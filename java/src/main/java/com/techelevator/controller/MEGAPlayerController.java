@@ -50,7 +50,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("stats")
-public class FullPlayerController {
+public class MEGAPlayerController {
     private QuarterbackSeasonTotalDao quarterbackSeasonTotalDao;
     private QuarterbackSeasonAverageDao quarterbackSeasonAverageDao;
     private QuarterbackSeasonProjectedDao quarterbackSeasonProjectedDao;
@@ -108,7 +108,7 @@ public class FullPlayerController {
     private static final String NAME = "name";
 
 
-    public FullPlayerController(QuarterbackSeasonTotalDao quarterbackSeasonTotalDao,
+    public MEGAPlayerController(QuarterbackSeasonTotalDao quarterbackSeasonTotalDao,
                                 QuarterbackSeasonAverageDao quarterbackSeasonAverageDao,
                                 QuarterbackSeasonProjectedDao quarterbackSeasonProjectedDao,
                                 QuarterbackLast4TotalDao quarterbackLast4TotalDao,

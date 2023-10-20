@@ -10,10 +10,10 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("stats")
-public class QuarterbackController {
+public class FullQuarterbackController {
     private FullQuarterbackService fullQuarterbackService;
     @Autowired
-    public QuarterbackController(FullQuarterbackService fullQuarterbackService) {
+    public FullQuarterbackController(FullQuarterbackService fullQuarterbackService) {
         this.fullQuarterbackService = fullQuarterbackService;
     }
 
