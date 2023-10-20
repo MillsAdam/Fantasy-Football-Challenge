@@ -73,7 +73,7 @@ public class JdbcKickerNext4ProjectedDao implements KickerNext4ProjectedDao {
 
 
     @Override
-    public List<KickerDto> geKickerNext4ProjectedStats(int searchWeek) {
+    public List<KickerDto> getKickerNext4ProjectedStats(int searchWeek) {
         List<KickerDto> kickerDtoList = new ArrayList<>();
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(SELECT_SQL + GROUP_SQL,

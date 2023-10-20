@@ -50,7 +50,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("stats")
-public class PlayerController {
+public class FullPlayerController {
     private QuarterbackSeasonTotalDao quarterbackSeasonTotalDao;
     private QuarterbackSeasonAverageDao quarterbackSeasonAverageDao;
     private QuarterbackSeasonProjectedDao quarterbackSeasonProjectedDao;
@@ -108,42 +108,42 @@ public class PlayerController {
     private static final String NAME = "name";
 
 
-    public PlayerController(QuarterbackSeasonTotalDao quarterbackSeasonTotalDao,
-                            QuarterbackSeasonAverageDao quarterbackSeasonAverageDao,
-                            QuarterbackSeasonProjectedDao quarterbackSeasonProjectedDao,
-                            QuarterbackLast4TotalDao quarterbackLast4TotalDao,
-                            QuarterbackLast4AverageDao quarterbackLast4AverageDao,
-                            QuarterbackNext4ProjectedDao quarterbackNext4ProjectedDao,
-                            QuarterbackRemainingProjectedDao quarterbackRemainingProjectedDao,
-                            QuarterbackWeeklyTotalDao quarterbackWeeklyTotalDao,
-                            QuarterbackWeeklyProjectedDao quarterbackWeeklyProjectedDao,
-                            FlexPlayerSeasonTotalDao flexPlayerSeasonTotalDao,
-                            FlexPlayerSeasonAverageDao flexPlayerSeasonAverageDao,
-                            FlexPlayerSeasonProjectedDao flexPlayerSeasonProjectedDao,
-                            FlexPlayerLast4TotalDao flexPlayerLast4TotalDao,
-                            FlexPlayerLast4AverageDao flexPlayerLast4AverageDao,
-                            FlexPlayerNext4ProjectedDao flexPlayerNext4ProjectedDao,
-                            FlexPlayerRemainingProjectedDao flexPlayerRemainingProjectedDao,
-                            FlexPlayerWeeklyTotalDao flexPlayerWeeklyTotalDao,
-                            FlexPlayerWeeklyProjectedDao flexPlayerWeeklyProjectedDao,
-                            KickerSeasonTotalDao kickerSeasonTotalDao,
-                            KickerSeasonAverageDao kickerSeasonAverageDao,
-                            KickerSeasonProjectedDao kickerSeasonProjectedDao,
-                            KickerLast4TotalDao kickerLast4TotalDao,
-                            KickerLast4AverageDao kickerLast4AverageDao,
-                            KickerNext4ProjectedDao kickerNext4ProjectedDao,
-                            KickerRemainingProjectedDao kickerRemainingProjectedDao,
-                            KickerWeeklyTotalDao kickerWeeklyTotalDao,
-                            KickerWeeklyProjectedDao kickerWeeklyProjectedDao,
-                            DefenseSeasonTotalDao defenseSeasonTotalDao,
-                            DefenseSeasonAverageDao defenseSeasonAverageDao,
-                            DefenseSeasonProjectedDao defenseSeasonProjectedDao,
-                            DefenseLast4TotalDao defenseLast4TotalDao,
-                            DefenseLast4AverageDao defenseLast4AverageDao,
-                            DefenseNext4ProjectedDao defenseNext4ProjectedDao,
-                            DefenseRemainingProjectedDao defenseRemainingProjectedDao,
-                            DefenseWeeklyTotalDao defenseWeeklyTotalDao,
-                            DefenseWeeklyProjectedDao defenseWeeklyProjectedDao) {
+    public FullPlayerController(QuarterbackSeasonTotalDao quarterbackSeasonTotalDao,
+                                QuarterbackSeasonAverageDao quarterbackSeasonAverageDao,
+                                QuarterbackSeasonProjectedDao quarterbackSeasonProjectedDao,
+                                QuarterbackLast4TotalDao quarterbackLast4TotalDao,
+                                QuarterbackLast4AverageDao quarterbackLast4AverageDao,
+                                QuarterbackNext4ProjectedDao quarterbackNext4ProjectedDao,
+                                QuarterbackRemainingProjectedDao quarterbackRemainingProjectedDao,
+                                QuarterbackWeeklyTotalDao quarterbackWeeklyTotalDao,
+                                QuarterbackWeeklyProjectedDao quarterbackWeeklyProjectedDao,
+                                FlexPlayerSeasonTotalDao flexPlayerSeasonTotalDao,
+                                FlexPlayerSeasonAverageDao flexPlayerSeasonAverageDao,
+                                FlexPlayerSeasonProjectedDao flexPlayerSeasonProjectedDao,
+                                FlexPlayerLast4TotalDao flexPlayerLast4TotalDao,
+                                FlexPlayerLast4AverageDao flexPlayerLast4AverageDao,
+                                FlexPlayerNext4ProjectedDao flexPlayerNext4ProjectedDao,
+                                FlexPlayerRemainingProjectedDao flexPlayerRemainingProjectedDao,
+                                FlexPlayerWeeklyTotalDao flexPlayerWeeklyTotalDao,
+                                FlexPlayerWeeklyProjectedDao flexPlayerWeeklyProjectedDao,
+                                KickerSeasonTotalDao kickerSeasonTotalDao,
+                                KickerSeasonAverageDao kickerSeasonAverageDao,
+                                KickerSeasonProjectedDao kickerSeasonProjectedDao,
+                                KickerLast4TotalDao kickerLast4TotalDao,
+                                KickerLast4AverageDao kickerLast4AverageDao,
+                                KickerNext4ProjectedDao kickerNext4ProjectedDao,
+                                KickerRemainingProjectedDao kickerRemainingProjectedDao,
+                                KickerWeeklyTotalDao kickerWeeklyTotalDao,
+                                KickerWeeklyProjectedDao kickerWeeklyProjectedDao,
+                                DefenseSeasonTotalDao defenseSeasonTotalDao,
+                                DefenseSeasonAverageDao defenseSeasonAverageDao,
+                                DefenseSeasonProjectedDao defenseSeasonProjectedDao,
+                                DefenseLast4TotalDao defenseLast4TotalDao,
+                                DefenseLast4AverageDao defenseLast4AverageDao,
+                                DefenseNext4ProjectedDao defenseNext4ProjectedDao,
+                                DefenseRemainingProjectedDao defenseRemainingProjectedDao,
+                                DefenseWeeklyTotalDao defenseWeeklyTotalDao,
+                                DefenseWeeklyProjectedDao defenseWeeklyProjectedDao) {
         this.quarterbackSeasonTotalDao = quarterbackSeasonTotalDao;
         this.quarterbackSeasonAverageDao = quarterbackSeasonAverageDao;
         this.quarterbackSeasonProjectedDao = quarterbackSeasonProjectedDao;
@@ -182,7 +182,7 @@ public class PlayerController {
         this.defenseWeeklyProjectedDao = defenseWeeklyProjectedDao;
     }
 
-    @RequestMapping(path="/search", method = RequestMethod.GET)
+    @RequestMapping(path="/all/search", method = RequestMethod.GET)
     public Object searchStats(
             @RequestParam("Position") String searchPosition, // qb, flex, rb, wr, te, k, def
             @RequestParam("Interval") String searchInterval, // season, last4, next4, remaining, weekly
@@ -647,7 +647,7 @@ public class PlayerController {
                 if (searchPoints.equalsIgnoreCase(PROJECTED)) {
 
                     if (searchCategory.equalsIgnoreCase(ALL)) {
-                        kickerDtoList = kickerNext4ProjectedDao.geKickerNext4ProjectedStats(searchWeek);
+                        kickerDtoList = kickerNext4ProjectedDao.getKickerNext4ProjectedStats(searchWeek);
                     } else if (searchCategory.equalsIgnoreCase(CONFERENCE)) {
                         kickerDtoList = kickerNext4ProjectedDao.getKickerNext4ProjectedStatsByConference(searchWeek, searchTerm);
                     } else if (searchCategory.equalsIgnoreCase(TEAM)) {

@@ -1,4 +1,4 @@
-package com.techelevator.service;
+package com.techelevator.service.position;
 
 import com.techelevator.dao.position.quarterback.regularSeason.last4Average.QuarterbackLast4AverageDao;
 import com.techelevator.dao.position.quarterback.regularSeason.last4Total.QuarterbackLast4TotalDao;
@@ -24,13 +24,6 @@ public class QuarterbackService {
     private QuarterbackRemainingProjectedDao quarterbackRemainingProjectedDao;
     private QuarterbackWeeklyTotalDao quarterbackWeeklyTotalDao;
     private QuarterbackWeeklyProjectedDao quarterbackWeeklyProjectedDao;
-    private static final String QB = "qb";
-    private static final String FLEX = "flex";
-    private static final String RB = "rb";
-    private static final String WR = "wr";
-    private static final String TE = "TE";
-    private static final String K = "k";
-    private static final String DEF = "def";
     private static final String SEASON = "season";
     private static final String LAST_4 = "last4";
     private static final String NEXT_4 = "next4";
@@ -66,16 +59,12 @@ public class QuarterbackService {
     }
 
     public List<QuarterbackDto> searchQuarterbackStats(
-            String searchPosition,
             String searchInterval,
             String searchPoints,
             String searchCategory,
             String searchTerm,
             Integer searchWeek) {
 
-        if (!searchPosition.equalsIgnoreCase(QB)) {
-            return Collections.emptyList();
-        }
 
         List<QuarterbackDto> results = Collections.emptyList();
 
@@ -98,6 +87,7 @@ public class QuarterbackService {
 
         return results;
     }
+
 
 
     private List<QuarterbackDto> handleSeasonInterval(String searchPoints, String searchCategory, String searchTerm) {

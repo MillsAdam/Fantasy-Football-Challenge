@@ -1,7 +1,6 @@
 package com.techelevator.controller;
 
-import com.techelevator.model.position.QuarterbackDto;
-import com.techelevator.service.FullQuarterbackService;
+import com.techelevator.service.PlayerStatsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,22 +9,22 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("stats")
-public class QuarterbackController {
-    private FullQuarterbackService fullQuarterbackService;
+public class PlayerStatsController {
+    private PlayerStatsService playerStatsService;
     @Autowired
-    public QuarterbackController(FullQuarterbackService fullQuarterbackService) {
-        this.fullQuarterbackService = fullQuarterbackService;
+    public PlayerStatsController(PlayerStatsService playerStatsService) {
+        this.playerStatsService = playerStatsService;
     }
 
-    @GetMapping("/qb/search")
-    public List<QuarterbackDto> searchQuarterbackStats(
+    @GetMapping("/search")
+    public List<?> searchPlayerStats(
             @RequestParam("Position") String searchPosition, // qb, flex, rb, wr, te, k, def
             @RequestParam("Interval") String searchInterval, // season, last4, next4, remaining, weekly
             @RequestParam("Points") String searchPoints, // total, average, projected
             @RequestParam("Category") String searchCategory, // all, conference, team, name
             @RequestParam(value = "Term", required = false) String searchTerm,
             @RequestParam(value = "Week", required = false) Integer searchWeek) {
-        return fullQuarterbackService.searchQuarterbackStats(
+        return playerStatsService.searchPlayerStats(
                 searchPosition,
                 searchInterval,
                 searchPoints,

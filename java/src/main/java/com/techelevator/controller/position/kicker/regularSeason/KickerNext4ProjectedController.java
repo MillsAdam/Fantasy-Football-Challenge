@@ -19,7 +19,7 @@ public class KickerNext4ProjectedController {
 
     @RequestMapping(path="/{week}", method = RequestMethod.GET)
     public List<KickerDto> geKickerNext4ProjectedStats(@PathVariable int week) {
-        List<KickerDto> kickerDtoList = kickerNext4ProjectedDao.geKickerNext4ProjectedStats(week);
+        List<KickerDto> kickerDtoList = kickerNext4ProjectedDao.getKickerNext4ProjectedStats(week);
         if (kickerDtoList == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Kickers Not Found.");
         }
