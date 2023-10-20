@@ -1,10 +1,18 @@
 package com.techelevator.service;
 
 import com.techelevator.service.position.*;
+import com.techelevator.service.position.QuarterbackService;
+import com.techelevator.service.position.FlexPlayerService;
+import com.techelevator.service.position.FlexPlayerPositionService;
+import com.techelevator.service.position.KickerService;
+import com.techelevator.service.position.DefenseService;
+import org.springframework.stereotype.Service;
+
 
 import java.util.Collections;
 import java.util.List;
 
+@Service
 public class PlayerStatsService {
     private QuarterbackService quarterbackService;
     private FlexPlayerService flexPlayerService;

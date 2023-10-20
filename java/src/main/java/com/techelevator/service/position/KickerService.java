@@ -10,10 +10,12 @@ import com.techelevator.dao.position.kicker.regularSeason.seasonTotal.KickerSeas
 import com.techelevator.dao.position.kicker.regularSeason.weeklyProjected.KickerWeeklyProjectedDao;
 import com.techelevator.dao.position.kicker.regularSeason.weeklyTotal.KickerWeeklyTotalDao;
 import com.techelevator.model.position.KickerDto;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 
+@Service
 public class KickerService {
     private KickerSeasonTotalDao kickerSeasonTotalDao;
     private KickerSeasonAverageDao kickerSeasonAverageDao;

@@ -10,10 +10,12 @@ import com.techelevator.dao.position.flexPlayer.regularSeason.seasonTotal.FlexPl
 import com.techelevator.dao.position.flexPlayer.regularSeason.weeklyProjected.FlexPlayerWeeklyProjectedDao;
 import com.techelevator.dao.position.flexPlayer.regularSeason.weeklyTotal.FlexPlayerWeeklyTotalDao;
 import com.techelevator.model.position.FlexPlayerDto;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 
+@Service
 public class FlexPlayerPositionService {
     private FlexPlayerSeasonTotalDao flexPlayerSeasonTotalDao;
     private FlexPlayerSeasonAverageDao flexPlayerSeasonAverageDao;

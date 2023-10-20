@@ -10,10 +10,13 @@ import com.techelevator.dao.position.quarterback.regularSeason.seasonTotal.Quart
 import com.techelevator.dao.position.quarterback.regularSeason.weeklyProjected.QuarterbackWeeklyProjectedDao;
 import com.techelevator.dao.position.quarterback.regularSeason.weeklyTotal.QuarterbackWeeklyTotalDao;
 import com.techelevator.model.position.QuarterbackDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 
+@Service
 public class QuarterbackService {
     private QuarterbackSeasonTotalDao quarterbackSeasonTotalDao;
     private QuarterbackSeasonAverageDao quarterbackSeasonAverageDao;

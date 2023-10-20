@@ -182,7 +182,7 @@ public class MEGAPlayerController {
         this.defenseWeeklyProjectedDao = defenseWeeklyProjectedDao;
     }
 
-    @RequestMapping(path="/all/search", method = RequestMethod.GET)
+    @GetMapping(path="/all/search")
     public Object searchStats(
             @RequestParam("Position") String searchPosition, // qb, flex, rb, wr, te, k, def
             @RequestParam("Interval") String searchInterval, // season, last4, next4, remaining, weekly

@@ -10,10 +10,12 @@ import com.techelevator.dao.position.defense.regularSeason.seasonProjected.Defen
 import com.techelevator.dao.position.defense.regularSeason.weeklyProjected.DefenseWeeklyProjectedDao;
 import com.techelevator.dao.position.defense.regularSeason.weeklyTotal.DefenseWeeklyTotalDao;
 import com.techelevator.model.position.DefenseDto;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 
+@Service
 public class DefenseService {
     private DefenseSeasonTotalDao defenseSeasonTotalDao;
     private DefenseSeasonAverageDao defenseSeasonAverageDao;
