@@ -4,40 +4,32 @@
             <div class="form-group">
                 <label for="searchPosition">Position</label>
                 <select v-model="searchPosition" class="form-control" id="searchPosition">
-                    <option value="qb">QB</option>
-                    <option value="flex">FLEX</option>
-                    <option value="rb">RB</option>
-                    <option value="wr">WR</option>
-                    <option value="te">TE</option>
-                    <option value="k">K</option>
-                    <option value="def">DEF</option>
+                    <option v-for="position in positions" :value="position" :key="position" :class="{ 'select-option': searchPosition === position }">
+                        {{ position.toUpperCase() }}</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="searchInterval">Interval</label>
                 <select v-model="searchInterval" class="form-control" id="searchInterval">
-                    <option value="season">Season</option>
-                    <option value="last4">Last 4</option>
-                    <option value="next4">Next 4</option>
-                    <option value="remaining">Remaining</option>
-                    <option value="weekly">Weekly</option>
+                    <option v-for="interval in intervals" :value="interval" :key="interval" :class="{ 'select-option': searchInterval === interval }">
+                        {{ interval.toUpperCase() }}
+                    </option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="searchPoints">Points</label>
                 <select v-model="searchPoints" class="form-control" id="searchPoints">
-                    <option value="total">Total</option>
-                    <option value="average">Average</option>
-                    <option value="projected">Projected</option>
+                    <option v-for="point in points" :value="point" :key="point" :class="{ 'select-option': searchPoints === point }">
+                        {{ point.toUpperCase() }}
+                    </option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="searchCategory">Category</label>
                 <select v-model="searchCategory" class="form-control" id="searchCategory">
-                    <option value="all">All</option>
-                    <option value="conference">Conference</option>
-                    <option value="team">Team</option>
-                    <option value="name">Name</option>
+                    <option v-for="category in categories" :value="category" :key="category" :class="{ 'select-option': searchCategory === category }">
+                        {{ category.toUpperCase() }}
+                    </option>
                 </select>
             </div>
             <div class="form-group">
@@ -55,12 +47,12 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col" v-if="columnsToShow.playerID">ID</th>
-                        <th scope="col" v-if="columnsToShow.week">WK</th>
-                        <th scope="col" v-if="columnsToShow.team">TM</th>
-                        <th scope="col" v-if="columnsToShow.position">POS</th>
-                        <th scope="col" v-if="columnsToShow.name">NAME</th>
-                        <th scope="col" v-if="columnsToShow.passingCompletions">COMP</th>
+                        <th scope="col" @click="sortBy('playerID')" v-if="columnsToShow.playerID">ID</th>
+                        <th scope="col" @click="sortBy('week')" v-if="columnsToShow.week">WK</th>
+                        <th scope="col" @click="sortBy('team')" v-if="columnsToShow.team">TM</th>
+                        <th scope="col" @click="sortBy('position')" v-if="columnsToShow.position">POS</th>
+                        <th scope="col" @click="sortBy('name')" v-if="columnsToShow.name">NAME</th>
+                        <th scope="col" @click="sortBy('passingCompletions')" v-if="columnsToShow.passingCompletions">COMP</th>
                         <th scope="col" v-if="columnsToShow.passingAttempts">ATT</th>
                         <th scope="col" v-if="columnsToShow.passingCompletionPercentage">COMP %</th>
                         <th scope="col" v-if="columnsToShow.passingYards">YDS</th>
@@ -76,39 +68,39 @@
                         <th scope="col" v-if="columnsToShow.receivingYards">YDS</th>
                         <th scope="col" v-if="columnsToShow.receivingYardsPerReception">YDS/REC</th>
                         <th scope="col" v-if="columnsToShow.receivingTouchdowns">TD</th>
-                        <th scope="col" v-if="columnsToShow.returnTouchdowns">Return Touchdowns</th>
-                        <th scope="col" v-if="columnsToShow.twoPointConversions">Two Point Conversions</th>
-                        <th scope="col" v-if="columnsToShow.usage">Usage</th>
-                        <th scope="col" v-if="columnsToShow.fumblesLost">Fumbles Lost</th>
-                        <th scope="col" v-if="columnsToShow.fieldGoalsMade">Field Goals Made</th>
-                        <th scope="col" v-if="columnsToShow.fieldGoalsAttempted">Field Goals Attempted</th>
-                        <th scope="col" v-if="columnsToShow.fieldGoalPercentage">Field Goal Percentage</th>
-                        <th scope="col" v-if="columnsToShow.fieldGoalsMade0to19">Field Goals Made 0 to 19</th>
-                        <th scope="col" v-if="columnsToShow.fieldGoalsMade20to29">Field Goals Made 20 to 29</th>
-                        <th scope="col" v-if="columnsToShow.fieldGoalsMade30to39">Field Goals Made 30 to 39</th>
-                        <th scope="col" v-if="columnsToShow.fieldGoalsMade40to49">Field Goals Made 40 to 49</th>
-                        <th scope="col" v-if="columnsToShow.fieldGoalsMade50Plus">Field Goals Made 50 Plus</th>
-                        <th scope="col" v-if="columnsToShow.extraPointsMade">Extra Points Made</th>
-                        <th scope="col" v-if="columnsToShow.extraPointsAttempted">Extra Points Attempted</th>
-                        <th scope="col" v-if="columnsToShow.extraPointPercentage">Extra Point Percentage</th>
-                        <th scope="col" v-if="columnsToShow.defensiveTouchdowns">Defensive Touchdowns</th>
-                        <th scope="col" v-if="columnsToShow.specialTeamsTouchdowns">Special Teams Touchdowns</th>
-                        <th scope="col" v-if="columnsToShow.touchdownsScored">Touchdowns Scored</th>
-                        <th scope="col" v-if="columnsToShow.fumblesForced">Fumbles Forced</th>
-                        <th scope="col" v-if="columnsToShow.fumblesRecovered">Fumbles Recovered</th>
-                        <th scope="col" v-if="columnsToShow.interceptions">Interceptions</th>
-                        <th scope="col" v-if="columnsToShow.tacklesForLoss">Tackles For Loss</th>
-                        <th scope="col" v-if="columnsToShow.quarterbackHits">Quarterback Hits</th>
-                        <th scope="col" v-if="columnsToShow.sacks">Sacks</th>
-                        <th scope="col" v-if="columnsToShow.safeties">Safeties</th>
-                        <th scope="col" v-if="columnsToShow.blockedKicks">Blocked Kicks</th>
-                        <th scope="col" v-if="columnsToShow.pointsAllowed">Points Allowed</th>
-                        <th scope="col" v-if="columnsToShow.fantasyPointsTotal">Fantasy Points Total</th>
-                        <th scope="col" v-if="columnsToShow.fantasyPointsAverage">Fantasy Points Average</th>
+                        <th scope="col" v-if="columnsToShow.returnTouchdowns">RT TD</th>
+                        <th scope="col" v-if="columnsToShow.twoPointConversions">2P</th>
+                        <th scope="col" v-if="columnsToShow.usage">TEAM %</th>
+                        <th scope="col" v-if="columnsToShow.fumblesLost">FL</th>
+                        <th scope="col" v-if="columnsToShow.fieldGoalsMade">FGM</th>
+                        <th scope="col" v-if="columnsToShow.fieldGoalsAttempted">FGA</th>
+                        <th scope="col" v-if="columnsToShow.fieldGoalPercentage">FG %</th>
+                        <th scope="col" v-if="columnsToShow.fieldGoalsMade0to19">0-19</th>
+                        <th scope="col" v-if="columnsToShow.fieldGoalsMade20to29">20-29</th>
+                        <th scope="col" v-if="columnsToShow.fieldGoalsMade30to39">30-39</th>
+                        <th scope="col" v-if="columnsToShow.fieldGoalsMade40to49">40-49</th>
+                        <th scope="col" v-if="columnsToShow.fieldGoalsMade50Plus">50+</th>
+                        <th scope="col" v-if="columnsToShow.extraPointsMade">XPM</th>
+                        <th scope="col" v-if="columnsToShow.extraPointsAttempted">XPA</th>
+                        <th scope="col" v-if="columnsToShow.extraPointPercentage">XP %</th>
+                        <th scope="col" v-if="columnsToShow.defensiveTouchdowns">DEF TD</th>
+                        <th scope="col" v-if="columnsToShow.specialTeamsTouchdowns">SPEC TD</th>
+                        <th scope="col" v-if="columnsToShow.touchdownsScored">TD</th>
+                        <th scope="col" v-if="columnsToShow.fumblesForced">FF</th>
+                        <th scope="col" v-if="columnsToShow.fumblesRecovered">FR</th>
+                        <th scope="col" v-if="columnsToShow.interceptions">INT</th>
+                        <th scope="col" v-if="columnsToShow.tacklesForLoss">TFL</th>
+                        <th scope="col" v-if="columnsToShow.quarterbackHits">QBH</th>
+                        <th scope="col" v-if="columnsToShow.sacks">SACK</th>
+                        <th scope="col" v-if="columnsToShow.safeties">SAF</th>
+                        <th scope="col" v-if="columnsToShow.blockedKicks">BK</th>
+                        <th scope="col" v-if="columnsToShow.pointsAllowed">PA</th>
+                        <th scope="col" v-if="columnsToShow.fantasyPointsTotal">FP TOT</th>
+                        <th scope="col" v-if="columnsToShow.fantasyPointsAverage">FP AVG</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="playerStat in playerStats" :key="playerStat.playerID">
+                    <tr v-for="playerStat in sortedPlayerStats" :key="playerStat.playerID">
                         <td v-if="columnsToShow.playerID">{{ playerStat.playerID }}</td>
                         <td v-if="columnsToShow.week">{{ playerStat.week }}</td>
                         <td v-if="columnsToShow.team">{{ playerStat.team }}</td>
@@ -178,11 +170,36 @@ export default {
         return {
             playerStats: [],
             searchPosition: "",
+            positions: ["qb", "flex", "rb", "wr", "te", "k", "def"],
             searchInterval: "",
+            intervals: ["season", "last4", "next4", "remaining", "weekly"],
             searchPoints: "",
+            points: ["total", "average", "projected"],
             searchCategory: "",
+            categories: ["all", "conference", "team", "name"],
             searchTerm: null,
             searchWeek: null,
+            sortingColumn: null,
+            sortingOrder: 'asc'
+        }
+    },
+    computed: {
+        sortedPlayerStats() {
+            if (!this.sortingColumn) {
+                return this.playerStats;
+            }
+
+            const sortedData = [...this.playerStats];
+
+            sortedData.sort((a, b) => {
+                if (this.sortingOrder === 'asc') {
+                    return a[this.sortingColumn] > b[this.sortingColumn];
+                } else {
+                    return a[this.sortingColumn] < b[this.sortingColumn];
+                }
+            });
+
+            return sortedData;
         }
     },
     methods: {
@@ -297,6 +314,19 @@ export default {
         }
 
     },
+    sortBy(columnName) {
+        if (this.sortingColumn === columnName) {
+            this.sortingOrder = this.sortingOrder === 'asc' ? 'desc' : 'asc';
+        } else {
+            this.sortingColumn = columnName;
+            this.sortingOrder = 'asc';
+        }
+
+        this.sortingOrder = this.sortingOrder === 'asc' ? 1 : -1;
+        this.playerStats.sort((a, b) => {
+            return this.sortingOrder * (a[this.sortingColumn] - b[this.sortingColumn] ? 1 : -1);
+        })
+    }
 }
 
 </script>
@@ -319,9 +349,45 @@ select, input {
   border-radius: 5px;
 }
 
+.select-option:hover {
+    background-color: #407F7F;
+    color: #ccc;
+}
+
+.custom-select:hover {
+    background-color:#407F7F;
+    color: #ccc;
+}
+
 button {
   width: 100%;
   margin-top: 10px;
+}
+
+
+table {
+    margin-top: 10px;
+    width: 100%;
+    overflow: auto;
+}
+
+th {
+    background-color: #343a40;
+    color: white;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+td {
+    padding-top: 10px;
+    border: 1px solid #ddd;
 }
 
 </style>
