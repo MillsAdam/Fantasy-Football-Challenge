@@ -66,8 +66,22 @@
         <div v-if="playerStats.length > 0">
             <table class="table table-striped">
                 <thead>
-                    <tr>
-                        <!-- @click="sortBy('playerID')" :class="{ 'sorted-asc': sortingColumn === 'playerID' && sortingOrder === 'asc', 'sorted-desc': sortingColumn === 'playerID' && sortingOrder === 'desc' }" -->
+                    <tr class="table-headers">
+                        <th colspan="5">Description</th>
+                        <th v-if="shouldShowQuarterbackHeaders" colspan="7">Passing</th>
+                        <th v-if="shouldShowQuarterbackHeaders" colspan="3">Rushing</th>
+                        <th v-if="shouldShowQuarterbackHeaders" colspan="4">Miscellaneous</th>
+                        <th v-if="shouldShowFlexHeaders" colspan="4">Rushing</th>
+                        <th v-if="shouldShowFlexHeaders" colspan="5">Receiving</th>
+                        <th v-if="shouldShowFlexHeaders" colspan="6">Miscellaneous</th>
+                        <th v-if="shouldShowKickersHeaders" colspan="8">Field Goal</th>
+                        <th v-if="shouldShowKickersHeaders" colspan="3">Extra Point</th>
+                        <th v-if="shouldShowKickersHeaders" colspan="2">Miscellaneous</th>
+                        <th v-if="shouldShowDefenseHeaders" colspan="3">Touchdown</th>
+                        <th v-if="shouldShowDefenseHeaders" colspan="8">Defense</th>
+                        <th v-if="shouldShowDefenseHeaders" colspan="3">Miscellaneous</th>
+                    </tr>
+                    <tr class="table-columns">
                         <th scope="col" @click="sortBy('playerID')" :class="{ 'sorted-asc': sortingColumn === 'playerID' && sortingOrder === 'asc', 'sorted-desc': sortingColumn === 'playerID' && sortingOrder === 'desc' }" v-if="columnsToShow.playerID">ID</th>
                         <th scope="col" @click="sortBy('week')" :class="{ 'sorted-asc': sortingColumn === 'week' && sortingOrder === 'asc', 'sorted-desc': sortingColumn === 'week' && sortingOrder === 'desc' }" v-if="columnsToShow.week">WK</th>
                         <th scope="col" @click="sortBy('team')" :class="{ 'sorted-asc': sortingColumn === 'team' && sortingOrder === 'asc', 'sorted-desc': sortingColumn === 'team' && sortingOrder === 'desc' }" v-if="columnsToShow.team">TM</th>
@@ -89,9 +103,9 @@
                         <th scope="col" @click="sortBy('receivingYards')" :class="{ 'sorted-asc': sortingColumn === 'receivingYards' && sortingOrder === 'asc', 'sorted-desc': sortingColumn === 'receivingYards' && sortingOrder === 'desc' }" v-if="columnsToShow.receivingYards">YDS</th>
                         <th scope="col" @click="sortBy('receivingYardsPerReception')" :class="{ 'sorted-asc': sortingColumn === 'receivingYardsPerReception' && sortingOrder === 'asc', 'sorted-desc': sortingColumn === 'receivingYardsPerReception' && sortingOrder === 'desc' }" v-if="columnsToShow.receivingYardsPerReception">YDS/REC</th>
                         <th scope="col" @click="sortBy('receivingTouchdowns')" :class="{ 'sorted-asc': sortingColumn === 'receivingTouchdowns' && sortingOrder === 'asc', 'sorted-desc': sortingColumn === 'receivingTouchdowns' && sortingOrder === 'desc' }" v-if="columnsToShow.receivingTouchdowns">TD</th>
+                        <th scope="col" @click="sortBy('usage')" :class="{ 'sorted-asc': sortingColumn === 'usage' && sortingOrder === 'asc', 'sorted-desc': sortingColumn === 'usage' && sortingOrder === 'desc' }" v-if="columnsToShow.usage">TEAM %</th>
                         <th scope="col" @click="sortBy('returnTouchdowns')" :class="{ 'sorted-asc': sortingColumn === 'returnTouchdowns' && sortingOrder === 'asc', 'sorted-desc': sortingColumn === 'returnTouchdowns' && sortingOrder === 'desc' }" v-if="columnsToShow.returnTouchdowns">RT TD</th>
                         <th scope="col" @click="sortBy('twoPointConversions')" :class="{ 'sorted-asc': sortingColumn === 'twoPointConversions' && sortingOrder === 'asc', 'sorted-desc': sortingColumn === 'twoPointConversions' && sortingOrder === 'desc' }" v-if="columnsToShow.twoPointConversions">2P</th>
-                        <th scope="col" @click="sortBy('usage')" :class="{ 'sorted-asc': sortingColumn === 'usage' && sortingOrder === 'asc', 'sorted-desc': sortingColumn === 'usage' && sortingOrder === 'desc' }" v-if="columnsToShow.usage">TEAM %</th>
                         <th scope="col" @click="sortBy('fumblesLost')" :class="{ 'sorted-asc': sortingColumn === 'fumblesLost' && sortingOrder === 'asc', 'sorted-desc': sortingColumn === 'fumblesLost' && sortingOrder === 'desc' }" v-if="columnsToShow.fumblesLost">FL</th>
                         <th scope="col" @click="sortBy('fieldGoalsMade')" :class="{ 'sorted-asc': sortingColumn === 'fieldGoalsMade' && sortingOrder === 'asc', 'sorted-desc': sortingColumn === 'fieldGoalsMade' && sortingOrder === 'desc' }" v-if="columnsToShow.fieldGoalsMade">FGM</th>
                         <th scope="col" @click="sortBy('fieldGoalsAttempted')" :class="{ 'sorted-asc': sortingColumn === 'fieldGoalsAttempted' && sortingOrder === 'asc', 'sorted-desc': sortingColumn === 'fieldGoalsAttempted' && sortingOrder === 'desc' }" v-if="columnsToShow.fieldGoalsAttempted">FGA</th>
@@ -121,7 +135,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- sortedPlayerStats -->
                     <tr v-for="(playerStat, index) in sortedPlayerStats" :key="index">
                         <td v-if="columnsToShow.playerID">{{ playerStat.playerID }}</td>
                         <td v-if="columnsToShow.week">{{ playerStat.week }}</td>
@@ -144,9 +157,9 @@
                         <td v-if="columnsToShow.receivingYards">{{ playerStat.receivingYards }}</td>
                         <td v-if="columnsToShow.receivingYardsPerReception">{{ playerStat.receivingYardsPerReception }}</td>
                         <td v-if="columnsToShow.receivingTouchdowns">{{ playerStat.receivingTouchdowns }}</td>
+                        <td v-if="columnsToShow.usage">{{ playerStat.usage }}</td>
                         <td v-if="columnsToShow.returnTouchdowns">{{ playerStat.returnTouchdowns }}</td>
                         <td v-if="columnsToShow.twoPointConversions">{{ playerStat.twoPointConversions }}</td>
-                        <td v-if="columnsToShow.usage">{{ playerStat.usage }}</td>
                         <td v-if="columnsToShow.fumblesLost">{{ playerStat.fumblesLost }}</td>
                         <td v-if="columnsToShow.fieldGoalsMade">{{ playerStat.fieldGoalsMade }}</td>
                         <td v-if="columnsToShow.fieldGoalsAttempted">{{ playerStat.fieldGoalsAttempted }}</td>
@@ -221,6 +234,7 @@ export default {
             }
             return this.points;
         },
+
         sortedPlayerStats() {
             if (this.sortingColumn) {
                 return this.playerStats.slice().sort((a, b) => {
@@ -235,6 +249,45 @@ export default {
                 });
             }
             return this.playerStats.slice;
+        },
+
+        columnsToShowCategories() {
+            if (this.searchPosition === "qb") {
+                return {
+                    passing: true,
+                    rushing: true,
+                    miscellaneous: true,
+                };
+            } else if (this.searchPosition === "flex" || this.searchPosition === "rb" || this.searchPosition === "wr" || this.searchPosition === "te") {
+                return {
+                    rushing: true,
+                    receiving: true,
+                    miscellaneous: true,
+                };
+            } else if (this.searchPosition === "k") {
+                return {
+                    fieldGoal: true,
+                    extraPoint: true,
+                    miscellaneous: true,
+                };
+            } else if (this.searchPosition === "def") {
+                return {
+                    touchdown: true,
+                    defense: true,
+                    miscellaneous: true,
+                };
+            } else {
+                return {
+                    passing: false,
+                    rushing: false,
+                    receiving: false,
+                    fieldGoal: false,
+                    extraPoint: false,
+                    touchdown: false,
+                    defense: false,
+                    miscellaneous: false,
+                };
+            }
         },
     },
     
@@ -335,6 +388,11 @@ export default {
 
             this.columnsToShow = columnsToShow;
 
+            this.shouldShowQuarterbackHeaders = this.searchPosition === "qb";
+            this.shouldShowFlexHeaders = this.searchPosition === "flex" || this.searchPosition === "rb" || this.searchPosition === "wr" || this.searchPosition === "te";
+            this.shouldShowKickersHeaders = this.searchPosition === "k";
+            this.shouldShowDefenseHeaders = this.searchPosition === "def";
+
             StatsService.searchPlayerStats({ 
                 searchPosition: this.searchPosition,
                 searchInterval: this.searchInterval,
@@ -423,8 +481,15 @@ th {
     background-color: #343a40;
     color: white;
     font-weight: bold;
-    font-size: 13px;
     padding: 10px 0px;
+}
+
+.table-headers{
+    font-size: 15px;
+}
+.table-columns {
+    cursor: pointer;
+    font-size: 13px;
 }
 
 tr:nth-child(even) {
@@ -438,6 +503,7 @@ tr:nth-child(odd) {
 td {
     padding-top: 10px;
     border: 1px solid #ddd;
+    font-size: 15px;
 }
 
 .sorted-asc::after {
