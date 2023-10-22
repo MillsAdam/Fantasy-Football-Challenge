@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class JdbcFlexPlayerNext4ProjectedDao implements FlexPlayerNext4ProjectedDao {
     private final JdbcTemplate jdbcTemplate;
-    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+    DecimalFormat decimalFormat = new DecimalFormat("#.0");
 
 
     public JdbcFlexPlayerNext4ProjectedDao(JdbcTemplate jdbcTemplate) {

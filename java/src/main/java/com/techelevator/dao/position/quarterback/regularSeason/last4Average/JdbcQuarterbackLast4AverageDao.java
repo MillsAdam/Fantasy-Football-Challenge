@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class JdbcQuarterbackLast4AverageDao implements QuarterbackLast4AverageDao {
     private final JdbcTemplate jdbcTemplate;
-    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+    DecimalFormat decimalFormat = new DecimalFormat("#.0");
 
 
     public JdbcQuarterbackLast4AverageDao(JdbcTemplate jdbcTemplate) {

@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class JdbcQuarterbackWeeklyProjectedDao implements QuarterbackWeeklyProjectedDao {
     private final JdbcTemplate jdbcTemplate;
-    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+    DecimalFormat decimalFormat = new DecimalFormat("#.0");
 
 
     public JdbcQuarterbackWeeklyProjectedDao(JdbcTemplate jdbcTemplate) {

@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class JdbcFlexPlayerLast4TotalDao implements FlexPlayerLast4TotalDao{
     private final JdbcTemplate jdbcTemplate;
-    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+    DecimalFormat decimalFormat = new DecimalFormat("#.0");
 
 
     public JdbcFlexPlayerLast4TotalDao(JdbcTemplate jdbcTemplate) {

@@ -8,6 +8,7 @@
                         {{ position.toUpperCase() }}</option>
                 </select>
             </div>
+
             <div class="form-group">
                 <label for="searchInterval">Interval</label>
                 <select v-model="searchInterval" class="form-control" id="searchInterval">
@@ -16,14 +17,25 @@
                     </option>
                 </select>
             </div>
+
             <div class="form-group">
                 <label for="searchPoints">Points</label>
                 <select v-model="searchPoints" class="form-control" id="searchPoints">
-                    <option v-for="point in points" :value="point" :key="point" :class="{ 'select-option': searchPoints === point }">
+                    <option v-for="point in filteredPoints" :value="point" :key="point" :class="{ 'select-option': searchPoints === point }">
                         {{ point.toUpperCase() }}
                     </option>
                 </select>
             </div>
+
+            <div class="form-group" v-if="searchInterval !== 'season' && searchInterval !== ''">
+                <label for="searchWeek">Week</label>
+                <select v-model="searchWeek" class="form-control" id="searchWeek">
+                    <option v-for="week in weeks" :value="week" :key="week" :class="{ 'select-option': searchWeek === week }">
+                        {{ week }}
+                    </option>
+                </select>
+            </div>
+
             <div class="form-group">
                 <label for="searchCategory">Category</label>
                 <select v-model="searchCategory" class="form-control" id="searchCategory">
@@ -32,14 +44,22 @@
                     </option>
                 </select>
             </div>
-            <div class="form-group">
+
+            <div class="form-group" v-if="searchCategory !== 'all' && searchCategory !== ''">
                 <label for="searchTerm">Term</label>
-                <input v-model="searchTerm" type="text" class="form-control" id="searchTerm">
+                <select v-model="searchTerm" class="form-control" id="searchTerm" v-if="searchCategory === 'conference'">
+                    <option v-for="conference in conferences" :value="conference" :key="conference" :class="{ 'select-option': searchCategory === conference }">
+                        {{ conference.toUpperCase() }}
+                    </option>
+                </select>
+                <select v-model="searchTerm" class="form-control" id="searchTerm" v-if="searchCategory === 'team'">
+                    <option v-for="team in teams" :value="team" :key="team" :class="{ 'select-option': searchCategory === team }">
+                        {{ team.toUpperCase() }}
+                    </option>
+                </select>
+                <input v-model="searchTerm" type="text" class="form-control" id="searchTerm" v-if="searchCategory === 'name'">
             </div>
-            <div class="form-group">
-                <label for="searchWeek">Week</label>
-                <input v-model="searchWeek" type="number" class="form-control" id="searchWeek">
-            </div>
+
             <button type="submit">Apply Filters</button>
         </form>
 
@@ -47,12 +67,13 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col" @click="sortBy('playerID')" v-if="columnsToShow.playerID">ID</th>
-                        <th scope="col" @click="sortBy('week')" v-if="columnsToShow.week">WK</th>
-                        <th scope="col" @click="sortBy('team')" v-if="columnsToShow.team">TM</th>
-                        <th scope="col" @click="sortBy('position')" v-if="columnsToShow.position">POS</th>
-                        <th scope="col" @click="sortBy('name')" v-if="columnsToShow.name">NAME</th>
-                        <th scope="col" @click="sortBy('passingCompletions')" v-if="columnsToShow.passingCompletions">COMP</th>
+                        <!-- @click="sortBy('playerID')" :class="{ 'sorted-asc': sortingColumn === 'playerID' && sortingOrder === 'asc', 'sorted-desc': sortingColumn === 'playerID' && sortingOrder === 'desc' }" -->
+                        <th scope="col" @click="sortBy('playerID')" :class="{ 'sorted-asc': sortingColumn === 'playerID' && sortingOrder === 'asc', 'sorted-desc': sortingColumn === 'playerID' && sortingOrder === 'desc' }" v-if="columnsToShow.playerID">ID</th>
+                        <th scope="col" v-if="columnsToShow.week">WK</th>
+                        <th scope="col" v-if="columnsToShow.team">TM</th>
+                        <th scope="col" v-if="columnsToShow.position">POS</th>
+                        <th scope="col" v-if="columnsToShow.name">NAME</th>
+                        <th scope="col" v-if="columnsToShow.passingCompletions">COMP</th>
                         <th scope="col" v-if="columnsToShow.passingAttempts">ATT</th>
                         <th scope="col" v-if="columnsToShow.passingCompletionPercentage">COMP %</th>
                         <th scope="col" v-if="columnsToShow.passingYards">YDS</th>
@@ -100,7 +121,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="playerStat in sortedPlayerStats" :key="playerStat.playerID">
+                    <!-- sortedPlayerStats -->
+                    <tr v-for="(playerStat, index) in sortedPlayerStats" :key="index">
                         <td v-if="columnsToShow.playerID">{{ playerStat.playerID }}</td>
                         <td v-if="columnsToShow.week">{{ playerStat.week }}</td>
                         <td v-if="columnsToShow.team">{{ playerStat.team }}</td>
@@ -176,32 +198,46 @@ export default {
             searchPoints: "",
             points: ["total", "average", "projected"],
             searchCategory: "",
-            categories: ["all", "conference", "team", "name"],
-            searchTerm: null,
             searchWeek: null,
+            weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+            categories: ["all", "conference", "team", "name"],
+            searchTerm: "",
+            conferences: ["afc", "nfc"],
+            teams: ["ari", "atl", "bal", "buf", "car", "chi", "cin", "cle", "dal", "den", "det", "gb", "hou", "ind", "jax", "kc", "lac", "lar", "lv", "mia", "min", "ne", "no", "nyg", "nyj", "phi", "pit", "sea", "sf", "tb", "ten", "wsh"],
             sortingColumn: null,
-            sortingOrder: 'asc'
+            sortingOrder: 'desc',
+            defaultSortingColumn: 'fantasyPointsTotal',
         }
     },
+
     computed: {
-        sortedPlayerStats() {
-            if (!this.sortingColumn) {
-                return this.playerStats;
+        filteredPoints() {
+            if (this.searchInterval === 'last4') {
+                return this.points.filter(point => point === 'total' || point === 'average');
+            } else if (this.searchInterval === 'next4' || this.searchInterval === 'remaining') {
+                return this.points.filter(point => point === 'projected');
+            } else if (this.searchInterval === 'weekly') {
+                return this.points.filter(point => point === 'total' || point === 'projected');
             }
+            return this.points;
+        },
+        sortedPlayerStats() {
+            if (this.sortingColumn) {
+                return this.playerStats.slice().sort((a, b) => {
+                    const aValue = a[this.sortingColumn];
+                    const bValue = b[this.sortingColumn];
 
-            const sortedData = [...this.playerStats];
-
-            sortedData.sort((a, b) => {
-                if (this.sortingOrder === 'asc') {
-                    return a[this.sortingColumn] > b[this.sortingColumn];
-                } else {
-                    return a[this.sortingColumn] < b[this.sortingColumn];
-                }
-            });
-
-            return sortedData;
-        }
+                    if (this.sortingOrder === 'asc') {
+                        return aValue > bValue ? 1 : -1;
+                    } else {
+                        return bValue > aValue ? 1 : -1;
+                    }
+                });
+            }
+            return this.playerStats.slice;
+        },
     },
+    
     methods: {
         searchPlayerStats() {
             let columnsToShow = {};
@@ -311,22 +347,33 @@ export default {
             }).catch(error => {
                 console.log('Error:', error);
             });    
-        }
+        },
+        sortBy(columnName) {
+            if (this.sortingColumn === columnName) {
+                this.sortingOrder = this.sortingOrder === 'asc' ? 'desc' : 'desc';
+            } else {
+                this.sortingColumn = columnName;
+                this.sortingOrder = 'desc';
+            }
 
+            this.playerStats.sort((a, b) => {
+                const aValue = a[this.sortingColumn];
+                const bValue = b[this.sortingColumn];
+
+                if (this.sortingOrder === 'asc') {
+                    return aValue > bValue ? 1 : -1;
+                } else {
+                    return bValue > aValue ? 1 : -1;
+                }
+            });
+        },
     },
-    sortBy(columnName) {
-        if (this.sortingColumn === columnName) {
-            this.sortingOrder = this.sortingOrder === 'asc' ? 'desc' : 'asc';
-        } else {
-            this.sortingColumn = columnName;
-            this.sortingOrder = 'asc';
-        }
 
-        this.sortingOrder = this.sortingOrder === 'asc' ? 1 : -1;
-        this.playerStats.sort((a, b) => {
-            return this.sortingOrder * (a[this.sortingColumn] - b[this.sortingColumn] ? 1 : -1);
-        })
-    }
+    created() {
+        this.searchPlayerStats();
+        this.sortBy(this.defaultSortingColumn);
+    },
+
 }
 
 </script>
@@ -375,6 +422,8 @@ th {
     background-color: #343a40;
     color: white;
     font-weight: bold;
+    font-size: 13px;
+    padding: 10px 0px;
 }
 
 tr:nth-child(even) {
@@ -388,6 +437,14 @@ tr:nth-child(odd) {
 td {
     padding-top: 10px;
     border: 1px solid #ddd;
+}
+
+.sorted-asc::after {
+    content: " ▲";
+}
+
+.sorted-desc::after {
+    content: " ▼";
 }
 
 </style>

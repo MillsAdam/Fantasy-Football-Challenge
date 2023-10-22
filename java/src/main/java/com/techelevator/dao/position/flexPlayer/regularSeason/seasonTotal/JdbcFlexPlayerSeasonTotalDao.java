@@ -15,7 +15,7 @@ import java.util.List;
 @Component
 public class JdbcFlexPlayerSeasonTotalDao implements FlexPlayerSeasonTotalDao{
     private final JdbcTemplate jdbcTemplate;
-    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+    DecimalFormat decimalFormat = new DecimalFormat("#.0");
 
 
     public JdbcFlexPlayerSeasonTotalDao(JdbcTemplate jdbcTemplate) {

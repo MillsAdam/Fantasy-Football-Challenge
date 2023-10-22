@@ -15,7 +15,7 @@ import java.util.List;
 @Component
 public class JdbcDefenseNext4ProjectedDao implements DefenseNext4ProjectedDao {
     private final JdbcTemplate jdbcTemplate;
-    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+    DecimalFormat decimalFormat = new DecimalFormat("#.0");
 
 
     public JdbcDefenseNext4ProjectedDao(JdbcTemplate jdbcTemplate) {

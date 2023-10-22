@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class JdbcKickerLast4AverageDao implements KickerLast4AverageDao{
     private final JdbcTemplate jdbcTemplate;
-    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+    DecimalFormat decimalFormat = new DecimalFormat("#.0");
 
 
     public JdbcKickerLast4AverageDao(JdbcTemplate jdbcTemplate) {

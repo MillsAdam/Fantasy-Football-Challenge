@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class JdbcDefenseWeeklyTotalDao implements DefenseWeeklyTotalDao {
     private final JdbcTemplate jdbcTemplate;
-    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+    DecimalFormat decimalFormat = new DecimalFormat("#.0");
 
 
     public JdbcDefenseWeeklyTotalDao(JdbcTemplate jdbcTemplate) {

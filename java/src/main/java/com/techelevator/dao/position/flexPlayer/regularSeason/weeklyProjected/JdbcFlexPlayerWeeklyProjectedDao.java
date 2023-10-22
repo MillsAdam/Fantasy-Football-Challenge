@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class JdbcFlexPlayerWeeklyProjectedDao implements FlexPlayerWeeklyProjectedDao {
     private final JdbcTemplate jdbcTemplate;
-    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+    DecimalFormat decimalFormat = new DecimalFormat("#.0");
 
 
     public JdbcFlexPlayerWeeklyProjectedDao(JdbcTemplate jdbcTemplate) {

@@ -16,7 +16,7 @@ import java.util.Map;
 @Component
 public class JdbcDefenseLast4AverageDao implements DefenseLast4AverageDao{
     private final JdbcTemplate jdbcTemplate;
-    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+    DecimalFormat decimalFormat = new DecimalFormat("#.0");
 
 
 

@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class JdbcKickerWeeklyTotalDao implements KickerWeeklyTotalDao {
     private final JdbcTemplate jdbcTemplate;
-    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+    DecimalFormat decimalFormat = new DecimalFormat("#.0");
 
 
     public JdbcKickerWeeklyTotalDao(JdbcTemplate jdbcTemplate) {

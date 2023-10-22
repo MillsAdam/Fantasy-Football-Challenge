@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class JdbcFlexPlayerLast4AverageDao implements FlexPlayerLast4AverageDao{
     private final JdbcTemplate jdbcTemplate;
-    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+    DecimalFormat decimalFormat = new DecimalFormat("#.0");
 
 
     public JdbcFlexPlayerLast4AverageDao(JdbcTemplate jdbcTemplate) {

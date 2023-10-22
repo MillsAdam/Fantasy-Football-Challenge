@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class JdbcQuarterbackSeasonProjectedDao implements QuarterbackSeasonProjectedDao {
     private final JdbcTemplate jdbcTemplate;
-    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+    DecimalFormat decimalFormat = new DecimalFormat("#.0");
 
 
     public JdbcQuarterbackSeasonProjectedDao(JdbcTemplate jdbcTemplate) {
