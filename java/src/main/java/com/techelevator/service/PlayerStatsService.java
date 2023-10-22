@@ -23,7 +23,7 @@ public class PlayerStatsService {
     private static final String FLEX = "flex";
     private static final String RB = "rb";
     private static final String WR = "wr";
-    private static final String TE = "TE";
+    private static final String TE = "te";
     private static final String K = "k";
     private static final String DEF = "def";
 
