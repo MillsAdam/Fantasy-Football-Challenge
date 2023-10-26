@@ -22,7 +22,7 @@
 
 button {
   font-family: "Urbanist", sans-serif;
-  display: inline-block;
+  /* display: inline-block; */
   background: #2c3e50;
   color: #fff;
   border: none;

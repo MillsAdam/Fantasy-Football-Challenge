@@ -52,7 +52,7 @@
                         </option>
                     </select>
                     <label for="searchTerm" v-if="searchCategory === 'name'" autocomplete="name">Name</label>
-                    <input v-model="searchTerm" type="text" class="form-control custom-input" id="searchTerm" v-if="searchCategory === 'name'" placeholder="Player Name">
+                    <input v-model="searchTerm" type="text" class="form-control" id="searchTerm" v-if="searchCategory === 'name'" placeholder="Player Name" @click="clearSearch">
                 </div>
             </div>
 
@@ -456,6 +456,10 @@ export default {
                 this.searchPoints = '';
             }
         },
+
+        clearSearch() {
+            this.searchTerm = '';
+        },
     },
 
     watch: {
@@ -483,6 +487,7 @@ export default {
     padding-top: 10px;
     gap: 10px;
 }
+
 .form-group {
     flex: 1;
     margin-bottom: 10px;
@@ -496,19 +501,30 @@ label {
 
 select, input {
     width: 100%;
-    padding: 8px 0px;
+    padding: 8px 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
 }
 
-select.form-control option:hover {
-    background-color: #407F7F;
-    color: #ccc;
-}
+@media (max-width: 767px) {
+    .form-row {
+        flex-direction: column;
+    }
 
-.custom-input {
-    padding-left: 10px;
+    .form-group {
+        margin-bottom: 0px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .form-group label {
+        margin-right: 5px;
+    }
+
+    .form-group select, .form-group input {
+        margin-left: 5px;
+    }
 }
 
 button {
@@ -520,6 +536,7 @@ button {
     width: 100%;
     max-width: 100%;
     overflow: auto;
+    white-space: nowrap;
 }
 
 table {
@@ -552,7 +569,8 @@ tr:nth-child(odd) {
 }
 
 td {
-    padding-top: 10px;
+    /* padding-top: 10px; */
+    padding: 10px 5px 0px 5px;
     border: 1px solid #ddd;
     font-size: 15px;
 }
