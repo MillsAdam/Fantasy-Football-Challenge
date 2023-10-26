@@ -40,13 +40,13 @@ public class JdbcOffenseDao implements OffenseDao {
 
     @Override
     public void addOffenseStats(Offense offense) {
-        String sql = generateSql("offense_stats_2022");
+        String sql = generateSql("offense_stats");
         jdbcTemplate.update(sql, createObjectArray(offense));
     }
 
     @Override
     public void addOffenseProj(Offense offense) {
-        String sql = generateSql("offense_proj_2022");
+        String sql = generateSql("offense_proj");
         jdbcTemplate.update(sql, createObjectArray(offense));
     }
 

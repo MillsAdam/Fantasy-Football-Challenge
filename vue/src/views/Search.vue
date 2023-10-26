@@ -20,7 +20,7 @@
                     </select>
                 </div>
 
-                <div class="form-group" v-if="searchInterval !== 'season' && searchInterval !== ''">
+                <div class="form-group" v-if="searchInterval === 'weekly' && searchInterval !== ''">
                     <label for="searchWeek">Week</label>
                     <select v-model="searchWeek" class="form-control" id="searchWeek">
                         <option v-for="week in weeks" :value="week" :key="week" :class="{ 'select-option': searchWeek === week }">
@@ -62,7 +62,7 @@
             
         </form>
 
-        <div v-if="playerStats.length > 0">
+        <div v-if="playerStats.length > 0" class="table-container">
             <table class="table table-striped">
                 <thead>
                     <tr class="table-headers">
@@ -73,9 +73,9 @@
                         <th v-if="shouldShowFlexHeaders" colspan="4">Rushing</th>
                         <th v-if="shouldShowFlexHeaders" colspan="5">Receiving</th>
                         <th v-if="shouldShowFlexHeaders" colspan="6">Miscellaneous</th>
-                        <th v-if="shouldShowKickersHeaders" colspan="8">Field Goal</th>
-                        <th v-if="shouldShowKickersHeaders" colspan="3">Extra Point</th>
-                        <th v-if="shouldShowKickersHeaders" colspan="2">Miscellaneous</th>
+                        <th v-if="shouldShowKickerHeaders" colspan="8">Field Goal</th>
+                        <th v-if="shouldShowKickerHeaders" colspan="3">Extra Point</th>
+                        <th v-if="shouldShowKickerHeaders" colspan="2">Miscellaneous</th>
                         <th v-if="shouldShowDefenseHeaders" colspan="3">Touchdown</th>
                         <th v-if="shouldShowDefenseHeaders" colspan="8">Defense</th>
                         <th v-if="shouldShowDefenseHeaders" colspan="3">Miscellaneous</th>
@@ -206,7 +206,17 @@ export default {
             searchPosition: "",
             positions: ["qb", "flex", "rb", "wr", "te", "k", "def"],
             searchInterval: "",
-            intervals: ["Season (Total)", "Season (Average)", "Season (Projected)", "Last 4 (Total)", "Last 4 (Average)", "Next 4 (Projected)", "Remaining (Projected)", "Weekly (Total)", "Weekly (Projected)"],
+            intervals: [
+                "Season (Total)", 
+                "Season (Average)", 
+                "Season (Projected)", 
+                "Last 4 (Total)", 
+                "Last 4 (Average)", 
+                "Next 4 (Projected)", 
+                "Remaining (Projected)", 
+                "Weekly (Total)", 
+                "Weekly (Projected)"
+            ],
             searchPoints: "",
             points: ["total", "average", "projected"],
             searchCategory: "",
@@ -282,45 +292,6 @@ export default {
                 });
             }
             return this.playerStats.slice;
-        },
-
-        columnsToShowCategories() {
-            if (this.searchPosition === "qb") {
-                return {
-                    passing: true,
-                    rushing: true,
-                    miscellaneous: true,
-                };
-            } else if (this.searchPosition === "flex" || this.searchPosition === "rb" || this.searchPosition === "wr" || this.searchPosition === "te") {
-                return {
-                    rushing: true,
-                    receiving: true,
-                    miscellaneous: true,
-                };
-            } else if (this.searchPosition === "k") {
-                return {
-                    fieldGoal: true,
-                    extraPoint: true,
-                    miscellaneous: true,
-                };
-            } else if (this.searchPosition === "def") {
-                return {
-                    touchdown: true,
-                    defense: true,
-                    miscellaneous: true,
-                };
-            } else {
-                return {
-                    passing: false,
-                    rushing: false,
-                    receiving: false,
-                    fieldGoal: false,
-                    extraPoint: false,
-                    touchdown: false,
-                    defense: false,
-                    miscellaneous: false,
-                };
-            }
         },
     },
     
@@ -423,7 +394,7 @@ export default {
 
             this.shouldShowQuarterbackHeaders = this.searchPosition === "qb";
             this.shouldShowFlexHeaders = this.searchPosition === "flex" || this.searchPosition === "rb" || this.searchPosition === "wr" || this.searchPosition === "te";
-            this.shouldShowKickersHeaders = this.searchPosition === "k";
+            this.shouldShowKickerHeaders = this.searchPosition === "k";
             this.shouldShowDefenseHeaders = this.searchPosition === "def";
 
             StatsService.searchPlayerStats({ 
@@ -528,6 +499,7 @@ select, input {
     padding: 8px 0px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-sizing: border-box;
 }
 
 select.form-control option:hover {
@@ -544,11 +516,16 @@ button {
   margin-top: 10px;
 }
 
+.table-container {
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+}
 
 table {
     margin-top: 10px;
     width: 100%;
-    overflow: auto;
+    min-width: 100%;
 }
 
 th {

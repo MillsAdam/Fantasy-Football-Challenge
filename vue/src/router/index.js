@@ -6,7 +6,6 @@ import Logout from '../views/Logout.vue'
 import Register from '../views/Register.vue'
 import store from '../store/index'
 import Search from '../views/Search.vue'
-import Search2ElectricBoogaloo from '../views/Search2ElectricBoogaloo.vue'
 
 Vue.use(Router)
 
@@ -59,14 +58,6 @@ const router = new Router({
       path: "/search/",
       name: "search",
       component: Search,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: "/search2electricboogaloo/",
-      name: "search2electricboogaloo",
-      component: Search2ElectricBoogaloo,
       meta: {
         requiresAuth: true
       }

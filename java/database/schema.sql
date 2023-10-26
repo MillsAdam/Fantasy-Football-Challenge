@@ -1,11 +1,11 @@
 BEGIN TRANSACTION;
 
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS offense_stats_2022;
-DROP TABLE IF EXISTS offense_proj_2022;
-DROP TABLE IF EXISTS defense_stats_2022;
-DROP TABLE IF EXISTS defense_proj_2022;
-DROP TABLE IF EXISTS teams_2022;
+DROP TABLE IF EXISTS offense_stats;
+DROP TABLE IF EXISTS offense_proj;
+DROP TABLE IF EXISTS defense_stats;
+DROP TABLE IF EXISTS defense_proj;
+DROP TABLE IF EXISTS teams;
 
 CREATE TABLE users (
 	user_id SERIAL,
@@ -15,7 +15,7 @@ CREATE TABLE users (
 	CONSTRAINT PK_user PRIMARY KEY (user_id)
 );
 
-CREATE TABLE offense_stats_2022 (
+CREATE TABLE offense_stats (
     GameKey VARCHAR(10),
     PlayerID INT,
     SeasonType INT,
@@ -100,7 +100,7 @@ CREATE TABLE offense_stats_2022 (
 );
 
 
-CREATE TABLE offense_proj_2022 (
+CREATE TABLE offense_proj (
     GameKey VARCHAR(10),
     PlayerID INT,
     SeasonType INT,
@@ -184,7 +184,7 @@ CREATE TABLE offense_proj_2022 (
     SnapCountsConfirmed BOOLEAN
 );
 
-CREATE TABLE defense_stats_2022 (
+CREATE TABLE defense_stats (
     GameKey VARCHAR(10),
     SeasonType INT,
     Season INT,
@@ -223,7 +223,7 @@ CREATE TABLE defense_stats_2022 (
     ScoreID INT
 );
 
-CREATE TABLE defense_proj_2022 (
+CREATE TABLE defense_proj (
     GameKey VARCHAR(10),
     SeasonType INT,
     Season INT,
@@ -262,7 +262,7 @@ CREATE TABLE defense_proj_2022 (
     ScoreID INT
 );
 
-CREATE TABLE teams_2022 (
+CREATE TABLE teams (
     Key VARCHAR(3),
     TeamID INT PRIMARY KEY,
     PlayerID INT,
@@ -290,17 +290,17 @@ CREATE TABLE teams_2022 (
 );
 
 
-ALTER TABLE offense_stats_2022
-ADD FOREIGN KEY (TeamID) REFERENCES teams_2022(TeamID);
+ALTER TABLE offense_stats
+ADD FOREIGN KEY (TeamID) REFERENCES teams(TeamID);
 
-ALTER TABLE offense_proj_2022
-ADD FOREIGN KEY (TeamID) REFERENCES teams_2022(TeamID);
+ALTER TABLE offense_proj
+ADD FOREIGN KEY (TeamID) REFERENCES teams(TeamID);
 
-ALTER TABLE defense_stats_2022
-ADD FOREIGN KEY (TeamID) REFERENCES teams_2022(TeamID);
+ALTER TABLE defense_stats
+ADD FOREIGN KEY (TeamID) REFERENCES teams(TeamID);
 
-ALTER TABLE defense_proj_2022
-ADD FOREIGN KEY (TeamID) REFERENCES teams_2022(TeamID);
+ALTER TABLE defense_proj
+ADD FOREIGN KEY (TeamID) REFERENCES teams(TeamID);
 
 
 COMMIT TRANSACTION;

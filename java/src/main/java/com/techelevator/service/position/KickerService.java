@@ -1,14 +1,14 @@
 package com.techelevator.service.position;
 
-import com.techelevator.dao.position.kicker.regularSeason.last4Average.KickerLast4AverageDao;
-import com.techelevator.dao.position.kicker.regularSeason.last4Total.KickerLast4TotalDao;
-import com.techelevator.dao.position.kicker.regularSeason.next4Projected.KickerNext4ProjectedDao;
-import com.techelevator.dao.position.kicker.regularSeason.remainingProjected.KickerRemainingProjectedDao;
-import com.techelevator.dao.position.kicker.regularSeason.seasonAverage.KickerSeasonAverageDao;
-import com.techelevator.dao.position.kicker.regularSeason.seasonProjected.KickerSeasonProjectedDao;
-import com.techelevator.dao.position.kicker.regularSeason.seasonTotal.KickerSeasonTotalDao;
-import com.techelevator.dao.position.kicker.regularSeason.weeklyProjected.KickerWeeklyProjectedDao;
-import com.techelevator.dao.position.kicker.regularSeason.weeklyTotal.KickerWeeklyTotalDao;
+import com.techelevator.dao.position.kicker.last4Average.KickerLast4AverageDao;
+import com.techelevator.dao.position.kicker.last4Total.KickerLast4TotalDao;
+import com.techelevator.dao.position.kicker.next4Projected.KickerNext4ProjectedDao;
+import com.techelevator.dao.position.kicker.remainingProjected.KickerRemainingProjectedDao;
+import com.techelevator.dao.position.kicker.seasonAverage.KickerSeasonAverageDao;
+import com.techelevator.dao.position.kicker.seasonProjected.KickerSeasonProjectedDao;
+import com.techelevator.dao.position.kicker.seasonTotal.KickerSeasonTotalDao;
+import com.techelevator.dao.position.kicker.weeklyProjected.KickerWeeklyProjectedDao;
+import com.techelevator.dao.position.kicker.weeklyTotal.KickerWeeklyTotalDao;
 import com.techelevator.model.position.KickerDto;
 import org.springframework.stereotype.Service;
 
@@ -75,13 +75,13 @@ public class KickerService {
                 results = handleSeasonInterval(searchPoints, searchCategory, searchTerm);
                 break;
             case LAST_4:
-                results = handleLast4Interval(searchPoints, searchCategory, searchTerm, searchWeek);
+                results = handleLast4Interval(searchPoints, searchCategory, searchTerm);
                 break;
             case NEXT_4:
-                results = handleNext4Interval(searchPoints, searchCategory, searchTerm, searchWeek);
+                results = handleNext4Interval(searchPoints, searchCategory, searchTerm);
                 break;
             case REMAINING:
-                results = handleRemainingInterval(searchPoints, searchCategory, searchTerm, searchWeek);
+                results = handleRemainingInterval(searchPoints, searchCategory, searchTerm);
                 break;
             case WEEKLY:
                 results = handleWeeklyInterval(searchPoints, searchCategory, searchTerm, searchWeek);
@@ -104,26 +104,26 @@ public class KickerService {
         return Collections.emptyList();
     }
 
-    private List<KickerDto> handleLast4Interval(String searchPoints, String searchCategory, String searchTerm, int searchWeek) {
+    private List<KickerDto> handleLast4Interval(String searchPoints, String searchCategory, String searchTerm) {
         switch(searchPoints) {
             case TOTAL:
-                return handleLast4Total(searchCategory, searchTerm, searchWeek);
+                return handleLast4Total(searchCategory, searchTerm);
             case AVERAGE:
-                return handleLast4Average(searchCategory, searchTerm, searchWeek);
+                return handleLast4Average(searchCategory, searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<KickerDto> handleNext4Interval(String searchPoints, String searchCategory, String searchTerm, int searchWeek) {
+    private List<KickerDto> handleNext4Interval(String searchPoints, String searchCategory, String searchTerm) {
         if (searchPoints.equalsIgnoreCase(PROJECTED)) {
-            return handleNext4Projected(searchCategory, searchTerm, searchWeek);
+            return handleNext4Projected(searchCategory, searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<KickerDto> handleRemainingInterval(String searchPoints, String searchCategory, String searchTerm, int searchWeek) {
+    private List<KickerDto> handleRemainingInterval(String searchPoints, String searchCategory, String searchTerm) {
         if (searchPoints.equalsIgnoreCase(PROJECTED)) {
-            return handleRemainingProjected(searchCategory, searchTerm, searchWeek);
+            return handleRemainingProjected(searchCategory, searchTerm);
         }
         return Collections.emptyList();
     }
@@ -182,58 +182,58 @@ public class KickerService {
         return Collections.emptyList();
     }
 
-    private List<KickerDto> handleLast4Total(String searchCategory, String searchTerm, Integer searchWeek) {
+    private List<KickerDto> handleLast4Total(String searchCategory, String searchTerm) {
         switch(searchCategory) {
             case ALL:
-                return kickerLast4TotalDao.getKickerLast4TotalStats(searchWeek);
+                return kickerLast4TotalDao.getKickerLast4TotalStats();
             case CONFERENCE:
-                return kickerLast4TotalDao.getKickerLast4TotalStatsByConference(searchWeek, searchTerm);
+                return kickerLast4TotalDao.getKickerLast4TotalStatsByConference(searchTerm);
             case TEAM:
-                return kickerLast4TotalDao.getKickerLast4TotalStatsByTeam(searchWeek, searchTerm);
+                return kickerLast4TotalDao.getKickerLast4TotalStatsByTeam(searchTerm);
             case NAME:
-                return kickerLast4TotalDao.getKickerLast4TotalStatsByName(searchWeek, searchTerm);
+                return kickerLast4TotalDao.getKickerLast4TotalStatsByName(searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<KickerDto> handleLast4Average(String searchCategory, String searchTerm, Integer searchWeek) {
+    private List<KickerDto> handleLast4Average(String searchCategory, String searchTerm) {
         switch(searchCategory) {
             case ALL:
-                return kickerLast4AverageDao.getKickerLast4AverageStats(searchWeek);
+                return kickerLast4AverageDao.getKickerLast4AverageStats();
             case CONFERENCE:
-                return kickerLast4AverageDao.getKickerLast4AverageStatsByConference(searchWeek, searchTerm);
+                return kickerLast4AverageDao.getKickerLast4AverageStatsByConference(searchTerm);
             case TEAM:
-                return kickerLast4AverageDao.getKickerLast4AverageStatsByTeam(searchWeek, searchTerm);
+                return kickerLast4AverageDao.getKickerLast4AverageStatsByTeam(searchTerm);
             case NAME:
-                return kickerLast4AverageDao.getKickerLast4AverageStatsByName(searchWeek, searchTerm);
+                return kickerLast4AverageDao.getKickerLast4AverageStatsByName(searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<KickerDto> handleNext4Projected(String searchCategory, String searchTerm, Integer searchWeek) {
+    private List<KickerDto> handleNext4Projected(String searchCategory, String searchTerm) {
         switch(searchCategory) {
             case ALL:
-                return kickerNext4ProjectedDao.getKickerNext4ProjectedStats(searchWeek);
+                return kickerNext4ProjectedDao.getKickerNext4ProjectedStats();
             case CONFERENCE:
-                return kickerNext4ProjectedDao.getKickerNext4ProjectedStatsByConference(searchWeek, searchTerm);
+                return kickerNext4ProjectedDao.getKickerNext4ProjectedStatsByConference(searchTerm);
             case TEAM:
-                return kickerNext4ProjectedDao.getKickerNext4ProjectedStatsByTeam(searchWeek, searchTerm);
+                return kickerNext4ProjectedDao.getKickerNext4ProjectedStatsByTeam(searchTerm);
             case NAME:
-                return kickerNext4ProjectedDao.getKickerNext4ProjectedStatsByName(searchWeek, searchTerm);
+                return kickerNext4ProjectedDao.getKickerNext4ProjectedStatsByName(searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<KickerDto> handleRemainingProjected(String searchCategory, String searchTerm, Integer searchWeek) {
+    private List<KickerDto> handleRemainingProjected(String searchCategory, String searchTerm) {
         switch(searchCategory) {
             case ALL:
-                return kickerRemainingProjectedDao.getKickerRemainingProjectedStats(searchWeek);
+                return kickerRemainingProjectedDao.getKickerRemainingProjectedStats();
             case CONFERENCE:
-                return kickerRemainingProjectedDao.getKickerRemainingProjectedStatsByConference(searchWeek, searchTerm);
+                return kickerRemainingProjectedDao.getKickerRemainingProjectedStatsByConference(searchTerm);
             case TEAM:
-                return kickerRemainingProjectedDao.getKickerRemainingProjectedStatsByTeam(searchWeek, searchTerm);
+                return kickerRemainingProjectedDao.getKickerRemainingProjectedStatsByTeam(searchTerm);
             case NAME:
-                return kickerRemainingProjectedDao.getKickerRemainingProjectedStatsByName(searchWeek, searchTerm);
+                return kickerRemainingProjectedDao.getKickerRemainingProjectedStatsByName(searchTerm);
         }
         return Collections.emptyList();
     }

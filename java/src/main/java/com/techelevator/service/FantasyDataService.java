@@ -17,9 +17,9 @@ public class FantasyDataService {
     private static final String FANTASY_DEFENSE_BY_GAME = "FantasyDefenseByGame/";
     private static final String PLAYER_GAME_PROJECTION_STATS_BY_WEEK = "PlayerGameProjectionStatsByWeek/";
     private static final String FANTASY_DEFENSE_PROJECTIONS_BY_GAME = "FantasyDefenseProjectionsByGame/";
-    private static final String REG = "2022REG/";
+    private static final String REG = "2023REG/";
     private static final String POST = "2022POST/";
-    private static final String TEAMS = "Teams/";
+    private static final String TEAMS = "Teams";
     private final RestTemplate restTemplate = new RestTemplate();
 
 

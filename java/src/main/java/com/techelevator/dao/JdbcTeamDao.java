@@ -25,7 +25,7 @@ public class JdbcTeamDao implements TeamDao{
     }
     @Override
     public void addTeams(Team team) {
-        String sql = generateSql("teams_2022");
+        String sql = generateSql("teams");
         jdbcTemplate.update(sql, createObjectArray(team));
     }
 

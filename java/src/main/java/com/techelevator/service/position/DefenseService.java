@@ -1,14 +1,14 @@
 package com.techelevator.service.position;
 
-import com.techelevator.dao.position.defense.regularSeason.SeasonTotal.DefenseSeasonTotalDao;
-import com.techelevator.dao.position.defense.regularSeason.last4Average.DefenseLast4AverageDao;
-import com.techelevator.dao.position.defense.regularSeason.last4Total.DefenseLast4TotalDao;
-import com.techelevator.dao.position.defense.regularSeason.next4Projected.DefenseNext4ProjectedDao;
-import com.techelevator.dao.position.defense.regularSeason.remainingProjected.DefenseRemainingProjectedDao;
-import com.techelevator.dao.position.defense.regularSeason.seasonAverage.DefenseSeasonAverageDao;
-import com.techelevator.dao.position.defense.regularSeason.seasonProjected.DefenseSeasonProjectedDao;
-import com.techelevator.dao.position.defense.regularSeason.weeklyProjected.DefenseWeeklyProjectedDao;
-import com.techelevator.dao.position.defense.regularSeason.weeklyTotal.DefenseWeeklyTotalDao;
+import com.techelevator.dao.position.defense.SeasonTotal.DefenseSeasonTotalDao;
+import com.techelevator.dao.position.defense.last4Average.DefenseLast4AverageDao;
+import com.techelevator.dao.position.defense.last4Total.DefenseLast4TotalDao;
+import com.techelevator.dao.position.defense.next4Projected.DefenseNext4ProjectedDao;
+import com.techelevator.dao.position.defense.remainingProjected.DefenseRemainingProjectedDao;
+import com.techelevator.dao.position.defense.seasonAverage.DefenseSeasonAverageDao;
+import com.techelevator.dao.position.defense.seasonProjected.DefenseSeasonProjectedDao;
+import com.techelevator.dao.position.defense.weeklyProjected.DefenseWeeklyProjectedDao;
+import com.techelevator.dao.position.defense.weeklyTotal.DefenseWeeklyTotalDao;
 import com.techelevator.model.position.DefenseDto;
 import org.springframework.stereotype.Service;
 
@@ -75,13 +75,13 @@ public class DefenseService {
                 results = handleSeasonInterval(searchPoints, searchCategory, searchTerm);
                 break;
             case LAST_4:
-                results = handleLast4Interval(searchPoints, searchCategory, searchTerm, searchWeek);
+                results = handleLast4Interval(searchPoints, searchCategory, searchTerm);
                 break;
             case NEXT_4:
-                results = handleNext4Interval(searchPoints, searchCategory, searchTerm, searchWeek);
+                results = handleNext4Interval(searchPoints, searchCategory, searchTerm);
                 break;
             case REMAINING:
-                results = handleRemainingInterval(searchPoints, searchCategory, searchTerm, searchWeek);
+                results = handleRemainingInterval(searchPoints, searchCategory, searchTerm);
                 break;
             case WEEKLY:
                 results = handleWeeklyInterval(searchPoints, searchCategory, searchTerm, searchWeek);
@@ -104,26 +104,26 @@ public class DefenseService {
         return Collections.emptyList();
     }
 
-    private List<DefenseDto> handleLast4Interval(String searchPoints, String searchCategory, String searchTerm, int searchWeek) {
+    private List<DefenseDto> handleLast4Interval(String searchPoints, String searchCategory, String searchTerm) {
         switch(searchPoints) {
             case TOTAL:
-                return handleLast4Total(searchCategory, searchTerm, searchWeek);
+                return handleLast4Total(searchCategory, searchTerm);
             case AVERAGE:
-                return handleLast4Average(searchCategory, searchTerm, searchWeek);
+                return handleLast4Average(searchCategory, searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<DefenseDto> handleNext4Interval(String searchPoints, String searchCategory, String searchTerm, int searchWeek) {
+    private List<DefenseDto> handleNext4Interval(String searchPoints, String searchCategory, String searchTerm) {
         if (searchPoints.equalsIgnoreCase(PROJECTED)) {
-            return handleNext4Projected(searchCategory, searchTerm, searchWeek);
+            return handleNext4Projected(searchCategory, searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<DefenseDto> handleRemainingInterval(String searchPoints, String searchCategory, String searchTerm, int searchWeek) {
+    private List<DefenseDto> handleRemainingInterval(String searchPoints, String searchCategory, String searchTerm) {
         if (searchPoints.equalsIgnoreCase(PROJECTED)) {
-            return handleRemainingProjected(searchCategory, searchTerm, searchWeek);
+            return handleRemainingProjected(searchCategory, searchTerm);
         }
         return Collections.emptyList();
     }
@@ -182,58 +182,58 @@ public class DefenseService {
         return Collections.emptyList();
     }
 
-    private List<DefenseDto> handleLast4Total(String searchCategory, String searchTerm, Integer searchWeek) {
+    private List<DefenseDto> handleLast4Total(String searchCategory, String searchTerm) {
         switch(searchCategory) {
             case ALL:
-                return defenseLast4TotalDao.getDefenseLast4TotalStats(searchWeek);
+                return defenseLast4TotalDao.getDefenseLast4TotalStats();
             case CONFERENCE:
-                return defenseLast4TotalDao.getDefenseLast4TotalStatsByConference(searchWeek, searchTerm);
+                return defenseLast4TotalDao.getDefenseLast4TotalStatsByConference(searchTerm);
             case TEAM:
-                return defenseLast4TotalDao.getDefenseLast4TotalStatsByTeam(searchWeek, searchTerm);
+                return defenseLast4TotalDao.getDefenseLast4TotalStatsByTeam(searchTerm);
             case NAME:
-                return defenseLast4TotalDao.getDefenseLast4TotalStatsByName(searchWeek, searchTerm);
+                return defenseLast4TotalDao.getDefenseLast4TotalStatsByName(searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<DefenseDto> handleLast4Average(String searchCategory, String searchTerm, Integer searchWeek) {
+    private List<DefenseDto> handleLast4Average(String searchCategory, String searchTerm) {
         switch(searchCategory) {
             case ALL:
-                return defenseLast4AverageDao.getDefenseLast4AverageStats(searchWeek);
+                return defenseLast4AverageDao.getDefenseLast4AverageStats();
             case CONFERENCE:
-                return defenseLast4AverageDao.getDefenseLast4AverageStatsByConference(searchWeek, searchTerm);
+                return defenseLast4AverageDao.getDefenseLast4AverageStatsByConference(searchTerm);
             case TEAM:
-                return defenseLast4AverageDao.getDefenseLast4AverageStatsByTeam(searchWeek, searchTerm);
+                return defenseLast4AverageDao.getDefenseLast4AverageStatsByTeam(searchTerm);
             case NAME:
-                return defenseLast4AverageDao.getDefenseLast4AverageStatsByName(searchWeek, searchTerm);
+                return defenseLast4AverageDao.getDefenseLast4AverageStatsByName(searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<DefenseDto> handleNext4Projected(String searchCategory, String searchTerm, Integer searchWeek) {
+    private List<DefenseDto> handleNext4Projected(String searchCategory, String searchTerm) {
         switch(searchCategory) {
             case ALL:
-                return defenseNext4ProjectedDao.getDefenseNext4ProjectedStats(searchWeek);
+                return defenseNext4ProjectedDao.getDefenseNext4ProjectedStats();
             case CONFERENCE:
-                return defenseNext4ProjectedDao.getDefenseNext4ProjectedStatsByConference(searchWeek, searchTerm);
+                return defenseNext4ProjectedDao.getDefenseNext4ProjectedStatsByConference(searchTerm);
             case TEAM:
-                return defenseNext4ProjectedDao.getDefenseNext4ProjectedStatsByTeam(searchWeek, searchTerm);
+                return defenseNext4ProjectedDao.getDefenseNext4ProjectedStatsByTeam(searchTerm);
             case NAME:
-                return defenseNext4ProjectedDao.getDefenseNext4ProjectedStatsByName(searchWeek, searchTerm);
+                return defenseNext4ProjectedDao.getDefenseNext4ProjectedStatsByName(searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<DefenseDto> handleRemainingProjected(String searchCategory, String searchTerm, Integer searchWeek) {
+    private List<DefenseDto> handleRemainingProjected(String searchCategory, String searchTerm) {
         switch(searchCategory) {
             case ALL:
-                return defenseRemainingProjectedDao.getDefenseRemainingProjectedStats(searchWeek);
+                return defenseRemainingProjectedDao.getDefenseRemainingProjectedStats();
             case CONFERENCE:
-                return defenseRemainingProjectedDao.getDefenseRemainingProjectedStatsByConference(searchWeek, searchTerm);
+                return defenseRemainingProjectedDao.getDefenseRemainingProjectedStatsByConference(searchTerm);
             case TEAM:
-                return defenseRemainingProjectedDao.getDefenseRemainingProjectedStatsByTeam(searchWeek, searchTerm);
+                return defenseRemainingProjectedDao.getDefenseRemainingProjectedStatsByTeam(searchTerm);
             case NAME:
-                return defenseRemainingProjectedDao.getDefenseRemainingProjectedStatsByName(searchWeek, searchTerm);
+                return defenseRemainingProjectedDao.getDefenseRemainingProjectedStatsByName(searchTerm);
         }
         return Collections.emptyList();
     }

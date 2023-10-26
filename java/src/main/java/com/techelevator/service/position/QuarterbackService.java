@@ -1,16 +1,15 @@
 package com.techelevator.service.position;
 
-import com.techelevator.dao.position.quarterback.regularSeason.last4Average.QuarterbackLast4AverageDao;
-import com.techelevator.dao.position.quarterback.regularSeason.last4Total.QuarterbackLast4TotalDao;
-import com.techelevator.dao.position.quarterback.regularSeason.next4Projected.QuarterbackNext4ProjectedDao;
-import com.techelevator.dao.position.quarterback.regularSeason.remainingProjected.QuarterbackRemainingProjectedDao;
-import com.techelevator.dao.position.quarterback.regularSeason.seasonAverage.QuarterbackSeasonAverageDao;
-import com.techelevator.dao.position.quarterback.regularSeason.seasonProjected.QuarterbackSeasonProjectedDao;
-import com.techelevator.dao.position.quarterback.regularSeason.seasonTotal.QuarterbackSeasonTotalDao;
-import com.techelevator.dao.position.quarterback.regularSeason.weeklyProjected.QuarterbackWeeklyProjectedDao;
-import com.techelevator.dao.position.quarterback.regularSeason.weeklyTotal.QuarterbackWeeklyTotalDao;
+import com.techelevator.dao.position.quarterback.last4Average.QuarterbackLast4AverageDao;
+import com.techelevator.dao.position.quarterback.last4Total.QuarterbackLast4TotalDao;
+import com.techelevator.dao.position.quarterback.next4Projected.QuarterbackNext4ProjectedDao;
+import com.techelevator.dao.position.quarterback.remainingProjected.QuarterbackRemainingProjectedDao;
+import com.techelevator.dao.position.quarterback.seasonAverage.QuarterbackSeasonAverageDao;
+import com.techelevator.dao.position.quarterback.seasonProjected.QuarterbackSeasonProjectedDao;
+import com.techelevator.dao.position.quarterback.seasonTotal.QuarterbackSeasonTotalDao;
+import com.techelevator.dao.position.quarterback.weeklyProjected.QuarterbackWeeklyProjectedDao;
+import com.techelevator.dao.position.quarterback.weeklyTotal.QuarterbackWeeklyTotalDao;
 import com.techelevator.model.position.QuarterbackDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -76,13 +75,13 @@ public class QuarterbackService {
                 results = handleSeasonInterval(searchPoints, searchCategory, searchTerm);
                 break;
             case LAST_4:
-                results = handleLast4Interval(searchPoints, searchCategory, searchTerm, searchWeek);
+                results = handleLast4Interval(searchPoints, searchCategory, searchTerm);
                 break;
             case NEXT_4:
-                results = handleNext4Interval(searchPoints, searchCategory, searchTerm, searchWeek);
+                results = handleNext4Interval(searchPoints, searchCategory, searchTerm);
                 break;
             case REMAINING:
-                results = handleRemainingInterval(searchPoints, searchCategory, searchTerm, searchWeek);
+                results = handleRemainingInterval(searchPoints, searchCategory, searchTerm);
                 break;
             case WEEKLY:
                 results = handleWeeklyInterval(searchPoints, searchCategory, searchTerm, searchWeek);
@@ -105,26 +104,26 @@ public class QuarterbackService {
         return Collections.emptyList();
     }
 
-    private List<QuarterbackDto> handleLast4Interval(String searchPoints, String searchCategory, String searchTerm, int searchWeek) {
+    private List<QuarterbackDto> handleLast4Interval(String searchPoints, String searchCategory, String searchTerm) {
         switch(searchPoints) {
             case TOTAL:
-                return handleLast4Total(searchCategory, searchTerm, searchWeek);
+                return handleLast4Total(searchCategory, searchTerm);
             case AVERAGE:
-                return handleLast4Average(searchCategory, searchTerm, searchWeek);
+                return handleLast4Average(searchCategory, searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<QuarterbackDto> handleNext4Interval(String searchPoints, String searchCategory, String searchTerm, int searchWeek) {
+    private List<QuarterbackDto> handleNext4Interval(String searchPoints, String searchCategory, String searchTerm) {
         if (searchPoints.equalsIgnoreCase(PROJECTED)) {
-            return handleNext4Projected(searchCategory, searchTerm, searchWeek);
+            return handleNext4Projected(searchCategory, searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<QuarterbackDto> handleRemainingInterval(String searchPoints, String searchCategory, String searchTerm, int searchWeek) {
+    private List<QuarterbackDto> handleRemainingInterval(String searchPoints, String searchCategory, String searchTerm) {
         if (searchPoints.equalsIgnoreCase(PROJECTED)) {
-            return handleRemainingProjected(searchCategory, searchTerm, searchWeek);
+            return handleRemainingProjected(searchCategory, searchTerm);
         }
         return Collections.emptyList();
     }
@@ -183,58 +182,58 @@ public class QuarterbackService {
         return Collections.emptyList();
     }
 
-    private List<QuarterbackDto> handleLast4Total(String searchCategory, String searchTerm, Integer searchWeek) {
+    private List<QuarterbackDto> handleLast4Total(String searchCategory, String searchTerm) {
         switch(searchCategory) {
             case ALL:
-                return quarterbackLast4TotalDao.getQuarterbackLast4TotalStats(searchWeek);
+                return quarterbackLast4TotalDao.getQuarterbackLast4TotalStats();
             case CONFERENCE:
-                return quarterbackLast4TotalDao.getQuarterbackLast4TotalStatsByAndConference(searchWeek, searchTerm);
+                return quarterbackLast4TotalDao.getQuarterbackLast4TotalStatsByAndConference(searchTerm);
             case TEAM:
-                return quarterbackLast4TotalDao.getQuarterbackLast4TotalStatsByTeam(searchWeek, searchTerm);
+                return quarterbackLast4TotalDao.getQuarterbackLast4TotalStatsByTeam(searchTerm);
             case NAME:
-                return quarterbackLast4TotalDao.getQuarterbackLast4TotalStatsByName(searchWeek, searchTerm);
+                return quarterbackLast4TotalDao.getQuarterbackLast4TotalStatsByName(searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<QuarterbackDto> handleLast4Average(String searchCategory, String searchTerm, Integer searchWeek) {
+    private List<QuarterbackDto> handleLast4Average(String searchCategory, String searchTerm) {
         switch(searchCategory) {
             case ALL:
-                return quarterbackLast4AverageDao.getQuarterbackLast4AverageStats(searchWeek);
+                return quarterbackLast4AverageDao.getQuarterbackLast4AverageStats();
             case CONFERENCE:
-                return quarterbackLast4AverageDao.getQuarterbackLast4AverageStatsByConference(searchWeek, searchTerm);
+                return quarterbackLast4AverageDao.getQuarterbackLast4AverageStatsByConference(searchTerm);
             case TEAM:
-                return quarterbackLast4AverageDao.getQuarterbackLast4AverageStatsByAndTeam(searchWeek, searchTerm);
+                return quarterbackLast4AverageDao.getQuarterbackLast4AverageStatsByAndTeam(searchTerm);
             case NAME:
-                return quarterbackLast4AverageDao.getQuarterbackLast4AverageStatsByAndName(searchWeek, searchTerm);
+                return quarterbackLast4AverageDao.getQuarterbackLast4AverageStatsByAndName(searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<QuarterbackDto> handleNext4Projected(String searchCategory, String searchTerm, Integer searchWeek) {
+    private List<QuarterbackDto> handleNext4Projected(String searchCategory, String searchTerm) {
         switch(searchCategory) {
             case ALL:
-                return quarterbackNext4ProjectedDao.getQuarterbackNext4ProjectedStats(searchWeek);
+                return quarterbackNext4ProjectedDao.getQuarterbackNext4ProjectedStats();
             case CONFERENCE:
-                return quarterbackNext4ProjectedDao.getQuarterbackNext4ProjectedStatsByConference(searchWeek, searchTerm);
+                return quarterbackNext4ProjectedDao.getQuarterbackNext4ProjectedStatsByConference(searchTerm);
             case TEAM:
-                return quarterbackNext4ProjectedDao.getQuarterbackNext4ProjectedStatsByTeam(searchWeek, searchTerm);
+                return quarterbackNext4ProjectedDao.getQuarterbackNext4ProjectedStatsByTeam(searchTerm);
             case NAME:
-                return quarterbackNext4ProjectedDao.getQuarterbackNext4ProjectedStatsByName(searchWeek, searchTerm);
+                return quarterbackNext4ProjectedDao.getQuarterbackNext4ProjectedStatsByName(searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<QuarterbackDto> handleRemainingProjected(String searchCategory, String searchTerm, Integer searchWeek) {
+    private List<QuarterbackDto> handleRemainingProjected(String searchCategory, String searchTerm) {
         switch(searchCategory) {
             case ALL:
-                return quarterbackRemainingProjectedDao.getQuarterbackRemainingProjectedStats(searchWeek);
+                return quarterbackRemainingProjectedDao.getQuarterbackRemainingProjectedStats();
             case CONFERENCE:
-                return quarterbackRemainingProjectedDao.getQuarterbackRemainingProjectedStatsByConference(searchWeek, searchTerm);
+                return quarterbackRemainingProjectedDao.getQuarterbackRemainingProjectedStatsByConference(searchTerm);
             case TEAM:
-                return quarterbackRemainingProjectedDao.getQuarterbackRemainingProjectedStatsByTeam(searchWeek, searchTerm);
+                return quarterbackRemainingProjectedDao.getQuarterbackRemainingProjectedStatsByTeam(searchTerm);
             case NAME:
-                return quarterbackRemainingProjectedDao.getQuarterbackRemainingProjectedStatsByName(searchWeek, searchTerm);
+                return quarterbackRemainingProjectedDao.getQuarterbackRemainingProjectedStatsByName(searchTerm);
         }
         return Collections.emptyList();
     }

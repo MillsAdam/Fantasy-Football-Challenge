@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 public class Application {
 
     public static void main(String[] args) {
+        System.setProperty("CURRENT_WEEK", "7");
         SpringApplication.run(Application.class, args);
     }
 

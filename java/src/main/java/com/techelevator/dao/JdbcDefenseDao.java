@@ -30,13 +30,13 @@ public class JdbcDefenseDao implements DefenseDao {
 
     @Override
     public void addDefenseStats(Defense defense) {
-        String sql = generateSql("defense_stats_2022");
+        String sql = generateSql("defense_stats");
         jdbcTemplate.update(sql, createObjectArray(defense));
     }
 
     @Override
     public void addDefenseProj(Defense defense) {
-        String sql = generateSql("defense_proj_2022");
+        String sql = generateSql("defense_proj");
         jdbcTemplate.update(sql, createObjectArray(defense));
     }
 

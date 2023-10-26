@@ -1,14 +1,14 @@
 package com.techelevator.service.position;
 
-import com.techelevator.dao.position.flexPlayer.regularSeason.last4Average.FlexPlayerLast4AverageDao;
-import com.techelevator.dao.position.flexPlayer.regularSeason.last4Total.FlexPlayerLast4TotalDao;
-import com.techelevator.dao.position.flexPlayer.regularSeason.next4Projected.FlexPlayerNext4ProjectedDao;
-import com.techelevator.dao.position.flexPlayer.regularSeason.remainingProjected.FlexPlayerRemainingProjectedDao;
-import com.techelevator.dao.position.flexPlayer.regularSeason.seasonAverage.FlexPlayerSeasonAverageDao;
-import com.techelevator.dao.position.flexPlayer.regularSeason.seasonProjected.FlexPlayerSeasonProjectedDao;
-import com.techelevator.dao.position.flexPlayer.regularSeason.seasonTotal.FlexPlayerSeasonTotalDao;
-import com.techelevator.dao.position.flexPlayer.regularSeason.weeklyProjected.FlexPlayerWeeklyProjectedDao;
-import com.techelevator.dao.position.flexPlayer.regularSeason.weeklyTotal.FlexPlayerWeeklyTotalDao;
+import com.techelevator.dao.position.flexPlayer.last4Average.FlexPlayerLast4AverageDao;
+import com.techelevator.dao.position.flexPlayer.last4Total.FlexPlayerLast4TotalDao;
+import com.techelevator.dao.position.flexPlayer.next4Projected.FlexPlayerNext4ProjectedDao;
+import com.techelevator.dao.position.flexPlayer.remainingProjected.FlexPlayerRemainingProjectedDao;
+import com.techelevator.dao.position.flexPlayer.seasonAverage.FlexPlayerSeasonAverageDao;
+import com.techelevator.dao.position.flexPlayer.seasonProjected.FlexPlayerSeasonProjectedDao;
+import com.techelevator.dao.position.flexPlayer.seasonTotal.FlexPlayerSeasonTotalDao;
+import com.techelevator.dao.position.flexPlayer.weeklyProjected.FlexPlayerWeeklyProjectedDao;
+import com.techelevator.dao.position.flexPlayer.weeklyTotal.FlexPlayerWeeklyTotalDao;
 import com.techelevator.model.position.FlexPlayerDto;
 import org.springframework.stereotype.Service;
 
@@ -76,13 +76,13 @@ public class FlexPlayerPositionService {
                 results = handleSeasonInterval(searchPosition, searchPoints, searchCategory, searchTerm);
                 break;
             case LAST_4:
-                results = handleLast4Interval(searchPosition, searchPoints, searchCategory, searchTerm, searchWeek);
+                results = handleLast4Interval(searchPosition, searchPoints, searchCategory, searchTerm);
                 break;
             case NEXT_4:
-                results = handleNext4Interval(searchPosition, searchPoints, searchCategory, searchTerm, searchWeek);
+                results = handleNext4Interval(searchPosition, searchPoints, searchCategory, searchTerm);
                 break;
             case REMAINING:
-                results = handleRemainingInterval(searchPosition, searchPoints, searchCategory, searchTerm, searchWeek);
+                results = handleRemainingInterval(searchPosition, searchPoints, searchCategory, searchTerm);
                 break;
             case WEEKLY:
                 results = handleWeeklyInterval(searchPosition, searchPoints, searchCategory, searchTerm, searchWeek);
@@ -105,26 +105,26 @@ public class FlexPlayerPositionService {
         return Collections.emptyList();
     }
 
-    private List<FlexPlayerDto> handleLast4Interval(String searchPosition, String searchPoints, String searchCategory, String searchTerm, int searchWeek) {
+    private List<FlexPlayerDto> handleLast4Interval(String searchPosition, String searchPoints, String searchCategory, String searchTerm) {
         switch(searchPoints) {
             case TOTAL:
-                return handleLast4Total(searchPosition, searchCategory, searchTerm, searchWeek);
+                return handleLast4Total(searchPosition, searchCategory, searchTerm);
             case AVERAGE:
-                return handleLast4Average(searchPosition, searchCategory, searchTerm, searchWeek);
+                return handleLast4Average(searchPosition, searchCategory, searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<FlexPlayerDto> handleNext4Interval(String searchPosition, String searchPoints, String searchCategory, String searchTerm, int searchWeek) {
+    private List<FlexPlayerDto> handleNext4Interval(String searchPosition, String searchPoints, String searchCategory, String searchTerm) {
         if (searchPoints.equalsIgnoreCase(PROJECTED)) {
-            return handleNext4Projected(searchPosition, searchCategory, searchTerm, searchWeek);
+            return handleNext4Projected(searchPosition, searchCategory, searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<FlexPlayerDto> handleRemainingInterval(String searchPosition, String searchPoints, String searchCategory, String searchTerm, int searchWeek) {
+    private List<FlexPlayerDto> handleRemainingInterval(String searchPosition, String searchPoints, String searchCategory, String searchTerm) {
         if (searchPoints.equalsIgnoreCase(PROJECTED)) {
-            return handleRemainingProjected(searchPosition, searchCategory, searchTerm, searchWeek);
+            return handleRemainingProjected(searchPosition, searchCategory, searchTerm);
         }
         return Collections.emptyList();
     }
@@ -183,58 +183,58 @@ public class FlexPlayerPositionService {
         return Collections.emptyList();
     }
 
-    private List<FlexPlayerDto> handleLast4Total(String searchPosition, String searchCategory, String searchTerm, Integer searchWeek) {
+    private List<FlexPlayerDto> handleLast4Total(String searchPosition, String searchCategory, String searchTerm) {
         switch(searchCategory) {
             case ALL:
-                return flexPlayerLast4TotalDao.getFlexPlayerLast4TotalStatsByPosition(searchWeek, searchPosition);
+                return flexPlayerLast4TotalDao.getFlexPlayerLast4TotalStatsByPosition(searchPosition);
             case CONFERENCE:
-                return flexPlayerLast4TotalDao.getFlexPlayerLast4TotalStatsByPositionAndConference(searchWeek, searchPosition, searchTerm);
+                return flexPlayerLast4TotalDao.getFlexPlayerLast4TotalStatsByPositionAndConference(searchPosition, searchTerm);
             case TEAM:
-                return flexPlayerLast4TotalDao.getFlexPlayerLast4TotalStatsByPositionAndTeam(searchWeek, searchPosition, searchTerm);
+                return flexPlayerLast4TotalDao.getFlexPlayerLast4TotalStatsByPositionAndTeam(searchPosition, searchTerm);
             case NAME:
-                return flexPlayerLast4TotalDao.getFlexPlayerLast4TotalStatsByPositionAndName(searchWeek, searchPosition, searchTerm);
+                return flexPlayerLast4TotalDao.getFlexPlayerLast4TotalStatsByPositionAndName(searchPosition, searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<FlexPlayerDto> handleLast4Average(String searchPosition, String searchCategory, String searchTerm, Integer searchWeek) {
+    private List<FlexPlayerDto> handleLast4Average(String searchPosition, String searchCategory, String searchTerm) {
         switch(searchCategory) {
             case ALL:
-                return flexPlayerLast4AverageDao.getFlexPlayerLast4AverageStatsByPosition(searchWeek, searchPosition);
+                return flexPlayerLast4AverageDao.getFlexPlayerLast4AverageStatsByPosition(searchPosition);
             case CONFERENCE:
-                return flexPlayerLast4AverageDao.getFlexPlayerLast4AverageStatsByPositionAndConference(searchWeek, searchPosition, searchTerm);
+                return flexPlayerLast4AverageDao.getFlexPlayerLast4AverageStatsByPositionAndConference(searchPosition, searchTerm);
             case TEAM:
-                return flexPlayerLast4AverageDao.getFlexPlayerLast4AverageStatsByPositionAndTeam(searchWeek, searchPosition, searchTerm);
+                return flexPlayerLast4AverageDao.getFlexPlayerLast4AverageStatsByPositionAndTeam(searchPosition, searchTerm);
             case NAME:
-                return flexPlayerLast4AverageDao.getFlexPlayerLast4AverageStatsByPositionAndName(searchWeek, searchPosition, searchTerm);
+                return flexPlayerLast4AverageDao.getFlexPlayerLast4AverageStatsByPositionAndName(searchPosition, searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<FlexPlayerDto> handleNext4Projected(String searchPosition, String searchCategory, String searchTerm, Integer searchWeek) {
+    private List<FlexPlayerDto> handleNext4Projected(String searchPosition, String searchCategory, String searchTerm) {
         switch(searchCategory) {
             case ALL:
-                return flexPlayerNext4ProjectedDao.getFlexPlayerNext4ProjectedStatsByPosition(searchWeek, searchPosition);
+                return flexPlayerNext4ProjectedDao.getFlexPlayerNext4ProjectedStatsByPosition(searchPosition);
             case CONFERENCE:
-                return flexPlayerNext4ProjectedDao.getFlexPlayerNext4ProjectedStatsByPositionAndConference(searchWeek, searchPosition, searchTerm);
+                return flexPlayerNext4ProjectedDao.getFlexPlayerNext4ProjectedStatsByPositionAndConference(searchPosition, searchTerm);
             case TEAM:
-                return flexPlayerNext4ProjectedDao.getFlexPlayerNext4ProjectedStatsByPositionAndTeam(searchWeek, searchPosition, searchTerm);
+                return flexPlayerNext4ProjectedDao.getFlexPlayerNext4ProjectedStatsByPositionAndTeam(searchPosition, searchTerm);
             case NAME:
-                return flexPlayerNext4ProjectedDao.getFlexPlayerNext4ProjectedStatsByPositionAndName(searchWeek, searchPosition, searchTerm);
+                return flexPlayerNext4ProjectedDao.getFlexPlayerNext4ProjectedStatsByPositionAndName(searchPosition, searchTerm);
         }
         return Collections.emptyList();
     }
 
-    private List<FlexPlayerDto> handleRemainingProjected(String searchPosition, String searchCategory, String searchTerm, Integer searchWeek) {
+    private List<FlexPlayerDto> handleRemainingProjected(String searchPosition, String searchCategory, String searchTerm) {
         switch(searchCategory) {
             case ALL:
-                return flexPlayerRemainingProjectedDao.getFlexPlayerRemainingProjectedStatsByPosition(searchWeek, searchPosition);
+                return flexPlayerRemainingProjectedDao.getFlexPlayerRemainingProjectedStatsByPosition(searchPosition);
             case CONFERENCE:
-                return flexPlayerRemainingProjectedDao.getFlexPlayerRemainingProjectedStatsByPositionAndConference(searchWeek, searchPosition, searchTerm);
+                return flexPlayerRemainingProjectedDao.getFlexPlayerRemainingProjectedStatsByPositionAndConference(searchPosition, searchTerm);
             case TEAM:
-                return flexPlayerRemainingProjectedDao.getFlexPlayerRemainingProjectedStatsByPositionAndTeam(searchWeek, searchPosition, searchTerm);
+                return flexPlayerRemainingProjectedDao.getFlexPlayerRemainingProjectedStatsByPositionAndTeam(searchPosition, searchTerm);
             case NAME:
-                return flexPlayerRemainingProjectedDao.getFlexPlayerRemainingProjectedStatsByPositionAndName(searchWeek, searchPosition, searchTerm);
+                return flexPlayerRemainingProjectedDao.getFlexPlayerRemainingProjectedStatsByPositionAndName(searchPosition, searchTerm);
         }
         return Collections.emptyList();
     }

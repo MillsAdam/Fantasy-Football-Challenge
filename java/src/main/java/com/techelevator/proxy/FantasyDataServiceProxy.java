@@ -30,6 +30,7 @@ public class FantasyDataServiceProxy {
     private DefenseDao defenseDao;
     @Autowired
     private TeamDao teamDao;
+    int currentWeek = Integer.parseInt(System.getProperty("CURRENT_WEEK"));
 
     public FantasyDataServiceProxy(FantasyDataService fantasyDataService, OffenseDao offenseDao, DefenseDao defenseDao, TeamDao teamDao) {
         this.fantasyDataService = fantasyDataService;
@@ -141,7 +142,7 @@ public class FantasyDataServiceProxy {
     @RequestMapping(path="/batch/offense/stats/reg", method=RequestMethod.POST)
     public ResponseEntity<String> addOffenseStatsRegFromAPI() {
         try {
-            for (int week = 1; week <= 18; week++) {
+            for (int week = 1; week <= currentWeek; week++) {
                 ResponseEntity<String> offenseStatsFromAPI = fantasyDataService.getOffenseStatsRegFromExternalAPI(week);
                 List<Offense> parsedOffenseStats = parseOffenseFromAPI(offenseStatsFromAPI);
                 for (Offense offense : parsedOffenseStats) {
@@ -210,7 +211,7 @@ public class FantasyDataServiceProxy {
     @RequestMapping(path="/batch/defense/stats/reg", method=RequestMethod.POST)
     public ResponseEntity<String> addDefenseStatsRegFromAPI() {
         try {
-            for (int week = 1; week <= 18; week++) {
+            for (int week = 1; week <= currentWeek; week++) {
                 ResponseEntity<String> defenseStatsFromAPI = fantasyDataService.getDefenseStatsRegFromExternalAPI(week);
                 List<Defense> parsedPlayerStats = parseDefenseFromAPI(defenseStatsFromAPI);
                 for (Defense defense : parsedPlayerStats) {
