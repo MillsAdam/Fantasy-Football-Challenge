@@ -6,6 +6,9 @@ DROP TABLE IF EXISTS offense_proj;
 DROP TABLE IF EXISTS defense_stats;
 DROP TABLE IF EXISTS defense_proj;
 DROP TABLE IF EXISTS teams;
+DROP TABLE IF EXISTS players;
+DROP TABLE IF EXISTS leagues;
+DROP TABLE IF EXISTS rosters;
 
 CREATE TABLE users (
 	user_id SERIAL,
@@ -287,6 +290,82 @@ CREATE TABLE teams (
     FanDuelPlayerID INT,
     AverageDraftPosition2QB DECIMAL(8, 2),
     AverageDraftPositionDynasty DECIMAL(8, 2)
+);
+
+CREATE TABLE players (
+    PlayerID INT PRIMARY KEY,
+    Team VARCHAR(255),
+    Number INT,
+    FirstName VARCHAR(255) NOT NULL,
+    LastName VARCHAR(255) NOT NULL,
+    Position VARCHAR(5),
+    Status VARCHAR(255),
+    Height VARCHAR(10),
+    Weight INT,
+    BirthDate DATE,
+    College VARCHAR(255),
+    Experience INT,
+    FantasyPosition VARCHAR(5),
+    PositionCategory VARCHAR(5),
+    PhotoUrl VARCHAR(255),
+    ByeWeek INT,
+    AverageDraftPosition DECIMAL(8, 2),
+    CollegeDraftTeam VARCHAR(255),
+    CollegeDraftYear INT,
+    CollegeDraftRound INT,
+    CollegeDraftPick INT,
+    IsUndraftedFreeAgent BOOLEAN,
+    FanDuelPlayerID INT,
+    DraftKingsPlayerID INT,
+    InjuryStatus VARCHAR(255),
+    FanDuelName VARCHAR(255),
+    DraftKingsName VARCHAR(255),
+    TeamID INT
+);
+
+CREATE TABLE leagues (
+    league_id Serial PRIMARY KEY,
+    user_id INT NOT NULL,
+    league_name VARCHAR(255) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE rosters (
+    roster_id SERIAL PRIMARY KEY,
+    league_id INT NOT NULL,
+    user_id INT NOT NULL,
+    roster_name VARCHAR(255) NOT NULL,
+    player1 INT UNIQUE REFERENCES players(playerID),
+    player2 INT UNIQUE REFERENCES players(playerID),
+    player3 INT UNIQUE REFERENCES players(playerID),
+    player4 INT UNIQUE REFERENCES players(playerID),
+    player5 INT UNIQUE REFERENCES players(playerID),
+    player6 INT UNIQUE REFERENCES players(playerID),
+    player7 INT UNIQUE REFERENCES players(playerID),
+    player8 INT UNIQUE REFERENCES players(playerID),
+    player9 INT UNIQUE REFERENCES players(playerID),
+    player10 INT UNIQUE REFERENCES players(playerID),
+    player11 INT UNIQUE REFERENCES players(playerID),
+    player12 INT UNIQUE REFERENCES players(playerID),
+    player13 INT UNIQUE REFERENCES players(playerID),
+    player14 INT UNIQUE REFERENCES players(playerID),
+    player15 INT UNIQUE REFERENCES players(playerID),
+    player16 INT UNIQUE REFERENCES players(playerID),
+    player17 INT UNIQUE REFERENCES players(playerID),
+    player18 INT UNIQUE REFERENCES players(playerID),
+    player19 INT UNIQUE REFERENCES players(playerID),
+    player20 INT UNIQUE REFERENCES players(playerID),
+    player21 INT UNIQUE REFERENCES players(playerID),
+    player22 INT UNIQUE REFERENCES players(playerID),
+    player23 INT UNIQUE REFERENCES players(playerID),
+    player24 INT UNIQUE REFERENCES players(playerID),
+    player25 INT UNIQUE REFERENCES players(playerID),
+    player26 INT UNIQUE REFERENCES players(playerID),
+    player27 INT UNIQUE REFERENCES players(playerID),
+    CONSTRAINT league_id_fk FOREIGN KEY (league_id) REFERENCES leagues(league_id),
+    CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 

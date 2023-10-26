@@ -4,9 +4,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techelevator.dao.DefenseDao;
 import com.techelevator.dao.OffenseDao;
+import com.techelevator.dao.PlayerDao;
 import com.techelevator.dao.TeamDao;
 import com.techelevator.model.Defense;
 import com.techelevator.model.Offense;
+import com.techelevator.model.Player;
 import com.techelevator.model.Team;
 import com.techelevator.service.FantasyDataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +32,18 @@ public class FantasyDataServiceProxy {
     private DefenseDao defenseDao;
     @Autowired
     private TeamDao teamDao;
+    @Autowired
+    private PlayerDao playerDao;
+
+
     int currentWeek = Integer.parseInt(System.getProperty("CURRENT_WEEK"));
 
-    public FantasyDataServiceProxy(FantasyDataService fantasyDataService, OffenseDao offenseDao, DefenseDao defenseDao, TeamDao teamDao) {
+    public FantasyDataServiceProxy(FantasyDataService fantasyDataService, OffenseDao offenseDao, DefenseDao defenseDao, TeamDao teamDao, PlayerDao playerDao) {
         this.fantasyDataService = fantasyDataService;
         this.offenseDao = offenseDao;
         this.defenseDao = defenseDao;
         this.teamDao = teamDao;
+        this.playerDao = playerDao;
     }
 
 
@@ -131,6 +138,36 @@ public class FantasyDataServiceProxy {
             throw new RuntimeException("Error parsing teams JSON" + e.getMessage(), e);
         }
     }
+
+
+
+    // Add Batch Teams
+    // /batch/teams
+    @RequestMapping(path="/batch/players", method = RequestMethod.POST)
+    public ResponseEntity<String> addPlayersFromExternalAPI() {
+        try {
+            ResponseEntity<String> playersFromAPI = fantasyDataService.getPlayersFromExternalAPI();
+            List<Player> parsedPlayers = parsePlayersFromAPI(playersFromAPI);
+            for (Player player : parsedPlayers) {
+                playerDao.addPlayers(player);
+            }
+            return ResponseEntity.ok("Players inserted into the database.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
+    }
+
+    // parsed Team and Stadium Detail from API
+    private List<Player> parsePlayersFromAPI(ResponseEntity<String> playersResponse) {
+        String playersJson = playersResponse.getBody();
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.readValue(playersJson, new TypeReference<List<Player>>() {});
+        } catch (IOException e) {
+            throw new RuntimeException("Error parsing players JSON" + e.getMessage(), e);
+        }
+    }
+
 
 
 

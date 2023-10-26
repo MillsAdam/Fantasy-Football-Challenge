@@ -20,6 +20,7 @@ public class FantasyDataService {
     private static final String REG = "2023REG/";
     private static final String POST = "2022POST/";
     private static final String TEAMS = "Teams";
+    private static final String PLAYERS = "Players";
     private final RestTemplate restTemplate = new RestTemplate();
 
 
@@ -68,6 +69,22 @@ public class FantasyDataService {
         HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
                 API_BASE_URL + TEAMS,
+                HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<String>() {}
+        );
+        return responseEntity;
+    }
+
+
+    // Players
+    public ResponseEntity<String> getPlayersFromExternalAPI() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.set("Ocp-Apim-Subscription-Key", API_KEY);
+        HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                API_BASE_URL + PLAYERS,
                 HttpMethod.GET,
                 entity,
                 new ParameterizedTypeReference<String>() {}
