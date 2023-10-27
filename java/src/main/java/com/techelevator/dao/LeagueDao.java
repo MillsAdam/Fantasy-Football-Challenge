@@ -5,7 +5,7 @@ import com.techelevator.model.League;
 import java.util.List;
 
 public interface LeagueDao {
-    void createLeague(League league);
+    League createLeague(int userId, String leagueName);
     League getLeagueById(int leagueId);
     List<League> getAllLeagues();
     void updateLeague(League league);

@@ -1,19 +1,19 @@
 package com.techelevator.model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class League {
     private int leagueId;
     private int userId;
     private String leagueName;
-    private Date startDate;
-    private Date endDate;
+    private Timestamp startDate;
+    private Timestamp endDate;
 
 
     public League() {}
 
 
-    public League(int leagueId, int userId, String leagueName, Date startDate, Date endDate) {
+    public League(int leagueId, int userId, String leagueName, Timestamp startDate, Timestamp endDate) {
         this.leagueId = leagueId;
         this.userId = userId;
         this.leagueName = leagueName;
@@ -46,19 +46,13 @@ public class League {
         this.leagueName = leagueName;
     }
 
-    public Date getStartDate() {
-        return new Date(System.currentTimeMillis());
-    }
+    public Timestamp getStartDate() { return startDate; }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
+    public void setStartDate(Timestamp startDate) { this.startDate = startDate; }
 
-    public Date getEndDate() {
-        return new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000);
-    }
+    public Timestamp getEndDate() { return endDate; }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
     }
 

@@ -327,8 +327,8 @@ CREATE TABLE leagues (
     league_id Serial PRIMARY KEY,
     user_id INT NOT NULL,
     league_name VARCHAR(255) NOT NULL,
-    start_date DATE NOT NULL,
-    end_date DATE NOT NULL,
+    start_date TIMESTAMP NOT NULL,
+    end_date TIMESTAMP NOT NULL,
     CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
