@@ -1,0 +1,10 @@
+CREATE USER fantasy_appuser
+WITH PASSWORD 'fantasyChallenge';
+
+GRANT SELECT, INSERT, UPDATE, DELETE
+ON ALL TABLES IN SCHEMA public
+TO fantasy_appuser;
+
+GRANT USAGE, SELECT
+ON ALL SEQUENCES IN SCHEMA public
+TO fantasy_appuser;
