@@ -18,7 +18,7 @@ namespace Capstone.Models
 
         public static TeamDto FromTeam(Team team) => new TeamDto
         {
-            TeamId = team.TeamId,
+            TeamId = team.TeamID,
             Team = team.Key,
             City = team.City,
             Name = team.Name,

@@ -28,9 +28,15 @@ namespace Capstone.Controllers
             try
             {
                 List<Team> teams = await _fantasyDataService.GetTeamsAsync();
+                List<Player> players = await _fantasyDataService.GetPlayersAsync();
                 foreach (Team team in teams)
                 {
                     PlayerDto playerDto = PlayerDto.FromTeam(team);
+                    await _playerDao.AddPlayerAsync(playerDto);
+                };
+                foreach (Player player in players)
+                {
+                    PlayerDto playerDto = PlayerDto.FromPlayer(player);
                     await _playerDao.AddPlayerAsync(playerDto);
                 };
                 return Ok("Players added successfully.");

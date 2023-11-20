@@ -11,9 +11,9 @@ namespace Capstone.Models
         [JsonProperty("Key")]
         public string Key { get; set; }
         [JsonProperty("TeamId")]
-        public int TeamId { get; set; }
+        public int TeamID { get; set; }
         [JsonProperty("PlayerId")]
-        public int PlayerId { get; set; }
+        public int PlayerID { get; set; }
         [JsonProperty("City")]
         public string City { get; set; }
         [JsonProperty("Name")]

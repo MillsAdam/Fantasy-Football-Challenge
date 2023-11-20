@@ -6,13 +6,14 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using Capstone.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Security;
 
 namespace Capstone.Services
 {
     public class FantasyDataService
     {
         private readonly HttpClient _client;
-        private const string ApiBaseUrl = "https://api.sportsdata.io/api/nfl/fantasy/json/Teams";
+        private const string ApiBaseUrl = "https://api.sportsdata.io/api/nfl/fantasy/json";
         private const string ApiKey = "d9c343f71fad4e1dbb63f512b9bcdbcd";
 
         public FantasyDataService()
@@ -24,7 +25,7 @@ namespace Capstone.Services
         {
             try 
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}");
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/Teams");
                 request.Headers.Add("Ocp-Apim-Subscription-Key", ApiKey);
 
                 var response = await _client.SendAsync(request);
@@ -33,6 +34,27 @@ namespace Capstone.Services
                 var jsonString = await response.Content.ReadAsStringAsync();
                 var teams = JsonConvert.DeserializeObject<List<Team>>(jsonString);
                 return teams;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error fetching data: {e.Message}");
+                return null;
+            }
+        }
+
+        public async Task<List<Player>> GetPlayersAsync()
+        {
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/Players");
+                request.Headers.Add("Ocp-Apim-Subscription-Key", ApiKey);
+
+                var response = await _client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var players = JsonConvert.DeserializeObject<List<Player>>(jsonString);
+                return players;
             }
             catch (Exception e)
             {

@@ -25,7 +25,14 @@ namespace Capstone.DAO
                 connection.Open();
                 NpgsqlCommand command = new NpgsqlCommand("INSERT INTO players (player_id, team_id, first_name, last_name, position, position_category, status, injury_status) VALUES (@player_id, @team_id, @first_name, @last_name, @position, @position_category, @status, @injury_status);", connection);
                 command.Parameters.AddWithValue("@player_id", playerDto.PlayerId);
-                command.Parameters.AddWithValue("@team_id", playerDto.TeamId);
+                if (playerDto.TeamId != null)
+                {
+                    command.Parameters.AddWithValue("@team_id", playerDto.TeamId);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@team_id", DBNull.Value);
+                }
                 command.Parameters.AddWithValue("@first_name", playerDto.FirstName);
                 command.Parameters.AddWithValue("@last_name", playerDto.LastName);
                 command.Parameters.AddWithValue("@position", playerDto.Position);

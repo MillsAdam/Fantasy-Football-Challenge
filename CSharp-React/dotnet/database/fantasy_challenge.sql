@@ -23,7 +23,7 @@ CREATE TABLE teams (
 
 CREATE TABLE players (
 	player_id int UNIQUE NOT NULL,
-	team_id int NOT NULL,
+	team_id int,
 	first_name varchar(50) NOT NULL,
 	last_name varchar(50) NOT NULL,
 	position varchar(50) NOT NULL,
