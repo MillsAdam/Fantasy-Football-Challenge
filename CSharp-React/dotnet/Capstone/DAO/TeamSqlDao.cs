@@ -22,7 +22,7 @@ namespace Capstone.DAO
         {
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 NpgsqlCommand command = new NpgsqlCommand("INSERT INTO teams (team_id, team, city, name, conference, division, full_name, status) VALUES (@team_id, @team, @city, @name, @conference, @division, @full_name, @status);", connection);
                 command.Parameters.AddWithValue("@team_id", teamDto.TeamId);
                 command.Parameters.AddWithValue("@team", teamDto.Team);

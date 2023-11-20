@@ -34,19 +34,12 @@ CREATE TABLE players (
 	CONSTRAINT FK_players_team_id FOREIGN KEY (team_id) REFERENCES teams(team_id)
 );
 
-CREATE TABLE fantasy_teams (
-	team_id SERIAL,
-	user_id int UNIQUE NOT NULL,
-	team_name varchar(50) UNIQUE NOT NULL,
-	CONSTRAINT PK_fantasy_teams_team_id PRIMARY KEY (team_id),
-	CONSTRAINT FK_fantasy_teams_user_id FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
-
 CREATE TABLE fantasy_rosters (
 	roster_id SERIAL,
-	team_id int NOT NULL,
-	CONSTRAINT PK_fantasy_rosters_roster_id PRIMARY KEY (roster_id),
-	CONSTRAINT FK_fantasy_rosters_team_id FOREIGN KEY (team_id) REFERENCES fantasy_teams(team_id)
+	user_id int UNIQUE NOT NULL,
+	team_name varchar(50) UNIQUE NOT NULL,
+	CONSTRAINT PK_fantasy_rosters_team_id PRIMARY KEY (roster_id),
+	CONSTRAINT FK_fantasy_rosters_user_id FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE roster_players (

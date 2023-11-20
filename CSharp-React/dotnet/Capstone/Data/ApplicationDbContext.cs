@@ -13,6 +13,12 @@ namespace Capstone.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Team> Teams { get; set; }
+        public DbSet<TeamDto> TeamDtos { get; set; }
+        public DbSet<Player> Players { get; set; }
+        public DbSet<PlayerDto> PlayerDtos { get; set; }
+        public DbSet<FantasyRoster> FantasyRosters { get; set; }
+        public DbSet<RosterPlayer> RosterPlayers { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
