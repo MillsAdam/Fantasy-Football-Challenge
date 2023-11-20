@@ -18,31 +18,21 @@ namespace Capstone.DAO
             _connectionString = configuration.GetConnectionString("Project");
         }
 
-        public TeamDto AddTeam(Team team)
+        public async Task AddTeamAsync(TeamDto teamDto)
         {
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 connection.Open();
                 NpgsqlCommand command = new NpgsqlCommand("INSERT INTO teams (team_id, team, city, name, conference, division, full_name, status) VALUES (@team_id, @team, @city, @name, @conference, @division, @full_name, @status);", connection);
-                command.Parameters.AddWithValue("@team", team.Key);
-                command.Parameters.AddWithValue("@city", team.City);
-                command.Parameters.AddWithValue("@name", team.Name);
-                command.Parameters.AddWithValue("@conference", team.Conference);
-                command.Parameters.AddWithValue("@division", team.Division);
-                command.Parameters.AddWithValue("@full_name", team.FullName);
+                command.Parameters.AddWithValue("@team_id", teamDto.TeamId);
+                command.Parameters.AddWithValue("@team", teamDto.Team);
+                command.Parameters.AddWithValue("@city", teamDto.City);
+                command.Parameters.AddWithValue("@name", teamDto.Name);
+                command.Parameters.AddWithValue("@conference", teamDto.Conference);
+                command.Parameters.AddWithValue("@division", teamDto.Division);
+                command.Parameters.AddWithValue("@full_name", teamDto.FullName);
                 command.Parameters.AddWithValue("@status", "Active");
                 command.ExecuteNonQuery();
-
-                TeamDto teamDto = new TeamDto();
-                teamDto.TeamId = team.TeamId;
-                teamDto.Team = team.Key;
-                teamDto.City = team.City;
-                teamDto.Name = team.Name;
-                teamDto.Conference = team.Conference;
-                teamDto.Division = team.Division;
-                teamDto.FullName = team.FullName;
-                teamDto.Status = "Active";
-                return teamDto;
             }
         }
     }

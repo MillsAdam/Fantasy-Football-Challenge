@@ -29,9 +29,9 @@ namespace Capstone.Models
         [JsonProperty("ByeWeek")]
         public int ByeWeek { get; set; }
         [JsonProperty("AverageDraftPosition")]
-        public double AverageDraftPosition { get; set; }
+        public double? AverageDraftPosition { get; set; }
         [JsonProperty("AverageDraftPositionPPR")]
-        public double AverageDraftPositionPPR { get; set; }
+        public double? AverageDraftPositionPPR { get; set; }
         [JsonProperty("PrimaryColor")]
         public string PrimaryColor { get; set; }
         [JsonProperty("SecondaryColor")]
@@ -53,12 +53,11 @@ namespace Capstone.Models
         [JsonProperty("FanDuelPlayerID")]
         public int FanDuelPlayerID { get; set; }
         [JsonProperty("AverageDraftPosition2QB")]
-        public double AverageDraftPosition2QB { get; set; }
+        public double? AverageDraftPosition2QB { get; set; }
         [JsonProperty("AverageDraftPositionDynasty")]
-        public double AverageDraftPositionDynasty { get; set; }
+        public double? AverageDraftPositionDynasty { get; set; }
         [JsonProperty("StadiumDetails")]
         public StadiumDetails StadiumDetails { get; set; }
-        public string Status { get; set; }
     }
 
     public class StadiumDetails

@@ -10,37 +10,36 @@ using Microsoft.AspNetCore.Mvc;
 namespace Capstone.Controllers
 {
     [ApiController]
-    [Route("api/teams")]
-    public class TeamController : ControllerBase
+    [Route("api/players")]
+    public class PlayerController : ControllerBase
     {
-        private readonly ITeamDao _teamDao;
+        private readonly IPlayerDao _playerDao;
         private readonly FantasyDataService _fantasyDataService;
-        
-        public TeamController(ITeamDao teamDao, FantasyDataService fantasyDataService)
+
+        public PlayerController(IPlayerDao playerDao, FantasyDataService fantasyDataService)
         {
-            _teamDao = teamDao;
+            _playerDao = playerDao;
             _fantasyDataService = fantasyDataService;
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddTeam()
+        public async Task<ActionResult> AddPlayer()
         {
             try
             {
                 List<Team> teams = await _fantasyDataService.GetTeamsAsync();
                 foreach (Team team in teams)
                 {
-                    TeamDto teamDto = TeamDto.FromTeam(team);
-                    await _teamDao.AddTeamAsync(teamDto);
+                    PlayerDto playerDto = PlayerDto.FromTeam(team);
+                    await _playerDao.AddPlayerAsync(playerDto);
                 };
-                return Ok("Teams added successfully.");
+                return Ok("Players added successfully.");
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error adding teams: {e.Message}");
+                Console.WriteLine($"Error adding players: {e.Message}");
                 return StatusCode(500, "An unexpected error occurred.");
             }
-
         }
     }
 }

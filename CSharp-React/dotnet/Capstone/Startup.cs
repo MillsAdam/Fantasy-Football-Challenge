@@ -46,6 +46,7 @@ namespace Capstone
                 options.UseNpgsql(connectionString));
             services.AddScoped<FantasyDataService>();
             services.AddTransient<ITeamDao, TeamSqlDao>();
+            services.AddTransient<IPlayerDao, PlayerSqlDao>();
             
 
             // configure jwt authentication

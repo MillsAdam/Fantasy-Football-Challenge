@@ -6,8 +6,8 @@ using Capstone.Models;
 
 namespace Capstone.DAO
 {
-    public interface ITeamDao
+    public interface IPlayerDao
     {
-        Task AddTeamAsync(TeamDto teamDto);
+        Task AddPlayerAsync(PlayerDto playerDto);
     }
 }
