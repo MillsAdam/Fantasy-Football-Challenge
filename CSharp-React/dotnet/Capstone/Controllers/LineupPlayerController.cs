@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Capstone.DAO;
 using Microsoft.AspNetCore.Mvc;
 using Capstone.Models;
+using Capstone.Services;
 
 namespace Capstone.Controllers
 {
@@ -14,11 +15,13 @@ namespace Capstone.Controllers
     {
         private readonly ILineupPlayerDao _lineupPlayerDao;
         private readonly IUserDao _userDao;
+        private readonly IFantasyLineupService _fantasyLineupService;
 
-        public LineupPlayerController(ILineupPlayerDao lineupPlayerDao, IUserDao userDao)
+        public LineupPlayerController(ILineupPlayerDao lineupPlayerDao, IUserDao userDao, IFantasyLineupService fantasyLineupService)
         {
             _lineupPlayerDao = lineupPlayerDao;
             _userDao = userDao;
+            _fantasyLineupService = fantasyLineupService;
         }
 
         [HttpPost]
@@ -28,7 +31,7 @@ namespace Capstone.Controllers
             {
                 string username = User.Identity.Name;
                 User user = _userDao.GetUserByUsername(username);
-                await _lineupPlayerDao.CreateLineupPlayer(user, playerId);
+                await _fantasyLineupService.CreateLineupPlayerAsync(user, playerId);
                 return Ok("Lineup player created successfully.");
             }
             catch (Exception e)

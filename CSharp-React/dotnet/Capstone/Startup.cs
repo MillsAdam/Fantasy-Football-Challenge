@@ -45,13 +45,13 @@ namespace Capstone
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(connectionString));
             services.AddScoped<FantasyDataService>();
+            services.AddScoped<IFantasyLineupService, FantasyLineupService>();
             services.AddTransient<ITeamDao, TeamSqlDao>();
             services.AddTransient<IPlayerDao, PlayerSqlDao>();
             services.AddTransient<IFantasyRosterDao, FantasyRosterSqlDao>();
             services.AddTransient<IRosterPlayerDao, RosterPlayerSqlDao>();
             services.AddTransient<IFantasyLineupDao, FantasyLineupSqlDao>();
-            services.AddTransient<ILineupPlayerDao, LineupPlayerSqlDao>();
-            
+            services.AddTransient<ILineupPlayerDao, LineupPlayerSqlDao>();            
 
             // configure jwt authentication
             var key = Encoding.ASCII.GetBytes(Configuration["JwtSecret"]);
