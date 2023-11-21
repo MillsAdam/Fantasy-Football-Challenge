@@ -25,6 +25,12 @@ namespace Capstone.DAO
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
+
+                List<RosterPlayer> rosterPlayers = await GetRosterPlayersByUser(user);
+                if (rosterPlayers.Count >= 27)
+                {
+                    throw new InvalidOperationException("Roster already has the maximum number of players.");
+                }
                 NpgsqlCommand command = new NpgsqlCommand("INSERT INTO roster_players (roster_id, player_id) VALUES (@roster_id, @player_id);", connection);
                 FantasyRoster fantasyRoster = await _fantasyRosterDao.GetFantasyRosterByUser(user);
                 command.Parameters.AddWithValue("@roster_id", fantasyRoster.FantasyRosterId);
@@ -33,10 +39,18 @@ namespace Capstone.DAO
             }
         }
 
-        // public async Task DeleteRosterPlayer(User user, int playerId)
-        // {
-        //     throw new NotImplementedException();
-        // }
+        public async Task DeleteRosterPlayer(User user, int playerId)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                NpgsqlCommand command = new NpgsqlCommand("DELETE FROM roster_players WHERE roster_id = @roster_id AND player_id = @player_id;", connection);
+                FantasyRoster fantasyRoster = await _fantasyRosterDao.GetFantasyRosterByUser(user);
+                command.Parameters.AddWithValue("@roster_id", fantasyRoster.FantasyRosterId);
+                command.Parameters.AddWithValue("@player_id", playerId);
+                command.ExecuteNonQuery();
+            }
+        }
 
         public async Task<List<RosterPlayer>> GetRosterPlayers()
         {
@@ -82,9 +96,18 @@ namespace Capstone.DAO
             return rosterPlayers;
         }
 
-        // public async Task UpdateRosterPlayer(User user, int playerId)
-        // {
-        //     throw new NotImplementedException();
-        // }
+        public async Task UpdateRosterPlayer(User user, int oldPlayerId, int newPlayerId)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                NpgsqlCommand command = new NpgsqlCommand("UPDATE roster_players SET player_id = @new_player_id WHERE roster_id = @roster_id AND player_id = @old_player_id;", connection);
+                FantasyRoster fantasyRoster = await _fantasyRosterDao.GetFantasyRosterByUser(user);
+                command.Parameters.AddWithValue("@roster_id", fantasyRoster.FantasyRosterId);
+                command.Parameters.AddWithValue("@old_player_id", oldPlayerId);
+                command.Parameters.AddWithValue("@new_player_id", newPlayerId);
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }

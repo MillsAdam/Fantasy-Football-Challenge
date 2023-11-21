@@ -40,7 +40,21 @@ namespace Capstone.Controllers
                 Console.WriteLine($"Error adding teams: {e.Message}");
                 return StatusCode(500, "An unexpected error occurred.");
             }
+        }
 
+        [HttpPut]
+        public async Task<ActionResult> UpdateTeamStatus([FromQuery] int teamId)
+        {
+            try
+            {
+                await _teamDao.UpdateTeamStatusAsync(teamId);
+                return Ok("Team status updated successfully.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error updating team status: {e.Message}");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
         }
     }
 }

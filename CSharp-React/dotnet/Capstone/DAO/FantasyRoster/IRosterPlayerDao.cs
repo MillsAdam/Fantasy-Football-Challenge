@@ -11,7 +11,7 @@ namespace Capstone.DAO
         Task<List<RosterPlayer>> GetRosterPlayers();
         Task<List<RosterPlayer>> GetRosterPlayersByUser(User user);
         Task CreateRosterPlayer(User user, int playerId);
-        // Task UpdateRosterPlayer(User user, int playerId);
-        // Task DeleteRosterPlayer(User user, int playerId);
+        Task UpdateRosterPlayer(User user, int oldPlayerId, int newPlayerId);
+        Task DeleteRosterPlayer(User user, int playerId);
     }
 }

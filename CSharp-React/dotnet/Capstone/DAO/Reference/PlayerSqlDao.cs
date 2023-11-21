@@ -49,5 +49,22 @@ namespace Capstone.DAO
                 command.ExecuteNonQuery();
             }
         }
+
+        public async Task<string> GetPlayerPositionByPlayerIdAsync(int playerId)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                NpgsqlCommand command = new NpgsqlCommand("SELECT position FROM players WHERE player_id = @player_id;", connection);
+                command.Parameters.AddWithValue("@player_id", playerId);
+                NpgsqlDataReader reader = command.ExecuteReader();
+                string position = "";
+                while (reader.Read())
+                {
+                    position = Convert.ToString(reader["position"]);
+                }
+                return position;
+            }
+        }
     }
 }

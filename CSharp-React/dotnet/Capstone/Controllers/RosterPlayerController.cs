@@ -38,6 +38,40 @@ namespace Capstone.Controllers
             }
         }
 
+        [HttpDelete]
+        public async Task<ActionResult> DeleteRosterPlayer([FromQuery] int playerId)
+        {
+            try
+            {
+                string username = User.Identity.Name;
+                User user = _userDao.GetUserByUsername(username);
+                await _rosterPlayerDao.DeleteRosterPlayer(user, playerId);
+                return Ok("Roster player deleted successfully.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error deleting roster player: {e.Message}");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateRosterPlayer([FromQuery] int oldPlayerId, [FromQuery] int newPlayerId)
+        {
+            try
+            {
+                string username = User.Identity.Name;
+                User user = _userDao.GetUserByUsername(username);
+                await _rosterPlayerDao.UpdateRosterPlayer(user, oldPlayerId, newPlayerId);
+                return Ok("Roster player updated successfully.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error updating roster player: {e.Message}");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+
         [HttpGet("all")]
         public async Task<ActionResult> GetRosterPlayers()
         {

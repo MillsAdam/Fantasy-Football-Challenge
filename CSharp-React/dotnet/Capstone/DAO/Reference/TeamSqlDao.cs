@@ -35,5 +35,16 @@ namespace Capstone.DAO
                 command.ExecuteNonQuery();
             }
         }
+
+        public async Task UpdateTeamStatusAsync(int teamId)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                NpgsqlCommand command = new NpgsqlCommand("UPDATE teams SET status = 'Inactive' WHERE team_id = @team_id;", connection);
+                command.Parameters.AddWithValue("@team_id", teamId);
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }
