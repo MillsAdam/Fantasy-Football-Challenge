@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import logo from '../logo.svg';
+import LeagueComponent from '../components/LeagueComponent';
 
 const League = () => {
     const { authToken } = useContext(AuthContext);
@@ -14,10 +14,8 @@ const League = () => {
     }, [authToken, navigate]);
 
     return (
-        <div className="home">
-            <h1>Home Page</h1>
-            <p>You must be authenticated to see this.</p>
-            <img src={logo} className="App-logo" alt="logo" />
+        <div className="league">
+            <LeagueComponent />
         </div>
     );
 };
