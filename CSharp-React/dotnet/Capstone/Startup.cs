@@ -91,7 +91,7 @@ namespace Capstone
 
             app.UseAuthentication();
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 
