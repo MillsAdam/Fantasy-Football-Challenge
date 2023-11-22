@@ -117,7 +117,7 @@ namespace Capstone.DAO
             PasswordHash hash = passwordHasher.ComputeHash(password);
 
             string sql = "INSERT INTO users (username, password_hash, salt, user_role) " +
-                         "OUTPUT INSERTED.user_id " +
+                        //  "OUTPUT INSERTED.user_id " +
                          "VALUES (@username, @password_hash, @salt, @user_role)";
 
             int newUserId = 0;
@@ -133,17 +133,18 @@ namespace Capstone.DAO
                     cmd.Parameters.AddWithValue("@salt", hash.Salt);
                     cmd.Parameters.AddWithValue("@user_role", role);
 
-                    newUserId = Convert.ToInt32(cmd.ExecuteScalar());
+                    // newUserId = Convert.ToInt32(cmd.ExecuteScalar());
+                    cmd.ExecuteNonQuery();
                     
                 }
-                newUser = GetUserById(newUserId);
+                // newUser = GetUserById(newUserId);
             }
             catch (PostgresException ex)
             {
                 throw new DaoException("SQL exception occurred", ex);
             }
 
-            return newUser;
+            return GetUserByUsername(username);
         }
 
         private User MapRowToUser(NpgsqlDataReader reader)
