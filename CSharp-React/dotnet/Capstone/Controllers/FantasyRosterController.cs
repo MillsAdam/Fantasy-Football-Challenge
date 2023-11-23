@@ -47,8 +47,8 @@ namespace Capstone.Controllers
         {
             try
             {
-                List<FantasyRoster> fantasyRosters = await _fantasyRosterDao.GetFantasyRosters();
-                return Ok(fantasyRosters);
+                List<FantasyRosterDto> fantasyRosterDtos = await _fantasyRosterDao.GetFantasyRosters();
+                return Ok(fantasyRosterDtos);
             }
             catch (Exception e)
             {

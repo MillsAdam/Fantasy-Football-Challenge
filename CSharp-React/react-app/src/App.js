@@ -10,6 +10,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import League from './views/League';
 import Roster from './views/Roster';
 
+
 function App() {
   return (
     <Router>
@@ -27,7 +28,6 @@ function App() {
         </Routes>
       </div>
     </Router>
-    
   );
 }
 

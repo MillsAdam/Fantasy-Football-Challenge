@@ -52,16 +52,16 @@ function Register() {
             )}
             <form onSubmit={register}>
                 <div className="form-input-group">
-                    <label>Username: </label>
-                    <input className="form" type="text" name="username" value={user.username} onChange={e => setUser({ ...user, username: e.target.value })} onFocus={clearErrors} />
+                    <label htmlFor="username">Username: </label>
+                    <input className="form" type="text" id="username" name="username" value={user.username} onChange={e => setUser({ ...user, username: e.target.value })} onFocus={clearErrors} autoComplete="username" />
                 </div>
                 <div className="form-input-group">
-                    <label>Password: </label>
-                    <input className="form" type="password" name="password" value={user.password} onChange={e => setUser({ ...user, password: e.target.value })} onFocus={clearErrors} />
+                    <label htmlFor="password">Password: </label>
+                    <input className="form" type="password" id="password" name="password" value={user.password} onChange={e => setUser({ ...user, password: e.target.value })} onFocus={clearErrors} autoComplete="new-password" />
                 </div>
                 <div className="form-input-group">
-                    <label>Confirm Password: </label>
-                    <input className="form" type="password" name="confirmPassword" value={user.confirmPassword} onChange={e => setUser({ ...user, confirmPassword: e.target.value })} onFocus={clearErrors} />
+                    <label htmlFor="confirmPassword">Confirm Password: </label>
+                    <input className="form" type="password" id="confirmPassword" name="confirmPassword" value={user.confirmPassword} onChange={e => setUser({ ...user, confirmPassword: e.target.value })} onFocus={clearErrors} autoComplete="new-password" />
                 </div>
                 <input type="submit" className="form" value="Register" />
             </form>

@@ -30,7 +30,11 @@ function LeagueComponent() {
             setIsLoading(false);
         }
 
-        checkUserTeam();
+        if (currentUser && currentUser.userId) {
+            checkUserTeam();
+        } else {
+            setError('User not found');
+        }
     }, [currentUser]);
 
     async function createRoster(e) {
@@ -38,9 +42,12 @@ function LeagueComponent() {
         setIsLoading(true);
         setError(null);
         try {
-            const data = await LeagueService.createRoster(teamName, authToken);
-            setRosters([...rosters, data]);
-            setUserHasTeam(true);
+            const newRoster = await LeagueService.createRoster(teamName, authToken);
+            if (newRoster) {
+                const updatedRosters = await LeagueService.getFantasyRosters();
+                setRosters(updatedRosters);
+                setUserHasTeam(true);
+            }
         } catch (error) {
             console.error('An error occurred: ', error);
             setError('Failed to create League Roster');
@@ -54,8 +61,11 @@ function LeagueComponent() {
             {!userHasTeam && (
                 <>
                     <form onSubmit={createRoster}>
+                        <label htmlFor="teamName">Team Name</label>
                         <input
                             type="text"
+                            id="teamName"
+                            name="teamName"
                             value={teamName}
                             onChange={(e) => setTeamName(e.target.value)}
                         />
@@ -71,16 +81,14 @@ function LeagueComponent() {
                         <table className="table">
                             <thead>
                                 <tr>
-                                    <th>Roster ID</th>
-                                    <th>User ID</th>
+                                    <th>Username</th>
                                     <th>Team Name</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {rosters.map((roster, index) => (
                                     <tr key={index}>
-                                        <td>{roster.fantasyRosterId}</td>
-                                        <td>{roster.userId}</td>
+                                        <td>{roster.username}</td>
                                         <td>{roster.teamName}</td>
                                     </tr>
                                 ))}

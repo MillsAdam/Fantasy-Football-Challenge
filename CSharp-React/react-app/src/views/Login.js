@@ -37,11 +37,11 @@ function Login() {
             <form onSubmit={login}>
                 <div className="form-input-group">
                     <label htmlFor="username">Username</label>
-                    <input className="form" type="text" name="username"  value={user.username} onChange={handleInputChange} />
+                    <input className="form" type="text" id="username" name="username"  value={user.username} onChange={handleInputChange} autoComplete="username" />
                 </div>
                 <div className="form-input-group">
                     <label htmlFor="password">Password</label>
-                    <input className="form" type="password" name="password" value={user.password} onChange={handleInputChange} />
+                    <input className="form" type="password" id="password" name="password" value={user.password} onChange={handleInputChange} autoComplete="current-password" />
                 </div>
                 <button className="form" type="submit" value="Login">Login</button>
             </form>

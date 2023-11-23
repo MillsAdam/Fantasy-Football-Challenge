@@ -1,26 +1,28 @@
 import axios from 'axios';
 
 const LeagueService = {
-    getFantasyRosters() {
-        return axios.get('http://localhost:5000/api/fantasyrosters')
-            .then(response => response.data)
-            .catch(error => {
-                console.error('An error occurred: ', error);
-                throw error;
-            });
+    async getFantasyRosters() {
+        try {
+            const response = await axios.get('http://localhost:5000/api/fantasyrosters');
+            return response.data;
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            throw error;
+        }
     },
 
-    createRoster(teamName, authToken) {
-        return axios.post(`http://localhost:5000/api/fantasyrosters?teamName=${teamName}`, {}, {
-            headers: {
-                Authorization: `Bearer ${authToken}`
-            },
-        })
-            .then(response => response.data)
-            .catch(error => {
-                console.error('An error occurred: ', error);
-                throw error;
+    async createRoster(teamName, authToken) {
+        try {
+            const response = await axios.post(`http://localhost:5000/api/fantasyrosters?teamName=${teamName}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                },
             });
+            return response.data;
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            throw error;
+        }
     },
 };
 

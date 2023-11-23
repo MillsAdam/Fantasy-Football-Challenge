@@ -31,27 +31,28 @@ namespace Capstone.DAO
             }
         }
 
-        public async Task<List<FantasyRoster>> GetFantasyRosters()
+        public async Task<List<FantasyRosterDto>> GetFantasyRosters()
         {
-            List<FantasyRoster> fantasyRosters = new List<FantasyRoster>();
+            List<FantasyRosterDto> fantasyRosterDtos = new List<FantasyRosterDto>();
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                NpgsqlCommand command = new NpgsqlCommand("SELECT roster_id, user_id, team_name FROM fantasy_rosters;", connection);
-                NpgsqlDataReader reader = command.ExecuteReader();
+                NpgsqlCommand command = new NpgsqlCommand("SELECT fr.roster_id, fr.user_id, fr.team_name, u.username FROM fantasy_rosters fr JOIN users u ON fr.user_id = u.user_id;", connection);
+                using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                 while (reader.Read())
                 {
-                    FantasyRoster fantasyRoster = new FantasyRoster();
+                    FantasyRosterDto fantasyRosterDto = new FantasyRosterDto();
                     {
-                        fantasyRoster.FantasyRosterId = Convert.ToInt32(reader["roster_id"]);
-                        fantasyRoster.UserId = Convert.ToInt32(reader["user_id"]);
-                        fantasyRoster.TeamName = Convert.ToString(reader["team_name"]);
+                        fantasyRosterDto.FantasyRosterId = Convert.ToInt32(reader["roster_id"]);
+                        fantasyRosterDto.UserId = Convert.ToInt32(reader["user_id"]);
+                        fantasyRosterDto.TeamName = Convert.ToString(reader["team_name"]);
+                        fantasyRosterDto.Username = Convert.ToString(reader["username"]);
                     
                     };
-                    fantasyRosters.Add(fantasyRoster);
+                    fantasyRosterDtos.Add(fantasyRosterDto);
                 }
             }
-            return fantasyRosters;
+            return fantasyRosterDtos;
         }
 
         public async Task<FantasyRoster> GetFantasyRosterByUser(User user)
