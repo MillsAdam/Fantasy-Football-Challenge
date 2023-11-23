@@ -73,6 +73,33 @@ namespace Capstone.DAO
             return rosterPlayers;
         }
 
+        public async Task<List<RosterPlayerDto>> GetRosterPlayerDtosByUser(User user)
+        {
+            List<RosterPlayerDto> rosterPlayerDtos = new List<RosterPlayerDto>();
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                NpgsqlCommand command = new NpgsqlCommand("SELECT rp.roster_id, rp.player_id, p.position, t.team, p.first_name, p.last_name FROM roster_players rp JOIN players p ON rp.player_id = p.player_id JOIN teams t ON p.team_id = t.team_id WHERE roster_id = @roster_id;", connection);
+                FantasyRoster fantasyRoster = await _fantasyRosterDao.GetFantasyRosterByUser(user);
+                command.Parameters.AddWithValue("@roster_id", fantasyRoster.FantasyRosterId);
+                NpgsqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    RosterPlayerDto rosterPlayerDto = new RosterPlayerDto();
+                    {
+                        rosterPlayerDto.FantasyRosterId = Convert.ToInt32(reader["roster_id"]);
+                        rosterPlayerDto.PlayerId = Convert.ToInt32(reader["player_id"]);
+                        rosterPlayerDto.Team = Convert.ToString(reader["team"]);
+                        rosterPlayerDto.Position = Convert.ToString(reader["position"]);
+                        rosterPlayerDto.FirstName = Convert.ToString(reader["first_name"]);
+                        rosterPlayerDto.LastName = Convert.ToString(reader["last_name"]);
+                    };
+                    rosterPlayerDtos.Add(rosterPlayerDto);
+                }
+            }
+            return rosterPlayerDtos;
+        }
+
         public async Task<List<RosterPlayer>> GetRosterPlayersByUser(User user)
         {
             List<RosterPlayer> rosterPlayers = new List<RosterPlayer>();

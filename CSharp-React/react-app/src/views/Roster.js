@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import logo from '../logo.svg';
+import RosterComponent from '../components/RosterComponent';
 
 const Roster = () => {
     const { authToken } = useContext(AuthContext);
@@ -14,10 +14,8 @@ const Roster = () => {
     }, [authToken, navigate]);
 
     return (
-        <div className="home">
-            <h1>Home Page</h1>
-            <p>You must be authenticated to see this.</p>
-            <img src={logo} className="App-logo" alt="logo" />
+        <div className="roster">
+            <RosterComponent />
         </div>
     );
 };

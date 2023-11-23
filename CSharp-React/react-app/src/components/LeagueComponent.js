@@ -62,16 +62,8 @@ function LeagueComponent() {
                 <>
                     <form onSubmit={createRoster}>
                         <label htmlFor="teamName">Team Name</label>
-                        <input
-                            type="text"
-                            id="teamName"
-                            name="teamName"
-                            value={teamName}
-                            onChange={(e) => setTeamName(e.target.value)}
-                        />
-                        <button type="submit" disabled={isLoading}>
-                            {isLoading ? "Loading..." : "Create League Roster"}
-                        </button>
+                        <input type="text" id="teamName" name="teamName" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
+                        <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create League Roster"}</button>
                     </form>
                 </>
             )}
