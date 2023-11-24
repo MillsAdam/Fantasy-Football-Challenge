@@ -20,6 +20,11 @@ namespace Capstone.Data
         public DbSet<RosterPlayer> RosterPlayers { get; set; }
         public DbSet<FantasyLineup> FantasyLineups { get; set; }
         public DbSet<LineupPlayer> LineupPlayers { get; set; }
+        public DbSet<PlayerStats> PlayerStats { get; set; }
+        public DbSet<PlayerStatsDto> PlayerStatsDtos { get; set; }
+        public DbSet<DefenseStats> DefenseStats { get; set; }
+        public DbSet<SearchPlayerDto> SearchPlayerDtos { get; set; }
+        
         
 
 

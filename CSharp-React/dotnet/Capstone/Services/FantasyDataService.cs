@@ -63,5 +63,47 @@ namespace Capstone.Services
             }
         }
 
+        public async Task<List<PlayerStats>> GetPlayerStatsAsync()
+        {
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/PlayerGameStatsByWeek/2023REG/1");
+                request.Headers.Add("Ocp-Apim-Subscription-Key", ApiKey);
+
+                var response = await _client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var playerStats = JsonConvert.DeserializeObject<List<PlayerStats>>(jsonString);
+                return playerStats;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error fetching data: {e.Message}");
+                return null;
+            }
+        }
+
+        public async Task<List<DefenseStats>> GetDefenseStatsAsync()
+        {
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/FantasyDefenseByGame/2023REG/1");
+                request.Headers.Add("Ocp-Apim-Subscription-Key", ApiKey);
+
+                var response = await _client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var defenseStats = JsonConvert.DeserializeObject<List<DefenseStats>>(jsonString);
+                return defenseStats;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error fetching data: {e.Message}");
+                return null;
+            }
+        }
+
     }
 }

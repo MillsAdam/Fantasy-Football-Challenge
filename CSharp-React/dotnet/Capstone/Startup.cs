@@ -13,6 +13,7 @@ using Capstone.Data;
 using Microsoft.EntityFrameworkCore;
 using Capstone.Models;
 using Capstone.Services;
+using Capstone.DAO.Reference;
 
 
 namespace Capstone
@@ -51,7 +52,8 @@ namespace Capstone
             services.AddTransient<IFantasyRosterDao, FantasyRosterSqlDao>();
             services.AddTransient<IRosterPlayerDao, RosterPlayerSqlDao>();
             services.AddTransient<IFantasyLineupDao, FantasyLineupSqlDao>();
-            services.AddTransient<ILineupPlayerDao, LineupPlayerSqlDao>();            
+            services.AddTransient<ILineupPlayerDao, LineupPlayerSqlDao>();   
+            services.AddTransient<IPlayerStatsDao, PlayerStatsSqlDao>();         
 
             // configure jwt authentication
             var key = Encoding.ASCII.GetBytes(Configuration["JwtSecret"]);

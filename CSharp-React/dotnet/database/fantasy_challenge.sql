@@ -31,6 +31,19 @@ CREATE TABLE players (
 	CONSTRAINT FK_players_team_id FOREIGN KEY (team_id) REFERENCES teams(team_id)
 );
 
+CREATE TABLE player_stats(
+	player_id int NOT NULL,
+	team_id int NOT NULL,
+	week int NOT NULL,
+	name varchar(50) NOT NULL,
+	position varchar(50) NOT NULL,
+	status varchar(50),
+	injury_status varchar(50),
+	fantasy_points numeric(5,2),
+	CONSTRAINT FK_player_stats_player_id FOREIGN KEY (player_id) REFERENCES players(player_id),
+	CONSTRAINT FK_player_stats_team_id FOREIGN KEY (team_id) REFERENCES teams(team_id)
+);
+
 CREATE TABLE fantasy_rosters (
 	roster_id SERIAL,
 	user_id int UNIQUE NOT NULL,

@@ -66,10 +66,6 @@ namespace Capstone.DAO
             }
         }
 
-        // CHANGE TO LIST OF PLAYERIDS
-        // FIX SEARCH TO ACCOMODATE FIRST AND LAST NAME
-        // ONLY INCLUDE OFFENSE PLAYERS AND KICKERS AND TEAM DEFENSE
-
         public async Task<List<SearchPlayerDto>> GetPlayerIdByNameAsync(string playerName)
         {
             List<SearchPlayerDto> searchPlayerDtos = new List<SearchPlayerDto>();
