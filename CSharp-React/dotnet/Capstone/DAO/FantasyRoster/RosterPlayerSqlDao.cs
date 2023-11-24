@@ -80,7 +80,20 @@ namespace Capstone.DAO
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                NpgsqlCommand command = new NpgsqlCommand("SELECT rp.roster_id, rp.player_id, p.position, t.team, p.first_name, p.last_name FROM roster_players rp JOIN players p ON rp.player_id = p.player_id JOIN teams t ON p.team_id = t.team_id WHERE roster_id = @roster_id;", connection);
+                NpgsqlCommand command = new NpgsqlCommand(
+                    "SELECT rp.roster_id, rp.player_id, p.position, t.team, p.name " + 
+                    "FROM roster_players rp " + 
+                    "JOIN players p ON rp.player_id = p.player_id " +
+                    "JOIN teams t ON p.team_id = t.team_id " + 
+                    "WHERE roster_id = @roster_id " + 
+                    "ORDER BY CASE p.position " + 
+                        "WHEN 'QB' THEN 1 " + 
+                        "WHEN 'RB' THEN 2 " + 
+                        "WHEN 'WR' THEN 3 " + 
+                        "WHEN 'TE' THEN 4 " + 
+                        "WHEN 'K' THEN 5 " + 
+                        "WHEN 'DEF' THEN 6 " + 
+                    "ELSE 7 END ASC;", connection);
                 FantasyRoster fantasyRoster = await _fantasyRosterDao.GetFantasyRosterByUser(user);
                 command.Parameters.AddWithValue("@roster_id", fantasyRoster.FantasyRosterId);
                 NpgsqlDataReader reader = command.ExecuteReader();
@@ -92,8 +105,7 @@ namespace Capstone.DAO
                         rosterPlayerDto.PlayerId = Convert.ToInt32(reader["player_id"]);
                         rosterPlayerDto.Team = Convert.ToString(reader["team"]);
                         rosterPlayerDto.Position = Convert.ToString(reader["position"]);
-                        rosterPlayerDto.FirstName = Convert.ToString(reader["first_name"]);
-                        rosterPlayerDto.LastName = Convert.ToString(reader["last_name"]);
+                        rosterPlayerDto.Name = Convert.ToString(reader["name"]);
                     };
                     rosterPlayerDtos.Add(rosterPlayerDto);
                 }

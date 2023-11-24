@@ -53,8 +53,8 @@ namespace Capstone.Controllers
         {
             try
             {
-                int playerId = await _playerDao.GetPlayerIdByNameAsync(playerName);
-                return Ok(playerId);
+                List<SearchPlayerDto> searchPlayerDtos = await _playerDao.GetPlayerIdByNameAsync(playerName);
+                return Ok(searchPlayerDtos);
             }
             catch (Exception e)
             {

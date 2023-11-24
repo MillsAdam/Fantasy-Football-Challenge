@@ -16,7 +16,6 @@ CREATE TABLE teams (
 	name varchar(50) NOT NULL,
 	conference varchar(50) NOT NULL,
 	division varchar(50) NOT NULL,
-	full_name varchar(100) NOT NULL,
 	status varchar(50) NOT NULL,
 	CONSTRAINT PK_teams_team_id PRIMARY KEY (team_id)
 );
@@ -24,10 +23,8 @@ CREATE TABLE teams (
 CREATE TABLE players (
 	player_id int UNIQUE NOT NULL,
 	team_id int,
-	first_name varchar(50) NOT NULL,
-	last_name varchar(50) NOT NULL,
+	name varchar(50) NOT NULL,
 	position varchar(50) NOT NULL,
-	position_category varchar(10),
 	status varchar(50),
 	injury_status varchar(50),
 	CONSTRAINT PK_players_player_id PRIMARY KEY (player_id),

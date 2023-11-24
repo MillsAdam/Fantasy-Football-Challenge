@@ -10,10 +10,8 @@ namespace Capstone.Models
     {
         public int PlayerId { get; set; } // Player ID
         public int? TeamId { get; set; } // Team ID // Nullable
-        public string FirstName { get; set; } // Player First Name
-        public string LastName { get; set; } // Player Last Name
+        public string Name { get; set; } // Player Name
         public string Position { get; set; } // Player Position
-        public string PositionCategory { get; set; } // Player Position Category
         public string Status { get; set; } // Player Status
         public string? InjuryStatus { get; set; } // Player Injury Status // Nullable
 
@@ -21,10 +19,8 @@ namespace Capstone.Models
         {
             PlayerId = player.PlayerID,
             TeamId = player.TeamID,
-            FirstName = player.FirstName,
-            LastName = player.LastName,
+            Name = player.FirstName + " " + player.LastName,
             Position = player.Position,
-            PositionCategory = player.PositionCategory,
             Status = player.Status,
             InjuryStatus = player.InjuryStatus
         };
@@ -33,10 +29,8 @@ namespace Capstone.Models
         {
             PlayerId = team.PlayerID,
             TeamId = team.TeamID,
-            FirstName = team.City,
-            LastName = team.Name,
+            Name = team.City + " " + team.Name,
             Position = "DEF",
-            PositionCategory = "DEF",
             Status = "Active",
             InjuryStatus = null
         };

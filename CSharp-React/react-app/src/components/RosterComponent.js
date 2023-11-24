@@ -10,11 +10,11 @@ function RosterComponent() {
     // const [userHasTeam, setUserHasTeam] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [playerId, setPlayerId] = useState("");
+    // const [playerId, setPlayerId] = useState("");
     // const [oldPlayerId, setOldPlayerId] = useState("");
     // const [newPlayerId, setNewPlayerId] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
-    const [searchPlayerId, setSearchPlayerId] = useState(null);
+    const [searchPlayer, setSearchPlayer] = useState([]);
 
     useEffect(() => {
         async function getRosterPlayers() {
@@ -36,29 +36,30 @@ function RosterComponent() {
         }
     }, [authToken, currentUser]);
 
-    async function createRosterPlayer(e) {
-        e.preventDefault();
-        setIsLoading(true);
-        setError(null);
-        try {
-            const newRosterPlayer = await RosterService.createRosterPlayer(playerId, authToken);
-            if (newRosterPlayer) {
-                const updatedRosterPlayers = await RosterService.getRosterPlayersByUser(authToken);
-                setRosterPlayers(updatedRosterPlayers);
-            }
-        } catch (error) {
-            console.error('An error occurred: ', error);
-            setError('Failed to create roster player');
-        }
-        setIsLoading(false);
-    }
+    // async function createRosterPlayer(e) {
+    //     e.preventDefault();
+    //     setIsLoading(true);
+    //     setError(null);
+    //     try {
+    //         const newRosterPlayer = await RosterService.createRosterPlayer(playerId, authToken);
+    //         if (newRosterPlayer) {
+    //             const updatedRosterPlayers = await RosterService.getRosterPlayersByUser(authToken);
+    //             setRosterPlayers(updatedRosterPlayers);
+    //         }
+    //     } catch (error) {
+    //         console.error('An error occurred: ', error);
+    //         setError('Failed to create roster player');
+    //     }
+    //     setIsLoading(false);
+    // }
 
     async function searchPlayers() {
         setIsLoading(true);
         setError(null);
         try {
-            const playerId = await DatabaseService.searchPlayers(searchTerm);
-            setSearchPlayerId(playerId);
+            const searchData = await DatabaseService.searchPlayers(searchTerm);
+            // console.log(searchData);
+            setSearchPlayer(searchData);
         } catch (error) {
             console.error('An error occurred: ', error);
             setError('Failed to search players');
@@ -74,6 +75,8 @@ function RosterComponent() {
             if (newRosterPlayer) {
                 const updatedRosterPlayers = await RosterService.getRosterPlayersByUser(authToken);
                 setRosterPlayers(updatedRosterPlayers);
+                setSearchTerm("");
+                setSearchPlayer([]);
             }
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -89,7 +92,40 @@ function RosterComponent() {
                 <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                 <button onClick={searchPlayers} disabled={isLoading}>Search Players</button>
             </div>
-            <>
+            {isLoading ? (
+                <p>Loading...</p>
+            ) : (
+                searchPlayer.length > 0 && (
+                    <div className="search-results">
+                        <h2>Search Results</h2>
+                        <div className="table-container">
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th>Position</th>
+                                        <th>Team</th>
+                                        <th>Player</th>
+                                        <th>Add</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {searchPlayer.map((player, index) => (
+                                        <tr key={index}>
+                                            <td>{player.position}</td>
+                                            <td>{player.team}</td>
+                                            <td>{player.name}</td>
+                                            <td>
+                                                <button onClick={() => handleAddPlayerToRoster(player.playerId)}>Add Player</button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )
+            )}
+            {/* <>
                 <form onSubmit={createRosterPlayer}>
                     <label htmlFor="playerId">Player ID</label>
                     <input type="text" id="playerId" name="playerId" value={playerId} onChange={(e) => setPlayerId(e.target.value)} />
@@ -97,14 +133,15 @@ function RosterComponent() {
                 </form>
             </>
             <div>
-                {searchPlayerId && (
+                {searchPlayer && (
                     <div>
-                        Player ID: {searchPlayerId}
-                        <button onClick={() => handleAddPlayerToRoster(searchPlayerId)}>Add Player To Roster</button>
+                        Player ID: {searchPlayer.playerId}<br />
+                        <button onClick={() => handleAddPlayerToRoster(searchPlayer.playerId)}>Add Player To Roster</button>
                     </div>
                 )}
-            </div>
+            </div> */}
             <>
+                <h2>My Roster</h2>
                 <div className="table-container">
                     <table className="table">
                         <thead>
@@ -119,7 +156,7 @@ function RosterComponent() {
                                 <tr key={index}>
                                     <td>{rosterPlayer.position}</td>
                                     <td>{rosterPlayer.team}</td>
-                                    <td>{rosterPlayer.firstName} {rosterPlayer.lastName}</td>
+                                    <td>{rosterPlayer.name}</td>
                                 </tr>
                             ))}
                         </tbody>

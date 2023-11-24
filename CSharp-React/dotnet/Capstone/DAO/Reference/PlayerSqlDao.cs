@@ -23,7 +23,8 @@ namespace Capstone.DAO
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                NpgsqlCommand command = new NpgsqlCommand("INSERT INTO players (player_id, team_id, first_name, last_name, position, position_category, status, injury_status) VALUES (@player_id, @team_id, @first_name, @last_name, @position, @position_category, @status, @injury_status);", connection);
+                NpgsqlCommand command = new NpgsqlCommand("INSERT INTO players (player_id, team_id, name, position, status, injury_status) " + 
+                    "VALUES (@player_id, @team_id, @name, @position, @status, @injury_status);", connection);
                 command.Parameters.AddWithValue("@player_id", playerDto.PlayerId);
                 if (playerDto.TeamId != null)
                 {
@@ -33,10 +34,8 @@ namespace Capstone.DAO
                 {
                     command.Parameters.AddWithValue("@team_id", DBNull.Value);
                 }
-                command.Parameters.AddWithValue("@first_name", playerDto.FirstName);
-                command.Parameters.AddWithValue("@last_name", playerDto.LastName);
+                command.Parameters.AddWithValue("@name", playerDto.Name);
                 command.Parameters.AddWithValue("@position", playerDto.Position);
-                command.Parameters.AddWithValue("@position_category", playerDto.PositionCategory);
                 command.Parameters.AddWithValue("@status", playerDto.Status);
                 if (playerDto.InjuryStatus != null)
                 {
@@ -71,28 +70,52 @@ namespace Capstone.DAO
         // FIX SEARCH TO ACCOMODATE FIRST AND LAST NAME
         // ONLY INCLUDE OFFENSE PLAYERS AND KICKERS AND TEAM DEFENSE
 
-        public async Task<int> GetPlayerIdByNameAsync(string playerName)
+        public async Task<List<SearchPlayerDto>> GetPlayerIdByNameAsync(string playerName)
         {
+            List<SearchPlayerDto> searchPlayerDtos = new List<SearchPlayerDto>();
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using NpgsqlCommand command = new NpgsqlCommand("SELECT player_id FROM players WHERE first_name ILIKE @player_name_pattern OR last_name ILIKE @player_name_pattern;", connection);
+                using NpgsqlCommand command = new NpgsqlCommand(
+                    "SELECT p.player_id, t.team, p.name, p.position, p.status, p.injury_status " +
+                    "FROM players p " +
+                    "JOIN teams t ON p.team_id = t.team_id " + 
+                    "WHERE p.name ILIKE @player_name_pattern " +
+                    "AND p.position IN ('QB', 'RB', 'WR', 'TE', 'K', 'DEF') " + 
+                    "AND p.team_id IS NOT NULL;", connection);
                 {
                     string playerNamePattern = "%" + playerName + "%";
                     command.Parameters.AddWithValue("@player_name_pattern", playerNamePattern);
 
                     using NpgsqlDataReader reader = command.ExecuteReader();
                     {
-                        int playerId = 0;
-                        if (await reader.ReadAsync())
+                        
+                        while (await reader.ReadAsync())
                         {
-                            playerId = Convert.ToInt32(reader["player_id"]);
-                        }
-                        return playerId;
+                            SearchPlayerDto searchPlayerDto = new SearchPlayerDto();
+                            {
+                                searchPlayerDto.PlayerId = Convert.ToInt32(reader["player_id"]);
+                                searchPlayerDto.Team = Convert.ToString(reader["team"]);
+                                searchPlayerDto.Name = Convert.ToString(reader["name"]);
+                                searchPlayerDto.Position = Convert.ToString(reader["position"]);
+                                searchPlayerDto.Status = Convert.ToString(reader["status"]);
+                                if (reader["injury_status"] != DBNull.Value)
+                                {
+                                    searchPlayerDto.InjuryStatus = Convert.ToString(reader["injury_status"]);
+                                }
+                                else
+                                {
+                                    searchPlayerDto.InjuryStatus = null;
+                                }
+                            };
+                            searchPlayerDtos.Add(searchPlayerDto);
+                        }                    
                     }
-                    
                 }
             }
+            return searchPlayerDtos;
         }
+
+        
     }
 }

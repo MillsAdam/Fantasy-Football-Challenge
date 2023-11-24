@@ -13,7 +13,6 @@ namespace Capstone.Models
         public string Name { get; set; } // Team Name
         public string Conference { get; set; } // Team Conference
         public string Division { get; set; } // Team Division
-        public string FullName { get; set; } // Team Full Name
         public string Status { get; set; } // Team Status
 
         public static TeamDto FromTeam(Team team) => new TeamDto
@@ -24,7 +23,6 @@ namespace Capstone.Models
             Name = team.Name,
             Conference = team.Conference,
             Division = team.Division,
-            FullName = team.FullName,
             Status = "Active"
         };
     }
