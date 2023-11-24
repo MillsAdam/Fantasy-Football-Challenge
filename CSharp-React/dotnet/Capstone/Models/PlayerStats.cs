@@ -149,15 +149,15 @@ namespace Capstone.Models
         [JsonProperty("FantasyPointsFanDuel")]
         public double FantasyPointsFanDuel { get; set; }
         [JsonProperty("FieldGoalsMade0to19")]
-        public double FieldGoalsMade0to19 { get; set; }
+        public double? FieldGoalsMade0to19 { get; set; }
         [JsonProperty("FieldGoalsMade20to29")]
-        public double FieldGoalsMade20to29 { get; set; }
+        public double? FieldGoalsMade20to29 { get; set; }
         [JsonProperty("FieldGoalsMade30to39")]
-        public double FieldGoalsMade30to39 { get; set; }
+        public double? FieldGoalsMade30to39 { get; set; }
         [JsonProperty("FieldGoalsMade40to49")]
-        public double FieldGoalsMade40to49 { get; set; }
+        public double? FieldGoalsMade40to49 { get; set; }
         [JsonProperty("FieldGoalsMade50Plus")]
-        public double FieldGoalsMade50Plus { get; set; }
+        public double? FieldGoalsMade50Plus { get; set; }
         [JsonProperty("FantasyPointsDraftKings")]
         public double FantasyPointsDraftKings { get; set; }
         [JsonProperty("InjuryStatus")]
@@ -169,6 +169,6 @@ namespace Capstone.Models
         [JsonProperty("ScoreID")]
         public int ScoreID { get; set; }
         [JsonProperty("SnapCountsConfirmed")]
-        public bool SnapCountsConfirmed { get; set; }
+        public bool? SnapCountsConfirmed { get; set; }
     }
 }

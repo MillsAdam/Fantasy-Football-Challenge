@@ -58,7 +58,7 @@ function RosterComponent() {
         setError(null);
         try {
             const searchData = await DatabaseService.searchPlayers(searchTerm);
-            // console.log(searchData);
+            console.log(searchData);
             setSearchPlayer(searchData);
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -133,7 +133,6 @@ function RosterComponent() {
                                             <td>{player.position}</td>
                                             <td>{player.team}</td>
                                             <td>{player.name}</td>
-                                            
                                         </tr>
                                     ))}
                                 </tbody>
@@ -167,6 +166,7 @@ function RosterComponent() {
                                 <th>Position</th>
                                 <th>Team</th>
                                 <th>Player</th>
+                                <th>Projection</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -178,6 +178,7 @@ function RosterComponent() {
                                     <td>{rosterPlayer.position}</td>
                                     <td>{rosterPlayer.team}</td>
                                     <td>{rosterPlayer.name}</td>
+                                    <td>{rosterPlayer.fantasyPoints}</td>
                                 </tr>
                             ))}
                         </tbody>

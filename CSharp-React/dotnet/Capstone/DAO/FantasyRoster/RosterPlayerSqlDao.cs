@@ -73,7 +73,6 @@ namespace Capstone.DAO
             return rosterPlayers;
         }
 
-        // REORDER RETURN TO GO QB, RB, WR, TE, K, DEF
         public async Task<List<RosterPlayerDto>> GetRosterPlayerDtosByUser(User user)
         {
             List<RosterPlayerDto> rosterPlayerDtos = new List<RosterPlayerDto>();
@@ -81,10 +80,11 @@ namespace Capstone.DAO
             {
                 await connection.OpenAsync();
                 NpgsqlCommand command = new NpgsqlCommand(
-                    "SELECT rp.roster_id, rp.player_id, p.position, t.team, p.name " + 
+                    "SELECT rp.roster_id, rp.player_id, p.position, t.team, p.name, pp.fantasy_points " + 
                     "FROM roster_players rp " + 
                     "JOIN players p ON rp.player_id = p.player_id " +
                     "JOIN teams t ON p.team_id = t.team_id " + 
+                    "JOIN player_projections pp ON p.player_id = pp.player_id " +
                     "WHERE roster_id = @roster_id " + 
                     "ORDER BY CASE p.position " + 
                         "WHEN 'QB' THEN 1 " + 
@@ -106,6 +106,7 @@ namespace Capstone.DAO
                         rosterPlayerDto.Team = Convert.ToString(reader["team"]);
                         rosterPlayerDto.Position = Convert.ToString(reader["position"]);
                         rosterPlayerDto.Name = Convert.ToString(reader["name"]);
+                        rosterPlayerDto.FantasyPoints = Convert.ToDouble(reader["fantasy_points"]);
                     };
                     rosterPlayerDtos.Add(rosterPlayerDto);
                 }

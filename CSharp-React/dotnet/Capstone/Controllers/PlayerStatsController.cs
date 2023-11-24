@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Capstone.Controllers
 {
     [ApiController]
-    [Route("api/playerstats")]
+    [Route("api/players")]
     public class PlayerStatsController : ControllerBase
     {
         private readonly IPlayerStatsDao _playerStatsDao;
@@ -23,7 +23,7 @@ namespace Capstone.Controllers
             _fantasyDataService = fantasyDataService;
         }
 
-        [HttpPost]
+        [HttpPost("stats")]
         public async Task<ActionResult> AddPlayerStats()
         {
             try
@@ -45,6 +45,32 @@ namespace Capstone.Controllers
             catch (Exception e)
             {
                 Console.WriteLine($"Error adding player stats: {e.Message}");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+
+        [HttpPost("projections")]
+        public async Task<ActionResult> AddPlayerProjections()
+        {
+            try
+            {
+                List<PlayerStats> playerProjections = await _fantasyDataService.GetPlayerProjectionsAsync();
+                List<DefenseStats> defenseProjections = await _fantasyDataService.GetDefenseProjectionsAsync();
+                foreach (PlayerStats playerProjection in playerProjections)
+                {
+                    PlayerStatsDto playerProjectionsDto = PlayerStatsDto.FromPlayerStats(playerProjection);
+                    await _playerStatsDao.AddPlayerProjectionsDtoAsync(playerProjectionsDto);
+                };
+                foreach (DefenseStats defenseProjection in defenseProjections)
+                {
+                    PlayerStatsDto playerProjectionsDto = PlayerStatsDto.FromDefenseStats(defenseProjection);
+                    await _playerStatsDao.AddDefenseProjectionsDtoAsync(playerProjectionsDto);
+                };
+                return Ok("Player projections added successfully.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error adding player projections: {e.Message}");
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }

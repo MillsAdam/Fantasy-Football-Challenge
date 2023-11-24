@@ -12,5 +12,6 @@ namespace Capstone.Models
         public string Position { get; set; }
         public string Team { get; set; }
         public string Name { get; set; }
+        public double FantasyPoints { get; set; }
     }
 }
