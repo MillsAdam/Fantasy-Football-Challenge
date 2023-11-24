@@ -10,5 +10,6 @@ namespace Capstone.DAO
     {
         Task AddPlayerAsync(PlayerDto playerDto);
         Task<string> GetPlayerPositionByPlayerIdAsync(int playerId);
+        Task<int> GetPlayerIdByNameAsync(string playerName);
     }
 }

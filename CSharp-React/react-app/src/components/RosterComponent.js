@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import RosterService from "../services/RosterService";
 import { AuthContext } from "../context/AuthContext";
+import DatabaseService from "../services/DatabaseService";
 import "../styles/LeagueComponent.css";
 
 function RosterComponent() {
@@ -12,6 +13,8 @@ function RosterComponent() {
     const [playerId, setPlayerId] = useState("");
     // const [oldPlayerId, setOldPlayerId] = useState("");
     // const [newPlayerId, setNewPlayerId] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchPlayerId, setSearchPlayerId] = useState(null);
 
     useEffect(() => {
         async function getRosterPlayers() {
@@ -50,9 +53,42 @@ function RosterComponent() {
         setIsLoading(false);
     }
 
+    async function searchPlayers() {
+        setIsLoading(true);
+        setError(null);
+        try {
+            const playerId = await DatabaseService.searchPlayers(searchTerm);
+            setSearchPlayerId(playerId);
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            setError('Failed to search players');
+        }
+        setIsLoading(false);
+    }
+
+    async function handleAddPlayerToRoster(playerId){
+        setIsLoading(true);
+        setError(null);
+        try {
+            const newRosterPlayer = await RosterService.createRosterPlayer(playerId, authToken);
+            if (newRosterPlayer) {
+                const updatedRosterPlayers = await RosterService.getRosterPlayersByUser(authToken);
+                setRosterPlayers(updatedRosterPlayers);
+            }
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            setError('Failed to create roster player');
+        }
+        setIsLoading(false);
+    }
+
     return (
         <div>
             <h1>Roster Component</h1>
+            <div>
+                <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                <button onClick={searchPlayers} disabled={isLoading}>Search Players</button>
+            </div>
             <>
                 <form onSubmit={createRosterPlayer}>
                     <label htmlFor="playerId">Player ID</label>
@@ -60,6 +96,14 @@ function RosterComponent() {
                     <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Add Player"}</button>
                 </form>
             </>
+            <div>
+                {searchPlayerId && (
+                    <div>
+                        Player ID: {searchPlayerId}
+                        <button onClick={() => handleAddPlayerToRoster(searchPlayerId)}>Add Player To Roster</button>
+                    </div>
+                )}
+            </div>
             <>
                 <div className="table-container">
                     <table className="table">

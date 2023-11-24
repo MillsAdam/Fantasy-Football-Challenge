@@ -20,6 +20,16 @@ const DatabaseService = {
             throw error;
         }
     },
+
+    async searchPlayers(playerName) {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/players?playerName=${playerName}`);
+            return response.data;
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            throw error;
+        }
+    }
 }
 
 export default DatabaseService;

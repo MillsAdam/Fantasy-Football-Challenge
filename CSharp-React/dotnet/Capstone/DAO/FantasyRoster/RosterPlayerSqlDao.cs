@@ -73,6 +73,7 @@ namespace Capstone.DAO
             return rosterPlayers;
         }
 
+        // REORDER RETURN TO GO QB, RB, WR, TE, K, DEF
         public async Task<List<RosterPlayerDto>> GetRosterPlayerDtosByUser(User user)
         {
             List<RosterPlayerDto> rosterPlayerDtos = new List<RosterPlayerDto>();

@@ -47,5 +47,20 @@ namespace Capstone.Controllers
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetPlayerIdByName([FromQuery] string playerName)
+        {
+            try
+            {
+                int playerId = await _playerDao.GetPlayerIdByNameAsync(playerName);
+                return Ok(playerId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error getting player ID: {e.Message}");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
     }
 }

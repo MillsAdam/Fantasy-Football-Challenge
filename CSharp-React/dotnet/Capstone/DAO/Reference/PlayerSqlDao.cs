@@ -66,5 +66,33 @@ namespace Capstone.DAO
                 return position;
             }
         }
+
+        // CHANGE TO LIST OF PLAYERIDS
+        // FIX SEARCH TO ACCOMODATE FIRST AND LAST NAME
+        // ONLY INCLUDE OFFENSE PLAYERS AND KICKERS AND TEAM DEFENSE
+
+        public async Task<int> GetPlayerIdByNameAsync(string playerName)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using NpgsqlCommand command = new NpgsqlCommand("SELECT player_id FROM players WHERE first_name ILIKE @player_name_pattern OR last_name ILIKE @player_name_pattern;", connection);
+                {
+                    string playerNamePattern = "%" + playerName + "%";
+                    command.Parameters.AddWithValue("@player_name_pattern", playerNamePattern);
+
+                    using NpgsqlDataReader reader = command.ExecuteReader();
+                    {
+                        int playerId = 0;
+                        if (await reader.ReadAsync())
+                        {
+                            playerId = Convert.ToInt32(reader["player_id"]);
+                        }
+                        return playerId;
+                    }
+                    
+                }
+            }
+        }
     }
 }
