@@ -3,7 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 function NavigationBar() {
-    const { authToken } = useContext(AuthContext);
+    const { authToken, currentUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleLogoutClick = () => {
@@ -18,6 +18,12 @@ function NavigationBar() {
                     <Link to="/league" className="App-link">League</Link>{" | "}
                     <Link to="/roster" className="App-link">Roster</Link>{" | "}
                     <span to="/logout" className="App-link" onClick={handleLogoutClick} style={{ cursor: 'pointer' }}>Logout</span>
+                    {currentUser.role === 'admin' && (
+                        <>
+                            {" | "}
+                            <Link to="/admin" className="App-link">Admin</Link>
+                        </>
+                    )}
                 </>
             )}
             {!authToken && (
