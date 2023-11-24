@@ -85,6 +85,22 @@ function RosterComponent() {
         setIsLoading(false);
     }
 
+    async function handleRemovePlayerFromRoster(playerId) {
+        setIsLoading(true);
+        setError(null);
+        try {
+            const removedRosterPlayer = await RosterService.deleteRosterPlayer(playerId, authToken);
+            if (removedRosterPlayer) {
+                const updatedRosterPlayers = await RosterService.getRosterPlayersByUser(authToken);
+                setRosterPlayers(updatedRosterPlayers);
+            }
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            setError('Failed to remove roster player');
+        }
+        setIsLoading(false);
+    }
+
     return (
         <div>
             <h1>Roster Component</h1>
@@ -102,21 +118,22 @@ function RosterComponent() {
                             <table className="table">
                                 <thead>
                                     <tr>
+                                        <th>Add</th>
                                         <th>Position</th>
                                         <th>Team</th>
                                         <th>Player</th>
-                                        <th>Add</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {searchPlayer.map((player, index) => (
                                         <tr key={index}>
+                                            <td>
+                                                <button onClick={() => handleAddPlayerToRoster(player.playerId)}>+</button>
+                                            </td>
                                             <td>{player.position}</td>
                                             <td>{player.team}</td>
                                             <td>{player.name}</td>
-                                            <td>
-                                                <button onClick={() => handleAddPlayerToRoster(player.playerId)}>Add Player</button>
-                                            </td>
+                                            
                                         </tr>
                                     ))}
                                 </tbody>
@@ -146,6 +163,7 @@ function RosterComponent() {
                     <table className="table">
                         <thead>
                             <tr>
+                                <th>Remove</th>
                                 <th>Position</th>
                                 <th>Team</th>
                                 <th>Player</th>
@@ -154,6 +172,9 @@ function RosterComponent() {
                         <tbody>
                             {rosterPlayers.map((rosterPlayer, index) => (
                                 <tr key={index}>
+                                    <td>
+                                                <button onClick={() => handleRemovePlayerFromRoster(rosterPlayer.playerId)}>-</button>
+                                            </td>
                                     <td>{rosterPlayer.position}</td>
                                     <td>{rosterPlayer.team}</td>
                                     <td>{rosterPlayer.name}</td>
