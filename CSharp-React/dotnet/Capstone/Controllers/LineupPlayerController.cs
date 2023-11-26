@@ -15,13 +15,11 @@ namespace Capstone.Controllers
     {
         private readonly ILineupPlayerDao _lineupPlayerDao;
         private readonly IUserDao _userDao;
-        private readonly IFantasyLineupService _fantasyLineupService;
 
-        public LineupPlayerController(ILineupPlayerDao lineupPlayerDao, IUserDao userDao, IFantasyLineupService fantasyLineupService)
+        public LineupPlayerController(ILineupPlayerDao lineupPlayerDao, IUserDao userDao)
         {
             _lineupPlayerDao = lineupPlayerDao;
             _userDao = userDao;
-            _fantasyLineupService = fantasyLineupService;
         }
 
         [HttpPost]

@@ -46,7 +46,7 @@ namespace Capstone
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(connectionString));
             services.AddScoped<FantasyDataService>();
-            services.AddScoped<IFantasyLineupService, FantasyLineupService>();
+            services.AddScoped<ScoreService>();
             services.AddTransient<ITeamDao, TeamSqlDao>();
             services.AddTransient<IPlayerDao, PlayerSqlDao>();
             services.AddTransient<IFantasyRosterDao, FantasyRosterSqlDao>();

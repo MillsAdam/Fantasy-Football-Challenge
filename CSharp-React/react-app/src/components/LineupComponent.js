@@ -162,7 +162,7 @@ function LineupComponent() {
                                                 <td>{rosterPlayer.position}</td>
                                                 <td>{rosterPlayer.team}</td>
                                                 <td>{rosterPlayer.name}</td>
-                                                <td>{rosterPlayer.fantasyPoints}</td>
+                                                <td>{rosterPlayer.fantasyPointsProj}</td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -183,6 +183,7 @@ function LineupComponent() {
                                             <th>Team</th>
                                             <th>Player</th>
                                             <th>Projection</th>
+                                            <th>Points</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -210,6 +211,7 @@ function LineupComponent() {
                                                 <td>{lineupPlayer.lineupPosition}</td>
                                                 <td>{lineupPlayer.team}</td>
                                                 <td>{lineupPlayer.name}</td>
+                                                <td>{lineupPlayer.fantasyPointsProj}</td>
                                                 <td>{lineupPlayer.fantasyPoints}</td>
                                             </tr>
                                         ))}

@@ -77,11 +77,12 @@ namespace Capstone.DAO
             {
                 await connection.OpenAsync();
                 NpgsqlCommand command = new NpgsqlCommand(
-                    "SELECT lp.lineup_id, lp.player_id, lp.lineup_position, p.position, t.team, p.name, pp.fantasy_points " + 
+                    "SELECT lp.lineup_id, lp.player_id, lp.lineup_position, p.position, t.team, p.name, COALESCE(pp.fantasy_points, 0) as proj_fantasy_points, COALESCE(ps.fantasy_points, 0) as stat_fantasy_points " + 
                     "FROM lineup_players lp " +
                     "JOIN players p ON lp.player_id = p.player_id " +
                     "JOIN teams t ON p.team_id = t.team_id " +
-                    "JOIN player_projections pp ON p.player_id = pp.player_id " +
+                    "LEFT JOIN player_projections pp ON p.player_id = pp.player_id " +
+                    "LEFT JOIN player_stats ps ON p.player_id = ps.player_id " +
                     "WHERE lineup_id = @lineup_id " + 
                     "ORDER BY CASE lp.lineup_position " + 
                         "WHEN 'QB1' THEN 1 " + 
@@ -108,7 +109,8 @@ namespace Capstone.DAO
                         lineupPlayerDto.Team = Convert.ToString(reader["team"]);
                         lineupPlayerDto.Position = Convert.ToString(reader["position"]);
                         lineupPlayerDto.Name = Convert.ToString(reader["name"]);
-                        lineupPlayerDto.FantasyPoints = Convert.ToDouble(reader["fantasy_points"]);
+                        lineupPlayerDto.FantasyPointsProj = Convert.ToDouble(reader["proj_fantasy_points"]);
+                        lineupPlayerDto.FantasyPoints = Convert.ToDouble(reader["stat_fantasy_points"]);
                         lineupPlayerDto.LineupPosition = Convert.ToString(reader["lineup_position"]);
                     };
                     lineupPlayerDtos.Add(lineupPlayerDto);

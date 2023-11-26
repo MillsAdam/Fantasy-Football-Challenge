@@ -10,5 +10,6 @@ namespace Capstone.Models
         public int FantasyLineupId { get; set; }
         public int FantasyRosterId { get; set; }
         public int GameWeek { get; set; }
+        public double TotalScore { get; set; }
     }
 }

@@ -11,5 +11,6 @@ namespace Capstone.Models
         public int UserId { get; set; }
         public string TeamName { get; set; }
         public string Username { get; set; }
+        public double TotalScore { get; set; }
     }
 }

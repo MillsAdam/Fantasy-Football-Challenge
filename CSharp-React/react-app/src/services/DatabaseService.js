@@ -49,6 +49,26 @@ const DatabaseService = {
             console.error('An error occurred: ', error);
             throw error;
         }
+    },
+
+    async updateLineupScores() {
+        try {
+            const response = await axios.put(`http://localhost:5000/api/scores/lineups`, {});
+            return response.data;
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            throw error;
+        }
+    },
+
+    async updateRosterScores() {
+        try {
+            const response = await axios.put(`http://localhost:5000/api/scores/rosters`, {});
+            return response.data;
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            throw error;
+        }
     }
 }
 

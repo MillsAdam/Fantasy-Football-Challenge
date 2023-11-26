@@ -21,6 +21,7 @@ function RosterComponent() {
             setIsLoading(true);
             try {
                 const rosterPlayersData = await RosterService.getRosterPlayersByUser(authToken);
+                console.log(rosterPlayersData);
                 setRosterPlayers(rosterPlayersData);
             } catch (error) {
                 console.error('An error occurred: ', error);
@@ -174,12 +175,12 @@ function RosterComponent() {
                                 {rosterPlayers.map((rosterPlayer, index) => (
                                     <tr key={index}>
                                         <td>
-                                                    <button onClick={() => handleRemovePlayerFromRoster(rosterPlayer.playerId)}>-</button>
-                                                </td>
+                                            <button onClick={() => handleRemovePlayerFromRoster(rosterPlayer.playerId)}>-</button>
+                                        </td>
                                         <td>{rosterPlayer.position}</td>
                                         <td>{rosterPlayer.team}</td>
                                         <td>{rosterPlayer.name}</td>
-                                        <td>{rosterPlayer.fantasyPoints}</td>
+                                        <td>{rosterPlayer.fantasyPointsProj}</td>
                                     </tr>
                                 ))}
                             </tbody>

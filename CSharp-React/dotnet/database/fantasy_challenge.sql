@@ -31,7 +31,7 @@ CREATE TABLE players (
 	CONSTRAINT FK_players_team_id FOREIGN KEY (team_id) REFERENCES teams(team_id)
 );
 
-CREATE TABLE player_stats(
+CREATE TABLE player_stats (
 	player_id int NOT NULL,
 	team_id int NOT NULL,
 	week int NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE player_stats(
 	CONSTRAINT FK_player_stats_team_id FOREIGN KEY (team_id) REFERENCES teams(team_id)
 );
 
-CREATE TABLE player_projections(
+CREATE TABLE player_projections (
 	player_id int NOT NULL,
 	team_id int NOT NULL,
 	week int NOT NULL,
@@ -62,6 +62,7 @@ CREATE TABLE fantasy_rosters (
 	roster_id SERIAL,
 	user_id int UNIQUE NOT NULL,
 	team_name varchar(50) UNIQUE NOT NULL,
+	total_score numeric(5,2),
 	CONSTRAINT PK_fantasy_rosters_team_id PRIMARY KEY (roster_id),
 	CONSTRAINT FK_fantasy_rosters_user_id FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
@@ -78,6 +79,7 @@ CREATE TABLE fantasy_lineups (
 	lineup_id SERIAL,
 	roster_id int NOT NULL,
 	game_week int NOT NULL,
+	total_score numeric(5,2),
 	CONSTRAINT PK_fantasy_lineups_lineup_id PRIMARY KEY (lineup_id),
 	CONSTRAINT FK_fantasy_lineups_roster_id FOREIGN KEY (roster_id) REFERENCES fantasy_rosters(roster_id)
 );
@@ -89,14 +91,6 @@ CREATE TABLE lineup_players (
 	FOREIGN KEY (lineup_id) REFERENCES fantasy_lineups(lineup_id),
 	FOREIGN KEY (player_id) REFERENCES players(player_id),
 	PRIMARY KEY (lineup_id, player_id)
-);
-
-CREATE TABLE fantasy_team_scores (
-	roster_id int NOT NULL,
-	game_week int NOT NULL,
-	total_score numeric(5,2),
-	CONSTRAINT PK_fantasy_team_scores_roster_id PRIMARY KEY (roster_id, game_week),
-	CONSTRAINT FK_fantasy_team_scores_roster_id FOREIGN KEY (roster_id) REFERENCES fantasy_rosters(roster_id)
 );
 
 

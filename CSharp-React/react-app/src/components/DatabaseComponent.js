@@ -79,6 +79,42 @@ function DatabaseComponent() {
         setIsLoading(false);
     }
 
+    async function updateLineupScores(e) {
+        e.preventDefault();
+        setIsLoading(true);
+        setError(null);
+        try {
+            if (authToken && currentUser.role === 'admin') {
+                const updatedLineupScores = await DatabaseService.updateLineupScores();
+                if (updatedLineupScores) {
+                    console.log("Lineup scores updated");
+                }
+            }
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            setError('Failed to update lineup scores');
+        }
+        setIsLoading(false);
+    }
+
+    async function updateRosterScores(e) {
+        e.preventDefault();
+        setIsLoading(true);
+        setError(null);
+        try {
+            if (authToken && currentUser.role === 'admin') {
+                const updatedRosterScores = await DatabaseService.updateRosterScores();
+                if (updatedRosterScores) {
+                    console.log("Roster scores updated");
+                }
+            }
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            setError('Failed to update roster scores');
+        }
+        setIsLoading(false);
+    }
+
     return (
         <div>
             <h1>Database Component</h1>
@@ -94,6 +130,12 @@ function DatabaseComponent() {
                 </form>
                 <form onSubmit={createPlayerProjections}>
                     <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create Player Projections"}</button>
+                </form>
+                <form onSubmit={updateLineupScores}>
+                    <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Update Lineup Scores"}</button>
+                </form>
+                <form onSubmit={updateRosterScores}>
+                    <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Update Roster Scores"}</button>
                 </form>
             </>
             {error && <p>{error}</p>}

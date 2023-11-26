@@ -73,8 +73,9 @@ function LeagueComponent() {
                         <table className="table">
                             <thead>
                                 <tr>
-                                    <th>Username</th>
-                                    <th>Team Name</th>
+                                    <th>User</th>
+                                    <th>Team</th>
+                                    <th>Points</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -82,6 +83,7 @@ function LeagueComponent() {
                                     <tr key={index}>
                                         <td>{roster.username}</td>
                                         <td>{roster.teamName}</td>
+                                        <td>{roster.totalScore}</td>
                                     </tr>
                                 ))}
                             </tbody>

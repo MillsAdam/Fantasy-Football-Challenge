@@ -80,11 +80,12 @@ namespace Capstone.DAO
             {
                 await connection.OpenAsync();
                 NpgsqlCommand command = new NpgsqlCommand(
-                    "SELECT rp.roster_id, rp.player_id, p.position, t.team, p.name, pp.fantasy_points " + 
+                    "SELECT rp.roster_id, rp.player_id, p.position, t.team, p.name, COALESCE(pp.fantasy_points, 0) as proj_fantasy_points, COALESCE(ps.fantasy_points, 0) as stat_fantasy_points " + 
                     "FROM roster_players rp " + 
                     "JOIN players p ON rp.player_id = p.player_id " +
                     "JOIN teams t ON p.team_id = t.team_id " + 
-                    "JOIN player_projections pp ON p.player_id = pp.player_id " +
+                    "LEFT JOIN player_projections pp ON p.player_id = pp.player_id " +
+                    "LEFT JOIN player_stats ps ON p.player_id = ps.player_id " +
                     "WHERE roster_id = @roster_id " + 
                     "ORDER BY CASE p.position " + 
                         "WHEN 'QB' THEN 1 " + 
@@ -106,7 +107,8 @@ namespace Capstone.DAO
                         rosterPlayerDto.Team = Convert.ToString(reader["team"]);
                         rosterPlayerDto.Position = Convert.ToString(reader["position"]);
                         rosterPlayerDto.Name = Convert.ToString(reader["name"]);
-                        rosterPlayerDto.FantasyPoints = Convert.ToDouble(reader["fantasy_points"]);
+                        rosterPlayerDto.FantasyPointsProj = Convert.ToDouble(reader["proj_fantasy_points"]);
+                        rosterPlayerDto.FantasyPoints = Convert.ToDouble(reader["stat_fantasy_points"]);
                     };
                     rosterPlayerDtos.Add(rosterPlayerDto);
                 }
