@@ -130,8 +130,8 @@ function LineupComponent() {
             {isLoading ? (
                 <p>Loading...</p>
             ) : (
-                <div>
-                    <>
+                <div className="lineup-container">
+                    <div className="roster">
                         <h2>My Roster</h2>
                         {rosterPlayers.length > 0 && (
                             <div className="table-container">
@@ -169,9 +169,9 @@ function LineupComponent() {
                                 </table>
                             </div>
                         )}
-                    </>
+                    </div>
 
-                    <>
+                    <div className="lineup">
                         <h2>My Lineup</h2>
                         {lineupPlayers.length > 0 && (
                             <div className="table-container">
@@ -217,7 +217,7 @@ function LineupComponent() {
                                 </table>
                             </div>
                         )}
-                    </>
+                    </div>
                 </div>
             )}
             {error && <p>{error}</p>}

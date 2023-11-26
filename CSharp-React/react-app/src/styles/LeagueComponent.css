@@ -8,3 +8,28 @@
     justify-content: center;
     align-items: center;
 }
+
+.lineup-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 100px;
+}
+
+@media (max-width: 768px) {
+    .table {
+      font-size: 12px;
+    }
+
+    .lineup-container { 
+        flex-direction: column;
+        gap: 0px; /* does nothing */
+    }
+
+    /* I don't think these do anything */
+    .roster, .lineup {
+        flex: 1;
+        padding: 0 10px;
+    }
+}
+
