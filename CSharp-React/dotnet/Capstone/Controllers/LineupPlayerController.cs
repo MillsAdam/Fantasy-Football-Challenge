@@ -25,13 +25,13 @@ namespace Capstone.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateLineupPlayer([FromQuery] int playerId)
+        public async Task<ActionResult> CreateLineupPlayer([FromQuery] int playerId, [FromQuery] string lineupPosition)
         {
             try
             {
                 string username = User.Identity.Name;
                 User user = _userDao.GetUserByUsername(username);
-                await _fantasyLineupService.CreateLineupPlayerAsync(user, playerId);
+                await _lineupPlayerDao.CreateLineupPlayer(user, playerId, lineupPosition);
                 return Ok("Lineup player created successfully.");
             }
             catch (Exception e)
@@ -59,13 +59,13 @@ namespace Capstone.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> UpdateLineupPlayer([FromQuery] int oldPlayerId, [FromQuery] int newPlayerId)
+        public async Task<ActionResult> UpdateLineupPlayer([FromQuery] int oldPlayerId, [FromQuery] int newPlayerId, [FromQuery] string oldLineupPosition, [FromQuery] string newLineupPosition)
         {
             try
             {
                 string username = User.Identity.Name;
                 User user = _userDao.GetUserByUsername(username);
-                await _lineupPlayerDao.UpdateLineupPlayer(user, oldPlayerId, newPlayerId);
+                await _lineupPlayerDao.UpdateLineupPlayer(user, oldPlayerId, newPlayerId, oldLineupPosition, newLineupPosition);
                 return Ok("Lineup player updated successfully.");
             }
             catch (Exception e)
@@ -80,9 +80,7 @@ namespace Capstone.Controllers
         {
             try
             {
-                string username = User.Identity.Name;
-                User user = _userDao.GetUserByUsername(username);
-                List<LineupPlayer> lineupPlayers = await _lineupPlayerDao.GetLineupPlayersByUser(user);
+                List<LineupPlayer> lineupPlayers = await _lineupPlayerDao.GetLineupPlayers();
                 return Ok(lineupPlayers);
             }
             catch (Exception e)
@@ -97,8 +95,10 @@ namespace Capstone.Controllers
         {
             try
             {
-                List<LineupPlayer> lineupPlayers = await _lineupPlayerDao.GetLineupPlayers();
-                return Ok(lineupPlayers);
+                string username = User.Identity.Name;
+                User user = _userDao.GetUserByUsername(username);
+                List<LineupPlayerDto> lineupPlayerDtos = await _lineupPlayerDao.GetLineupPlayerDtosByUser(user);
+                return Ok(lineupPlayerDtos);
             }
             catch (Exception e)
             {

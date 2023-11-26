@@ -26,7 +26,7 @@ namespace Capstone.Services
         {
             var fantasyLineup = await _fantasyLineupDao.GetFantasyLineupByUser(user, 1);
             var position = await _playerDao.GetPlayerPositionByPlayerIdAsync(playerId);
-            var currentLineupPlayers = await _lineupPlayerDao.GetLineupPlayersByUser(user);
+            var currentLineupPlayers = await _lineupPlayerDao.GetLineupPlayerDtosByUser(user);
             var positionLimits = new Dictionary<string, int>
             {
                 {"QB", 2},
@@ -37,7 +37,7 @@ namespace Capstone.Services
                 {"K", 1},
                 {"DST", 1}
             };
-            var positionCounts = currentLineupPlayers.GroupBy(p => p.Position).ToDictionary(g => g.Key, g => g.Count());
+            var positionCounts = currentLineupPlayers.GroupBy(p => p.LineupPosition).ToDictionary(g => g.Key, g => g.Count());
 
             if (positionCounts.TryGetValue(position, out int currentCount) && currentCount >= positionLimits[position])
             {
@@ -46,14 +46,14 @@ namespace Capstone.Services
 
             if (position == "RB" || position == "WR" || position == "TE")
             {
-                int flexCount = currentLineupPlayers.Count(p => p.Position == "RB" || p.Position == "WR" || p.Position == "TE");
+                int flexCount = currentLineupPlayers.Count(p => p.LineupPosition == "RB" || p.LineupPosition == "WR" || p.LineupPosition == "TE");
                 if (flexCount >= positionLimits["FLEX"])
                 {
                     throw new InvalidOperationException($"Cannot add another player to the FLEX position.  The limit has been reached.");
                 }
             }
 
-            await _lineupPlayerDao.CreateLineupPlayer(user, playerId);
+            await _lineupPlayerDao.CreateLineupPlayer(user, playerId, position);
         }
     }
 }

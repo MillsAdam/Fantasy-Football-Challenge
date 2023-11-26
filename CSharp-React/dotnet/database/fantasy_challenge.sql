@@ -85,10 +85,19 @@ CREATE TABLE fantasy_lineups (
 CREATE TABLE lineup_players (
 	lineup_id int NOT NULL,
 	player_id int NOT NULL,
-	position varchar(50) NOT NULL,
+	lineup_position varchar(50) NOT NULL,
 	FOREIGN KEY (lineup_id) REFERENCES fantasy_lineups(lineup_id),
 	FOREIGN KEY (player_id) REFERENCES players(player_id),
 	PRIMARY KEY (lineup_id, player_id)
 );
+
+CREATE TABLE fantasy_team_scores (
+	roster_id int NOT NULL,
+	game_week int NOT NULL,
+	total_score numeric(5,2),
+	CONSTRAINT PK_fantasy_team_scores_roster_id PRIMARY KEY (roster_id, game_week),
+	CONSTRAINT FK_fantasy_team_scores_roster_id FOREIGN KEY (roster_id) REFERENCES fantasy_rosters(roster_id)
+);
+
 
 COMMIT TRANSACTION;

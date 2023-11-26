@@ -13,7 +13,6 @@ const RosterService = {
             console.error('An error occurred: ', error);
             throw error;
         }
-
     },
 
     async createRosterPlayer(playerId, authToken) {

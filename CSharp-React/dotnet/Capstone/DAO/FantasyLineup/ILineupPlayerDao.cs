@@ -9,9 +9,9 @@ namespace Capstone.DAO
     public interface ILineupPlayerDao
     {
         Task<List<LineupPlayer>> GetLineupPlayers();
-        Task<List<LineupPlayer>> GetLineupPlayersByUser(User user);
-        Task CreateLineupPlayer(User user, int playerId);
-        Task UpdateLineupPlayer(User user, int oldPlayerId, int newPlayerId);
+        Task<List<LineupPlayerDto>> GetLineupPlayerDtosByUser(User user);
+        Task CreateLineupPlayer(User user, int playerId, string lineupPosition);
+        Task UpdateLineupPlayer(User user, int oldPlayerId, int newPlayerId, string oldLineupPosition, string newLineupPosition);
         Task DeleteLineupPlayer(User user, int playerId);
     }
 }

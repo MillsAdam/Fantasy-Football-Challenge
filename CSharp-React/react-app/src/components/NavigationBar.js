@@ -17,6 +17,7 @@ function NavigationBar() {
                     <Link to="/" className="App-link">Home</Link>{" | "}
                     <Link to="/league" className="App-link">League</Link>{" | "}
                     <Link to="/roster" className="App-link">Roster</Link>{" | "}
+                    <Link to="/lineup" className="App-link">Lineup</Link>{" | "}
                     <span to="/logout" className="App-link" onClick={handleLogoutClick} style={{ cursor: 'pointer' }}>Logout</span>
                     {currentUser.role === 'admin' && (
                         <>

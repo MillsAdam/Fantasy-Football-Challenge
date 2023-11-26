@@ -43,6 +43,42 @@ function DatabaseComponent() {
         setIsLoading(false);
     }
 
+    async function createPlayerStats(e) {
+        e.preventDefault();
+        setIsLoading(true);
+        setError(null);
+        try {
+            if (authToken && currentUser.role === 'admin') {
+                const newPlayerStats = await DatabaseService.createPlayerStats();
+                if (newPlayerStats) {
+                    console.log("Player stats created");
+                }
+            }
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            setError('Failed to create player stats');
+        }
+        setIsLoading(false);
+    }
+
+    async function createPlayerProjections(e) {
+        e.preventDefault();
+        setIsLoading(true);
+        setError(null);
+        try {
+            if (authToken && currentUser.role === 'admin') {
+                const newPlayerProjections = await DatabaseService.createPlayerProjections();
+                if (newPlayerProjections) {
+                    console.log("Player projections created");
+                }
+            }
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            setError('Failed to create player projections');
+        }
+        setIsLoading(false);
+    }
+
     return (
         <div>
             <h1>Database Component</h1>
@@ -52,6 +88,12 @@ function DatabaseComponent() {
                 </form>
                 <form onSubmit={createPlayers}>
                     <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create Players"}</button>
+                </form>
+                <form onSubmit={createPlayerStats}>
+                    <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create Player Stats"}</button>
+                </form>
+                <form onSubmit={createPlayerProjections}>
+                    <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create Player Projections"}</button>
                 </form>
             </>
             {error && <p>{error}</p>}

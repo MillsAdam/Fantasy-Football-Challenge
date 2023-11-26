@@ -158,32 +158,34 @@ function RosterComponent() {
             </div> */}
             <>
                 <h2>My Roster</h2>
-                <div className="table-container">
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>Remove</th>
-                                <th>Position</th>
-                                <th>Team</th>
-                                <th>Player</th>
-                                <th>Projection</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {rosterPlayers.map((rosterPlayer, index) => (
-                                <tr key={index}>
-                                    <td>
-                                                <button onClick={() => handleRemovePlayerFromRoster(rosterPlayer.playerId)}>-</button>
-                                            </td>
-                                    <td>{rosterPlayer.position}</td>
-                                    <td>{rosterPlayer.team}</td>
-                                    <td>{rosterPlayer.name}</td>
-                                    <td>{rosterPlayer.fantasyPoints}</td>
+                {rosterPlayers.length > 0 && (
+                    <div className="table-container">
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>Remove</th>
+                                    <th>Position</th>
+                                    <th>Team</th>
+                                    <th>Player</th>
+                                    <th>Projection</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody>
+                                {rosterPlayers.map((rosterPlayer, index) => (
+                                    <tr key={index}>
+                                        <td>
+                                                    <button onClick={() => handleRemovePlayerFromRoster(rosterPlayer.playerId)}>-</button>
+                                                </td>
+                                        <td>{rosterPlayer.position}</td>
+                                        <td>{rosterPlayer.team}</td>
+                                        <td>{rosterPlayer.name}</td>
+                                        <td>{rosterPlayer.fantasyPoints}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </>
             {error && <p>{error}</p>}
         </div>
