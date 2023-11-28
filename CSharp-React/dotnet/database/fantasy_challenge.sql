@@ -34,6 +34,7 @@ CREATE TABLE players (
 CREATE TABLE player_stats (
 	player_id int NOT NULL,
 	team_id int NOT NULL,
+	season_type int NOT NULL,
 	week int NOT NULL,
 	name varchar(50) NOT NULL,
 	position varchar(50) NOT NULL,
@@ -47,6 +48,7 @@ CREATE TABLE player_stats (
 CREATE TABLE player_projections (
 	player_id int NOT NULL,
 	team_id int NOT NULL,
+	season_type int NOT NULL,
 	week int NOT NULL,
 	name varchar(50) NOT NULL,
 	position varchar(50) NOT NULL,

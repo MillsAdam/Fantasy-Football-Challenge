@@ -12,6 +12,7 @@ namespace Capstone.Models
         public string Position { get; set; }
         public string Team { get; set; }
         public string Name { get; set; }
+        public double FantasyPointsAvg { get; set; }
         public double FantasyPointsProj { get; set; }
         public double FantasyPoints { get; set; }
         public string LineupPosition { get; set; }

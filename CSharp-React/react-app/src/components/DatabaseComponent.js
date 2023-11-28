@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import DatabaseService from "../services/DatabaseService";
+import "../styles/DatabaseComponent.css";
 
 function DatabaseComponent() {
     const { authToken, currentUser } = useContext(AuthContext);
@@ -39,6 +40,24 @@ function DatabaseComponent() {
         } catch (error) {
             console.error('An error occurred: ', error);
             setError('Failed to create players');
+        }
+        setIsLoading(false);
+    }
+
+    async function updatePlayers(e) {
+        e.preventDefault();
+        setIsLoading(true);
+        setError(null);
+        try {
+            if (authToken && currentUser.role === 'admin') {
+                const updatedPlayers = await DatabaseService.updatePlayers();
+                if (updatedPlayers) {
+                    console.log("Players updated");
+                }
+            }
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            setError('Failed to update players');
         }
         setIsLoading(false);
     }
@@ -116,28 +135,43 @@ function DatabaseComponent() {
     }
 
     return (
-        <div>
-            <h1>Database Component</h1>
-            <>
+        <div className="database-container">
+            <div className="form-container">
+                <h3>Teams</h3>
                 <form onSubmit={createTeams}>
-                    <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create Teams"}</button>
+                    <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create Teams"}</button>
                 </form>
+            </div>
+            <div className="form-container">
+                <h3>Players</h3>
                 <form onSubmit={createPlayers}>
-                    <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create Players"}</button>
+                    <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create Players"}</button>
                 </form>
+                <form onSubmit={updatePlayers}>
+                    <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Update Players"}</button>
+                </form>
+            </div>
+            <div className="form-container">
+                <h3>Player Stats</h3>
                 <form onSubmit={createPlayerStats}>
-                    <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create Player Stats"}</button>
+                    <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create Player Stats"}</button>
                 </form>
+            </div>
+            <div className="form-container">
+                <h3>Player Projections</h3>
                 <form onSubmit={createPlayerProjections}>
-                    <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create Player Projections"}</button>
+                    <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create Player Projections"}</button>
                 </form>
+            </div>
+            <div className="form-container">
+                <h3>Scores</h3>
                 <form onSubmit={updateLineupScores}>
-                    <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Update Lineup Scores"}</button>
+                    <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Update Lineup Scores"}</button>
                 </form>
                 <form onSubmit={updateRosterScores}>
-                    <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Update Roster Scores"}</button>
+                    <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Update Roster Scores"}</button>
                 </form>
-            </>
+            </div>
             {error && <p>{error}</p>}
         </div>
     )

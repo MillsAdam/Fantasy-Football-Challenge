@@ -63,11 +63,30 @@ namespace Capstone.Services
             }
         }
 
-        public async Task<List<PlayerStats>> GetPlayerStatsAsync()
+        public async Task<List<PlayerStats>> GetAllPlayerStatsAsync()
+        {
+            List<PlayerStats> allPlayerStats = new List<PlayerStats>();
+
+            for (int week = 1; week <= 18; week++)
+            {
+                var weeklyStats = await GetPlayerStatsAsync("2023REG", week);
+                allPlayerStats.AddRange(weeklyStats);
+            }
+
+            for (int week = 1; week <= 4; week++)
+            {
+                var weeklyStats = await GetPlayerStatsAsync("2023POST", week);
+                allPlayerStats.AddRange(weeklyStats);
+            }
+
+            return allPlayerStats;
+        }
+
+        public async Task<List<PlayerStats>> GetPlayerStatsAsync(string season, int week)
         {
             try
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/PlayerGameStatsByWeek/2023REG/1");
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/PlayerGameStatsByWeek/{season}/{week}");
                 request.Headers.Add("Ocp-Apim-Subscription-Key", ApiKey);
 
                 var response = await _client.SendAsync(request);
@@ -79,16 +98,35 @@ namespace Capstone.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error fetching data: {e.Message}");
+                Console.WriteLine($"Error fetching data for {season} and {week}: {e.Message}");
                 return null;
             }
         }
 
-        public async Task<List<DefenseStats>> GetDefenseStatsAsync()
+        public async Task<List<DefenseStats>> GetAllDefenseStatsAsync()
+        {
+            List<DefenseStats> allDefenseStats = new List<DefenseStats>();
+
+            for (int week = 1; week <= 18; week++)
+            {
+                var weeklyStats = await GetDefenseStatsAsync("2023REG", week);
+                allDefenseStats.AddRange(weeklyStats);
+            }
+
+            for (int week = 1; week <= 4; week++)
+            {
+                var weeklyStats = await GetDefenseStatsAsync("2023POST", week);
+                allDefenseStats.AddRange(weeklyStats);
+            }
+
+            return allDefenseStats;
+        }
+
+        public async Task<List<DefenseStats>> GetDefenseStatsAsync(string season, int week)
         {
             try
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/FantasyDefenseByGame/2023REG/1");
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/FantasyDefenseByGame/{season}/{week}");
                 request.Headers.Add("Ocp-Apim-Subscription-Key", ApiKey);
 
                 var response = await _client.SendAsync(request);
@@ -100,16 +138,35 @@ namespace Capstone.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error fetching data: {e.Message}");
+                Console.WriteLine($"Error fetching data for {season} and {week}: {e.Message}");
                 return null;
             }
         }
 
-        public async Task<List<PlayerStats>> GetPlayerProjectionsAsync()
+        public async Task<List<PlayerStats>> GetAllPlayerProjectionsAsync()
+        {
+            List<PlayerStats> allPlayerProjections = new List<PlayerStats>();
+
+            for (int week = 1; week <= 18; week++)
+            {
+                var weeklyProjections = await GetPlayerProjectionsAsync("2023REG", week);
+                allPlayerProjections.AddRange(weeklyProjections);
+            }
+
+            for (int week = 1; week <= 4; week++)
+            {
+                var weeklyProjections = await GetPlayerProjectionsAsync("2023POST", week);
+                allPlayerProjections.AddRange(weeklyProjections);
+            }
+
+            return allPlayerProjections;
+        }
+
+        public async Task<List<PlayerStats>> GetPlayerProjectionsAsync(string season, int week)
         {
             try
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/PlayerGameProjectionStatsByWeek/2023REG/1");
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/PlayerGameProjectionStatsByWeek/{season}/{week}");
                 request.Headers.Add("Ocp-Apim-Subscription-Key", ApiKey);
 
                 var response = await _client.SendAsync(request);
@@ -121,16 +178,35 @@ namespace Capstone.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error fetching data: {e.Message}");
+                Console.WriteLine($"Error fetching data for {season} and {week}: {e.Message}");
                 return null;
             }
         }
 
-        public async Task<List<DefenseStats>> GetDefenseProjectionsAsync()
+        public async Task<List<DefenseStats>> GetAllDefenseProjectionsAsync()
+        {
+            List<DefenseStats> allDefenseProjections = new List<DefenseStats>();
+
+            for (int week = 1; week <= 18; week++)
+            {
+                var weeklyProjections = await GetDefenseProjectionsAsync("2023REG", week);
+                allDefenseProjections.AddRange(weeklyProjections);
+            }
+
+            for (int week = 1; week <= 4; week++)
+            {
+                var weeklyProjections = await GetDefenseProjectionsAsync("2023POST", week);
+                allDefenseProjections.AddRange(weeklyProjections);
+            }
+
+            return allDefenseProjections;
+        }
+
+        public async Task<List<DefenseStats>> GetDefenseProjectionsAsync(string season, int week)
         {
             try
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/FantasyDefenseProjectionsByGame/2023REG/1");
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/FantasyDefenseProjectionsByGame/{season}/{week}");
                 request.Headers.Add("Ocp-Apim-Subscription-Key", ApiKey);
 
                 var response = await _client.SendAsync(request);
@@ -142,7 +218,7 @@ namespace Capstone.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error fetching data: {e.Message}");
+                Console.WriteLine($"Error fetching data for {season} and {week}: {e.Message}");
                 return null;
             }
         }

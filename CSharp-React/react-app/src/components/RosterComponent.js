@@ -120,9 +120,10 @@ function RosterComponent() {
                                 <thead>
                                     <tr>
                                         <th>Add</th>
-                                        <th>Position</th>
+                                        <th>Pos</th>
                                         <th>Team</th>
                                         <th>Player</th>
+                                        <th>Avg</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -134,6 +135,7 @@ function RosterComponent() {
                                             <td>{player.position}</td>
                                             <td>{player.team}</td>
                                             <td>{player.name}</td>
+                                            <td>{player.fantasyPointsAvg}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -165,10 +167,11 @@ function RosterComponent() {
                             <thead>
                                 <tr>
                                     <th>Remove</th>
-                                    <th>Position</th>
+                                    <th>Pos</th>
                                     <th>Team</th>
                                     <th>Player</th>
-                                    <th>Projection</th>
+                                    <th>Avg</th>
+                                    <th>Proj</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -180,6 +183,7 @@ function RosterComponent() {
                                         <td>{rosterPlayer.position}</td>
                                         <td>{rosterPlayer.team}</td>
                                         <td>{rosterPlayer.name}</td>
+                                        <td>{rosterPlayer.fantasyPointsAvg}</td>
                                         <td>{rosterPlayer.fantasyPointsProj}</td>
                                     </tr>
                                 ))}

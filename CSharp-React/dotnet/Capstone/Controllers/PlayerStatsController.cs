@@ -28,8 +28,8 @@ namespace Capstone.Controllers
         {
             try
             {
-                List<PlayerStats> playerStats = await _fantasyDataService.GetPlayerStatsAsync();
-                List<DefenseStats> defenseStats = await _fantasyDataService.GetDefenseStatsAsync();
+                List<PlayerStats> playerStats = await _fantasyDataService.GetAllPlayerStatsAsync();
+                List<DefenseStats> defenseStats = await _fantasyDataService.GetAllDefenseStatsAsync();
                 foreach (PlayerStats playerStat in playerStats)
                 {
                     PlayerStatsDto playerStatsDto = PlayerStatsDto.FromPlayerStats(playerStat);
@@ -54,8 +54,8 @@ namespace Capstone.Controllers
         {
             try
             {
-                List<PlayerStats> playerProjections = await _fantasyDataService.GetPlayerProjectionsAsync();
-                List<DefenseStats> defenseProjections = await _fantasyDataService.GetDefenseProjectionsAsync();
+                List<PlayerStats> playerProjections = await _fantasyDataService.GetAllPlayerProjectionsAsync();
+                List<DefenseStats> defenseProjections = await _fantasyDataService.GetAllDefenseProjectionsAsync();
                 foreach (PlayerStats playerProjection in playerProjections)
                 {
                     PlayerStatsDto playerProjectionsDto = PlayerStatsDto.FromPlayerStats(playerProjection);

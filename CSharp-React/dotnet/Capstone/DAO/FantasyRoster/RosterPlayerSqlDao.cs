@@ -80,13 +80,23 @@ namespace Capstone.DAO
             {
                 await connection.OpenAsync();
                 NpgsqlCommand command = new NpgsqlCommand(
-                    "SELECT rp.roster_id, rp.player_id, p.position, t.team, p.name, COALESCE(pp.fantasy_points, 0) as proj_fantasy_points, COALESCE(ps.fantasy_points, 0) as stat_fantasy_points " + 
+                    "SELECT " + 
+                        "rp.roster_id, " +
+                        "rp.player_id, " +
+                        "p.position, " +
+                        "t.team, " +
+                        "p.name, " +
+                        "COALESCE(ROUND(AVG(ps.fantasy_points), 2), 0) as avg_fantasy_points, " +
+                        "COALESCE(ppi.fantasy_points, 0) as proj_fantasy_points, " +
+                        "COALESCE(psi.fantasy_points, 0) as stat_fantasy_points " + 
                     "FROM roster_players rp " + 
                     "JOIN players p ON rp.player_id = p.player_id " +
                     "JOIN teams t ON p.team_id = t.team_id " + 
-                    "LEFT JOIN player_projections pp ON p.player_id = pp.player_id " +
                     "LEFT JOIN player_stats ps ON p.player_id = ps.player_id " +
+                    "LEFT JOIN player_projections ppi ON p.player_id = ppi.player_id AND ppi.week = 12 AND ppi.season_type = 1 " +
+                    "LEFT JOIN player_stats psi ON p.player_id = psi.player_id AND psi.week = 12 AND psi.season_type = 1 " +
                     "WHERE roster_id = @roster_id " + 
+                    "GROUP BY rp.roster_id, rp.player_id, p.position, t.team, p.name, ppi.fantasy_points, psi.fantasy_points " +
                     "ORDER BY CASE p.position " + 
                         "WHEN 'QB' THEN 1 " + 
                         "WHEN 'RB' THEN 2 " + 
@@ -107,6 +117,7 @@ namespace Capstone.DAO
                         rosterPlayerDto.Team = Convert.ToString(reader["team"]);
                         rosterPlayerDto.Position = Convert.ToString(reader["position"]);
                         rosterPlayerDto.Name = Convert.ToString(reader["name"]);
+                        rosterPlayerDto.FantasyPointsAvg = Convert.ToDouble(reader["avg_fantasy_points"]);
                         rosterPlayerDto.FantasyPointsProj = Convert.ToDouble(reader["proj_fantasy_points"]);
                         rosterPlayerDto.FantasyPoints = Convert.ToDouble(reader["stat_fantasy_points"]);
                     };

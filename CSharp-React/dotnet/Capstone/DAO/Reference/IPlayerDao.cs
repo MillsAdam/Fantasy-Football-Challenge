@@ -9,6 +9,7 @@ namespace Capstone.DAO
     public interface IPlayerDao
     {
         Task AddPlayerAsync(PlayerDto playerDto);
+        Task UpdatePlayerAsync(PlayerDto playerDto);
         Task<string> GetPlayerPositionByPlayerIdAsync(int playerId);
         Task<List<SearchPlayerDto>> GetPlayerIdByNameAsync(string playerName);
     }

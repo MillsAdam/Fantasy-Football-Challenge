@@ -124,10 +124,11 @@ function LineupComponent() {
                                         <tr>
                                             <th>Lineup</th>
                                             <th>Add</th>
-                                            <th>Position</th>
+                                            <th>Pos</th>
                                             <th>Team</th>
                                             <th>Player</th>
-                                            <th>Projection</th>
+                                            <th>Avg</th>
+                                            <th>Proj</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -146,6 +147,7 @@ function LineupComponent() {
                                                 <td>{rosterPlayer.position}</td>
                                                 <td>{rosterPlayer.team}</td>
                                                 <td>{rosterPlayer.name}</td>
+                                                <td>{rosterPlayer.fantasyPointsAvg}</td>
                                                 <td>{rosterPlayer.fantasyPointsProj}</td>
                                             </tr>
                                         ))}
@@ -163,10 +165,10 @@ function LineupComponent() {
                                     <thead>
                                         <tr>
                                             <th>Remove</th>
-                                            <th>Position</th>
+                                            <th>Pos</th>
                                             <th>Team</th>
                                             <th>Player</th>
-                                            <th>Projection</th>
+                                            <th>Proj</th>
                                             <th>Points</th>
                                         </tr>
                                     </thead>

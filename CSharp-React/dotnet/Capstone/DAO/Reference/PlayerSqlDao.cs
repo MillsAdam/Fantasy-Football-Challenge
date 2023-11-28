@@ -49,6 +49,34 @@ namespace Capstone.DAO
             }
         }
 
+        public async Task UpdatePlayerAsync(PlayerDto playerDto)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                string sql = @"
+                    UPDATE players
+                    SET team_id = @team_id,
+                        name = @name,
+                        position = @position,
+                        status = @status,
+                        injury_status = @injury_status
+                    WHERE player_id = @player_id;";
+
+                using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
+                {
+                    command.Parameters.AddWithValue("@player_id", playerDto.PlayerId);
+                    command.Parameters.AddWithValue("@team_id", playerDto.TeamId ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@name", playerDto.Name);
+                    command.Parameters.AddWithValue("@position", playerDto.Position);
+                    command.Parameters.AddWithValue("@status", playerDto.Status ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@injury_status", playerDto.InjuryStatus ?? (object)DBNull.Value);
+
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
+
         public async Task<string> GetPlayerPositionByPlayerIdAsync(int playerId)
         {
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))

@@ -9,6 +9,7 @@ namespace Capstone.Models
     {
         public int PlayerId { get; set; } // Player ID
         public int TeamId { get; set; } // Team ID
+        public int SeasonType { get; set; } // Season Type
         public int Week { get; set; } // Week
         public string Name { get; set; } // Player Name
         public string Position { get; set; } // Player Position
@@ -20,6 +21,7 @@ namespace Capstone.Models
         {
             PlayerId = playerStats.PlayerID,
             TeamId = playerStats.TeamID,
+            SeasonType = playerStats.SeasonType,
             Week = playerStats.Week,
             Name = playerStats.Name,
             Position = playerStats.Position,
@@ -32,6 +34,7 @@ namespace Capstone.Models
         {
             PlayerId = defenseStats.PlayerID,
             TeamId = defenseStats.TeamID,
+            SeasonType = defenseStats.SeasonType,
             Week = defenseStats.Week,
             Name = defenseStats.Team,
             Position = "DEF",

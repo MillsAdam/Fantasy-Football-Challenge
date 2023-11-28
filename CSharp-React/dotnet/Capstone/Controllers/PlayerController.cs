@@ -48,6 +48,32 @@ namespace Capstone.Controllers
             }
         }
 
+        [HttpPut]
+        public async Task<ActionResult> UpdatePlayer()
+        {
+            try
+            {
+                List<Team> teams = await _fantasyDataService.GetTeamsAsync();
+                List<Player> players = await _fantasyDataService.GetPlayersAsync();
+                foreach (Team team in teams)
+                {
+                    PlayerDto playerDto = PlayerDto.FromTeam(team);
+                    await _playerDao.UpdatePlayerAsync(playerDto);
+                };
+                foreach (Player player in players)
+                {
+                    PlayerDto playerDto = PlayerDto.FromPlayer(player);
+                    await _playerDao.UpdatePlayerAsync(playerDto);
+                };
+                return Ok("Players updated successfully.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error updating players: {e.Message}");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+
         [HttpGet]
         public async Task<ActionResult> GetPlayerIdByName([FromQuery] string playerName)
         {

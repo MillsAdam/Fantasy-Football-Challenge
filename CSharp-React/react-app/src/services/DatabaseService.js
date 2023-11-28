@@ -21,6 +21,16 @@ const DatabaseService = {
         }
     },
 
+    async updatePlayers() {
+        try {
+            const response = await axios.put(`http://localhost:5000/api/players`, {});
+            return response.data;
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            throw error;
+        }
+    },
+
     async searchPlayers(playerName) {
         try {
             const response = await axios.get(`http://localhost:5000/api/players?playerName=${playerName}`);
