@@ -38,7 +38,11 @@ namespace Capstone.DAO
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                NpgsqlCommand command = new NpgsqlCommand("SELECT fr.roster_id, fr.user_id, fr.team_name, u.username, fr.total_score FROM fantasy_rosters fr JOIN users u ON fr.user_id = u.user_id;", connection);
+                NpgsqlCommand command = new NpgsqlCommand(
+                    "SELECT fr.roster_id, fr.user_id, fr.team_name, u.username, fr.total_score " + 
+                    "FROM fantasy_rosters fr " + 
+                    "JOIN users u ON fr.user_id = u.user_id " +
+                    "ORDER BY fr.total_score DESC, u.username;", connection);
                 using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                 while (reader.Read())
                 {

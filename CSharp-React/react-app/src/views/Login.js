@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthService from '../services/AuthService';
 import { AuthContext } from '../context/AuthContext';
+import '../styles/LoginRegister.css';
 
 function Login() {
     const [user, setUser] = useState({ username: '', password: '' });
@@ -37,16 +38,18 @@ function Login() {
             <form onSubmit={login}>
                 <div className="form-input-group">
                     <label htmlFor="username">Username</label>
-                    <input className="form" type="text" id="username" name="username"  value={user.username} onChange={handleInputChange} autoComplete="username" />
+                    <input className="form-field" type="text" id="username" name="username"  value={user.username} onChange={handleInputChange} autoComplete="username" />
                 </div>
                 <div className="form-input-group">
                     <label htmlFor="password">Password</label>
-                    <input className="form" type="password" id="password" name="password" value={user.password} onChange={handleInputChange} autoComplete="current-password" />
+                    <input className="form-field" type="password" id="password" name="password" value={user.password} onChange={handleInputChange} autoComplete="current-password" />
                 </div>
-                <button className="form" type="submit" value="Login">Login</button>
+                <button className="form-button" type="submit" value="Login">Login</button>
             </form>
             {invalidCredentials && <p className="invalid-credentials">Invalid credentials.</p>}
-            <p>Don't have an account? <Link to="/register">Register</Link></p>
+            <div className="account-query">
+                Don't have an account? <Link className="register-link" to="/register">Register</Link>
+            </div>
         </div>
     );
 }

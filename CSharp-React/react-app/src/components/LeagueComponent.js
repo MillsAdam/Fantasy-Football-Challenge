@@ -73,17 +73,17 @@ function LeagueComponent() {
                         <table className="table">
                             <thead>
                                 <tr>
-                                    <th>User</th>
-                                    <th>Team</th>
-                                    <th>Points</th>
+                                    <th className="th-width">User</th>
+                                    <th className="th-width">Team</th>
+                                    <th className="th-width">Points</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {rosters.map((roster, index) => (
                                     <tr key={index}>
-                                        <td>{roster.username}</td>
-                                        <td>{roster.teamName}</td>
-                                        <td>{roster.totalScore}</td>
+                                        <td className="td-width">{roster.username}</td>
+                                        <td className="td-width">{roster.teamName}</td>
+                                        <td className="td-width">{roster.totalScore}</td>
                                     </tr>
                                 ))}
                             </tbody>
