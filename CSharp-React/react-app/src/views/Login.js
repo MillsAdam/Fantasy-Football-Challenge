@@ -33,18 +33,18 @@ function Login() {
     };
 
     return (
-        <div className="login">
+        <div className="component-container">
             <h1>Login</h1>
             <form onSubmit={login}>
                 <div className="form-input-group">
                     <label htmlFor="username">Username</label>
-                    <input className="form-field" type="text" id="username" name="username"  value={user.username} onChange={handleInputChange} autoComplete="username" />
+                    <input type="text" id="username" name="username"  value={user.username} onChange={handleInputChange} autoComplete="username" />
                 </div>
                 <div className="form-input-group">
                     <label htmlFor="password">Password</label>
-                    <input className="form-field" type="password" id="password" name="password" value={user.password} onChange={handleInputChange} autoComplete="current-password" />
+                    <input type="password" id="password" name="password" value={user.password} onChange={handleInputChange} autoComplete="current-password" />
                 </div>
-                <button className="form-button" type="submit" value="Login">Login</button>
+                <button className="login-button" type="submit" value="Login">Login</button>
             </form>
             {invalidCredentials && <p className="invalid-credentials">Invalid credentials.</p>}
             <div className="account-query">

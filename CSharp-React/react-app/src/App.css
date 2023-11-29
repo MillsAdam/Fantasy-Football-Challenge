@@ -38,4 +38,162 @@
   }
 }
 
+.page-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.component-container {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+
+/* TABLE STYLES */
+table {
+  margin-left: auto;
+  margin-right: auto;
+  border-collapse: collapse;
+  width: 100%;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+table th, table td {
+  padding: 4px 5px;
+}
+
+table th {
+  text-align: center;
+  background-color: #f4f4f4;
+  color: #333;
+  font-weight: bold;
+}
+
+table td {
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+}
+
+table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table tr:hover {
+  background-color: #f1f1f1
+}
+
+th-width, .td-width {
+  width: 100px;
+}
+
+
+
+/* BUTTON STYLES */
+button {
+  /* padding: 10px 15px; */
+  background-color: #282c34;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+}
+
+button:hover {
+  background-color: #61dafb;
+  color: #282c34;
+}
+
+.add-remove-button {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  margin: 0;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+/* FORM STYLES */
+input {
+  margin-bottom: 1rem;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: calc(100% - 22px);
+}
+
+input:focus {
+  outline: none;
+  border-color: #61dafb;
+}
+
+.form-input-group {
+  margin-bottom: 1rem;
+}
+
+
+
+/* LABEL STYLES */
+label {
+  display: block;
+  margin-bottom: .5rem;
+  color: #333;
+}
+
+
+/* SELECT STYLES */
+select {
+  padding: 3px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: calc(100% - 22px);
+  width: auto;
+}
+
+
+
+/* MEDIA QUERIES */
+@media (max-width: 768px) {
+  @media (max-width: 768px) {
+    .page-container { 
+        flex-direction: column;
+        gap: 0px;
+    }
+  }
+
+  .component-container {
+    width: 350px;
+  }
+
+  table {
+    font-size: 12px;
+  }
+
+  button {
+    flex-shrink: 0;
+    /* width: 30px; */
+  }
+}
+
 

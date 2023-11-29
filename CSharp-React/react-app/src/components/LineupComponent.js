@@ -109,17 +109,51 @@ function LineupComponent() {
     }
 
     return (
-        <div>
+        <div className="component-container">
             <h1>Lineup Component</h1>
             {isLoading ? (
                 <p>Loading...</p>
             ) : (
-                <div className="lineup-container">
-                    <div className="roster-comp">
+                <div>
+                    <div>
+                        <h2>My Lineup</h2>
+                        {lineupPlayers.length > 0 && (
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Remove</th>
+                                            <th>Pos</th>
+                                            <th>Team</th>
+                                            <th>Player</th>
+                                            <th>Proj</th>
+                                            <th>Points</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {lineupPlayers.map((lineupPlayer, index) => (
+                                            <tr key={index}>
+                                                <td>
+                                                    <button className="add-remove-button" onClick={() => handleRemovePlayerFromLineup(lineupPlayer.playerId)}>-</button>
+                                                </td>
+                                                <td>{lineupPlayer.lineupPosition}</td>
+                                                <td>{lineupPlayer.team}</td>
+                                                <td>{lineupPlayer.name}</td>
+                                                <td>{lineupPlayer.fantasyPointsProj}</td>
+                                                <td>{lineupPlayer.fantasyPoints}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+                    </div>
+
+                    <div>
                         <h2>My Roster</h2>
                         {rosterPlayers.length > 0 && (
                             <div className="table-container">
-                                <table className="table">
+                                <table>
                                     <thead>
                                         <tr>
                                             <th>Lineup</th>
@@ -135,14 +169,14 @@ function LineupComponent() {
                                         {rosterPlayers.map((rosterPlayer, index) => (
                                             <tr key={index}>
                                                 <td>
-                                                    <select className="lineup-select" id={`lineup-position-${index}`}>
+                                                    <select id={`lineup-position-${index}`}>
                                                         {getFilteredLineupOptions(rosterPlayer.position).map((option) => (
                                                             <option key={option} value={option}>{option}</option>
                                                         ))}
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <button className="lineup-button" onClick={() => handleAddPlayerToLineup(rosterPlayer.playerId, document.getElementById(`lineup-position-${index}`).value)}>+</button>
+                                                    <button className="add-remove-button" onClick={() => handleAddPlayerToLineup(rosterPlayer.playerId, document.getElementById(`lineup-position-${index}`).value)}>+</button>
                                                 </td>
                                                 <td>{rosterPlayer.position}</td>
                                                 <td>{rosterPlayer.team}</td>
@@ -155,45 +189,10 @@ function LineupComponent() {
                                 </table>
                             </div>
                         )}
-                    </div>
-
-                    <div className="lineup-comp">
-                        <h2>My Lineup</h2>
-                        {lineupPlayers.length > 0 && (
-                            <div className="table-container">
-                                <table className="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Remove</th>
-                                            <th>Pos</th>
-                                            <th>Team</th>
-                                            <th>Player</th>
-                                            <th>Proj</th>
-                                            <th>Points</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {lineupPlayers.map((lineupPlayer, index) => (
-                                            <tr key={index}>
-                                                <td>
-                                                    <button className="lineup-button" onClick={() => handleRemovePlayerFromLineup(lineupPlayer.playerId)}>-</button>
-                                                </td>
-                                                <td>{lineupPlayer.lineupPosition}</td>
-                                                <td>{lineupPlayer.team}</td>
-                                                <td>{lineupPlayer.name}</td>
-                                                <td>{lineupPlayer.fantasyPointsProj}</td>
-                                                <td>{lineupPlayer.fantasyPoints}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        )}
-                    </div>
+                    </div> 
                 </div>
             )}
             {error && <p>{error}</p>}
-            {/* <LineupPositionModal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleModalSubmit} /> */}
         </div>
     )
 }

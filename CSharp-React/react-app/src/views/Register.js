@@ -44,7 +44,7 @@ function Register() {
     };
 
     return (
-        <div className="register">
+        <div className="component-container">
             <h1>Register</h1>
             {registrationErrors && (
                 <div role="alert">
@@ -54,17 +54,17 @@ function Register() {
             <form onSubmit={register}>
                 <div className="form-input-group">
                     <label htmlFor="username">Username: </label>
-                    <input className="form-field" type="text" id="username" name="username" value={user.username} onChange={e => setUser({ ...user, username: e.target.value })} onFocus={clearErrors} autoComplete="username" />
+                    <input type="text" id="username" name="username" value={user.username} onChange={e => setUser({ ...user, username: e.target.value })} onFocus={clearErrors} autoComplete="username" />
                 </div>
                 <div className="form-input-group">
                     <label htmlFor="password">Password: </label>
-                    <input className="form-field" type="password" id="password" name="password" value={user.password} onChange={e => setUser({ ...user, password: e.target.value })} onFocus={clearErrors} autoComplete="new-password" />
+                    <input type="password" id="password" name="password" value={user.password} onChange={e => setUser({ ...user, password: e.target.value })} onFocus={clearErrors} autoComplete="new-password" />
                 </div>
                 <div className="form-input-group">
                     <label htmlFor="confirmPassword">Confirm Password: </label>
-                    <input className="form-field" type="password" id="confirmPassword" name="confirmPassword" value={user.confirmPassword} onChange={e => setUser({ ...user, confirmPassword: e.target.value })} onFocus={clearErrors} autoComplete="new-password" />
+                    <input type="password" id="confirmPassword" name="confirmPassword" value={user.confirmPassword} onChange={e => setUser({ ...user, confirmPassword: e.target.value })} onFocus={clearErrors} autoComplete="new-password" />
                 </div>
-                <input type="submit" className="form-button" value="Register" />
+                <input className="register-button" type="submit" value="Register" />
             </form>
             {registrationErrors && <div className="registration-errors">{registrationErrorMsg}</div>}
             <div className="account-query">

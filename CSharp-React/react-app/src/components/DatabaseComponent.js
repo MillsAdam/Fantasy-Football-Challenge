@@ -10,9 +10,9 @@ const configValueOptions = {
     'current_lineup_week': [1, 2, 3, 4]
 };
 const configKeyDisplayNames = {
-    'current_week': 'Current Week',
-    'current_season_type': 'Current Season Type',
-    'current_lineup_week': 'Current Lineup Week'
+    'current_week': 'Week',
+    'current_season_type': 'Season',
+    'current_lineup_week': 'Lineup'
 };
 
 function DatabaseComponent() {
@@ -22,10 +22,6 @@ function DatabaseComponent() {
     const [selectedConfigKey, setSelectedConfigKey] = useState(configKeyOptions[0]);
     const [selectedConfigValue, setSelectedConfigValue] = useState(configValueOptions[configKeyOptions[0]][0]);
     const [configurations, setConfigurations] = useState([]);
-
-    useEffect(() => {
-        getConfiguration();
-    }, []);
 
     async function createTeams(e) {
         e.preventDefault();
@@ -200,14 +196,14 @@ function DatabaseComponent() {
 
     return (
         <div>
-            <div className="database-container">
-                <div className="form-container">
+            <div className="page-container">
+                <div className="component-container">
                     <h3>Teams</h3>
                     <form onSubmit={createTeams}>
                         <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create Teams"}</button>
                     </form>
                 </div>
-                <div className="form-container">
+                <div className="component-container">
                     <h3>Players</h3>
                     <form onSubmit={createPlayers}>
                         <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create Players"}</button>
@@ -216,19 +212,19 @@ function DatabaseComponent() {
                         <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Update Players"}</button>
                     </form>
                 </div>
-                <div className="form-container">
+                <div className="component-container">
                     <h3>Player Stats</h3>
                     <form onSubmit={createPlayerStats}>
                         <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create Player Stats"}</button>
                     </form>
                 </div>
-                <div className="form-container">
+                <div className="component-container">
                     <h3>Player Projections</h3>
                     <form onSubmit={createPlayerProjections}>
                         <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create Player Projections"}</button>
                     </form>
                 </div>
-                <div className="form-container">
+                <div className="component-container">
                     <h3>Scores</h3>
                     <form onSubmit={updateLineupScores}>
                         <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Update Lineup Scores"}</button>
@@ -237,12 +233,12 @@ function DatabaseComponent() {
                         <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Update Roster Scores"}</button>
                     </form>
                 </div>
-                <div className="form-container">
+                <div className="component-container">
                     <h3>Configuration</h3>
                     <form onSubmit={updateConfiguration}>
                         <select 
                             value={selectedConfigKey} 
-                            className="database-select"
+                            className="database-key-select"
                             onChange={(e) => {
                                 setSelectedConfigKey(e.target.value);
                                 setSelectedConfigValue(configValueOptions[e.target.value][0]);
@@ -254,7 +250,7 @@ function DatabaseComponent() {
                         </select>
                         <select 
                             value={selectedConfigValue} 
-                            className="database-select"
+                            className="database-value-select"
                             onChange={(e) => setSelectedConfigValue(e.target.value)} 
                         >
                             {configValueOptions[selectedConfigKey].map(value => (
@@ -263,7 +259,7 @@ function DatabaseComponent() {
                         </select>
                         <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Update Configuration"}</button>
                     </form>
-                    <div className="configuration-table">
+                    <div className="table-container">
                         <table>
                             <tbody>
                                 {configurations.map((config, index) => (

@@ -56,7 +56,7 @@ function LeagueComponent() {
     }
 
     return (
-        <div>
+        <div className="component-container">
             <h1>League Component</h1>
             {!userHasTeam && (
                 <>
@@ -70,20 +70,20 @@ function LeagueComponent() {
             {userHasTeam && (
                 <>
                     <div className="table-container">
-                        <table className="table">
+                        <table>
                             <thead>
                                 <tr>
-                                    <th className="th-width">User</th>
-                                    <th className="th-width">Team</th>
-                                    <th className="th-width">Points</th>
+                                    <th>User</th>
+                                    <th>Team</th>
+                                    <th>Points</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {rosters.map((roster, index) => (
                                     <tr key={index}>
-                                        <td className="td-width">{roster.username}</td>
-                                        <td className="td-width">{roster.teamName}</td>
-                                        <td className="td-width">{roster.totalScore}</td>
+                                        <td>{roster.username}</td>
+                                        <td>{roster.teamName}</td>
+                                        <td>{roster.totalScore}</td>
                                     </tr>
                                 ))}
                             </tbody>
