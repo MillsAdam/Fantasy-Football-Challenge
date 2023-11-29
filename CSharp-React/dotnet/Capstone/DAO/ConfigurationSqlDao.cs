@@ -22,10 +22,13 @@ namespace Capstone.DAO
             using (Npgsql.NpgsqlConnection connection = new Npgsql.NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                Npgsql.NpgsqlCommand command = new Npgsql.NpgsqlCommand("UPDATE configuration SET config_value = @config_value WHERE config_key = @config_key;", connection);
-                command.Parameters.AddWithValue("@config_value", configuration.ConfigValue);
-                command.Parameters.AddWithValue("@config_key", configuration.ConfigKey);
-                await command.ExecuteNonQueryAsync();
+                using Npgsql.NpgsqlCommand command = new Npgsql.NpgsqlCommand(
+                    "UPDATE configuration SET config_value = @config_value WHERE config_key = @config_key;", connection);
+                {
+                    command.Parameters.AddWithValue("@config_value", configuration.ConfigValue);
+                    command.Parameters.AddWithValue("@config_key", configuration.ConfigKey);
+                    await command.ExecuteNonQueryAsync();
+                }
             }
         }
 
@@ -35,7 +38,8 @@ namespace Capstone.DAO
             using (Npgsql.NpgsqlConnection connection = new Npgsql.NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using Npgsql.NpgsqlCommand command = new Npgsql.NpgsqlCommand("SELECT config_key, config_value FROM configuration;", connection);
+                using Npgsql.NpgsqlCommand command = new Npgsql.NpgsqlCommand(
+                    "SELECT config_key, config_value FROM configuration;", connection);
                 {
                     using Npgsql.NpgsqlDataReader reader = await command.ExecuteReaderAsync();
                     {

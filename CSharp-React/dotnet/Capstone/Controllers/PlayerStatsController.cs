@@ -74,5 +74,57 @@ namespace Capstone.Controllers
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }
+
+        [HttpPut("stats")]
+        public async Task<ActionResult> UpdatePlayerStats()
+        {
+            try
+            {
+                List<PlayerStats> playerStats = await _fantasyDataService.GetAllPlayerStatsAsync();
+                List<DefenseStats> defenseStats = await _fantasyDataService.GetAllDefenseStatsAsync();
+                foreach (PlayerStats playerStat in playerStats)
+                {
+                    PlayerStatsDto playerStatsDto = PlayerStatsDto.FromPlayerStats(playerStat);
+                    await _playerStatsDao.UpdatePlayerStatsDtoAsync(playerStatsDto);
+                };
+                foreach (DefenseStats defenseStat in defenseStats)
+                {
+                    PlayerStatsDto playerStatsDto = PlayerStatsDto.FromDefenseStats(defenseStat);
+                    await _playerStatsDao.UpdateDefenseStatsDtoAsync(playerStatsDto);
+                };
+                return Ok("Player stats updated successfully.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error updating player stats: {e.Message}");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+
+        [HttpPut("projections")]
+        public async Task<ActionResult> UpdatePlayerProjections()
+        {
+            try
+            {
+                List<PlayerStats> playerProjections = await _fantasyDataService.GetAllPlayerProjectionsAsync();
+                List<DefenseStats> defenseProjections = await _fantasyDataService.GetAllDefenseProjectionsAsync();
+                foreach (PlayerStats playerProjection in playerProjections)
+                {
+                    PlayerStatsDto playerProjectionsDto = PlayerStatsDto.FromPlayerStats(playerProjection);
+                    await _playerStatsDao.UpdatePlayerProjectionsDtoAsync(playerProjectionsDto);
+                };
+                foreach (DefenseStats defenseProjection in defenseProjections)
+                {
+                    PlayerStatsDto playerProjectionsDto = PlayerStatsDto.FromDefenseStats(defenseProjection);
+                    await _playerStatsDao.UpdateDefenseProjectionsDtoAsync(playerProjectionsDto);
+                };
+                return Ok("Player projections updated successfully.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error updating player projections: {e.Message}");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
     }
 }

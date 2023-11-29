@@ -23,29 +23,20 @@ namespace Capstone.DAO
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                NpgsqlCommand command = new NpgsqlCommand("INSERT INTO players (player_id, team_id, name, position, status, injury_status) " + 
-                    "VALUES (@player_id, @team_id, @name, @position, @status, @injury_status);", connection);
-                command.Parameters.AddWithValue("@player_id", playerDto.PlayerId);
-                if (playerDto.TeamId != null)
+                using NpgsqlCommand command = new NpgsqlCommand(@"
+                    INSERT INTO players (
+                        player_id, team_id, name, position, status, injury_status) 
+                    VALUES (
+                        @player_id, @team_id, @name, @position, @status, @injury_status);", connection);
                 {
-                    command.Parameters.AddWithValue("@team_id", playerDto.TeamId);
+                    command.Parameters.AddWithValue("@player_id", playerDto.PlayerId);
+                    command.Parameters.AddWithValue("@team_id", playerDto.TeamId ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@name", playerDto.Name);
+                    command.Parameters.AddWithValue("@position", playerDto.Position);
+                    command.Parameters.AddWithValue("@status", playerDto.Status);
+                    command.Parameters.AddWithValue("@injury_status", playerDto.InjuryStatus ?? (object)DBNull.Value);
+                    await command.ExecuteNonQueryAsync();
                 }
-                else
-                {
-                    command.Parameters.AddWithValue("@team_id", DBNull.Value);
-                }
-                command.Parameters.AddWithValue("@name", playerDto.Name);
-                command.Parameters.AddWithValue("@position", playerDto.Position);
-                command.Parameters.AddWithValue("@status", playerDto.Status);
-                if (playerDto.InjuryStatus != null)
-                {
-                    command.Parameters.AddWithValue("@injury_status", playerDto.InjuryStatus);
-                }
-                else
-                {
-                    command.Parameters.AddWithValue("@injury_status", DBNull.Value);
-                }
-                command.ExecuteNonQuery();
             }
         }
 
@@ -82,18 +73,24 @@ namespace Capstone.DAO
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                NpgsqlCommand command = new NpgsqlCommand("SELECT position FROM players WHERE player_id = @player_id;", connection);
-                command.Parameters.AddWithValue("@player_id", playerId);
-                NpgsqlDataReader reader = command.ExecuteReader();
-                string position = "";
-                while (reader.Read())
+                using NpgsqlCommand command = new NpgsqlCommand("SELECT position FROM players WHERE player_id = @player_id;", connection);
                 {
-                    position = Convert.ToString(reader["position"]);
+                    command.Parameters.AddWithValue("@player_id", playerId);
+                    using NpgsqlDataReader reader = command.ExecuteReader();
+                    {
+                        string position = "";
+                        while (await reader.ReadAsync())
+                        {
+                            position = Convert.ToString(reader["position"]);
+                        }
+                        return position;
+                    }
                 }
-                return position;
             }
         }
 
+
+        // ORDER BY PS.FANTASY_POINTS DESC, THEN MAYBE POSITION
         public async Task<List<SearchPlayerDto>> GetPlayerIdByNameAsync(string playerName)
         {
             List<SearchPlayerDto> searchPlayerDtos = new List<SearchPlayerDto>();
@@ -101,12 +98,22 @@ namespace Capstone.DAO
             {
                 await connection.OpenAsync();
                 using NpgsqlCommand command = new NpgsqlCommand(
-                    "SELECT p.player_id, t.team, p.name, p.position, p.status, p.injury_status " +
-                    "FROM players p " +
-                    "JOIN teams t ON p.team_id = t.team_id " + 
-                    "WHERE p.name ILIKE @player_name_pattern " +
-                    "AND p.position IN ('QB', 'RB', 'WR', 'TE', 'K', 'DEF') " + 
-                    "AND p.team_id IS NOT NULL;", connection);
+                    @"SELECT 
+                        p.player_id, 
+                        t.team, 
+                        p.name, 
+                        p.position, 
+                        p.status, 
+                        p.injury_status, 
+                        COALESCE(ROUND(AVG(ps.fantasy_points), 2), 0) as avg_fantasy_points 
+                    FROM players p 
+                    JOIN teams t ON p.team_id = t.team_id 
+                    LEFT JOIN player_stats ps ON p.player_id = ps.player_id 
+                    WHERE p.name ILIKE @player_name_pattern 
+                        AND p.position IN ('QB', 'RB', 'WR', 'TE', 'K', 'DEF') 
+                        AND p.team_id IS NOT NULL 
+                    GROUP BY p.player_id, t.team, p.name, p.position, p.status, p.injury_status 
+                    ORDER BY avg_fantasy_points DESC;", connection);
                 {
                     string playerNamePattern = "%" + playerName + "%";
                     command.Parameters.AddWithValue("@player_name_pattern", playerNamePattern);
@@ -123,14 +130,8 @@ namespace Capstone.DAO
                                 searchPlayerDto.Name = Convert.ToString(reader["name"]);
                                 searchPlayerDto.Position = Convert.ToString(reader["position"]);
                                 searchPlayerDto.Status = Convert.ToString(reader["status"]);
-                                if (reader["injury_status"] != DBNull.Value)
-                                {
-                                    searchPlayerDto.InjuryStatus = Convert.ToString(reader["injury_status"]);
-                                }
-                                else
-                                {
-                                    searchPlayerDto.InjuryStatus = null;
-                                }
+                                searchPlayerDto.InjuryStatus = Convert.ToString(reader["injury_status"] ?? (object)DBNull.Value);
+                                searchPlayerDto.FantasyPointsAvg = Convert.ToDouble(reader["avg_fantasy_points"]);
                             };
                             searchPlayerDtos.Add(searchPlayerDto);
                         }                    

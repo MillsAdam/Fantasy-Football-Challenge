@@ -9,7 +9,7 @@ namespace Capstone.DAO
     public interface IFantasyLineupDao
     {
         Task CreateFantasyLineup(int fantasyRosterId);
-        Task<FantasyLineup> GetFantasyLineupByUser(User user, int gameWeek);
+        Task<FantasyLineup> GetFantasyLineupByUser(User user);
         
     }
 }

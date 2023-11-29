@@ -95,6 +95,24 @@ function DatabaseComponent() {
         setIsLoading(false);
     }
 
+    async function updatePlayerStats(e) {
+        e.preventDefault();
+        setIsLoading(true);
+        setError(null);
+        try {
+            if (authToken && currentUser.role === 'admin') {
+                const updatedPlayerStats = await DatabaseService.updatePlayerStats();
+                if (updatedPlayerStats) {
+                    console.log("Player stats updated");
+                }
+            }
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            setError('Failed to update player stats');
+        }
+        setIsLoading(false);
+    }
+
     async function createPlayerProjections(e) {
         e.preventDefault();
         setIsLoading(true);
@@ -109,6 +127,24 @@ function DatabaseComponent() {
         } catch (error) {
             console.error('An error occurred: ', error);
             setError('Failed to create player projections');
+        }
+        setIsLoading(false);
+    }
+
+    async function updatePlayerProjections(e) {
+        e.preventDefault();
+        setIsLoading(true);
+        setError(null);
+        try {
+            if (authToken && currentUser.role === 'admin') {
+                const updatedPlayerProjections = await DatabaseService.updatePlayerProjections();
+                if (updatedPlayerProjections) {
+                    console.log("Player projections updated");
+                }
+            }
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            setError('Failed to update player projections');
         }
         setIsLoading(false);
     }
@@ -217,11 +253,17 @@ function DatabaseComponent() {
                     <form onSubmit={createPlayerStats}>
                         <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create Player Stats"}</button>
                     </form>
+                    <form onSubmit={updatePlayerStats}>
+                        <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Update Player Stats"}</button>
+                    </form>
                 </div>
                 <div className="component-container">
                     <h3>Player Projections</h3>
                     <form onSubmit={createPlayerProjections}>
                         <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create Player Projections"}</button>
+                    </form>
+                    <form onSubmit={updatePlayerProjections}>
+                        <button className="database-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Update Player Projections"}</button>
                     </form>
                 </div>
                 <div className="component-container">

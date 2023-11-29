@@ -23,16 +23,19 @@ namespace Capstone.DAO
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                NpgsqlCommand command = new NpgsqlCommand("INSERT INTO teams (team_id, team, city, name, conference, division, status) " + 
+                using NpgsqlCommand command = new NpgsqlCommand(
+                    "INSERT INTO teams (team_id, team, city, name, conference, division, status) " + 
                     "VALUES (@team_id, @team, @city, @name, @conference, @division, @status);", connection);
-                command.Parameters.AddWithValue("@team_id", teamDto.TeamId);
-                command.Parameters.AddWithValue("@team", teamDto.Team);
-                command.Parameters.AddWithValue("@city", teamDto.City);
-                command.Parameters.AddWithValue("@name", teamDto.Name);
-                command.Parameters.AddWithValue("@conference", teamDto.Conference);
-                command.Parameters.AddWithValue("@division", teamDto.Division);
-                command.Parameters.AddWithValue("@status", "Active");
-                command.ExecuteNonQuery();
+                {
+                    command.Parameters.AddWithValue("@team_id", teamDto.TeamId);
+                    command.Parameters.AddWithValue("@team", teamDto.Team);
+                    command.Parameters.AddWithValue("@city", teamDto.City);
+                    command.Parameters.AddWithValue("@name", teamDto.Name);
+                    command.Parameters.AddWithValue("@conference", teamDto.Conference);
+                    command.Parameters.AddWithValue("@division", teamDto.Division);
+                    command.Parameters.AddWithValue("@status", "Active");
+                    await command.ExecuteNonQueryAsync();
+                }
             }
         }
 
@@ -41,9 +44,12 @@ namespace Capstone.DAO
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                NpgsqlCommand command = new NpgsqlCommand("UPDATE teams SET status = 'Inactive' WHERE team_id = @team_id;", connection);
-                command.Parameters.AddWithValue("@team_id", teamId);
-                command.ExecuteNonQuery();
+                using NpgsqlCommand command = new NpgsqlCommand(
+                    "UPDATE teams SET status = 'Inactive' WHERE team_id = @team_id;", connection);
+                {
+                    command.Parameters.AddWithValue("@team_id", teamId);
+                    await command.ExecuteNonQueryAsync();
+                }
             }
         }
     }

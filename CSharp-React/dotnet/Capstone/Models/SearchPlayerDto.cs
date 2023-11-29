@@ -13,5 +13,6 @@ namespace Capstone.Models
         public string Position { get; set; } // Player Position
         public string Status { get; set; } // Player Status
         public string? InjuryStatus { get; set; } // Player Injury Status // Nullable
+        public double FantasyPointsAvg { get; set; } // Player Fantasy Points Average
     }
 }

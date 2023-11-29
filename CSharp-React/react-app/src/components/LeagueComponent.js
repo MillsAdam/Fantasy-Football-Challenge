@@ -63,7 +63,7 @@ function LeagueComponent() {
                     <form onSubmit={createRoster}>
                         <label htmlFor="teamName">Team Name</label>
                         <input type="text" id="teamName" name="teamName" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
-                        <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create League Roster"}</button>
+                        <button className="league-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create League Roster"}</button>
                     </form>
                 </>
             )}
@@ -75,6 +75,10 @@ function LeagueComponent() {
                                 <tr>
                                     <th>User</th>
                                     <th>Team</th>
+                                    <th>W1</th>
+                                    <th>W2</th>
+                                    <th>W3</th>
+                                    <th>W4</th>
                                     <th>Points</th>
                                 </tr>
                             </thead>
@@ -83,6 +87,10 @@ function LeagueComponent() {
                                     <tr key={index}>
                                         <td>{roster.username}</td>
                                         <td>{roster.teamName}</td>
+                                        <td>{roster.week1Score}</td>
+                                        <td>{roster.week2Score}</td>
+                                        <td>{roster.week3Score}</td>
+                                        <td>{roster.week4Score}</td>
                                         <td>{roster.totalScore}</td>
                                     </tr>
                                 ))}

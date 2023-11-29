@@ -12,5 +12,9 @@ namespace Capstone.Models
         public string TeamName { get; set; }
         public string Username { get; set; }
         public double TotalScore { get; set; }
+        public double Week1Score { get; set; }
+        public double Week2Score { get; set; }
+        public double Week3Score { get; set; }
+        public double Week4Score { get; set; }
     }
 }
