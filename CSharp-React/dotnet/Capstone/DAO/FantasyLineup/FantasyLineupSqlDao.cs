@@ -14,7 +14,7 @@ namespace Capstone.DAO
         private readonly string connectionString;
         private readonly IFantasyRosterDao _fantasyRosterDao;
 
-        public FantasyLineupSqlDao(IConfiguration configuration, IUserDao userDao, IFantasyRosterDao fantasyRosterDao)
+        public FantasyLineupSqlDao(IConfiguration configuration, IFantasyRosterDao fantasyRosterDao)
         {
             connectionString = configuration.GetConnectionString("Project");
             _fantasyRosterDao = fantasyRosterDao;

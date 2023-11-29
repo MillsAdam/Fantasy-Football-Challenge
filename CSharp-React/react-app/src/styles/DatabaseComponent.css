@@ -21,6 +21,7 @@
 }
 
 .database-select {
+    margin-right: 5px;
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -60,7 +61,51 @@ label {
     color: #333;
 }
 
+.configuration-table {
+    /* margin-top: 20px; */
+    border-collapse: collapse;
+    width: 100%;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.configuration-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.configuration-table th, .configuration-table td {
+    padding: 12px 15px;
+    text-align: left;
+    /* border-bottom: 1px solid #ddd; */
+}
+
+.configuration-table th {
+    background-color: #f4f4f4;
+    color: #333;
+    font-weight: bold;
+}
+
+.configuration-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.configuration-table tr:hover {
+    background-color: #f1f1f1
+}
+
+.configuration-table td {
+    font-size: 14px;
+    color: #333;
+}
+
 @media (max-width: 768px) {
+    .table {
+        font-size: 12px;
+    }
+
     .database-container { 
         flex-direction: column;
         gap: 0px; /* does nothing */
@@ -80,6 +125,8 @@ label {
         font-size: 8px;
         width: 60px;
         flex-shrink: 0;
+        margin-right: 5px;
+        /* padding-right: 5px; */
     }
 
     .database-button {

@@ -79,6 +79,26 @@ const DatabaseService = {
             console.error('An error occurred: ', error);
             throw error;
         }
+    },
+
+    async updateConfiguration(configuration) {
+        try {
+            const response = await axios.put(`http://localhost:5000/api/configuration`, configuration);
+            return response.data;
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            throw error;
+        }
+    },
+
+    async getConfiguration() {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/configuration`);
+            return response.data;
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            throw error;
+        }
     }
 }
 

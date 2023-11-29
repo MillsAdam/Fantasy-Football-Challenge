@@ -9,6 +9,12 @@ CREATE TABLE users (
 	CONSTRAINT PK_user PRIMARY KEY (user_id)
 );
 
+CREATE TABLE configuration (
+	config_key varchar(50) NOT NULL,
+	config_value int NOT NULL,
+	CONSTRAINT PK_configuration_config_key PRIMARY KEY (config_key)
+);
+
 CREATE TABLE teams (
 	team_id int UNIQUE NOT NULL,
 	team varchar(10) NOT NULL,

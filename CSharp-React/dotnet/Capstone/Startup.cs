@@ -53,7 +53,8 @@ namespace Capstone
             services.AddTransient<IRosterPlayerDao, RosterPlayerSqlDao>();
             services.AddTransient<IFantasyLineupDao, FantasyLineupSqlDao>();
             services.AddTransient<ILineupPlayerDao, LineupPlayerSqlDao>();   
-            services.AddTransient<IPlayerStatsDao, PlayerStatsSqlDao>();         
+            services.AddTransient<IPlayerStatsDao, PlayerStatsSqlDao>();
+            services.AddTransient<IConfigurationDao, ConfigurationSqlDao>();
 
             // configure jwt authentication
             var key = Encoding.ASCII.GetBytes(Configuration["JwtSecret"]);

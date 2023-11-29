@@ -24,6 +24,7 @@ namespace Capstone.Data
         public DbSet<PlayerStatsDto> PlayerStatsDtos { get; set; }
         public DbSet<DefenseStats> DefenseStats { get; set; }
         public DbSet<SearchPlayerDto> SearchPlayerDtos { get; set; }
+        public DbSet<Configuration> Configuration { get; set; }
         
         
 
