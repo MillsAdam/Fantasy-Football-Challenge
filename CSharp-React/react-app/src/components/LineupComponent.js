@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import RosterService from "../services/RosterService";
 import LineupService from "../services/LineupService";
+import DatabaseService from "../services/DatabaseService";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/LineupComponent.css";
 
@@ -23,6 +24,8 @@ function LineupComponent() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [lineupOptions, setLineupOptions] = useState([]);
+    const [configurations, setConfigurations] = useState([]);
+    const [isLineupLocked, setIsLineupLocked] = useState(false);
 
     useEffect(() => {
         async function getRosterPlayers() {
@@ -68,6 +71,26 @@ function LineupComponent() {
     }, [authToken, currentUser]);
 
     useEffect(() => {
+        async function fetchConfigurations() {
+            try {
+                const fetchedConfigurations = await DatabaseService.getConfiguration();
+                setConfigurations(fetchedConfigurations);
+            } catch (error) {
+                console.error('An error occurred: ', error);
+                setError('Failed to get configurations');
+            }
+        }
+        fetchConfigurations();
+    }, []);
+
+    useEffect(() => {
+        const lineupLockConfig = configurations.find(config => config.configKey === 'lock_lineups');
+        if (lineupLockConfig) {
+            setIsLineupLocked(lineupLockConfig.configValue === 1);
+        }
+    }, [configurations, isLineupLocked]);
+
+    useEffect(() => {
         const takenPositions = lineupPlayers.map((lineupPlayer) => lineupPlayer.lineupPosition);
         const availablePositions = ALL_LINEUP_POSITIONS.filter((position) => !takenPositions.includes(position));
         setLineupOptions(availablePositions);
@@ -80,6 +103,10 @@ function LineupComponent() {
 
     async function handleAddPlayerToLineup(e, playerId, lineupPosition) {
         e.preventDefault();
+        if (isLineupLocked) {
+            setError('Lineups are locked');
+            return;
+        }
         setIsLoading(true);
         setError(null);
         try {
@@ -97,6 +124,10 @@ function LineupComponent() {
 
     async function handleRemovePlayerFromLineup(e, playerId) {
         e.preventDefault();
+        if (isLineupLocked) {
+            setError('Lineups are locked');
+            return;
+        }
         setIsLoading(true);
         setError(null);
         try {

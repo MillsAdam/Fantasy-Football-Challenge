@@ -7,13 +7,15 @@ const configValueOptions = {
     'current_week': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
     'current_season_type': [1, 3],
     'current_lineup_week': [1, 2, 3, 4],
-    'lock_rosters': [1, 2]
+    'lock_rosters': [1, 2],
+    'lock_lineups': [1, 2],
 };
 const configKeyDisplayNames = {
     'current_week': 'Current Week',
     'current_season_type': 'Current Season Type',
     'current_lineup_week': 'Current Lineup Week',
-    'lock_rosters': 'lock_rosters',
+    'lock_rosters': 'Lock Rosters',
+    'lock_lineups': 'Lock Lineups',
 };
 const teamNameDisplayNames = {
     'ARI': 'Arizona Cardinals',
