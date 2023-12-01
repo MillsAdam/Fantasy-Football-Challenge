@@ -5,12 +5,12 @@ import DatabaseService from "../services/DatabaseService";
 import "../styles/RosterComponent.css";
 
 const positionOptions = ['QB', 'RB', 'WR', 'TE', 'K', 'DEF'];
-const teamNameOptions = [
-    'ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CHI', 'CIN', 'CLE', 
-    'DAL', 'DEN', 'DET', 'GB', 'HOU', 'IND', 'JAX', 'KC',
-    'MIA', 'MIN', 'NE', 'NO', 'NYG', 'NYJ', 'LV', 'PHI',
-    'PIT', 'LAC', 'SEA', 'SF', 'LAR', 'TB', 'TEN', 'WAS'
-];
+// const teamNameOptions = [
+//     'ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CHI', 'CIN', 'CLE', 
+//     'DAL', 'DEN', 'DET', 'GB', 'HOU', 'IND', 'JAX', 'KC',
+//     'MIA', 'MIN', 'NE', 'NO', 'NYG', 'NYJ', 'LV', 'PHI',
+//     'PIT', 'LAC', 'SEA', 'SF', 'LAR', 'TB', 'TEN', 'WAS'
+// ];
 const teamNameDisplayNames = {
     'ARI': 'Arizona Cardinals',
     'ATL': 'Atlanta Falcons',
@@ -52,10 +52,13 @@ function RosterComponent() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [searchName, setSearchName] = useState("");
+    const [activeTeamNameOptions, setActiveTeamNameOptions] = useState([]);
     const [selectedTeamName, setSelectedTeamName] = useState("");
     const [selectedPosition, setSelectedPosition] = useState("");
     const [searchPlayer, setSearchPlayer] = useState([]);
     const [activeSearchMethod, setActiveSearchMethod] = useState("");
+    const isRosterFull = rosterPlayers.length >= 27;
+
 
     useEffect(() => {
         async function getRosterPlayers() {
@@ -77,6 +80,24 @@ function RosterComponent() {
             setError('User not found');
         }
     }, [authToken, currentUser]);
+
+    useEffect(() => {
+        async function getActiveTeamNameOptions() {
+            setIsLoading(true);
+            try {
+                const activeTeamNameOptionsData = await DatabaseService.getActiveTeams();
+                console.log(activeTeamNameOptionsData);
+                const sortedTeamNames = activeTeamNameOptionsData.map(team => team.team).sort();
+                setActiveTeamNameOptions(sortedTeamNames);
+            } catch (error) {
+                console.error('An error occurred: ', error);
+                setError('Failed to get active team name options');
+            }
+            setIsLoading(false);
+        }
+
+        getActiveTeamNameOptions();
+    }, []);
 
     function startSearchByName(e) {
         setActiveSearchMethod("name");
@@ -107,8 +128,11 @@ function RosterComponent() {
         setError(null);
         try {
             const searchData = await DatabaseService.searchPlayersName(searchName);
+            const filteredSearchData = searchData.filter(player => 
+                !rosterPlayers.some(rosterPlayer => rosterPlayer.playerId === player.playerId)
+            );
             console.log(searchData);
-            setSearchPlayer(searchData);
+            setSearchPlayer(filteredSearchData);
         } catch (error) {
             console.error('An error occurred: ', error);
             setError('Failed to search players');
@@ -122,8 +146,11 @@ function RosterComponent() {
         setError(null);
         try {
             const searchData = await DatabaseService.searchPlayersTeam(selectedTeamName);
+            const filteredSearchData = searchData.filter(player =>
+                !rosterPlayers.some(rosterPlayer => rosterPlayer.playerId === player.playerId)
+            );
             console.log(searchData);
-            setSearchPlayer(searchData);
+            setSearchPlayer(filteredSearchData);
         } catch (error) {
             console.error('An error occurred: ', error);
             setError('Failed to search players');
@@ -137,8 +164,11 @@ function RosterComponent() {
         setError(null);
         try {
             const searchData = await DatabaseService.searchPlayersPosition(selectedPosition);
+            const filteredSearchData = searchData.filter(player =>
+                !rosterPlayers.some(rosterPlayer => rosterPlayer.playerId === player.playerId)
+            );
             console.log(searchData);
-            setSearchPlayer(searchData);
+            setSearchPlayer(filteredSearchData);
         } catch (error) {
             console.error('An error occurred: ', error);
             setError('Failed to search players');
@@ -146,7 +176,8 @@ function RosterComponent() {
         setIsLoading(false);
     }
 
-    async function handleAddPlayerToRoster(playerId){
+    async function handleAddPlayerToRoster(e, playerId) {
+        e.preventDefault();
         setIsLoading(true);
         setError(null);
         try {
@@ -162,7 +193,8 @@ function RosterComponent() {
         setIsLoading(false);
     }
 
-    async function handleRemovePlayerFromRoster(playerId) {
+    async function handleRemovePlayerFromRoster(e, playerId) {
+        e.preventDefault();
         setIsLoading(true);
         setError(null);
         try {
@@ -207,8 +239,8 @@ function RosterComponent() {
                             disabled={activeSearchMethod && activeSearchMethod !== "team"}
                         >
                             <option value="" disabled hidden>Select Team</option>
-                            {teamNameOptions.map((teamName, index) => (
-                                <option key={index} value={teamName}>{teamNameDisplayNames[teamName]}</option>
+                            {activeTeamNameOptions.map(teamName => (
+                                <option key={teamName} value={teamName}>{teamNameDisplayNames[teamName] || teamName}</option>
                             ))}
                         </select>
                         <button 
@@ -259,7 +291,13 @@ function RosterComponent() {
                                             {searchPlayer.map((player, index) => (
                                                 <tr key={index}>
                                                     <td>
-                                                        <button className="add-remove-button" onClick={() => handleAddPlayerToRoster(player.playerId)}>+</button>
+                                                        <button 
+                                                            className="add-remove-button" 
+                                                            onClick={(e) => handleAddPlayerToRoster(e, player.playerId)} 
+                                                            disabled={isRosterFull}
+                                                        >
+                                                            +
+                                                        </button>
                                                     </td>
                                                     <td>{player.position}</td>
                                                     <td>{player.team}</td>
@@ -296,7 +334,12 @@ function RosterComponent() {
                                         <tr key={index}>
                                             <td>{index+1}</td>
                                             <td>
-                                                <button className="add-remove-button" onClick={() => handleRemovePlayerFromRoster(rosterPlayer.playerId)}>-</button>
+                                                <button 
+                                                    className="add-remove-button" 
+                                                    onClick={(e) => handleRemovePlayerFromRoster(e, rosterPlayer.playerId)}
+                                                >
+                                                    -
+                                                </button>
                                             </td>
                                             <td>{rosterPlayer.position}</td>
                                             <td>{rosterPlayer.team}</td>

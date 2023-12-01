@@ -46,14 +46,33 @@ namespace Capstone.DAO
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using NpgsqlCommand command = new NpgsqlCommand("DELETE FROM roster_players WHERE roster_id = @roster_id AND player_id = @player_id;", connection);
-                {
+                using var transaction = connection.BeginTransaction();
+                try {
                     FantasyRoster fantasyRoster = await _fantasyRosterDao.GetFantasyRosterByUser(user);
-                    command.Parameters.AddWithValue("@roster_id", fantasyRoster.FantasyRosterId);
-                    command.Parameters.AddWithValue("@player_id", playerId);
-                    await command.ExecuteNonQueryAsync();
-                
+                    using NpgsqlCommand command = new NpgsqlCommand(
+                        @"DELETE FROM roster_players 
+                        WHERE roster_id = @roster_id AND player_id = @player_id;", connection);
+                    {
+                        command.Parameters.AddWithValue("@roster_id", fantasyRoster.FantasyRosterId);
+                        command.Parameters.AddWithValue("@player_id", playerId);
+                        await command.ExecuteNonQueryAsync();
+                    }
+                    using NpgsqlCommand command2 = new NpgsqlCommand(
+                        @"DELETE FROM lineup_players 
+                        WHERE player_id = @player_id 
+                            AND lineup_id IN (SELECT lineup_id FROM fantasy_lineups WHERE roster_id = @roster_id);", connection);
+                    {
+                        command2.Parameters.AddWithValue("@roster_id", fantasyRoster.FantasyRosterId);
+                        command2.Parameters.AddWithValue("@player_id", playerId);
+                        await command2.ExecuteNonQueryAsync();
+                    }
+                    await transaction.CommitAsync();
                 }
+                catch (Exception e)
+                {
+                    await transaction.RollbackAsync();
+                    throw new ApplicationException("An error occurred while updating the roster. Please try again.", e);
+                }     
             }
         }
 

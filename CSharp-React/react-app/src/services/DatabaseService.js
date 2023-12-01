@@ -159,6 +159,16 @@ const DatabaseService = {
             console.error('An error occurred: ', error);
             throw error;
         }
+    },
+
+    async getActiveTeams() {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/teams/active`);
+            return response.data;
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            throw error;
+        }
     }
 }
 

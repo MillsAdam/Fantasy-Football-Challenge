@@ -76,7 +76,8 @@ function LineupComponent() {
         return lineupOptions.filter(option => specificOptions.includes(option));
     }
 
-    async function handleAddPlayerToLineup(playerId, lineupPosition){
+    async function handleAddPlayerToLineup(e, playerId, lineupPosition) {
+        e.preventDefault();
         setIsLoading(true);
         setError(null);
         try {
@@ -92,7 +93,8 @@ function LineupComponent() {
         setIsLoading(false);
     }
 
-    async function handleRemovePlayerFromLineup(playerId) {
+    async function handleRemovePlayerFromLineup(e, playerId) {
+        e.preventDefault();
         setIsLoading(true);
         setError(null);
         try {
@@ -131,7 +133,7 @@ function LineupComponent() {
                                         {lineupPlayers.map((lineupPlayer, index) => (
                                             <tr key={index}>
                                                 <td>
-                                                    <button className="add-remove-button" onClick={() => handleRemovePlayerFromLineup(lineupPlayer.playerId)}>-</button>
+                                                    <button className="add-remove-button" onClick={(e) => handleRemovePlayerFromLineup(e, lineupPlayer.playerId)}>-</button>
                                                 </td>
                                                 <td>{lineupPlayer.lineupPosition}</td>
                                                 <td>{lineupPlayer.team}</td>
@@ -173,7 +175,7 @@ function LineupComponent() {
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <button className="add-remove-button" onClick={() => handleAddPlayerToLineup(rosterPlayer.playerId, document.getElementById(`lineup-position-${index}`).value)}>+</button>
+                                                    <button className="add-remove-button" onClick={(e) => handleAddPlayerToLineup(e, rosterPlayer.playerId, document.getElementById(`lineup-position-${index}`).value)}>+</button>
                                                 </td>
                                                 <td>{rosterPlayer.position}</td>
                                                 <td>{rosterPlayer.team}</td>

@@ -3,7 +3,6 @@ import { AuthContext } from "../context/AuthContext";
 import DatabaseService from "../services/DatabaseService";
 import "../styles/DatabaseComponent.css";
 
-const configKeyOptions = ['current_week', 'current_season_type', 'current_lineup_week'];
 const configValueOptions = {
     'current_week': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
     'current_season_type': [1, 3],
@@ -14,12 +13,6 @@ const configKeyDisplayNames = {
     'current_season_type': 'Current Season Type',
     'current_lineup_week': 'Current Lineup Week'
 };
-const teamNameOptions = [
-    'ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CHI', 'CIN', 'CLE', 
-    'DAL', 'DEN', 'DET', 'GB', 'HOU', 'IND', 'JAX', 'KC',
-    'MIA', 'MIN', 'NE', 'NO', 'NYG', 'NYJ', 'LV', 'PHI',
-    'PIT', 'LAC', 'SEA', 'SF', 'LAR', 'TB', 'TEN', 'WAS'
-];
 const teamNameDisplayNames = {
     'ARI': 'Arizona Cardinals',
     'ATL': 'Atlanta Falcons',
@@ -59,16 +52,18 @@ function DatabaseComponent() {
     const { authToken, currentUser } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [dynamicConfigKeyOptions, setDynamicConfigKeyOptions] = useState([]);
     const [selectedConfigKey, setSelectedConfigKey] = useState("");
     const [selectedConfigValue, setSelectedConfigValue] = useState("");
     const [configurations, setConfigurations] = useState([]);
+    const [dynamicTeamNameOptions, setDynamicTeamNameOptions] = useState([]);
     const [selectedTeamName, setSelectedTeamName] = useState("");
     const [teams, setTeams] = useState([]);
     const [successMessage, setSuccessMessage] = useState("");
     const [loadingMessage, setLoadingMessage] = useState("");
     const [isTeamsTableVisible, setIsTeamsTableVisible] = useState(false);
     const [isConfigTableVisible, setIsConfigTableVisible] = useState(false);
-
+    
     const displaySuccessMessage = (message) => {
         setSuccessMessage(message);
         setTimeout(() => {
@@ -298,8 +293,12 @@ function DatabaseComponent() {
             if (authToken && currentUser.role === 'admin') {
                 const fetchedConfiguration = await DatabaseService.getConfiguration();
                 if (fetchedConfiguration) {
-                    const sortedConfigurations = configKeyOptions.map(key => fetchedConfiguration.find(config => config.configKey === key));
+                    const sortedConfigurations = fetchedConfiguration.sort((a, b) => {
+                        return a.configKey.localeCompare(b.configKey);
+                    });
+                    const sortedConfigKeys = fetchedConfiguration.map(config => config.configKey).sort();
                     setConfigurations(sortedConfigurations);
+                    setDynamicConfigKeyOptions(sortedConfigKeys);
                 }
             }
         } catch (error) {
@@ -340,8 +339,12 @@ function DatabaseComponent() {
             if (authToken && currentUser.role === 'admin') {
                 const fetchedTeams = await DatabaseService.getTeams();
                 if (fetchedTeams) {
-                    const sortedTeams = teamNameOptions.map(teamName => fetchedTeams.find(team => team.team === teamName));
+                    const sortedTeams = fetchedTeams.sort((a, b) => {
+                        return a.team.localeCompare(b.team);
+                    });
+                    const sortedTeamNames = fetchedTeams.map(team => team.team).sort();
                     setTeams(sortedTeams);
+                    setDynamicTeamNameOptions(sortedTeamNames);
                 }
             }
         } catch (error) {
@@ -433,8 +436,8 @@ function DatabaseComponent() {
                             }}
                         >
                             <option value="" disabled hidden>Select Config Key</option>
-                            {configKeyOptions.map(key => (
-                                <option key={key} value={key}>{configKeyDisplayNames[key]}</option>
+                            {dynamicConfigKeyOptions.map(key => (
+                                <option key={key} value={key}>{configKeyDisplayNames[key] || key}</option>
                             ))}
                         </select>
                         <select 
@@ -479,8 +482,8 @@ function DatabaseComponent() {
                             onChange={(e) => setSelectedTeamName(e.target.value)}
                         >
                             <option value="" disabled hidden>Select a Team</option>
-                            {teamNameOptions.map(key => (
-                                <option key={key} value={key}>{teamNameDisplayNames[key]}</option>
+                            {dynamicTeamNameOptions.map(teamName => (
+                                <option key={teamName} value={teamName}>{teamNameDisplayNames[teamName] || teamName}</option>
                             ))}
                         </select>
                         <button className="database-button" type="submit" disabled={isLoading || selectedTeamName === ""}>

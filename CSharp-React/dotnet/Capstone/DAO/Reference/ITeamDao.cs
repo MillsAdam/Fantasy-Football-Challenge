@@ -11,5 +11,6 @@ namespace Capstone.DAO
         Task AddTeamAsync(TeamDto teamDto);
         Task ToggleTeamStatusAsync(string teamName);
         Task<List<TeamDto>> GetTeamsAsync();
+        Task<List<TeamDto>> GetActiveTeamsAsync();
     }
 }

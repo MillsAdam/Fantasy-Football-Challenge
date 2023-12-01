@@ -87,5 +87,35 @@ namespace Capstone.DAO
             }
             return teams;
         }
+
+        public async Task<List<TeamDto>> GetActiveTeamsAsync()
+        {
+            List<TeamDto> teams = new List<TeamDto>();
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using (NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM teams WHERE status = 'Active';", connection))
+                {
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (reader.Read())
+                        {
+                            TeamDto team = new TeamDto
+                            {
+                                TeamId = Convert.ToInt32(reader["team_id"]),
+                                Team = Convert.ToString(reader["team"]),
+                                City = Convert.ToString(reader["city"]),
+                                Name = Convert.ToString(reader["name"]),
+                                Conference = Convert.ToString(reader["conference"]),
+                                Division = Convert.ToString(reader["division"]),
+                                Status = Convert.ToString(reader["status"])
+                            };
+                            teams.Add(team);
+                        }
+                    }
+                }
+            }
+            return teams;
+        }
     }
 }

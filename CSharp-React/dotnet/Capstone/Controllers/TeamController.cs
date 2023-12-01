@@ -71,5 +71,20 @@ namespace Capstone.Controllers
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }
+
+        [HttpGet("active")]
+        public async Task<ActionResult<List<TeamDto>>> GetActiveTeamsAsync()
+        {
+            try
+            {
+                List<TeamDto> teams = await _teamDao.GetActiveTeamsAsync();
+                return Ok(teams);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error getting active teams: {e.Message}");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
     }
 }
