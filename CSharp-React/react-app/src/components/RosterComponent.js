@@ -5,12 +5,6 @@ import DatabaseService from "../services/DatabaseService";
 import "../styles/RosterComponent.css";
 
 const positionOptions = ['QB', 'RB', 'WR', 'TE', 'K', 'DEF'];
-// const teamNameOptions = [
-//     'ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CHI', 'CIN', 'CLE', 
-//     'DAL', 'DEN', 'DET', 'GB', 'HOU', 'IND', 'JAX', 'KC',
-//     'MIA', 'MIN', 'NE', 'NO', 'NYG', 'NYJ', 'LV', 'PHI',
-//     'PIT', 'LAC', 'SEA', 'SF', 'LAR', 'TB', 'TEN', 'WAS'
-// ];
 const teamNameDisplayNames = {
     'ARI': 'Arizona Cardinals',
     'ATL': 'Atlanta Falcons',
@@ -49,6 +43,8 @@ const teamNameDisplayNames = {
 function RosterComponent() {
     const { authToken, currentUser } = useContext(AuthContext);
     const [rosterPlayers, setRosterPlayers] = useState([]);
+    const [activeRosterPlayers, setActiveRosterPlayers] = useState([]);
+    const isRosterFull = rosterPlayers.length >= 27;
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [searchName, setSearchName] = useState("");
@@ -57,7 +53,6 @@ function RosterComponent() {
     const [selectedPosition, setSelectedPosition] = useState("");
     const [searchPlayer, setSearchPlayer] = useState([]);
     const [activeSearchMethod, setActiveSearchMethod] = useState("");
-    const isRosterFull = rosterPlayers.length >= 27;
 
 
     useEffect(() => {
@@ -67,6 +62,9 @@ function RosterComponent() {
                 const rosterPlayersData = await RosterService.getRosterPlayersByUser(authToken);
                 console.log(rosterPlayersData);
                 setRosterPlayers(rosterPlayersData);
+                const activeRosterPlayers = rosterPlayersData.filter(player => player.teamStatus === 'Active');
+                console.log(activeRosterPlayers);
+                setActiveRosterPlayers(activeRosterPlayers);
             } catch (error) {
                 console.error('An error occurred: ', error);
                 setError('Failed to get roster players');
@@ -99,22 +97,23 @@ function RosterComponent() {
         getActiveTeamNameOptions();
     }, []);
 
-    function startSearchByName(e) {
+    async function startSearchByName(e) {
         setActiveSearchMethod("name");
         searchPlayersName(e);
     }
 
-    function startSearchByTeam(e) {
+    async function startSearchByTeam(e) {
         setActiveSearchMethod("team");
         searchPlayersTeam(e);
     }
 
-    function startSearchByPosition(e) {
+    async function startSearchByPosition(e) {
         setActiveSearchMethod("position");
         searchPlayersPosition(e);
     }
 
-    function clearSearch() {
+    async function clearSearch(e) {
+        e.preventDefault();
         setSearchName("");
         setSelectedTeamName("");
         setSelectedPosition("");
@@ -129,6 +128,7 @@ function RosterComponent() {
         try {
             const searchData = await DatabaseService.searchPlayersName(searchName);
             const filteredSearchData = searchData.filter(player => 
+                player.teamStatus === 'Active' &&
                 !rosterPlayers.some(rosterPlayer => rosterPlayer.playerId === player.playerId)
             );
             console.log(searchData);
@@ -146,7 +146,8 @@ function RosterComponent() {
         setError(null);
         try {
             const searchData = await DatabaseService.searchPlayersTeam(selectedTeamName);
-            const filteredSearchData = searchData.filter(player =>
+            const filteredSearchData = searchData.filter(player => 
+                player.teamStatus === 'Active' &&
                 !rosterPlayers.some(rosterPlayer => rosterPlayer.playerId === player.playerId)
             );
             console.log(searchData);
@@ -164,7 +165,8 @@ function RosterComponent() {
         setError(null);
         try {
             const searchData = await DatabaseService.searchPlayersPosition(selectedPosition);
-            const filteredSearchData = searchData.filter(player =>
+            const filteredSearchData = searchData.filter(player => 
+                player.teamStatus === 'Active' &&
                 !rosterPlayers.some(rosterPlayer => rosterPlayer.playerId === player.playerId)
             );
             console.log(searchData);
@@ -185,6 +187,10 @@ function RosterComponent() {
             if (newRosterPlayer) {
                 const updatedRosterPlayers = await RosterService.getRosterPlayersByUser(authToken);
                 setRosterPlayers(updatedRosterPlayers);
+                const activeRosterPlayers = updatedRosterPlayers.filter(player => player.teamStatus === 'Active');
+                setActiveRosterPlayers(activeRosterPlayers);
+                const updatedSearchPlayer = searchPlayer.filter(player => player.playerId !== playerId);
+                setSearchPlayer(updatedSearchPlayer);
             }
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -202,6 +208,8 @@ function RosterComponent() {
             if (removedRosterPlayer) {
                 const updatedRosterPlayers = await RosterService.getRosterPlayersByUser(authToken);
                 setRosterPlayers(updatedRosterPlayers);
+                const activeRosterPlayers = updatedRosterPlayers.filter(player => player.teamStatus === 'Active');
+                setActiveRosterPlayers(activeRosterPlayers);
             }
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -281,8 +289,10 @@ function RosterComponent() {
                                         <thead>
                                             <tr>
                                                 <th>Add</th>
-                                                <th>Pos</th>
+                                                <th>Conf</th>
                                                 <th>Team</th>
+                                                <th>Pos</th>
+                                                <th>Inj</th>
                                                 <th>Player</th>
                                                 <th>Avg</th>
                                             </tr>
@@ -299,8 +309,10 @@ function RosterComponent() {
                                                             +
                                                         </button>
                                                     </td>
-                                                    <td>{player.position}</td>
+                                                    <td>{player.conference}</td>
                                                     <td>{player.team}</td>
+                                                    <td>{player.position}</td>
+                                                    <td>{player.injuryStatus ? player.injuryStatus.charAt(0) : ''}</td>
                                                     <td>{player.name}</td>
                                                     <td>{player.fantasyPointsAvg}</td>
                                                 </tr>
@@ -315,22 +327,24 @@ function RosterComponent() {
                 
                 <div className="component-container">
                     <h2>My Roster</h2>
-                    {rosterPlayers.length > 0 && (
+                    {activeRosterPlayers.length > 0 && (
                         <div className="table-container">
                             <table>
                                 <thead>
                                     <tr>
                                         <th>#</th>
                                         <th>Remove</th>
-                                        <th>Pos</th>
+                                        <th>Conf</th>
                                         <th>Team</th>
+                                        <th>Pos</th>
+                                        <th>Inj</th>
                                         <th>Player</th>
                                         <th>Avg</th>
                                         <th>Proj</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {rosterPlayers.map((rosterPlayer, index) => (
+                                    {activeRosterPlayers.map((rosterPlayer, index) => (
                                         <tr key={index}>
                                             <td>{index+1}</td>
                                             <td>
@@ -341,8 +355,15 @@ function RosterComponent() {
                                                     -
                                                 </button>
                                             </td>
-                                            <td>{rosterPlayer.position}</td>
+                                            <td>{rosterPlayer.conference}</td>
                                             <td>{rosterPlayer.team}</td>
+                                            <td>{rosterPlayer.position}</td>
+                                            <td className={
+                                                rosterPlayer.injuryStatus === 'P' || rosterPlayer.injuryStatus === null ? 'green-highlight' :
+                                                ["Q", "D", "O"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
+                                            }>
+                                                {rosterPlayer.injuryStatus ? rosterPlayer.injuryStatus.charAt(0) : 'A'}
+                                            </td>
                                             <td>{rosterPlayer.name}</td>
                                             <td>{rosterPlayer.fantasyPointsAvg}</td>
                                             <td>{rosterPlayer.fantasyPointsProj}</td>

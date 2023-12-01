@@ -92,10 +92,15 @@ namespace Capstone.DAO
                         lp.player_id, 
                         lp.lineup_position, 
                         p.position, 
-                        t.team, p.name, 
+                        t.team, 
+                        p.name, 
+                        p.status, 
+                        p.injury_status, 
                         COALESCE(ROUND(AVG(ps.fantasy_points), 2), 0) as avg_fantasy_points, 
                         COALESCE(ppi.fantasy_points, 0) as proj_fantasy_points, 
-                        COALESCE(psi.fantasy_points, 0) as stat_fantasy_points 
+                        COALESCE(psi.fantasy_points, 0) as stat_fantasy_points, 
+                        t.conference, 
+                        t.status as team_status 
                     FROM lineup_players lp 
                     JOIN players p ON lp.player_id = p.player_id 
                     JOIN teams t ON p.team_id = t.team_id 
@@ -105,8 +110,19 @@ namespace Capstone.DAO
                     LEFT JOIN player_projections ppi ON p.player_id = ppi.player_id AND ppi.week = c_week.config_value AND ppi.season_type = c_season_type.config_value 
                     LEFT JOIN player_stats psi ON p.player_id = psi.player_id AND psi.week = c_week.config_value AND psi.season_type = c_season_type.config_value 
                     WHERE lineup_id = @lineup_id 
-                        AND t.status = 'Active' 
-                    GROUP BY lp.lineup_id, lp.player_id, lp.lineup_position, p.position, t.team, p.name, ppi.fantasy_points, psi.fantasy_points 
+                    GROUP BY 
+                        lp.lineup_id, 
+                        lp.player_id, 
+                        lp.lineup_position, 
+                        p.position, 
+                        t.team, 
+                        p.name, 
+                        p.status, 
+                        p.injury_status, 
+                        ppi.fantasy_points, 
+                        psi.fantasy_points, 
+                        t.conference, 
+                        t.status 
                     ORDER BY CASE lp.lineup_position 
                         WHEN 'QB1' THEN 1 
                         WHEN 'QB2' THEN 2 
@@ -130,13 +146,17 @@ namespace Capstone.DAO
                         {
                             lineupPlayerDto.FantasyLineupId = Convert.ToInt32(reader["lineup_id"]);
                             lineupPlayerDto.PlayerId = Convert.ToInt32(reader["player_id"]);
-                            lineupPlayerDto.Team = Convert.ToString(reader["team"]);
+                            lineupPlayerDto.LineupPosition = Convert.ToString(reader["lineup_position"]);
                             lineupPlayerDto.Position = Convert.ToString(reader["position"]);
+                            lineupPlayerDto.Team = Convert.ToString(reader["team"]);
                             lineupPlayerDto.Name = Convert.ToString(reader["name"]);
+                            lineupPlayerDto.Status = Convert.ToString(reader["status"]);
+                            lineupPlayerDto.InjuryStatus = Convert.ToString(reader["injury_status"] ?? (object)DBNull.Value);
                             lineupPlayerDto.FantasyPointsAvg = Convert.ToDouble(reader["avg_fantasy_points"]);
                             lineupPlayerDto.FantasyPointsProj = Convert.ToDouble(reader["proj_fantasy_points"]);
                             lineupPlayerDto.FantasyPoints = Convert.ToDouble(reader["stat_fantasy_points"]);
-                            lineupPlayerDto.LineupPosition = Convert.ToString(reader["lineup_position"]);
+                            lineupPlayerDto.Conference = Convert.ToString(reader["conference"]);
+                            lineupPlayerDto.TeamStatus = Convert.ToString(reader["team_status"]);
                         };
                         lineupPlayerDtos.Add(lineupPlayerDto);
                     }

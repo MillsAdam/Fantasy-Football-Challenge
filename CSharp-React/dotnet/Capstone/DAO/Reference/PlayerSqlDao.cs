@@ -98,20 +98,21 @@ namespace Capstone.DAO
                 using NpgsqlCommand command = new NpgsqlCommand(
                     @"SELECT 
                         p.player_id, 
+                        p.position, 
                         t.team, 
                         p.name, 
-                        p.position, 
                         p.status, 
                         p.injury_status, 
-                        COALESCE(ROUND(AVG(ps.fantasy_points), 2), 0) as avg_fantasy_points 
+                        COALESCE(ROUND(AVG(ps.fantasy_points), 2), 0) as avg_fantasy_points, 
+                        t.conference, 
+                        t.status as team_status
                     FROM players p 
                     JOIN teams t ON p.team_id = t.team_id 
                     LEFT JOIN player_stats ps ON p.player_id = ps.player_id 
                     WHERE p.name ILIKE @player_name_pattern 
                         AND p.position IN ('QB', 'RB', 'WR', 'TE', 'K', 'DEF') 
                         AND p.team_id IS NOT NULL 
-                        AND t.status = 'Active' 
-                    GROUP BY p.player_id, t.team, p.name, p.position, p.status, p.injury_status 
+                    GROUP BY p.player_id, p.position, t.team, p.name, p.status, p.injury_status, t.conference, t.status 
                     ORDER BY avg_fantasy_points DESC;", connection);
                 {
                     string playerNamePattern = "%" + playerName + "%";
@@ -125,12 +126,14 @@ namespace Capstone.DAO
                             SearchPlayerDto searchPlayerDto = new SearchPlayerDto();
                             {
                                 searchPlayerDto.PlayerId = Convert.ToInt32(reader["player_id"]);
+                                searchPlayerDto.Position = Convert.ToString(reader["position"]);
                                 searchPlayerDto.Team = Convert.ToString(reader["team"]);
                                 searchPlayerDto.Name = Convert.ToString(reader["name"]);
-                                searchPlayerDto.Position = Convert.ToString(reader["position"]);
                                 searchPlayerDto.Status = Convert.ToString(reader["status"]);
                                 searchPlayerDto.InjuryStatus = Convert.ToString(reader["injury_status"] ?? (object)DBNull.Value);
                                 searchPlayerDto.FantasyPointsAvg = Convert.ToDouble(reader["avg_fantasy_points"]);
+                                searchPlayerDto.Conference = Convert.ToString(reader["conference"]);
+                                searchPlayerDto.TeamStatus = Convert.ToString(reader["team_status"]);
                             };
                             searchPlayerDtos.Add(searchPlayerDto);
                         }                    
@@ -149,20 +152,21 @@ namespace Capstone.DAO
                 using NpgsqlCommand command = new NpgsqlCommand(
                     @"SELECT 
                         p.player_id, 
+                        p.position, 
                         t.team, 
                         p.name, 
-                        p.position, 
                         p.status, 
                         p.injury_status, 
-                        COALESCE(ROUND(AVG(ps.fantasy_points), 2), 0) as avg_fantasy_points 
+                        COALESCE(ROUND(AVG(ps.fantasy_points), 2), 0) as avg_fantasy_points, 
+                        t.conference, 
+                        t.status as team_status 
                     FROM players p 
                     JOIN teams t ON p.team_id = t.team_id 
                     LEFT JOIN player_stats ps ON p.player_id = ps.player_id 
                     WHERE t.team = @team 
                         AND p.position IN ('QB', 'RB', 'WR', 'TE', 'K', 'DEF') 
                         AND p.team_id IS NOT NULL 
-                        AND t.status = 'Active' 
-                    GROUP BY p.player_id, t.team, p.name, p.position, p.status, p.injury_status 
+                    GROUP BY p.player_id, p.position, t.team, p.name, p.status, p.injury_status, t.conference, t.status 
                     ORDER BY avg_fantasy_points DESC;", connection);
                 {
                     command.Parameters.AddWithValue("@team", teamName);
@@ -175,12 +179,14 @@ namespace Capstone.DAO
                             SearchPlayerDto searchPlayerDto = new SearchPlayerDto();
                             {
                                 searchPlayerDto.PlayerId = Convert.ToInt32(reader["player_id"]);
+                                searchPlayerDto.Position = Convert.ToString(reader["position"]);
                                 searchPlayerDto.Team = Convert.ToString(reader["team"]);
                                 searchPlayerDto.Name = Convert.ToString(reader["name"]);
-                                searchPlayerDto.Position = Convert.ToString(reader["position"]);
                                 searchPlayerDto.Status = Convert.ToString(reader["status"]);
                                 searchPlayerDto.InjuryStatus = Convert.ToString(reader["injury_status"] ?? (object)DBNull.Value);
                                 searchPlayerDto.FantasyPointsAvg = Convert.ToDouble(reader["avg_fantasy_points"]);
+                                searchPlayerDto.Conference = Convert.ToString(reader["conference"]);
+                                searchPlayerDto.TeamStatus = Convert.ToString(reader["team_status"]);
                             };
                             searchPlayerDtos.Add(searchPlayerDto);
                         }                    
@@ -199,20 +205,21 @@ namespace Capstone.DAO
                 using NpgsqlCommand command = new NpgsqlCommand(
                     @"SELECT 
                         p.player_id, 
+                        p.position, 
                         t.team, 
                         p.name, 
-                        p.position, 
                         p.status, 
                         p.injury_status, 
-                        COALESCE(ROUND(AVG(ps.fantasy_points), 2), 0) as avg_fantasy_points 
+                        COALESCE(ROUND(AVG(ps.fantasy_points), 2), 0) as avg_fantasy_points, 
+                        t.conference, 
+                        t.status as team_status 
                     FROM players p 
                     JOIN teams t ON p.team_id = t.team_id 
                     LEFT JOIN player_stats ps ON p.player_id = ps.player_id 
                     WHERE p.position = @position 
                         AND p.position IN ('QB', 'RB', 'WR', 'TE', 'K', 'DEF') 
                         AND p.team_id IS NOT NULL 
-                        AND t.status = 'Active' 
-                    GROUP BY p.player_id, t.team, p.name, p.position, p.status, p.injury_status 
+                    GROUP BY p.player_id, p.position, t.team, p.name, p.status, p.injury_status, t.conference, t.status 
                     ORDER BY avg_fantasy_points DESC;", connection);
                 {
                     command.Parameters.AddWithValue("@position", position);
@@ -225,12 +232,14 @@ namespace Capstone.DAO
                             SearchPlayerDto searchPlayerDto = new SearchPlayerDto();
                             {
                                 searchPlayerDto.PlayerId = Convert.ToInt32(reader["player_id"]);
+                                searchPlayerDto.Position = Convert.ToString(reader["position"]);
                                 searchPlayerDto.Team = Convert.ToString(reader["team"]);
                                 searchPlayerDto.Name = Convert.ToString(reader["name"]);
-                                searchPlayerDto.Position = Convert.ToString(reader["position"]);
                                 searchPlayerDto.Status = Convert.ToString(reader["status"]);
                                 searchPlayerDto.InjuryStatus = Convert.ToString(reader["injury_status"] ?? (object)DBNull.Value);
                                 searchPlayerDto.FantasyPointsAvg = Convert.ToDouble(reader["avg_fantasy_points"]);
+                                searchPlayerDto.Conference = Convert.ToString(reader["conference"]);
+                                searchPlayerDto.TeamStatus = Convert.ToString(reader["team_status"]);
                             };
                             searchPlayerDtos.Add(searchPlayerDto);
                         }                    

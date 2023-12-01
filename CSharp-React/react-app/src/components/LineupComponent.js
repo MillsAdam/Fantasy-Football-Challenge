@@ -122,8 +122,10 @@ function LineupComponent() {
                                     <thead>
                                         <tr>
                                             <th>Remove</th>
-                                            <th>Pos</th>
+                                            <th>Conf</th>
                                             <th>Team</th>
+                                            <th>Pos</th>
+                                            <th>Inj</th>
                                             <th>Player</th>
                                             <th>Proj</th>
                                             <th>Points</th>
@@ -135,8 +137,15 @@ function LineupComponent() {
                                                 <td>
                                                     <button className="add-remove-button" onClick={(e) => handleRemovePlayerFromLineup(e, lineupPlayer.playerId)}>-</button>
                                                 </td>
-                                                <td>{lineupPlayer.lineupPosition}</td>
+                                                <td>{lineupPlayer.conference}</td>
                                                 <td>{lineupPlayer.team}</td>
+                                                <td>{lineupPlayer.lineupPosition}</td>
+                                                <td className={
+                                                    lineupPlayer.injuryStatus === 'P' || lineupPlayer.injuryStatus === null ? 'green-highlight' :
+                                                    ["Q", "D", "O"].includes(lineupPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
+                                                }>
+                                                    {lineupPlayer.injuryStatus ? lineupPlayer.injuryStatus.charAt(0) : 'A'}
+                                                </td>
                                                 <td>{lineupPlayer.name}</td>
                                                 <td>{lineupPlayer.fantasyPointsProj}</td>
                                                 <td>{lineupPlayer.fantasyPoints}</td>
@@ -157,8 +166,10 @@ function LineupComponent() {
                                         <tr>
                                             <th>Lineup</th>
                                             <th>Add</th>
-                                            <th>Pos</th>
+                                            <th>Conf</th>
                                             <th>Team</th>
+                                            <th>Pos</th>
+                                            <th>Inj</th>
                                             <th>Player</th>
                                             <th>Avg</th>
                                             <th>Proj</th>
@@ -177,8 +188,15 @@ function LineupComponent() {
                                                 <td>
                                                     <button className="add-remove-button" onClick={(e) => handleAddPlayerToLineup(e, rosterPlayer.playerId, document.getElementById(`lineup-position-${index}`).value)}>+</button>
                                                 </td>
-                                                <td>{rosterPlayer.position}</td>
+                                                <td>{rosterPlayer.conference}</td>
                                                 <td>{rosterPlayer.team}</td>
+                                                <td>{rosterPlayer.position}</td>
+                                                <td className={
+                                                    rosterPlayer.injuryStatus === 'P' || rosterPlayer.injuryStatus === null ? 'green-highlight' :
+                                                    ["Q", "D", "O"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
+                                                }>
+                                                    {rosterPlayer.injuryStatus ? rosterPlayer.injuryStatus.charAt(0) : 'A'}
+                                                </td>
                                                 <td>{rosterPlayer.name}</td>
                                                 <td>{rosterPlayer.fantasyPointsAvg}</td>
                                                 <td>{rosterPlayer.fantasyPointsProj}</td>

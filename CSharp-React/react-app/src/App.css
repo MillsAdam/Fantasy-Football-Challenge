@@ -38,6 +38,14 @@
   }
 }
 
+.red-highlight {
+  color: red;
+}
+
+.green-highlight {
+  color: green;
+}
+
 .page-container {
   display: flex;
   flex-direction: row;

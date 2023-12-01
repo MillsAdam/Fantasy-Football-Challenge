@@ -25,12 +25,6 @@ namespace Capstone.DAO
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-
-                List<RosterPlayer> rosterPlayers = await GetRosterPlayersByUser(user);
-                if (rosterPlayers.Count > 27)
-                {
-                    throw new InvalidOperationException("Roster already has the maximum number of players.");
-                }
                 using NpgsqlCommand command = new NpgsqlCommand("INSERT INTO roster_players (roster_id, player_id) VALUES (@roster_id, @player_id);", connection);
                 {
                     FantasyRoster fantasyRoster = await _fantasyRosterDao.GetFantasyRosterByUser(user);
@@ -112,9 +106,13 @@ namespace Capstone.DAO
                         p.position, 
                         t.team, 
                         p.name, 
+                        p.status, 
+                        p.injury_status, 
                         COALESCE(ROUND(AVG(ps.fantasy_points), 2), 0) as avg_fantasy_points, 
                         COALESCE(ppi.fantasy_points, 0) as proj_fantasy_points, 
-                        COALESCE(psi.fantasy_points, 0) as stat_fantasy_points 
+                        COALESCE(psi.fantasy_points, 0) as stat_fantasy_points, 
+                        t.conference, 
+                        t.status as team_status 
                     FROM roster_players rp 
                     JOIN players p ON rp.player_id = p.player_id 
                     JOIN teams t ON p.team_id = t.team_id 
@@ -124,8 +122,18 @@ namespace Capstone.DAO
                     LEFT JOIN player_projections ppi ON p.player_id = ppi.player_id AND ppi.week = c_week.config_value AND ppi.season_type = c_season_type.config_value 
                     LEFT JOIN player_stats psi ON p.player_id = psi.player_id AND psi.week = c_week.config_value AND psi.season_type = c_season_type.config_value 
                     WHERE roster_id = @roster_id 
-                        AND t.status = 'Active' 
-                    GROUP BY rp.roster_id, rp.player_id, p.position, t.team, p.name, ppi.fantasy_points, psi.fantasy_points 
+                    GROUP BY 
+                        rp.roster_id, 
+                        rp.player_id, 
+                        p.position, 
+                        t.team, 
+                        p.name, 
+                        p.status, 
+                        p.injury_status, 
+                        ppi.fantasy_points, 
+                        psi.fantasy_points, 
+                        t.conference, 
+                        t.status 
                     ORDER BY 
                         CASE p.position 
                             WHEN 'QB' THEN 1 
@@ -149,9 +157,13 @@ namespace Capstone.DAO
                             rosterPlayerDto.Team = Convert.ToString(reader["team"]);
                             rosterPlayerDto.Position = Convert.ToString(reader["position"]);
                             rosterPlayerDto.Name = Convert.ToString(reader["name"]);
+                            rosterPlayerDto.Status = Convert.ToString(reader["status"]);
+                            rosterPlayerDto.InjuryStatus = Convert.ToString(reader["injury_status"] ?? (object)DBNull.Value);
                             rosterPlayerDto.FantasyPointsAvg = Convert.ToDouble(reader["avg_fantasy_points"]);
                             rosterPlayerDto.FantasyPointsProj = Convert.ToDouble(reader["proj_fantasy_points"]);
                             rosterPlayerDto.FantasyPoints = Convert.ToDouble(reader["stat_fantasy_points"]);
+                            rosterPlayerDto.Conference = Convert.ToString(reader["conference"]);
+                            rosterPlayerDto.TeamStatus = Convert.ToString(reader["team_status"]);
                         };
                         rosterPlayerDtos.Add(rosterPlayerDto);
                     }
