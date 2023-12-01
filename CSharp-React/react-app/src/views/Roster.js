@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import RosterComponent from '../components/RosterComponent';
 
 const Roster = () => {
-    const { authToken } = useContext(AuthContext);
+    const { authToken, currentUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
     useEffect(() => {
         if (!authToken) {
             navigate('/login');
         }
-    }, [authToken, navigate]);
+    }, [authToken, currentUser, navigate]);
 
     return (
         <div className="roster">

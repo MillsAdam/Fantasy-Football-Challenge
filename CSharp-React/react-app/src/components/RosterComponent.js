@@ -389,7 +389,8 @@ function RosterComponent() {
                                                 <td>{rosterPlayer.position}</td>
                                                 <td className={
                                                     rosterPlayer.injuryStatus === 'P' || rosterPlayer.injuryStatus === null ? 'green-highlight' :
-                                                    ["Q", "D", "O"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
+                                                    ["Q"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'yellow-highlight' :
+                                                    ["D", "O"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
                                                 }>
                                                     {rosterPlayer.injuryStatus ? rosterPlayer.injuryStatus.charAt(0) : 'A'}
                                                 </td>

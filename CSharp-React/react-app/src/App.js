@@ -1,5 +1,6 @@
 import './App.css';
 import React from 'react';
+import ErrorBoundary from './ErrorBoundary';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import NavigationBar from './components/NavigationBar';
 import Home from './views/Home';
@@ -17,21 +18,23 @@ import Lineup from './views/Lineup';
 function App() {
   return (
     <Router>
-      <div className="App">
-        <header className="App-header">
-          <NavigationBar />
-        </header>
-        <Routes>
-          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/logout" element={<ProtectedRoute><Logout /></ProtectedRoute>} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/league" element={<ProtectedRoute><League /></ProtectedRoute>} />
-          <Route path="/roster" element={<ProtectedRoute><Roster /></ProtectedRoute>} />
-          <Route path="/lineup" element={<ProtectedRoute><Lineup /></ProtectedRoute>} />
-          <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
-        </Routes>
-      </div>
+      <ErrorBoundary>
+        <div className="App">
+          <header className="App-header">
+            <NavigationBar />
+          </header>
+          <Routes>
+            <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/logout" element={<ProtectedRoute><Logout /></ProtectedRoute>} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/league" element={<ProtectedRoute><League /></ProtectedRoute>} />
+            <Route path="/roster" element={<ProtectedRoute><Roster /></ProtectedRoute>} />
+            <Route path="/lineup" element={<ProtectedRoute><Lineup /></ProtectedRoute>} />
+            <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
+          </Routes>
+        </div>
+      </ErrorBoundary>     
     </Router>
   );
 }

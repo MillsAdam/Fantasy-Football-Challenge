@@ -64,7 +64,7 @@ function Register() {
                     <label htmlFor="confirmPassword">Confirm Password: </label>
                     <input type="password" id="confirmPassword" name="confirmPassword" value={user.confirmPassword} onChange={e => setUser({ ...user, confirmPassword: e.target.value })} onFocus={clearErrors} autoComplete="new-password" />
                 </div>
-                <input className="register-button" type="submit" value="Register" />
+                <button className="register-button" type="submit" value="Register">Register</button>
             </form>
             {registrationErrors && <div className="registration-errors">{registrationErrorMsg}</div>}
             <div className="account-query">

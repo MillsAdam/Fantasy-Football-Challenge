@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import React from 'react';
+import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 function NavigationBar() {
-    const { authToken, currentUser } = useContext(AuthContext);
+    const { authToken, currentUser } = useAuth();
     const navigate = useNavigate();
 
     const handleLogoutClick = () => {
@@ -19,7 +19,7 @@ function NavigationBar() {
                     <Link to="/roster" className="App-link">Roster</Link>{" | "}
                     <Link to="/lineup" className="App-link">Lineup</Link>{" | "}
                     <span to="/logout" className="App-link" onClick={handleLogoutClick} style={{ cursor: 'pointer' }}>Logout</span>
-                    {currentUser.role === 'admin' && (
+                    {currentUser && currentUser.role === 'admin' && (
                         <>
                             {" | "}
                             <Link to="/admin" className="App-link">Admin</Link>

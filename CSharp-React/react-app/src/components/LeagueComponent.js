@@ -59,16 +59,22 @@ function LeagueComponent() {
         <div>
             {isLoading ? (<p>Loading...</p>) : (
                 <div className="component-container">
-                    <h1>League Component</h1>
                     {!userHasTeam && (
-                        <form onSubmit={createRoster}>
-                            <label htmlFor="teamName">Team Name</label>
-                            <input type="text" id="teamName" name="teamName" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
-                            <button className="league-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create League Roster"}</button>
-                        </form>
+                        <div>
+                            <h2>Create League Roster</h2>
+                            <form onSubmit={createRoster}>
+                                <label>Team Name</label>
+                                <input type="text" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
+                                <button className="league-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create League Roster"}</button>
+                            </form>
+                        </div>
+                        
                     )}
                     {userHasTeam && (
                         <div className="table-container">
+                            <div>
+                                <h2>Leaderboard</h2>
+                            </div>
                             <table>
                                 <thead>
                                     <tr>

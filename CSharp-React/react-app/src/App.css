@@ -46,6 +46,10 @@
   color: green;
 }
 
+.yellow-highlight {
+  color: yellow;
+}
+
 .page-container {
   display: flex;
   flex-direction: row;
@@ -114,6 +118,7 @@ th-width, .td-width {
 /* BUTTON STYLES */
 button {
   /* padding: 10px 15px; */
+  padding: 10px 15px;
   background-color: #282c34;
   color: white;
   border: none;
@@ -146,10 +151,10 @@ button:hover {
 /* FORM STYLES */
 input {
   margin-bottom: 1rem;
-  padding: 10px 12px;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  width: calc(100% - 22px);
+  width: 100%;
   box-sizing: border-box;
 }
 
@@ -183,7 +188,7 @@ select {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  width: calc(100% - 22px);
+  width: 100%;
   width: auto;
   box-sizing: border-box
 }

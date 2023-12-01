@@ -175,7 +175,8 @@ function LineupComponent() {
                                                 <td>{lineupPlayer.lineupPosition}</td>
                                                 <td className={
                                                     lineupPlayer.injuryStatus === 'P' || lineupPlayer.injuryStatus === null ? 'green-highlight' :
-                                                    ["Q", "D", "O"].includes(lineupPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
+                                                    ["Q"].includes(lineupPlayer.injuryStatus?.charAt(0)) ? 'yellow-highlight' :
+                                                    ["D", "O"].includes(lineupPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
                                                 }>
                                                     {lineupPlayer.injuryStatus ? lineupPlayer.injuryStatus.charAt(0) : 'A'}
                                                 </td>
@@ -226,7 +227,8 @@ function LineupComponent() {
                                                 <td>{rosterPlayer.position}</td>
                                                 <td className={
                                                     rosterPlayer.injuryStatus === 'P' || rosterPlayer.injuryStatus === null ? 'green-highlight' :
-                                                    ["Q", "D", "O"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
+                                                    ["Q"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'yellow-highlight' :
+                                                    ["D", "O"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
                                                 }>
                                                     {rosterPlayer.injuryStatus ? rosterPlayer.injuryStatus.charAt(0) : 'A'}
                                                 </td>
