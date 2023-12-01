@@ -109,13 +109,10 @@ function LineupComponent() {
     }
 
     return (
-        <div className="component-container">
-            <h1>Lineup Component</h1>
-            {isLoading ? (
-                <p>Loading...</p>
-            ) : (
-                <div>
-                    <div>
+        <div>
+            {isLoading ? (<p>Loading...</p>) : (
+                <div className="page-container">
+                    <div className="component-container">
                         <h2>My Lineup</h2>
                         {lineupPlayers.length > 0 && (
                             <div className="table-container">
@@ -149,7 +146,7 @@ function LineupComponent() {
                         )}
                     </div>
 
-                    <div>
+                    <div className="component-container">
                         <h2>My Roster</h2>
                         {rosterPlayers.length > 0 && (
                             <div className="table-container">
@@ -169,7 +166,7 @@ function LineupComponent() {
                                         {rosterPlayers.map((rosterPlayer, index) => (
                                             <tr key={index}>
                                                 <td>
-                                                    <select id={`lineup-position-${index}`}>
+                                                    <select class="lineup-select" id={`lineup-position-${index}`}>
                                                         {getFilteredLineupOptions(rosterPlayer.position).map((option) => (
                                                             <option key={option} value={option}>{option}</option>
                                                         ))}
@@ -191,8 +188,10 @@ function LineupComponent() {
                         )}
                     </div> 
                 </div>
-            )}
-            {error && <p>{error}</p>}
+             )}
+             <div className="message-container">
+                {error && <p>{error}</p>}
+            </div> 
         </div>
     )
 }

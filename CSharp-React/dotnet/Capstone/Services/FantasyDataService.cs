@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Capstone.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Security;
+using Capstone.DAO;
 
 namespace Capstone.Services
 {
@@ -15,10 +16,12 @@ namespace Capstone.Services
         private readonly HttpClient _client;
         private const string ApiBaseUrl = "https://api.sportsdata.io/api/nfl/fantasy/json";
         private const string ApiKey = "d9c343f71fad4e1dbb63f512b9bcdbcd";
+        private readonly IConfigurationDao _configurationDao;
 
-        public FantasyDataService()
+        public FantasyDataService(IConfigurationDao configurationDao)
         {
             _client = new HttpClient();
+            _configurationDao = configurationDao;
         }
 
         public async Task<List<Team>> GetTeamsAsync()
@@ -204,6 +207,132 @@ namespace Capstone.Services
 
         public async Task<List<DefenseStats>> GetDefenseProjectionsAsync(string season, int week)
         {
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/FantasyDefenseProjectionsByGame/{season}/{week}");
+                request.Headers.Add("Ocp-Apim-Subscription-Key", ApiKey);
+
+                var response = await _client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var defenseProjections = JsonConvert.DeserializeObject<List<DefenseStats>>(jsonString);
+                return defenseProjections;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error fetching data for {season} and {week}: {e.Message}");
+                return null;
+            }
+        }
+
+
+        // Get Stats/Projections for Update
+        public async Task<List<PlayerStats>> GetPlayerStatsForUpdateAsync()
+        {
+            int week = await _configurationDao.GetConfigurationValue("current_week");
+            int seasonType = await _configurationDao.GetConfigurationValue("current_season_type");
+
+            string season = seasonType switch
+            {
+                1 => "2023REG",
+                3 => "2023POST",
+                _ => throw new InvalidOperationException("Invalid season type")
+            };
+
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/PlayerGameStatsByWeek/{season}/{week}");
+                request.Headers.Add("Ocp-Apim-Subscription-Key", ApiKey);
+
+                var response = await _client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var playerStats = JsonConvert.DeserializeObject<List<PlayerStats>>(jsonString);
+                return playerStats;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error fetching data for {season} and {week}: {e.Message}");
+                return null;
+            }
+        }
+
+        public async Task<List<DefenseStats>> GetDefenseStatsForUpdateAsync()
+        {
+            int week = await _configurationDao.GetConfigurationValue("current_week");
+            int seasonType = await _configurationDao.GetConfigurationValue("current_season_type");
+
+            string season = seasonType switch
+            {
+                1 => "2023REG",
+                3 => "2023POST",
+                _ => throw new InvalidOperationException("Invalid season type")
+            };
+
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/FantasyDefenseByGame/{season}/{week}");
+                request.Headers.Add("Ocp-Apim-Subscription-Key", ApiKey);
+
+                var response = await _client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var defenseStats = JsonConvert.DeserializeObject<List<DefenseStats>>(jsonString);
+                return defenseStats;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error fetching data for {season} and {week}: {e.Message}");
+                return null;
+            }
+        }
+
+        public async Task<List<PlayerStats>> GetPlayerProjectionsForUpdateAsync()
+        {
+            int week = await _configurationDao.GetConfigurationValue("current_week");
+            int seasonType = await _configurationDao.GetConfigurationValue("current_season_type");
+
+            string season = seasonType switch
+            {
+                1 => "2023REG",
+                3 => "2023POST",
+                _ => throw new InvalidOperationException("Invalid season type")
+            };
+
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/PlayerGameProjectionStatsByWeek/{season}/{week}");
+                request.Headers.Add("Ocp-Apim-Subscription-Key", ApiKey);
+
+                var response = await _client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var playerProjections = JsonConvert.DeserializeObject<List<PlayerStats>>(jsonString);
+                return playerProjections;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error fetching data for {season} and {week}: {e.Message}");
+                return null;
+            }
+        }
+
+        public async Task<List<DefenseStats>> GetDefenseProjectionsForUpdateAsync()
+        {
+            int week = await _configurationDao.GetConfigurationValue("current_week");
+            int seasonType = await _configurationDao.GetConfigurationValue("current_season_type");
+
+            string season = seasonType switch
+            {
+                1 => "2023REG",
+                3 => "2023POST",
+                _ => throw new InvalidOperationException("Invalid season type")
+            };
+
             try
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/FantasyDefenseProjectionsByGame/{season}/{week}");

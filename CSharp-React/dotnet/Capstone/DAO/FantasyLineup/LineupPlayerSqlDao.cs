@@ -105,6 +105,7 @@ namespace Capstone.DAO
                     LEFT JOIN player_projections ppi ON p.player_id = ppi.player_id AND ppi.week = c_week.config_value AND ppi.season_type = c_season_type.config_value 
                     LEFT JOIN player_stats psi ON p.player_id = psi.player_id AND psi.week = c_week.config_value AND psi.season_type = c_season_type.config_value 
                     WHERE lineup_id = @lineup_id 
+                        AND t.status = 'Active' 
                     GROUP BY lp.lineup_id, lp.player_id, lp.lineup_position, p.position, t.team, p.name, ppi.fantasy_points, psi.fantasy_points 
                     ORDER BY CASE lp.lineup_position 
                         WHEN 'QB1' THEN 1 

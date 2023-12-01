@@ -15,6 +15,7 @@ const Roster = () => {
 
     return (
         <div className="roster">
+            <h1>Roster Page</h1>
             <RosterComponent />
         </div>
     );

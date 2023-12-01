@@ -10,5 +10,6 @@ namespace Capstone.DAO
     {
         Task UpdateConfiguration(Configuration configuration);
         Task<List<Configuration>> GetConfigurations();
+        Task<int> GetConfigurationValue(string configKey);
     }
 }

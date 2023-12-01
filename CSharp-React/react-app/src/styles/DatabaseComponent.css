@@ -2,18 +2,8 @@
     padding: 12px 15px;
 }
 
-.database-key-select, .database-value-select {
-    padding: 12px 15px;
-    width: 45%;
-    margin-bottom: 1rem;
-}
-
-.database-key-select {
-    margin-right: 1rem;
-}
-
-.database-value-select {
-    margin-left: 1rem;
+.database-key-select, .database-value-select, .database-team-select {
+    width: 100%;
 }
   
   

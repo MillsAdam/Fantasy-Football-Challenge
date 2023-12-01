@@ -89,8 +89,6 @@ namespace Capstone.DAO
             }
         }
 
-
-        // ORDER BY PS.FANTASY_POINTS DESC, THEN MAYBE POSITION
         public async Task<List<SearchPlayerDto>> GetPlayerIdByNameAsync(string playerName)
         {
             List<SearchPlayerDto> searchPlayerDtos = new List<SearchPlayerDto>();
@@ -112,11 +110,112 @@ namespace Capstone.DAO
                     WHERE p.name ILIKE @player_name_pattern 
                         AND p.position IN ('QB', 'RB', 'WR', 'TE', 'K', 'DEF') 
                         AND p.team_id IS NOT NULL 
+                        AND t.status = 'Active' 
                     GROUP BY p.player_id, t.team, p.name, p.position, p.status, p.injury_status 
                     ORDER BY avg_fantasy_points DESC;", connection);
                 {
                     string playerNamePattern = "%" + playerName + "%";
                     command.Parameters.AddWithValue("@player_name_pattern", playerNamePattern);
+
+                    using NpgsqlDataReader reader = command.ExecuteReader();
+                    {
+                        
+                        while (await reader.ReadAsync())
+                        {
+                            SearchPlayerDto searchPlayerDto = new SearchPlayerDto();
+                            {
+                                searchPlayerDto.PlayerId = Convert.ToInt32(reader["player_id"]);
+                                searchPlayerDto.Team = Convert.ToString(reader["team"]);
+                                searchPlayerDto.Name = Convert.ToString(reader["name"]);
+                                searchPlayerDto.Position = Convert.ToString(reader["position"]);
+                                searchPlayerDto.Status = Convert.ToString(reader["status"]);
+                                searchPlayerDto.InjuryStatus = Convert.ToString(reader["injury_status"] ?? (object)DBNull.Value);
+                                searchPlayerDto.FantasyPointsAvg = Convert.ToDouble(reader["avg_fantasy_points"]);
+                            };
+                            searchPlayerDtos.Add(searchPlayerDto);
+                        }                    
+                    }
+                }
+            }
+            return searchPlayerDtos;
+        }
+
+        public async Task<List<SearchPlayerDto>> GetPlayerIdByTeamAsync(string teamName)
+        {
+            List<SearchPlayerDto> searchPlayerDtos = new List<SearchPlayerDto>();
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using NpgsqlCommand command = new NpgsqlCommand(
+                    @"SELECT 
+                        p.player_id, 
+                        t.team, 
+                        p.name, 
+                        p.position, 
+                        p.status, 
+                        p.injury_status, 
+                        COALESCE(ROUND(AVG(ps.fantasy_points), 2), 0) as avg_fantasy_points 
+                    FROM players p 
+                    JOIN teams t ON p.team_id = t.team_id 
+                    LEFT JOIN player_stats ps ON p.player_id = ps.player_id 
+                    WHERE t.team = @team 
+                        AND p.position IN ('QB', 'RB', 'WR', 'TE', 'K', 'DEF') 
+                        AND p.team_id IS NOT NULL 
+                        AND t.status = 'Active' 
+                    GROUP BY p.player_id, t.team, p.name, p.position, p.status, p.injury_status 
+                    ORDER BY avg_fantasy_points DESC;", connection);
+                {
+                    command.Parameters.AddWithValue("@team", teamName);
+
+                    using NpgsqlDataReader reader = command.ExecuteReader();
+                    {
+                        
+                        while (await reader.ReadAsync())
+                        {
+                            SearchPlayerDto searchPlayerDto = new SearchPlayerDto();
+                            {
+                                searchPlayerDto.PlayerId = Convert.ToInt32(reader["player_id"]);
+                                searchPlayerDto.Team = Convert.ToString(reader["team"]);
+                                searchPlayerDto.Name = Convert.ToString(reader["name"]);
+                                searchPlayerDto.Position = Convert.ToString(reader["position"]);
+                                searchPlayerDto.Status = Convert.ToString(reader["status"]);
+                                searchPlayerDto.InjuryStatus = Convert.ToString(reader["injury_status"] ?? (object)DBNull.Value);
+                                searchPlayerDto.FantasyPointsAvg = Convert.ToDouble(reader["avg_fantasy_points"]);
+                            };
+                            searchPlayerDtos.Add(searchPlayerDto);
+                        }                    
+                    }
+                }
+            }
+            return searchPlayerDtos;
+        }
+
+        public async Task<List<SearchPlayerDto>> GetPlayerIdByPositionAsync(string position)
+        {
+            List<SearchPlayerDto> searchPlayerDtos = new List<SearchPlayerDto>();
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using NpgsqlCommand command = new NpgsqlCommand(
+                    @"SELECT 
+                        p.player_id, 
+                        t.team, 
+                        p.name, 
+                        p.position, 
+                        p.status, 
+                        p.injury_status, 
+                        COALESCE(ROUND(AVG(ps.fantasy_points), 2), 0) as avg_fantasy_points 
+                    FROM players p 
+                    JOIN teams t ON p.team_id = t.team_id 
+                    LEFT JOIN player_stats ps ON p.player_id = ps.player_id 
+                    WHERE p.position = @position 
+                        AND p.position IN ('QB', 'RB', 'WR', 'TE', 'K', 'DEF') 
+                        AND p.team_id IS NOT NULL 
+                        AND t.status = 'Active' 
+                    GROUP BY p.player_id, t.team, p.name, p.position, p.status, p.injury_status 
+                    ORDER BY avg_fantasy_points DESC;", connection);
+                {
+                    command.Parameters.AddWithValue("@position", position);
 
                     using NpgsqlDataReader reader = command.ExecuteReader();
                     {

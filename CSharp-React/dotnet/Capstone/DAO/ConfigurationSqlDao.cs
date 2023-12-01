@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Capstone.Models;
 using Microsoft.Extensions.Configuration;
+using Npgsql;
 
 namespace Capstone.DAO
 {
@@ -19,10 +20,10 @@ namespace Capstone.DAO
 
         public async Task UpdateConfiguration(Configuration configuration)
         {
-            using (Npgsql.NpgsqlConnection connection = new Npgsql.NpgsqlConnection(_connectionString))
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using Npgsql.NpgsqlCommand command = new Npgsql.NpgsqlCommand(
+                using NpgsqlCommand command = new NpgsqlCommand(
                     "UPDATE configuration SET config_value = @config_value WHERE config_key = @config_key;", connection);
                 {
                     command.Parameters.AddWithValue("@config_value", configuration.ConfigValue);
@@ -35,13 +36,13 @@ namespace Capstone.DAO
         public async Task<List<Configuration>> GetConfigurations()
         {
             List<Configuration> configurations = new List<Configuration>();
-            using (Npgsql.NpgsqlConnection connection = new Npgsql.NpgsqlConnection(_connectionString))
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using Npgsql.NpgsqlCommand command = new Npgsql.NpgsqlCommand(
+                using NpgsqlCommand command = new NpgsqlCommand(
                     "SELECT config_key, config_value FROM configuration;", connection);
                 {
-                    using Npgsql.NpgsqlDataReader reader = await command.ExecuteReaderAsync();
+                    using NpgsqlDataReader reader = await command.ExecuteReaderAsync();
                     {
                         while (await reader.ReadAsync())
                         {
@@ -55,6 +56,28 @@ namespace Capstone.DAO
                 }
             }
             return configurations;
+        }
+
+        public async Task<int> GetConfigurationValue(string configKey)
+        {
+            int configValue = 0;
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using NpgsqlCommand command = new NpgsqlCommand(
+                    "SELECT config_value FROM configuration WHERE config_key = @config_key;", connection);
+                {
+                    command.Parameters.AddWithValue("@config_key", configKey);
+                    using NpgsqlDataReader reader = await command.ExecuteReaderAsync();
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            configValue = Convert.ToInt32(reader["config_value"]);
+                        }
+                    }
+                }
+            }
+            return configValue;
         }
     }
 }

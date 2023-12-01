@@ -52,7 +52,7 @@
   background: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
-  width: 500px;
+  width: 750px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -73,17 +73,18 @@ table {
 
 table th, table td {
   padding: 4px 5px;
+  text-align: left;
 }
 
 table th {
-  text-align: center;
+  /* text-align: center; */
   background-color: #f4f4f4;
   color: #333;
   font-weight: bold;
 }
 
 table td {
-  text-align: left;
+  /* text-align: left; */
   font-size: 14px;
   color: #333;
 }
@@ -137,10 +138,16 @@ button:hover {
 /* FORM STYLES */
 input {
   margin-bottom: 1rem;
-  padding: 10px;
+  padding: 10px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   width: calc(100% - 22px);
+  box-sizing: border-box;
+}
+
+input:disabled {
+  background-color: #e0e0e0;
+  color: #a0a0a0;
 }
 
 input:focus {
@@ -164,26 +171,36 @@ label {
 
 /* SELECT STYLES */
 select {
-  padding: 3px;
+  margin-bottom: 1rem;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   width: calc(100% - 22px);
   width: auto;
+  box-sizing: border-box
+}
+
+select:disabled {
+  background-color: #e0e0e0;
+  color: #a0a0a0;
+}
+
+select:focus {
+  outline: none;
+  border-color: #61dafb;
 }
 
 
 
 /* MEDIA QUERIES */
 @media (max-width: 768px) {
-  @media (max-width: 768px) {
-    .page-container { 
-        flex-direction: column;
-        gap: 0px;
-    }
+  .page-container { 
+      flex-direction: column;
+      gap: 0px;
   }
 
   .component-container {
-    width: 350px;
+    width: 90%;
   }
 
   table {

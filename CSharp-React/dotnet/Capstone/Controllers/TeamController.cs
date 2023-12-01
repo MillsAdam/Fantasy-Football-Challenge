@@ -43,16 +43,31 @@ namespace Capstone.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> UpdateTeamStatus([FromQuery] int teamId)
+        public async Task<ActionResult> ToggleTeamStatusAsync([FromQuery] string teamName)
         {
             try
             {
-                await _teamDao.UpdateTeamStatusAsync(teamId);
+                await _teamDao.ToggleTeamStatusAsync(teamName);
                 return Ok("Team status updated successfully.");
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Error updating team status: {e.Message}");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<TeamDto>>> GetTeamsAsync()
+        {
+            try
+            {
+                List<TeamDto> teams = await _teamDao.GetTeamsAsync();
+                return Ok(teams);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error getting teams: {e.Message}");
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }

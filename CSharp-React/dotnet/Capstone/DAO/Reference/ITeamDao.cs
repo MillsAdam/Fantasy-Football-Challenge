@@ -9,6 +9,7 @@ namespace Capstone.DAO
     public interface ITeamDao
     {
         Task AddTeamAsync(TeamDto teamDto);
-        Task UpdateTeamStatusAsync(int teamId);
+        Task ToggleTeamStatusAsync(string teamName);
+        Task<List<TeamDto>> GetTeamsAsync();
     }
 }

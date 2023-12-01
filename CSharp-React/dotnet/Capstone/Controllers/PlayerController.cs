@@ -74,12 +74,42 @@ namespace Capstone.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("name")]
         public async Task<ActionResult> GetPlayerIdByName([FromQuery] string playerName)
         {
             try
             {
                 List<SearchPlayerDto> searchPlayerDtos = await _playerDao.GetPlayerIdByNameAsync(playerName);
+                return Ok(searchPlayerDtos);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error getting player ID: {e.Message}");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+
+        [HttpGet("team")]
+        public async Task<ActionResult> GetPlayerIdByTeam([FromQuery] string teamName)
+        {
+            try
+            {
+                List<SearchPlayerDto> searchPlayerDtos = await _playerDao.GetPlayerIdByTeamAsync(teamName);
+                return Ok(searchPlayerDtos);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error getting player ID: {e.Message}");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+
+        [HttpGet("position")]
+        public async Task<ActionResult> GetPlayerIdByPosition([FromQuery] string position)
+        {
+            try
+            {
+                List<SearchPlayerDto> searchPlayerDtos = await _playerDao.GetPlayerIdByPositionAsync(position);
                 return Ok(searchPlayerDtos);
             }
             catch (Exception e)

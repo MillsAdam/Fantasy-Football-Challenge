@@ -1,10 +1,13 @@
 .search-button {
-    padding: 12px 15px;
-    width: 45%;
-    margin-left: .5rem
+    width: 49%;
+    margin-left: 1%;
 }
 
-.search-input {
-    width: 40%;
-    margin-right: .5rem;
+.search-input, .search-select {
+    width: 49%;
+    margin-right: 1%;
+}
+
+.clear-button, .search-button {
+    padding: 12px 15px;
 }

@@ -39,18 +39,53 @@ namespace Capstone.DAO
             }
         }
 
-        public async Task UpdateTeamStatusAsync(int teamId)
+        public async Task ToggleTeamStatusAsync(string teamName)
         {
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using NpgsqlCommand command = new NpgsqlCommand(
-                    "UPDATE teams SET status = 'Inactive' WHERE team_id = @team_id;", connection);
+                using (NpgsqlCommand command = new NpgsqlCommand(
+                    @"UPDATE teams 
+                    SET status = CASE 
+                        WHEN status = 'Active' 
+                        THEN 'Inactive' ELSE 'Active' 
+                    END 
+                    WHERE team = @team;", connection))
                 {
-                    command.Parameters.AddWithValue("@team_id", teamId);
+                    command.Parameters.AddWithValue("@team", teamName);
                     await command.ExecuteNonQueryAsync();
                 }
             }
+        }
+
+        public async Task<List<TeamDto>> GetTeamsAsync()
+        {
+            List<TeamDto> teams = new List<TeamDto>();
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using (NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM teams;", connection))
+                {
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (reader.Read())
+                        {
+                            TeamDto team = new TeamDto
+                            {
+                                TeamId = Convert.ToInt32(reader["team_id"]),
+                                Team = Convert.ToString(reader["team"]),
+                                City = Convert.ToString(reader["city"]),
+                                Name = Convert.ToString(reader["name"]),
+                                Conference = Convert.ToString(reader["conference"]),
+                                Division = Convert.ToString(reader["division"]),
+                                Status = Convert.ToString(reader["status"])
+                            };
+                            teams.Add(team);
+                        }
+                    }
+                }
+            }
+            return teams;
         }
     }
 }

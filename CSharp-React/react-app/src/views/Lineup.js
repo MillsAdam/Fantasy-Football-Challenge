@@ -15,6 +15,7 @@ const Lineup = () => {
 
     return (
         <div className="lineup">
+            <h1>Lineup Page</h1>
             <LineupComponent />
         </div>
     );

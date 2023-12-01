@@ -73,6 +73,7 @@ function LeagueComponent() {
                         <table>
                             <thead>
                                 <tr>
+                                    <th>Rank</th>
                                     <th>User</th>
                                     <th>Team</th>
                                     <th>W1</th>
@@ -85,6 +86,7 @@ function LeagueComponent() {
                             <tbody>
                                 {rosters.map((roster, index) => (
                                     <tr key={index}>
+                                        <td>{index + 1}</td>
                                         <td>{roster.username}</td>
                                         <td>{roster.teamName}</td>
                                         <td>{roster.week1Score}</td>
