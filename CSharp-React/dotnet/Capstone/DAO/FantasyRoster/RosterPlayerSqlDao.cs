@@ -164,6 +164,9 @@ namespace Capstone.DAO
                             rosterPlayerDto.FantasyPoints = Convert.ToDouble(reader["stat_fantasy_points"]);
                             rosterPlayerDto.Conference = Convert.ToString(reader["conference"]);
                             rosterPlayerDto.TeamStatus = Convert.ToString(reader["team_status"]);
+
+                            rosterPlayerDto.FantasyLineupId = null;
+                            rosterPlayerDto.LineupPosition = null;
                         };
                         rosterPlayerDtos.Add(rosterPlayerDto);
                     }

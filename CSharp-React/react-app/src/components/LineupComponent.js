@@ -17,7 +17,8 @@ const POSITION_SPECIFIC_OPTIONS = {
 
 function LineupComponent() {
     const { authToken, currentUser } = useContext(AuthContext);
-    const [rosterPlayers, setRosterPlayers] = useState([]);
+    // const [rosterPlayers, setRosterPlayers] = useState([]);
+    const [activeRosterPlayers, setActiveRosterPlayers] = useState([]);
     const [lineupPlayers, setLineupPlayers] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -28,9 +29,10 @@ function LineupComponent() {
             setIsLoading(true);
             try {
                 const rosterPlayersData = await RosterService.getRosterPlayersByUser(authToken);
+                const activeRosterPlayersData = rosterPlayersData.filter(player => player.teamStatus === 'Active');
                 const lineupPlayerIds = new Set(lineupPlayers.map(p => p.playerId));
-                const filteredRosterPlayers = rosterPlayersData.filter(p => !lineupPlayerIds.has(p.playerId));
-                setRosterPlayers(filteredRosterPlayers);
+                const filteredRosterPlayers = activeRosterPlayersData.filter(p => !lineupPlayerIds.has(p.playerId));
+                setActiveRosterPlayers(filteredRosterPlayers);
             } catch (error) {
                 console.error('An error occurred: ', error);
                 setError('Failed to get roster players');
@@ -159,7 +161,7 @@ function LineupComponent() {
 
                     <div className="component-container">
                         <h2>My Roster</h2>
-                        {rosterPlayers.length > 0 && (
+                        {activeRosterPlayers.length > 0 && (
                             <div className="table-container">
                                 <table>
                                     <thead>
@@ -176,10 +178,10 @@ function LineupComponent() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {rosterPlayers.map((rosterPlayer, index) => (
+                                        {activeRosterPlayers.map((rosterPlayer, index) => (
                                             <tr key={index}>
                                                 <td>
-                                                    <select class="lineup-select" id={`lineup-position-${index}`}>
+                                                    <select className="lineup-select" id={`lineup-position-${index}`}>
                                                         {getFilteredLineupOptions(rosterPlayer.position).map((option) => (
                                                             <option key={option} value={option}>{option}</option>
                                                         ))}

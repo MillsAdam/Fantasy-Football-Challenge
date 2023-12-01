@@ -4,3 +4,4 @@ INSERT INTO users (username, password_hash, salt, user_role) VALUES ('admin','Yh
 INSERT INTO configuration (config_key, config_value) VALUES ('current_week', 1);
 INSERT INTO configuration (config_key, config_value) VALUES ('current_season_type', 1);
 INSERT INTO configuration (config_key, config_value) VALUES ('current_lineup_week', 1);
+INSERT INTO configuration (config_key, config_value) VALUES ('lock_rosters', 2);

@@ -53,6 +53,8 @@ function RosterComponent() {
     const [selectedPosition, setSelectedPosition] = useState("");
     const [searchPlayer, setSearchPlayer] = useState([]);
     const [activeSearchMethod, setActiveSearchMethod] = useState("");
+    const [configurations, setConfigurations] = useState([]);
+    const [isRosterLocked, setIsRosterLocked] = useState(false);
 
 
     useEffect(() => {
@@ -60,10 +62,8 @@ function RosterComponent() {
             setIsLoading(true);
             try {
                 const rosterPlayersData = await RosterService.getRosterPlayersByUser(authToken);
-                console.log(rosterPlayersData);
                 setRosterPlayers(rosterPlayersData);
                 const activeRosterPlayers = rosterPlayersData.filter(player => player.teamStatus === 'Active');
-                console.log(activeRosterPlayers);
                 setActiveRosterPlayers(activeRosterPlayers);
             } catch (error) {
                 console.error('An error occurred: ', error);
@@ -84,7 +84,6 @@ function RosterComponent() {
             setIsLoading(true);
             try {
                 const activeTeamNameOptionsData = await DatabaseService.getActiveTeams();
-                console.log(activeTeamNameOptionsData);
                 const sortedTeamNames = activeTeamNameOptionsData.map(team => team.team).sort();
                 setActiveTeamNameOptions(sortedTeamNames);
             } catch (error) {
@@ -96,6 +95,26 @@ function RosterComponent() {
 
         getActiveTeamNameOptions();
     }, []);
+
+    useEffect(() => {
+        async function fetchConfigurations() {
+            try {
+                const fetchedConfigurations = await DatabaseService.getConfiguration();
+                setConfigurations(fetchedConfigurations);
+            } catch (error) {
+                console.error('An error occurred: ', error);
+                setError('Failed to get configurations');
+            }
+        }
+        fetchConfigurations();
+    }, []);
+
+    useEffect(() => {
+        const rosterLockConfig = configurations.find(config => config.configKey === 'lock_rosters');
+        if (rosterLockConfig) {
+            setIsRosterLocked(rosterLockConfig.configValue === 1);
+        }
+    }, [configurations, isRosterLocked]);
 
     async function startSearchByName(e) {
         setActiveSearchMethod("name");
@@ -131,7 +150,6 @@ function RosterComponent() {
                 player.teamStatus === 'Active' &&
                 !rosterPlayers.some(rosterPlayer => rosterPlayer.playerId === player.playerId)
             );
-            console.log(searchData);
             setSearchPlayer(filteredSearchData);
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -150,7 +168,6 @@ function RosterComponent() {
                 player.teamStatus === 'Active' &&
                 !rosterPlayers.some(rosterPlayer => rosterPlayer.playerId === player.playerId)
             );
-            console.log(searchData);
             setSearchPlayer(filteredSearchData);
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -169,7 +186,6 @@ function RosterComponent() {
                 player.teamStatus === 'Active' &&
                 !rosterPlayers.some(rosterPlayer => rosterPlayer.playerId === player.playerId)
             );
-            console.log(searchData);
             setSearchPlayer(filteredSearchData);
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -180,6 +196,14 @@ function RosterComponent() {
 
     async function handleAddPlayerToRoster(e, playerId) {
         e.preventDefault();
+        if (isRosterLocked) {
+            alert('Roster is locked');
+            return;
+        }
+        if (isRosterFull) {
+            alert('Roster is full');
+            return;
+        }
         setIsLoading(true);
         setError(null);
         try {
@@ -201,6 +225,10 @@ function RosterComponent() {
 
     async function handleRemovePlayerFromRoster(e, playerId) {
         e.preventDefault();
+        if (isRosterLocked) {
+            alert('Roster is locked');
+            return;
+        }
         setIsLoading(true);
         setError(null);
         try {
@@ -220,161 +248,164 @@ function RosterComponent() {
 
     return (
         <div>
-            <div className="page-container">
-                <div className="component-container">
-                    <h2>Search Players</h2>
-                    <div>
-                        <input 
-                            className="search-input" 
-                            type="text" value={searchName} 
-                            placeholder="Enter Name" 
-                            onChange={(e) => setSearchName(e.target.value)} 
-                            disabled={activeSearchMethod && activeSearchMethod !== "name"}
-                        />
-                        <button 
-                            className="search-button" 
-                            onClick={startSearchByName} 
-                            disabled={isLoading || (activeSearchMethod && activeSearchMethod !=="name")}
-                        >
-                            Search by Name
-                        </button>
-                    </div>
-                    <div>
-                        <select 
-                            className="search-select" 
-                            value={selectedTeamName} 
-                            onChange={(e) => setSelectedTeamName(e.target.value)} 
-                            disabled={activeSearchMethod && activeSearchMethod !== "team"}
-                        >
-                            <option value="" disabled hidden>Select Team</option>
-                            {activeTeamNameOptions.map(teamName => (
-                                <option key={teamName} value={teamName}>{teamNameDisplayNames[teamName] || teamName}</option>
-                            ))}
-                        </select>
-                        <button 
-                            className="search-button" 
-                            onClick={startSearchByTeam} 
-                            disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "team")}
-                        >
-                            Search by Team
-                        </button>
-                    </div>
-                    <div>
-                        <select 
-                            className="search-select" 
-                            value={selectedPosition} 
-                            onChange={(e) => setSelectedPosition(e.target.value)} 
-                            disabled={activeSearchMethod && activeSearchMethod !== "position"}
-                        >
-                            <option value="" disabled hidden>Select Position</option>
-                            {positionOptions.map((position, index) => (
-                                <option key={index} value={position}>{position}</option>
-                            ))}
-                        </select>
-                        <button 
-                            className="search-button" 
-                            onClick={startSearchByPosition} 
-                            disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "position")}
-                        >
-                            Search by Position
-                        </button>
-                    </div>
-                    <button className="clear-button" onClick={clearSearch} disabled={isLoading}>Clear Search</button>
-                    {isLoading ? (<p>Loading...</p>) : (
-                        searchPlayer.length > 0 && (
-                            <div>
-                                <h2>Search Results</h2>
-                                <div className="table-container">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Add</th>
-                                                <th>Conf</th>
-                                                <th>Team</th>
-                                                <th>Pos</th>
-                                                <th>Inj</th>
-                                                <th>Player</th>
-                                                <th>Avg</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {searchPlayer.map((player, index) => (
-                                                <tr key={index}>
-                                                    <td>
-                                                        <button 
-                                                            className="add-remove-button" 
-                                                            onClick={(e) => handleAddPlayerToRoster(e, player.playerId)} 
-                                                            disabled={isRosterFull}
-                                                        >
-                                                            +
-                                                        </button>
-                                                    </td>
-                                                    <td>{player.conference}</td>
-                                                    <td>{player.team}</td>
-                                                    <td>{player.position}</td>
-                                                    <td>{player.injuryStatus ? player.injuryStatus.charAt(0) : ''}</td>
-                                                    <td>{player.name}</td>
-                                                    <td>{player.fantasyPointsAvg}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        )
-                    )}
-                </div>
-                
-                <div className="component-container">
-                    <h2>My Roster</h2>
-                    {activeRosterPlayers.length > 0 && (
-                        <div className="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Remove</th>
-                                        <th>Conf</th>
-                                        <th>Team</th>
-                                        <th>Pos</th>
-                                        <th>Inj</th>
-                                        <th>Player</th>
-                                        <th>Avg</th>
-                                        <th>Proj</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {activeRosterPlayers.map((rosterPlayer, index) => (
-                                        <tr key={index}>
-                                            <td>{index+1}</td>
-                                            <td>
-                                                <button 
-                                                    className="add-remove-button" 
-                                                    onClick={(e) => handleRemovePlayerFromRoster(e, rosterPlayer.playerId)}
-                                                >
-                                                    -
-                                                </button>
-                                            </td>
-                                            <td>{rosterPlayer.conference}</td>
-                                            <td>{rosterPlayer.team}</td>
-                                            <td>{rosterPlayer.position}</td>
-                                            <td className={
-                                                rosterPlayer.injuryStatus === 'P' || rosterPlayer.injuryStatus === null ? 'green-highlight' :
-                                                ["Q", "D", "O"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
-                                            }>
-                                                {rosterPlayer.injuryStatus ? rosterPlayer.injuryStatus.charAt(0) : 'A'}
-                                            </td>
-                                            <td>{rosterPlayer.name}</td>
-                                            <td>{rosterPlayer.fantasyPointsAvg}</td>
-                                            <td>{rosterPlayer.fantasyPointsProj}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+            {isLoading? (<p>Loading...</p>) : (
+                <div className="page-container">
+                    <div className="component-container">
+                        <h2>Search Players</h2>
+                        <div>
+                            <input 
+                                className="search-input" 
+                                type="text" value={searchName} 
+                                placeholder="Enter Name" 
+                                onChange={(e) => setSearchName(e.target.value)} 
+                                disabled={activeSearchMethod && activeSearchMethod !== "name"}
+                            />
+                            <button 
+                                className="search-button" 
+                                onClick={startSearchByName} 
+                                disabled={isLoading || (activeSearchMethod && activeSearchMethod !=="name")}
+                            >
+                                Search by Name
+                            </button>
                         </div>
-                    )}
+                        <div>
+                            <select 
+                                className="search-select" 
+                                value={selectedTeamName} 
+                                onChange={(e) => setSelectedTeamName(e.target.value)} 
+                                disabled={activeSearchMethod && activeSearchMethod !== "team"}
+                            >
+                                <option value="" disabled hidden>Select Team</option>
+                                {activeTeamNameOptions.map(teamName => (
+                                    <option key={teamName} value={teamName}>{teamNameDisplayNames[teamName] || teamName}</option>
+                                ))}
+                            </select>
+                            <button 
+                                className="search-button" 
+                                onClick={startSearchByTeam} 
+                                disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "team")}
+                            >
+                                Search by Team
+                            </button>
+                        </div>
+                        <div>
+                            <select 
+                                className="search-select" 
+                                value={selectedPosition} 
+                                onChange={(e) => setSelectedPosition(e.target.value)} 
+                                disabled={activeSearchMethod && activeSearchMethod !== "position"}
+                            >
+                                <option value="" disabled hidden>Select Position</option>
+                                {positionOptions.map((position, index) => (
+                                    <option key={index} value={position}>{position}</option>
+                                ))}
+                            </select>
+                            <button 
+                                className="search-button" 
+                                onClick={startSearchByPosition} 
+                                disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "position")}
+                            >
+                                Search by Position
+                            </button>
+                        </div>
+                        <button className="clear-button" onClick={clearSearch} disabled={isLoading}>Clear Search</button>
+                        {isLoading ? (<p>Loading...</p>) : (
+                            searchPlayer.length > 0 && (
+                                <div>
+                                    <h2>Search Results</h2>
+                                    <div className="table-container">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Add</th>
+                                                    <th>Conf</th>
+                                                    <th>Team</th>
+                                                    <th>Pos</th>
+                                                    <th>Inj</th>
+                                                    <th>Player</th>
+                                                    <th>Avg</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {searchPlayer.map((player, index) => (
+                                                    <tr key={index}>
+                                                        <td>
+                                                            <button 
+                                                                className="add-remove-button" 
+                                                                onClick={(e) => handleAddPlayerToRoster(e, player.playerId)} 
+                                                                // disabled={isRosterFull}
+                                                            >
+                                                                +
+                                                            </button>
+                                                        </td>
+                                                        <td>{player.conference}</td>
+                                                        <td>{player.team}</td>
+                                                        <td>{player.position}</td>
+                                                        <td>{player.injuryStatus ? player.injuryStatus.charAt(0) : ''}</td>
+                                                        <td>{player.name}</td>
+                                                        <td>{player.fantasyPointsAvg}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            )
+                        )}
+                    </div>
+                    
+                    <div className="component-container">
+                        <h2>My Roster</h2>
+                        {activeRosterPlayers.length > 0 && (
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Remove</th>
+                                            <th>Conf</th>
+                                            <th>Team</th>
+                                            <th>Pos</th>
+                                            <th>Inj</th>
+                                            <th>Player</th>
+                                            <th>Avg</th>
+                                            <th>Proj</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {activeRosterPlayers.map((rosterPlayer, index) => (
+                                            <tr key={index}>
+                                                <td>{index+1}</td>
+                                                <td>
+                                                    <button 
+                                                        className="add-remove-button" 
+                                                        onClick={(e) => handleRemovePlayerFromRoster(e, rosterPlayer.playerId)}
+                                                    >
+                                                        -
+                                                    </button>
+                                                </td>
+                                                <td>{rosterPlayer.conference}</td>
+                                                <td>{rosterPlayer.team}</td>
+                                                <td>{rosterPlayer.position}</td>
+                                                <td className={
+                                                    rosterPlayer.injuryStatus === 'P' || rosterPlayer.injuryStatus === null ? 'green-highlight' :
+                                                    ["Q", "D", "O"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
+                                                }>
+                                                    {rosterPlayer.injuryStatus ? rosterPlayer.injuryStatus.charAt(0) : 'A'}
+                                                </td>
+                                                <td>{rosterPlayer.name}</td>
+                                                <td>{rosterPlayer.fantasyPointsAvg}</td>
+                                                <td>{rosterPlayer.fantasyPointsProj}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
+            
             <div className="message-container">
                 {error && <p>{error}</p>}
             </div>

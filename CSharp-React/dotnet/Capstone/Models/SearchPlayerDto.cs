@@ -16,5 +16,12 @@ namespace Capstone.Models
         public double FantasyPointsAvg { get; set; } // Player Fantasy Points Average
         public string Conference { get; set; } // Player Conference
         public string TeamStatus { get; set; } // Player Team Status
+        
+        public int? FantasyRosterId { get; set; } // Fantasy Roster ID
+        public int? FantasyLineupId { get; set; } // Fantasy Lineup ID
+        public double? FantasyPointsProj { get; set; } // Player Fantasy Points Projection
+        public double? FantasyPoints { get; set; } // Player Fantasy Points
+        public string? LineupPosition { get; set; } // Player Lineup Position
+
     }
 }

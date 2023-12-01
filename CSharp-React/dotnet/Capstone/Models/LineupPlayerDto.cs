@@ -20,5 +20,7 @@ namespace Capstone.Models
         public double FantasyPoints { get; set; }
         public string Conference { get; set; }
         public string TeamStatus { get; set; }
+
+        public int? FantasyRosterId { get; set; }
     }
 }

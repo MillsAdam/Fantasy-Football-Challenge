@@ -56,53 +56,56 @@ function LeagueComponent() {
     }
 
     return (
-        <div className="component-container">
-            <h1>League Component</h1>
-            {!userHasTeam && (
-                <>
-                    <form onSubmit={createRoster}>
-                        <label htmlFor="teamName">Team Name</label>
-                        <input type="text" id="teamName" name="teamName" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
-                        <button className="league-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create League Roster"}</button>
-                    </form>
-                </>
-            )}
-            {userHasTeam && (
-                <>
-                    <div className="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Rank</th>
-                                    <th>User</th>
-                                    <th>Team</th>
-                                    <th>W1</th>
-                                    <th>W2</th>
-                                    <th>W3</th>
-                                    <th>W4</th>
-                                    <th>Points</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {rosters.map((roster, index) => (
-                                    <tr key={index}>
-                                        <td>{index + 1}</td>
-                                        <td>{roster.username}</td>
-                                        <td>{roster.teamName}</td>
-                                        <td>{roster.week1Score}</td>
-                                        <td>{roster.week2Score}</td>
-                                        <td>{roster.week3Score}</td>
-                                        <td>{roster.week4Score}</td>
-                                        <td>{roster.totalScore}</td>
+        <div>
+            {isLoading ? (<p>Loading...</p>) : (
+                <div className="component-container">
+                    <h1>League Component</h1>
+                    {!userHasTeam && (
+                        <form onSubmit={createRoster}>
+                            <label htmlFor="teamName">Team Name</label>
+                            <input type="text" id="teamName" name="teamName" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
+                            <button className="league-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create League Roster"}</button>
+                        </form>
+                    )}
+                    {userHasTeam && (
+                        <div className="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>User</th>
+                                        <th>Team</th>
+                                        <th>W1</th>
+                                        <th>W2</th>
+                                        <th>W3</th>
+                                        <th>W4</th>
+                                        <th>Points</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </>
+                                </thead>
+                                <tbody>
+                                    {rosters.map((roster, index) => (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            <td>{roster.username}</td>
+                                            <td>{roster.teamName}</td>
+                                            <td>{roster.week1Score}</td>
+                                            <td>{roster.week2Score}</td>
+                                            <td>{roster.week3Score}</td>
+                                            <td>{roster.week4Score}</td>
+                                            <td>{roster.totalScore}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </div>
             )}
-            {error && <p>{error}</p>}
+            <div className="message-container">
+                {error && <p>{error}</p>}
+            </div>
         </div>
+       
     )
 }
 

@@ -6,12 +6,14 @@ import "../styles/DatabaseComponent.css";
 const configValueOptions = {
     'current_week': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
     'current_season_type': [1, 3],
-    'current_lineup_week': [1, 2, 3, 4]
+    'current_lineup_week': [1, 2, 3, 4],
+    'lock_rosters': [1, 2]
 };
 const configKeyDisplayNames = {
     'current_week': 'Current Week',
     'current_season_type': 'Current Season Type',
-    'current_lineup_week': 'Current Lineup Week'
+    'current_lineup_week': 'Current Lineup Week',
+    'lock_rosters': 'lock_rosters',
 };
 const teamNameDisplayNames = {
     'ARI': 'Arizona Cardinals',
@@ -78,6 +80,14 @@ function DatabaseComponent() {
     const toggleConfigTableVisibility = () => {
         setIsConfigTableVisible(!isConfigTableVisible);
     }
+
+    // function translateLockRostersValue(value) {
+    //     return value === 1;
+    // }
+
+    // function translateLockRostersValueBack(value) {
+    //     return value ? 1 : 2;
+    // }
 
     async function createTeams(e) {
         e.preventDefault();
@@ -228,7 +238,7 @@ function DatabaseComponent() {
             if (authToken && currentUser.role === 'admin') {
                 const updatedLineupScores = await DatabaseService.updateLineupScores();
                 if (updatedLineupScores) {
-                    console.log("Lineup scores updated");
+                    displaySuccessMessage("Lineup scores updated successfully")
                 }
             }
         } catch (error) {
@@ -248,7 +258,7 @@ function DatabaseComponent() {
             if (authToken && currentUser.role === 'admin') {
                 const updatedRosterScores = await DatabaseService.updateRosterScores();
                 if (updatedRosterScores) {
-                    console.log("Roster scores updated");
+                    displaySuccessMessage("Roster scores updated successfully")
                 }
             }
         } catch (error) {
@@ -297,6 +307,13 @@ function DatabaseComponent() {
                         return a.configKey.localeCompare(b.configKey);
                     });
                     const sortedConfigKeys = fetchedConfiguration.map(config => config.configKey).sort();
+                    // const translateConfigurations = fetchedConfiguration.map(config => {
+                    //     if (config.configKey === 'lock_rosters') {
+                    //         return {...config, configValue: translateLockRostersValue(config.configValue)}
+                    //     }
+                    //     return config;
+                    // });
+                    // setConfigurations(translatedConfigurations);
                     setConfigurations(sortedConfigurations);
                     setDynamicConfigKeyOptions(sortedConfigKeys);
                 }
@@ -500,7 +517,12 @@ function DatabaseComponent() {
                                     {teams.map((team, index) => (
                                         <tr key={index}>
                                             <td>{teamNameDisplayNames[team.team] || team.team}</td>
-                                            <td>{team.status}</td>
+                                            <td className={
+                                                team.status === 'Active' ? 'green-highlight' :
+                                                team.status === 'Inactive' ? 'red-highlight' : ''
+                                            }>
+                                                {team.status}
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>

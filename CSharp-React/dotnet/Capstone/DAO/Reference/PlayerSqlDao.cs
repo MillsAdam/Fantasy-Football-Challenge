@@ -134,6 +134,12 @@ namespace Capstone.DAO
                                 searchPlayerDto.FantasyPointsAvg = Convert.ToDouble(reader["avg_fantasy_points"]);
                                 searchPlayerDto.Conference = Convert.ToString(reader["conference"]);
                                 searchPlayerDto.TeamStatus = Convert.ToString(reader["team_status"]);
+
+                                searchPlayerDto.FantasyRosterId = null;
+                                searchPlayerDto.FantasyLineupId = null;
+                                searchPlayerDto.FantasyPointsProj = null;
+                                searchPlayerDto.FantasyPoints = null;
+                                searchPlayerDto.LineupPosition = null;
                             };
                             searchPlayerDtos.Add(searchPlayerDto);
                         }                    
