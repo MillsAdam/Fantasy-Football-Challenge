@@ -55,6 +55,7 @@ function RosterComponent() {
     const [activeSearchMethod, setActiveSearchMethod] = useState("");
     const [configurations, setConfigurations] = useState([]);
     const [isRosterLocked, setIsRosterLocked] = useState(false);
+    const [playerIndexMap, setPlayerIndexMap] = useState({});
 
 
     useEffect(() => {
@@ -151,6 +152,10 @@ function RosterComponent() {
                 !rosterPlayers.some(rosterPlayer => rosterPlayer.playerId === player.playerId)
             );
             setSearchPlayer(filteredSearchData);
+            setPlayerIndexMap(filteredSearchData.reduce((acc, player, index) => {
+                acc[player.playerId] = index;
+                return acc;
+            }, {}));
         } catch (error) {
             console.error('An error occurred: ', error);
             setError('Failed to search players');
@@ -169,6 +174,10 @@ function RosterComponent() {
                 !rosterPlayers.some(rosterPlayer => rosterPlayer.playerId === player.playerId)
             );
             setSearchPlayer(filteredSearchData);
+            setPlayerIndexMap(filteredSearchData.reduce((acc, player, index) => {
+                acc[player.playerId] = index;
+                return acc;
+            }, {}));
         } catch (error) {
             console.error('An error occurred: ', error);
             setError('Failed to search players');
@@ -187,6 +196,10 @@ function RosterComponent() {
                 !rosterPlayers.some(rosterPlayer => rosterPlayer.playerId === player.playerId)
             );
             setSearchPlayer(filteredSearchData);
+            setPlayerIndexMap(filteredSearchData.reduce((acc, player, index) => {
+                acc[player.playerId] = index;
+                return acc;
+            }, {}));
         } catch (error) {
             console.error('An error occurred: ', error);
             setError('Failed to search players');
@@ -232,12 +245,22 @@ function RosterComponent() {
         setIsLoading(true);
         setError(null);
         try {
+            const playerToRemove = rosterPlayers.find(player => player.playerId === playerId);
             const removedRosterPlayer = await RosterService.deleteRosterPlayer(playerId, authToken);
             if (removedRosterPlayer) {
                 const updatedRosterPlayers = await RosterService.getRosterPlayersByUser(authToken);
                 setRosterPlayers(updatedRosterPlayers);
                 const activeRosterPlayers = updatedRosterPlayers.filter(player => player.teamStatus === 'Active');
                 setActiveRosterPlayers(activeRosterPlayers);
+                
+                const playerIndex = playerIndexMap[playerId];
+                if (playerToRemove) {
+                    setSearchPlayer(prevPlayers => {
+                        const newPlayers = [...prevPlayers];
+                        newPlayers.splice(playerIndex, 0, playerToRemove);
+                        return newPlayers;
+                    });
+                }
             }
         } catch (error) {
             console.error('An error occurred: ', error);
