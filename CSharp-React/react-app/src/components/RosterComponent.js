@@ -341,7 +341,13 @@ function RosterComponent() {
                                                         <td>{player.conference}</td>
                                                         <td>{player.team}</td>
                                                         <td>{player.position}</td>
-                                                        <td>{player.injuryStatus ? player.injuryStatus.charAt(0) : ''}</td>
+                                                        <td className={
+                                                            player.injuryStatus === 'P' || player.injuryStatus === null ? 'green-highlight' :
+                                                            ["Q"].includes(player.injuryStatus?.charAt(0)) ? 'yellow-highlight' :
+                                                            ["D", "O"].includes(player.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
+                                                        }>
+                                                            {player.injuryStatus ? player.injuryStatus.charAt(0) : 'A'}
+                                                        </td>
                                                         <td>{player.name}</td>
                                                         <td>{player.fantasyPointsAvg}</td>
                                                     </tr>

@@ -66,5 +66,30 @@ namespace Capstone.DAO
                 }
             }
         }
+
+        public async Task<double> GetWeeklyScoreByUserAndWeek(User user, int gameWeek)
+        {
+            double weeklyScore = 0.0;
+            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+            {
+                await connection.OpenAsync();
+                using NpgsqlCommand command = new NpgsqlCommand(
+                    @"SELECT fl.total_score 
+                    FROM fantasy_lineups fl 
+                    JOIN fantasy_rosters fr ON fr.roster_id = fl.roster_id
+                    WHERE fr.user_id = @user_id 
+                        AND fl.game_week = @game_week;", connection);
+                {
+                    command.Parameters.AddWithValue("@user_id", user.UserId);
+                    command.Parameters.AddWithValue("@game_week", gameWeek);
+                    NpgsqlDataReader reader = command.ExecuteReader();
+                    while (await reader.ReadAsync())
+                    {
+                        weeklyScore = Convert.ToDouble(reader["total_score"]);
+                    }
+                    return weeklyScore;
+                }
+            }
+        }
     }
 }

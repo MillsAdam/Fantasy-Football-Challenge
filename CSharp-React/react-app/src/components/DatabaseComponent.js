@@ -9,6 +9,14 @@ const configValueOptions = {
     'current_lineup_week': [1, 2, 3, 4],
     'lock_rosters': [1, 2],
     'lock_lineups': [1, 2],
+    'lineup_week_one': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+    'lineup_week_two': [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10, 11, 12, 13, 14, 15, 16, 17, 18],
+    'lineup_week_three': [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10, 11, 12, 13, 14, 15, 16, 17, 18],
+    'lineup_week_four': [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10, 11, 12, 13, 14, 15, 16, 17, 18],
+    'lineup_season_type_week_one': [1, 3],
+    'lineup_season_type_week_two': [1, 3],
+    'lineup_season_type_week_three': [1, 3],
+    'lineup_season_type_week_four': [1, 3],
 };
 const configKeyDisplayNames = {
     'current_week': 'Current Week',
@@ -16,6 +24,14 @@ const configKeyDisplayNames = {
     'current_lineup_week': 'Current Lineup Week',
     'lock_rosters': 'Lock Rosters',
     'lock_lineups': 'Lock Lineups',
+    'lineup_week_one': 'Lineup Week One',
+    'lineup_week_two': 'Lineup Week Two',
+    'lineup_week_three': 'Lineup Week Three',
+    'lineup_week_four': 'Lineup Week Four',
+    'lineup_season_type_week_one': 'Lineup Season Type Week One',
+    'lineup_season_type_week_two': 'Lineup Season Type Week Two',
+    'lineup_season_type_week_three': 'Lineup Season Type Week Three',
+    'lineup_season_type_week_four': 'Lineup Season Type Week Four',
 };
 const teamNameDisplayNames = {
     'ARI': 'Arizona Cardinals',

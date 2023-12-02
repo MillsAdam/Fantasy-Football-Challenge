@@ -10,6 +10,7 @@ namespace Capstone.DAO
     {
         Task CreateFantasyLineup(int fantasyRosterId);
         Task<FantasyLineup> GetFantasyLineupByUser(User user);
+        Task<double> GetWeeklyScoreByUserAndWeek(User user, int gameWeek);
         
     }
 }

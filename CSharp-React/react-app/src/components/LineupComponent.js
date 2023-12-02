@@ -13,7 +13,8 @@ const POSITION_SPECIFIC_OPTIONS = {
     TE: ['TE', 'FLEX'],
     K: ['K'],
     DEF: ['DEF']
-}
+};
+const GAME_WEEK_OPTIONS = [1, 2, 3, 4];
 
 
 function LineupComponent() {
@@ -26,6 +27,9 @@ function LineupComponent() {
     const [lineupOptions, setLineupOptions] = useState([]);
     const [configurations, setConfigurations] = useState([]);
     const [isLineupLocked, setIsLineupLocked] = useState(false);
+    const [selectedGameWeek, setSelectedGameWeek] = useState("");
+    const [weeklyLineupPlayers, setWeeklyLineupPlayers] = useState([]);
+    const [weeklyScore, setWeeklyScore] = useState("");
 
     useEffect(() => {
         async function getRosterPlayers() {
@@ -70,6 +74,26 @@ function LineupComponent() {
         }
     }, [authToken, currentUser]);
 
+    // useEffect(() => {
+    //     async function getLineupPlayersByWeek() {
+    //         setIsLoading(true);
+    //         try {
+    //             const lineupPlayersData = await LineupService.getLineupPlayersByWeek(authToken, selectedGameWeek);
+    //             setWeeklyLineupPlayers(lineupPlayersData);
+    //         } catch (error) {
+    //             console.error('An error occurred: ', error);
+    //             setError('Failed to get lineup players');
+    //         }
+    //         setIsLoading(false);
+    //     }
+
+    //     if (currentUser && currentUser.userId) {
+    //         getLineupPlayersByWeek();
+    //     } else {
+    //         setError('User not found');
+    //     }
+    // }, [authToken, currentUser, selectedGameWeek]);
+
     useEffect(() => {
         async function fetchConfigurations() {
             try {
@@ -99,6 +123,12 @@ function LineupComponent() {
     function getFilteredLineupOptions(playerPosition) {
         const specificOptions = POSITION_SPECIFIC_OPTIONS[playerPosition] || [];
         return lineupOptions.filter(option => specificOptions.includes(option));
+    }
+
+    function clearGameWeek(e) {
+        e.preventDefault();
+        setSelectedGameWeek("");
+        setWeeklyLineupPlayers([]);
     }
 
     async function handleAddPlayerToLineup(e, playerId, lineupPosition) {
@@ -139,6 +169,22 @@ function LineupComponent() {
         } catch (error) {
             console.error('An error occurred: ', error);
             setError('Failed to remove lineup player');
+        }
+        setIsLoading(false);
+    }
+
+    async function getLineupPlayersByWeek(e) {
+        e.preventDefault();
+        setIsLoading(true);
+        setError(null);
+        try {
+            const lineupPlayersData = await LineupService.getLineupPlayersByWeek(authToken, selectedGameWeek);
+            setWeeklyLineupPlayers(lineupPlayersData);
+            const weeklyScoreData = await LineupService.getWeeklyScoreByWeek(authToken, selectedGameWeek);
+            setWeeklyScore(weeklyScoreData);
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            setError('Failed to get lineup players');
         }
         setIsLoading(false);
     }
@@ -242,6 +288,63 @@ function LineupComponent() {
                             </div>
                         )}
                     </div> 
+                    <div className="component-container">
+                        <h2>Weekly Lineup</h2>
+                        <form onSubmit={getLineupPlayersByWeek}>
+                            <select 
+                                className="game-week-select"
+                                value={selectedGameWeek} 
+                                onChange={(e) => setSelectedGameWeek(e.target.value)}
+                            >
+                                <option value="" disabled hidden>Select Week</option>
+                                {GAME_WEEK_OPTIONS.map((option) => (
+                                    <option key={option} value={option}>Week {option}</option>
+                                ))}
+                            </select>
+                            <button type="submit" disabled={isLoading || selectedGameWeek === ""}>Submit</button>
+                            <button type="button" onClick={clearGameWeek} disabled={isLoading || selectedGameWeek === ""}>Clear</button>
+                        </form>
+                        {weeklyLineupPlayers.length > 0 && (
+                            <div>
+                                <div>
+                                    <h3>Weekly Score: {weeklyScore}</h3>
+                                </div>
+                                <div className="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Conf</th>
+                                                <th>Team</th>
+                                                <th>Pos</th>
+                                                <th>Inj</th>
+                                                <th>Player</th>
+                                                <th>Points</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {weeklyLineupPlayers.map((lineupPlayer, index) => (
+                                                <tr key={index}>
+                                                    <td>{lineupPlayer.conference}</td>
+                                                    <td>{lineupPlayer.team}</td>
+                                                    <td>{lineupPlayer.lineupPosition}</td>
+                                                    <td className={
+                                                        lineupPlayer.injuryStatus === 'P' || lineupPlayer.injuryStatus === null ? 'green-highlight' :
+                                                        ["Q"].includes(lineupPlayer.injuryStatus?.charAt(0)) ? 'yellow-highlight' :
+                                                        ["D", "O"].includes(lineupPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
+                                                    }>
+                                                        {lineupPlayer.injuryStatus ? lineupPlayer.injuryStatus.charAt(0) : 'A'}
+                                                    </td>
+                                                    <td>{lineupPlayer.name}</td>
+                                                    <td>{lineupPlayer.fantasyPoints}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                        )}
+                    </div>
                 </div>
              )}
              <div className="message-container">

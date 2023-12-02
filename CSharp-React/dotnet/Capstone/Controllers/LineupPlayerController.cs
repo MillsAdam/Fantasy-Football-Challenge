@@ -104,5 +104,22 @@ namespace Capstone.Controllers
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }
+
+        [HttpGet("week")]
+        public async Task<ActionResult> GetLineupPlayersByUserAndWeek([FromQuery] int gameWeek)
+        {
+            try
+            {
+                string username = User.Identity.Name;
+                User user = _userDao.GetUserByUsername(username);
+                List<LineupPlayerDto> lineupPlayerDtos = await _lineupPlayerDao.GetLineupPlayerDtosByUserAndWeek(user, gameWeek);
+                return Ok(lineupPlayerDtos);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error getting lineup players: {e.Message}");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
     }
 }

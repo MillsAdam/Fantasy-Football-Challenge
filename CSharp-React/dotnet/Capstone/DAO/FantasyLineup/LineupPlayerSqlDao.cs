@@ -190,5 +190,109 @@ namespace Capstone.DAO
                 
             }
         }
+
+        // CHANGE STATUS AND INJURY STATUS TO REFLECT CORRECT WEEK
+        public async Task<List<LineupPlayerDto>> GetLineupPlayerDtosByUserAndWeek(User user, int gameWeek)
+        {
+            List<LineupPlayerDto> lineupPlayerDtos = new List<LineupPlayerDto>();
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using NpgsqlCommand command = new NpgsqlCommand(
+                    @"SELECT 
+                        lp.lineup_id, 
+                        lp.player_id, 
+                        lp.lineup_position, 
+                        p.position, 
+                        t.team, 
+                        p.name, 
+                        p.status, 
+                        p.injury_status, 
+                        COALESCE(ROUND(AVG(ps.fantasy_points), 2), 0) as avg_fantasy_points, 
+                        COALESCE(ppi.fantasy_points, 0) as proj_fantasy_points, 
+                        COALESCE(psi.fantasy_points, 0) as stat_fantasy_points, 
+                        t.conference, 
+                        t.status as team_status 
+                    FROM lineup_players lp 
+                    JOIN players p ON lp.player_id = p.player_id 
+                    JOIN teams t ON p.team_id = t.team_id 
+                    JOIN fantasy_lineups fl ON lp.lineup_id = fl.lineup_id 
+                    JOIN fantasy_rosters fr ON fl.roster_id = fr.roster_id 
+                    LEFT JOIN player_stats ps ON p.player_id = ps.player_id 
+                    LEFT JOIN configuration c_week ON c_week.config_key = 
+                        CASE 
+                            WHEN @game_week = 1 THEN 'lineup_week_one' 
+                            WHEN @game_week = 2 THEN 'lineup_week_two' 
+                            WHEN @game_week = 3 THEN 'lineup_week_three' 
+                            WHEN @game_week = 4 THEN 'lineup_week_four' 
+                        END 
+                    LEFT JOIN configuration c_season_type ON c_season_type.config_key = 
+                        CASE 
+                            WHEN @game_week = 1 THEN 'lineup_season_type_week_one' 
+                            WHEN @game_week = 2 THEN 'lineup_season_type_week_two' 
+                            WHEN @game_week = 3 THEN 'lineup_season_type_week_three' 
+                            WHEN @game_week = 4 THEN 'lineup_season_type_week_four' 
+                        END 
+                    LEFT JOIN player_projections ppi ON p.player_id = ppi.player_id AND ppi.week = c_week.config_value AND ppi.season_type = c_season_type.config_value 
+                    LEFT JOIN player_stats psi ON p.player_id = psi.player_id AND psi.week = c_week.config_value AND psi.season_type = c_season_type.config_value 
+                    WHERE fr.user_id = @user_id  
+                        AND fl.game_week = @game_week
+                    GROUP BY 
+                        lp.lineup_id, 
+                        lp.player_id, 
+                        lp.lineup_position, 
+                        p.position, 
+                        t.team, 
+                        p.name, 
+                        p.status, 
+                        p.injury_status, 
+                        ppi.fantasy_points, 
+                        psi.fantasy_points, 
+                        t.conference, 
+                        t.status 
+                    ORDER BY CASE lp.lineup_position 
+                        WHEN 'QB1' THEN 1 
+                        WHEN 'QB2' THEN 2 
+                        WHEN 'RB1' THEN 3 
+                        WHEN 'RB2' THEN 4 
+                        WHEN 'WR1' THEN 5 
+                        WHEN 'WR2' THEN 6 
+                        WHEN 'WR3' THEN 7 
+                        WHEN 'TE' THEN 8 
+                        WHEN 'FLEX' THEN 9 
+                        WHEN 'K' THEN 10 
+                        WHEN 'DEF' THEN 11 
+                    ELSE 12 END ASC;", connection);
+                {
+                    command.Parameters.AddWithValue("@user_id", user.UserId);
+                    command.Parameters.AddWithValue("@game_week", gameWeek);
+                    NpgsqlDataReader reader = command.ExecuteReader();
+                    while (await reader.ReadAsync())
+                    {
+                        LineupPlayerDto lineupPlayerDto = new LineupPlayerDto();
+                        {
+                            lineupPlayerDto.FantasyLineupId = Convert.ToInt32(reader["lineup_id"]);
+                            lineupPlayerDto.PlayerId = Convert.ToInt32(reader["player_id"]);
+                            lineupPlayerDto.LineupPosition = Convert.ToString(reader["lineup_position"]);
+                            lineupPlayerDto.Position = Convert.ToString(reader["position"]);
+                            lineupPlayerDto.Team = Convert.ToString(reader["team"]);
+                            lineupPlayerDto.Name = Convert.ToString(reader["name"]);
+                            lineupPlayerDto.Status = Convert.ToString(reader["status"]);
+                            lineupPlayerDto.InjuryStatus = Convert.ToString(reader["injury_status"] ?? (object)DBNull.Value);
+                            lineupPlayerDto.FantasyPointsAvg = Convert.ToDouble(reader["avg_fantasy_points"]);
+                            lineupPlayerDto.FantasyPointsProj = Convert.ToDouble(reader["proj_fantasy_points"]);
+                            lineupPlayerDto.FantasyPoints = Convert.ToDouble(reader["stat_fantasy_points"]);
+                            lineupPlayerDto.Conference = Convert.ToString(reader["conference"]);
+                            lineupPlayerDto.TeamStatus = Convert.ToString(reader["team_status"]);
+
+                            lineupPlayerDto.FantasyRosterId = null;
+                        };
+                        lineupPlayerDtos.Add(lineupPlayerDto);
+                    }
+                    return lineupPlayerDtos;
+                
+                }
+            }
+        }
     }
 }

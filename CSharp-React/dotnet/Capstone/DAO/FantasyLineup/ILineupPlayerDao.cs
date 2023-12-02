@@ -10,6 +10,7 @@ namespace Capstone.DAO
     {
         Task<List<LineupPlayer>> GetLineupPlayers();
         Task<List<LineupPlayerDto>> GetLineupPlayerDtosByUser(User user);
+        Task<List<LineupPlayerDto>> GetLineupPlayerDtosByUserAndWeek(User user, int gameWeek);
         Task CreateLineupPlayer(User user, int playerId, string lineupPosition);
         Task UpdateLineupPlayer(User user, int oldPlayerId, int newPlayerId, string oldLineupPosition, string newLineupPosition);
         Task DeleteLineupPlayer(User user, int playerId);
