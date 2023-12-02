@@ -13,6 +13,7 @@ import Roster from './views/Roster';
 import Admin from './views/Admin';
 import AdminRoute from './components/AdminRoute';
 import Lineup from './views/Lineup';
+import Stats from './views/Stats';
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path="/league" element={<ProtectedRoute><League /></ProtectedRoute>} />
             <Route path="/roster" element={<ProtectedRoute><Roster /></ProtectedRoute>} />
             <Route path="/lineup" element={<ProtectedRoute><Lineup /></ProtectedRoute>} />
+            <Route path="/stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
             <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
           </Routes>
         </div>
