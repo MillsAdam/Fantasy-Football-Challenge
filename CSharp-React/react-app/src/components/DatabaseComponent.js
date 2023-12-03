@@ -170,15 +170,15 @@ function DatabaseComponent() {
         setLoadingMessage("");
     }
 
-    async function createPlayerStatsByWeek(e) {
+    async function upsertPlayerStatsByWeek(e) {
         e.preventDefault();
-        setLoadingMessage("Creating Player Stats By Week...");
+        setLoadingMessage("Upserting Player Stats By Week...");
         setIsLoading(true);
         setError(null);
         try {
             if (authToken && currentUser.role === 'admin') {
-                const newPlayerStatsByWeek = await DatabaseService.createPlayerStatsByWeek();
-                const newPlayerStatsByWeekExt = await DatabaseService.createPlayerStatsExtByWeek();
+                const newPlayerStatsByWeek = await DatabaseService.upsertPlayerStatsByWeek();
+                const newPlayerStatsByWeekExt = await DatabaseService.upsertPlayerStatsExtByWeek();
                 if (newPlayerStatsByWeek && newPlayerStatsByWeekExt) {
                     displaySuccessMessage("Player stats by week created successfully")
                 }
@@ -186,27 +186,6 @@ function DatabaseComponent() {
         } catch (error) {
             console.error('An error occurred: ', error);
             setError('Failed to create player stats by week');
-        }
-        setIsLoading(false);
-        setLoadingMessage("");
-    }
-
-    async function updatePlayerStats(e) {
-        e.preventDefault();
-        setLoadingMessage("Updating Player Stats...");
-        setIsLoading(true);
-        setError(null);
-        try {
-            if (authToken && currentUser.role === 'admin') {
-                const updatedPlayerStats = await DatabaseService.updatePlayerStats();
-                const updatedPlayerStatsExt = await DatabaseService.updatePlayerStatsExt();
-                if (updatedPlayerStats && updatedPlayerStatsExt) {
-                    displaySuccessMessage("Player stats updated successfully")
-                }
-            }
-        } catch (error) {
-            console.error('An error occurred: ', error);
-            setError('Failed to update player stats');
         }
         setIsLoading(false);
         setLoadingMessage("");
@@ -233,36 +212,15 @@ function DatabaseComponent() {
         setLoadingMessage("");
     }
 
-    async function createPlayerProjectionsByWeek(e) {
+    async function upsertPlayerProjectionsByWeek(e) {
         e.preventDefault();
-        setLoadingMessage("Updating Player Projections...");
+        setLoadingMessage("Upserting Player Projections...");
         setIsLoading(true);
         setError(null);
         try {
             if (authToken && currentUser.role === 'admin') {
-                const updatedPlayerProjections = await DatabaseService.createPlayerProjectionsByWeek();
-                const updatedPlayerProjectionsExt = await DatabaseService.createPlayerProjectionsExtByWeek();
-                if (updatedPlayerProjections && updatedPlayerProjectionsExt) {
-                    displaySuccessMessage("Player projections updated successfully")
-                }
-            }
-        } catch (error) {
-            console.error('An error occurred: ', error);
-            setError('Failed to update player projections');
-        }
-        setIsLoading(false);
-        setLoadingMessage("");
-    }
-
-    async function updatePlayerProjections(e) {
-        e.preventDefault();
-        setLoadingMessage("Updating Player Projections...");
-        setIsLoading(true);
-        setError(null);
-        try {
-            if (authToken && currentUser.role === 'admin') {
-                const updatedPlayerProjections = await DatabaseService.updatePlayerProjections();
-                const updatedPlayerProjectionsExt = await DatabaseService.updatePlayerProjectionsExt();
+                const updatedPlayerProjections = await DatabaseService.upsertPlayerProjectionsByWeek();
+                const updatedPlayerProjectionsExt = await DatabaseService.upsertPlayerProjectionsExtByWeek();
                 if (updatedPlayerProjections && updatedPlayerProjectionsExt) {
                     displaySuccessMessage("Player projections updated successfully")
                 }
@@ -453,14 +411,9 @@ function DatabaseComponent() {
                             {isLoading && loadingMessage === "Creating Player Stats..." ? "Loading..." : "Create Player Stats"}
                         </button>
                     </form>
-                    <form onSubmit={createPlayerStatsByWeek}>
+                    <form onSubmit={upsertPlayerStatsByWeek}>
                         <button className="database-button" type="submit" disabled={isLoading}>
-                            {isLoading && loadingMessage === "Creating Player Stats By Week..." ? "Loading..." : "Create Player Stats By Week"}
-                        </button>
-                    </form>
-                    <form onSubmit={updatePlayerStats}>
-                        <button className="database-button" type="submit" disabled={isLoading}>
-                            {isLoading && loadingMessage === "Updating Player Stats..." ? "Loading..." : "Update Player Stats"}
+                            {isLoading && loadingMessage === "Upserting Player Stats By Week..." ? "Loading..." : "Upsert Player Stats By Week"}
                         </button>
                     </form>
                 </div>
@@ -471,14 +424,9 @@ function DatabaseComponent() {
                             {isLoading && loadingMessage === "Creating Player Projections..." ? "Loading..." : "Create Player Projections"}
                         </button>
                     </form>
-                    <form onSubmit={createPlayerProjectionsByWeek}>
+                    <form onSubmit={upsertPlayerProjectionsByWeek}>
                         <button className="database-button" type="submit" disabled={isLoading}>
-                            {isLoading && loadingMessage === "Creating Player Projections By Week..." ? "Loading..." : "Create Player Projections By Week"}
-                        </button>
-                    </form>
-                    <form onSubmit={updatePlayerProjections}>
-                        <button className="database-button" type="submit" disabled={isLoading}>
-                            {isLoading && loadingMessage === "Updating Player Projections" ? "Loading..." : "Update Player Projections"}
+                            {isLoading && loadingMessage === "Upserting Player Projections By Week..." ? "Loading..." : "Upsert Player Projections By Week"}
                         </button>
                     </form>
                 </div>

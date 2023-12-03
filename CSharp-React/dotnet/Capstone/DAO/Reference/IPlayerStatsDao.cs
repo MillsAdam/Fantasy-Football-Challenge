@@ -14,19 +14,20 @@ namespace Capstone.DAO.Reference
         Task AddPlayerProjectionsDtoAsync(PlayerStatsDto playerStatsDto);
         Task AddDefenseProjectionsDtoAsync(PlayerStatsDto playerStatsDto);
 
-        Task UpdatePlayerStatsDtoAsync(PlayerStatsDto playerStatsDto);
-        Task UpdateDefenseStatsDtoAsync(PlayerStatsDto playerStatsDto);
-        Task UpdatePlayerProjectionsDtoAsync(PlayerStatsDto playerStatsDto);
-        Task UpdateDefenseProjectionsDtoAsync(PlayerStatsDto playerStatsDto);
+        Task UpsertPlayerStatsDtoAsync(PlayerStatsDto playerStatsDto);
+        Task UpsertDefenseStatsDtoAsync(PlayerStatsDto playerStatsDto);
+        Task UpsertPlayerProjectionsDtoAsync(PlayerStatsDto playerStatsDto);
+        Task UpsertDefenseProjectionsDtoAsync(PlayerStatsDto playerStatsDto);
 
         Task AddPlayerStatsExtAsync(PlayerStatsExt playerStatsExt);
         Task AddDefenseStatsExtAsync(PlayerStatsExt playerStatsExt);
         Task AddPlayerProjectionsExtAsync(PlayerStatsExt playerStatsExt);
         Task AddDefenseProjectionsExtAsync(PlayerStatsExt playerStatsExt);
 
-        Task UpdatePlayerStatsExtAsync(PlayerStatsExt playerStatsExt);
-        Task UpdateDefenseStatsExtAsync(PlayerStatsExt playerStatsExt);
-        Task UpdatePlayerProjectionsExtAsync(PlayerStatsExt playerStatsExt);
-        Task UpdateDefenseProjectionsExtAsync(PlayerStatsExt playerStatsExt);
+        Task UpsertPlayerStatsExtAsync(PlayerStatsExt playerStatsExt);
+        Task UpsertDefenseStatsExtAsync(PlayerStatsExt playerStatsExt);
+        Task UpsertPlayerProjectionsExtAsync(PlayerStatsExt playerStatsExt);
+        Task UpsertDefenseProjectionsExtAsync(PlayerStatsExt playerStatsExt);
+
     }
 }

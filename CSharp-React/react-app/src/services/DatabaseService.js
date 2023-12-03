@@ -71,19 +71,9 @@ const DatabaseService = {
         }
     },
 
-    async createPlayerStatsByWeek() {
+    async upsertPlayerStatsByWeek() {
         try {
             const response = await axios.post(`http://localhost:5000/api/players/stats/week`, {});
-            return response.data;
-        } catch (error) {
-            console.error('An error occurred: ', error);
-            throw error;
-        }
-    },
-
-    async updatePlayerStats() {
-        try {
-            const response = await axios.put(`http://localhost:5000/api/players/stats`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -101,19 +91,9 @@ const DatabaseService = {
         }
     },
 
-    async createPlayerProjectionsByWeek() {
+    async upsertPlayerProjectionsByWeek() {
         try {
             const response = await axios.post(`http://localhost:5000/api/players/projections/week`, {});
-            return response.data;
-        } catch (error) {
-            console.error('An error occurred: ', error);
-            throw error;
-        }
-    },
-
-    async updatePlayerProjections() {
-        try {
-            const response = await axios.put(`http://localhost:5000/api/players/projections`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -131,19 +111,9 @@ const DatabaseService = {
         }
     },
 
-    async createPlayerStatsExtByWeek() {
+    async upsertPlayerStatsExtByWeek() {
         try {
             const response = await axios.post(`http://localhost:5000/api/players/stats/ext/week`, {});
-            return response.data;
-        } catch (error) {
-            console.error('An error occurred: ', error);
-            throw error;
-        }
-    },
-
-    async updatePlayerStatsExt() {
-        try {
-            const response = await axios.put(`http://localhost:5000/api/players/stats/ext`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -161,19 +131,9 @@ const DatabaseService = {
         }
     },
 
-    async createPlayerProjectionsExtByWeek() {
+    async upsertPlayerProjectionsExtByWeek() {
         try {
             const response = await axios.post(`http://localhost:5000/api/players/projections/ext/week`, {});
-            return response.data;
-        } catch (error) {
-            console.error('An error occurred: ', error);
-            throw error;
-        }
-    },
-
-    async updatePlayerProjectionsExt() {
-        try {
-            const response = await axios.put(`http://localhost:5000/api/players/projections/ext`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);

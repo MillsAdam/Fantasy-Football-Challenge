@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,6 +66,65 @@ namespace Capstone.DAO.Reference
             }
         }
 
+        public async Task UpsertPlayerStatsDtoAsync(PlayerStatsDto playerStatsDto)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                string sql = @"
+                    INSERT INTO player_stats (player_id, team_id, week, name, position, status, injury_status, fantasy_points) 
+                    VALUES (@player_id, @team_id, @week, @name, @position, @status, @injury_status, @fantasy_points) 
+                    ON CONFLICT (player_id, team_id, week) DO UPDATE 
+                    SET name = EXCLUDED.name, 
+                        position = EXCLUDED.position, 
+                        status = EXCLUDED.status, 
+                        injury_status = EXCLUDED.injury_status, 
+                        fantasy_points = EXCLUDED.fantasy_points;";
+                using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
+                {
+                    command.Parameters.AddWithValue("@player_id", playerStatsDto.PlayerId);
+                    command.Parameters.AddWithValue("@team_id", playerStatsDto.TeamId);
+                    command.Parameters.AddWithValue("@week", playerStatsDto.Week);
+                    command.Parameters.AddWithValue("@name", playerStatsDto.Name);
+                    command.Parameters.AddWithValue("@position", playerStatsDto.Position);
+                    command.Parameters.AddWithValue("@status", playerStatsDto.Status);
+                    command.Parameters.AddWithValue("@injury_status", playerStatsDto.InjuryStatus ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@fantasy_points", playerStatsDto.FantasyPoints);
+
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
+
+        public async Task UpsertDefenseStatsDtoAsync(PlayerStatsDto playerStatsDto)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                string sql = @"
+                    INSERT INTO player_stats (player_id, team_id, week, name, position, status, injury_status, fantasy_points) 
+                    VALUES (@player_id, @team_id, @week, 
+                        (SELECT name FROM players WHERE player_id = @player_id), @position, @status, @injury_status, @fantasy_points) 
+                    ON CONFLICT (player_id, team_id, week) DO UPDATE 
+                    SET position = EXCLUDED.position, 
+                        status = EXCLUDED.status, 
+                        injury_status = EXCLUDED.injury_status, 
+                        fantasy_points = EXCLUDED.fantasy_points;";
+                using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
+                {
+                    command.Parameters.AddWithValue("@player_id", playerStatsDto.PlayerId);
+                    command.Parameters.AddWithValue("@team_id", playerStatsDto.TeamId);
+                    command.Parameters.AddWithValue("@week", playerStatsDto.Week);
+                    command.Parameters.AddWithValue("@position", playerStatsDto.Position);
+                    command.Parameters.AddWithValue("@status", playerStatsDto.Status);
+                    command.Parameters.AddWithValue("@injury_status", playerStatsDto.InjuryStatus ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@fantasy_points", playerStatsDto.FantasyPoints);
+
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
+
         public async Task AddPlayerProjectionsDtoAsync(PlayerStatsDto playerStatsDto)
         {
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
@@ -109,29 +169,25 @@ namespace Capstone.DAO.Reference
             }
         }
 
-        public async Task UpdatePlayerStatsDtoAsync(PlayerStatsDto playerStatsDto)
+        public async Task UpsertPlayerProjectionsDtoAsync(PlayerStatsDto playerStatsDto)
         {
-            int week = await _configurationDao.GetConfigurationValue("current_week");
-
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 string sql = @"
-                    UPDATE player_stats
-                    SET team_id = @team_id,
-                        name = @name,
-                        position = @position,
-                        status = @status,
-                        injury_status = @injury_status,
-                        fantasy_points = @fantasy_points
-                    WHERE player_id = @player_id 
-                        AND week = @week;";
-
+                    INSERT INTO player_projections (player_id, team_id, week, name, position, status, injury_status, fantasy_points) 
+                    VALUES (@player_id, @team_id, @week, @name, @position, @status, @injury_status, @fantasy_points) 
+                    ON CONFLICT (player_id, team_id, week) DO UPDATE 
+                    SET name = EXCLUDED.name, 
+                        position = EXCLUDED.position, 
+                        status = EXCLUDED.status, 
+                        injury_status = EXCLUDED.injury_status, 
+                        fantasy_points = EXCLUDED.fantasy_points;";
                 using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsDto.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsDto.TeamId);
-                    command.Parameters.AddWithValue("@week", week);
+                    command.Parameters.AddWithValue("@week", playerStatsDto.Week);
                     command.Parameters.AddWithValue("@name", playerStatsDto.Name);
                     command.Parameters.AddWithValue("@position", playerStatsDto.Position);
                     command.Parameters.AddWithValue("@status", playerStatsDto.Status);
@@ -143,97 +199,25 @@ namespace Capstone.DAO.Reference
             }
         }
 
-        public async Task UpdateDefenseStatsDtoAsync(PlayerStatsDto playerStatsDto)
+        public async Task UpsertDefenseProjectionsDtoAsync(PlayerStatsDto playerStatsDto)
         {
-            int week = await _configurationDao.GetConfigurationValue("current_week");
-
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 string sql = @"
-                    UPDATE player_stats
-                    SET team_id = @team_id,
-                        week = @week,
-                        name = (SELECT name FROM players WHERE player_id = @player_id),
-                        position = @position,
-                        status = @status,
-                        injury_status = @injury_status,
-                        fantasy_points = @fantasy_points
-                    WHERE player_id = @player_id 
-                        AND week = @week;";
-
+                    INSERT INTO player_projections (player_id, team_id, week, name, position, status, injury_status, fantasy_points) 
+                    VALUES (@player_id, @team_id, @week, 
+                        (SELECT name FROM players WHERE player_id = @player_id), @position, @status, @injury_status, @fantasy_points) 
+                    ON CONFLICT (player_id, team_id, week) DO UPDATE 
+                    SET position = EXCLUDED.position, 
+                        status = EXCLUDED.status, 
+                        injury_status = EXCLUDED.injury_status, 
+                        fantasy_points = EXCLUDED.fantasy_points;";
                 using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsDto.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsDto.TeamId);
-                    command.Parameters.AddWithValue("@week", week);
-                    command.Parameters.AddWithValue("@position", playerStatsDto.Position);
-                    command.Parameters.AddWithValue("@status", playerStatsDto.Status);
-                    command.Parameters.AddWithValue("@injury_status", playerStatsDto.InjuryStatus ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@fantasy_points", playerStatsDto.FantasyPoints);
-
-                    await command.ExecuteNonQueryAsync();
-                }
-            }
-        }
-
-        public async Task UpdatePlayerProjectionsDtoAsync(PlayerStatsDto playerStatsDto)
-        {
-            int week = await _configurationDao.GetConfigurationValue("current_week");
-
-            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                string sql = @"
-                    UPDATE player_projections
-                    SET team_id = @team_id,
-                        name = @name,
-                        position = @position,
-                        status = @status,
-                        injury_status = @injury_status,
-                        fantasy_points = @fantasy_points
-                    WHERE player_id = @player_id 
-                        AND week = @week;";
-
-                using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
-                {
-                    command.Parameters.AddWithValue("@player_id", playerStatsDto.PlayerId);
-                    command.Parameters.AddWithValue("@team_id", playerStatsDto.TeamId);
-                    command.Parameters.AddWithValue("@week", week);
-                    command.Parameters.AddWithValue("@name", playerStatsDto.Name);
-                    command.Parameters.AddWithValue("@position", playerStatsDto.Position);
-                    command.Parameters.AddWithValue("@status", playerStatsDto.Status);
-                    command.Parameters.AddWithValue("@injury_status", playerStatsDto.InjuryStatus ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@fantasy_points", playerStatsDto.FantasyPoints);
-
-                    await command.ExecuteNonQueryAsync();
-                }
-            }
-        }
-
-        public async Task UpdateDefenseProjectionsDtoAsync(PlayerStatsDto playerStatsDto)
-        {
-            int week = await _configurationDao.GetConfigurationValue("current_week");
-
-            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                string sql = @"
-                    UPDATE player_projections
-                    SET team_id = @team_id,
-                        name = (SELECT name FROM players WHERE player_id = @player_id),
-                        position = @position,
-                        status = @status,
-                        injury_status = @injury_status,
-                        fantasy_points = @fantasy_points
-                    WHERE player_id = @player_id 
-                        AND week = @week;";
-
-                using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
-                {
-                    command.Parameters.AddWithValue("@player_id", playerStatsDto.PlayerId);
-                    command.Parameters.AddWithValue("@team_id", playerStatsDto.TeamId);
-                    command.Parameters.AddWithValue("@week", week);
+                    command.Parameters.AddWithValue("@week", playerStatsDto.Week);
                     command.Parameters.AddWithValue("@position", playerStatsDto.Position);
                     command.Parameters.AddWithValue("@status", playerStatsDto.Status);
                     command.Parameters.AddWithValue("@injury_status", playerStatsDto.InjuryStatus ?? (object)DBNull.Value);
@@ -556,65 +540,80 @@ namespace Capstone.DAO.Reference
             }
         }
 
-        public async Task UpdatePlayerStatsExtAsync(PlayerStatsExt playerStatsExt)
+        public async Task UpsertPlayerStatsExtAsync(PlayerStatsExt playerStatsExt)
         {
-            int week = await _configurationDao.GetConfigurationValue("current_week");
-
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 string sql = @"
-                    UPDATE player_stats_ext
-                    SET team_id = @team_id,
-                        name = @name,
-                        position = @position,
-                        status = @status,
-                        injury_status = @injury_status,
-                        fantasy_points = @fantasy_points,
-                        passing_completions = @passing_completions,
-                        passing_attempts = @passing_attempts,
-                        passing_yards = @passing_yards,
-                        passing_touchdowns = @passing_touchdowns,
-                        passing_interceptions = @passing_interceptions,
-                        passing_rating = @passing_rating,
-                        rushing_attempts = @rushing_attempts,
-                        rushing_yards = @rushing_yards,
-                        rushing_touchdowns = @rushing_touchdowns,
-                        receiving_targets = @receiving_targets,
-                        receptions = @receptions,
-                        receiving_yards = @receiving_yards,
-                        receiving_touchdowns = @receiving_touchdowns,
-                        return_touchdowns = @return_touchdowns,
-                        two_point_conversions = @two_point_conversions,
-                        fumbles_lost = @fumbles_lost,
-                        field_goals_made = @field_goals_made,
-                        field_goals_attempted = @field_goals_attempted,
-                        field_goals_made_0_to_19 = @field_goals_made_0_to_19,
-                        field_goals_made_20_to_29 = @field_goals_made_20_to_29,
-                        field_goals_made_30_to_39 = @field_goals_made_30_to_39,
-                        field_goals_made_40_to_49 = @field_goals_made_40_to_49,
-                        field_goals_made_50_plus = @field_goals_made_50_plus,
-                        extra_points_made = @extra_points_made,
-                        extra_points_attempted = @extra_points_attempted,
-                        defensive_touchdowns = @defensive_touchdowns,
-                        special_teams_touchdowns = @special_teams_touchdowns,
-                        touchdowns_scored = @touchdowns_scored,
-                        fumbles_forced = @fumbles_forced,
-                        fumbles_recovered = @fumbles_recovered,
-                        interceptions = @interceptions,
-                        tackles_for_loss = @tackles_for_loss,
-                        quarterback_hits = @quarterback_hits,
-                        sacks = @sacks,
-                        safeties = @safeties,
-                        blocked_kicks = @blocked_kicks,
-                        points_allowed = @points_allowed
-                    WHERE player_id = @player_id
-                        AND week = @week;";
+                    INSERT INTO player_stats_ext (
+                        player_id, team_id, week, name, position, 
+                        status, injury_status, fantasy_points, passing_completions, passing_attempts, 
+                        passing_yards, passing_touchdowns, passing_interceptions, passing_rating, rushing_attempts, 
+                        rushing_yards, rushing_touchdowns, receiving_targets, receptions, receiving_yards, 
+                        receiving_touchdowns, return_touchdowns, two_point_conversions, fumbles_lost, field_goals_made, 
+                        field_goals_attempted, field_goals_made_0_to_19, field_goals_made_20_to_29, field_goals_made_30_to_39, field_goals_made_40_to_49, 
+                        field_goals_made_50_plus, extra_points_made, extra_points_attempted, defensive_touchdowns, special_teams_touchdowns, 
+                        touchdowns_scored, fumbles_forced, fumbles_recovered, interceptions, tackles_for_loss, 
+                        quarterback_hits, sacks, safeties, blocked_kicks, points_allowed) 
+                    VALUES (
+                        @player_id, @team_id, @week, @name, @position, 
+                        @status, @injury_status, @fantasy_points, @passing_completions, @passing_attempts, 
+                        @passing_yards, @passing_touchdowns, @passing_interceptions, @passing_rating, @rushing_attempts, 
+                        @rushing_yards, @rushing_touchdowns, @receiving_targets, @receptions, @receiving_yards, 
+                        @receiving_touchdowns, @return_touchdowns, @two_point_conversions, @fumbles_lost, @field_goals_made, 
+                        @field_goals_attempted, @field_goals_made_0_to_19, @field_goals_made_20_to_29, @field_goals_made_30_to_39, @field_goals_made_40_to_49, 
+                        @field_goals_made_50_plus, @extra_points_made, @extra_points_attempted, @defensive_touchdowns, @special_teams_touchdowns, 
+                        @touchdowns_scored, @fumbles_forced, @fumbles_recovered, @interceptions, @tackles_for_loss, 
+                        @quarterback_hits, @sacks, @safeties, @blocked_kicks, @points_allowed)
+                    ON CONFLICT (player_id, team_id, week) DO UPDATE
+                    SET name = EXCLUDED.name,
+                        position = EXCLUDED.position,
+                        status = EXCLUDED.status,
+                        injury_status = EXCLUDED.injury_status,
+                        fantasy_points = EXCLUDED.fantasy_points,
+                        passing_completions = EXCLUDED.passing_completions,
+                        passing_attempts = EXCLUDED.passing_attempts,
+                        passing_yards = EXCLUDED.passing_yards,
+                        passing_touchdowns = EXCLUDED.passing_touchdowns,
+                        passing_interceptions = EXCLUDED.passing_interceptions,
+                        passing_rating = EXCLUDED.passing_rating,
+                        rushing_attempts = EXCLUDED.rushing_attempts,
+                        rushing_yards = EXCLUDED.rushing_yards,
+                        rushing_touchdowns = EXCLUDED.rushing_touchdowns,
+                        receiving_targets = EXCLUDED.receiving_targets,
+                        receptions = EXCLUDED.receptions,
+                        receiving_yards = EXCLUDED.receiving_yards,
+                        receiving_touchdowns = EXCLUDED.receiving_touchdowns,
+                        return_touchdowns = EXCLUDED.return_touchdowns,
+                        two_point_conversions = EXCLUDED.two_point_conversions,
+                        fumbles_lost = EXCLUDED.fumbles_lost,
+                        field_goals_made = EXCLUDED.field_goals_made,
+                        field_goals_attempted = EXCLUDED.field_goals_attempted,
+                        field_goals_made_0_to_19 = EXCLUDED.field_goals_made_0_to_19,
+                        field_goals_made_20_to_29 = EXCLUDED.field_goals_made_20_to_29,
+                        field_goals_made_30_to_39 = EXCLUDED.field_goals_made_30_to_39,
+                        field_goals_made_40_to_49 = EXCLUDED.field_goals_made_40_to_49,
+                        field_goals_made_50_plus = EXCLUDED.field_goals_made_50_plus,
+                        extra_points_made = EXCLUDED.extra_points_made,
+                        extra_points_attempted = EXCLUDED.extra_points_attempted,
+                        defensive_touchdowns = EXCLUDED.defensive_touchdowns,
+                        special_teams_touchdowns = EXCLUDED.special_teams_touchdowns,
+                        touchdowns_scored = EXCLUDED.touchdowns_scored,
+                        fumbles_forced = EXCLUDED.fumbles_forced,
+                        fumbles_recovered = EXCLUDED.fumbles_recovered,
+                        interceptions = EXCLUDED.interceptions,
+                        tackles_for_loss = EXCLUDED.tackles_for_loss,
+                        quarterback_hits = EXCLUDED.quarterback_hits,
+                        sacks = EXCLUDED.sacks,
+                        safeties = EXCLUDED.safeties,
+                        blocked_kicks = EXCLUDED.blocked_kicks,
+                        points_allowed = EXCLUDED.points_allowed;";
                 using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsExt.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsExt.TeamId);
-                    command.Parameters.AddWithValue("@week", week);
+                    command.Parameters.AddWithValue("@week", playerStatsExt.Week);
                     command.Parameters.AddWithValue("@name", playerStatsExt.Name);
                     command.Parameters.AddWithValue("@position", playerStatsExt.Position);
                     command.Parameters.AddWithValue("@status", playerStatsExt.Status);
@@ -657,70 +656,86 @@ namespace Capstone.DAO.Reference
                     command.Parameters.AddWithValue("@safeties", playerStatsExt.Safeties);
                     command.Parameters.AddWithValue("@blocked_kicks", playerStatsExt.BlockedKicks);
                     command.Parameters.AddWithValue("@points_allowed", playerStatsExt.PointsAllowed);
+
                     await command.ExecuteNonQueryAsync();
                 }
             }
         }
 
-        public async Task UpdateDefenseStatsExtAsync(PlayerStatsExt playerStatsExt)
+        public async Task UpsertDefenseStatsExtAsync(PlayerStatsExt playerStatsExt)
         {
-            int week = await _configurationDao.GetConfigurationValue("current_week");
-
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 string sql = @"
-                    UPDATE player_stats_ext
-                    SET team_id = @team_id,
-                        name = (SELECT name FROM players WHERE player_id = @player_id),
-                        position = @position,
-                        status = @status,
-                        injury_status = @injury_status,
-                        fantasy_points = @fantasy_points,
-                        passing_completions = @passing_completions,
-                        passing_attempts = @passing_attempts,
-                        passing_yards = @passing_yards,
-                        passing_touchdowns = @passing_touchdowns,
-                        passing_interceptions = @passing_interceptions,
-                        passing_rating = @passing_rating,
-                        rushing_attempts = @rushing_attempts,
-                        rushing_yards = @rushing_yards,
-                        rushing_touchdowns = @rushing_touchdowns,
-                        receiving_targets = @receiving_targets,
-                        receptions = @receptions,
-                        receiving_yards = @receiving_yards,
-                        receiving_touchdowns = @receiving_touchdowns,
-                        return_touchdowns = @return_touchdowns,
-                        two_point_conversions = @two_point_conversions,
-                        fumbles_lost = @fumbles_lost,
-                        field_goals_made = @field_goals_made,
-                        field_goals_attempted = @field_goals_attempted,
-                        field_goals_made_0_to_19 = @field_goals_made_0_to_19,
-                        field_goals_made_20_to_29 = @field_goals_made_20_to_29,
-                        field_goals_made_30_to_39 = @field_goals_made_30_to_39,
-                        field_goals_made_40_to_49 = @field_goals_made_40_to_49,
-                        field_goals_made_50_plus = @field_goals_made_50_plus,
-                        extra_points_made = @extra_points_made,
-                        extra_points_attempted = @extra_points_attempted,
-                        defensive_touchdowns = @defensive_touchdowns,
-                        special_teams_touchdowns = @special_teams_touchdowns,
-                        touchdowns_scored = @touchdowns_scored,
-                        fumbles_forced = @fumbles_forced,
-                        fumbles_recovered = @fumbles_recovered,
-                        interceptions = @interceptions,
-                        tackles_for_loss = @tackles_for_loss,
-                        quarterback_hits = @quarterback_hits,
-                        sacks = @sacks,
-                        safeties = @safeties,
-                        blocked_kicks = @blocked_kicks,
-                        points_allowed = @points_allowed
-                    WHERE player_id = @player_id
-                        AND week = @week;";
+                    INSERT INTO player_stats_ext (
+                        player_id, team_id, week, name, position, 
+                        status, injury_status, fantasy_points, passing_completions, passing_attempts, 
+                        passing_yards, passing_touchdowns, passing_interceptions, passing_rating, rushing_attempts, 
+                        rushing_yards, rushing_touchdowns, receiving_targets, receptions, receiving_yards, 
+                        receiving_touchdowns, return_touchdowns, two_point_conversions, fumbles_lost, field_goals_made, 
+                        field_goals_attempted, field_goals_made_0_to_19, field_goals_made_20_to_29, field_goals_made_30_to_39, field_goals_made_40_to_49, 
+                        field_goals_made_50_plus, extra_points_made, extra_points_attempted, defensive_touchdowns, special_teams_touchdowns, 
+                        touchdowns_scored, fumbles_forced, fumbles_recovered, interceptions, tackles_for_loss, 
+                        quarterback_hits, sacks, safeties, blocked_kicks, points_allowed) 
+                    VALUES (
+                        @player_id, @team_id, @week, (SELECT name FROM players WHERE player_id = @player_id), @position, 
+                        @status, @injury_status, @fantasy_points, @passing_completions, @passing_attempts, 
+                        @passing_yards, @passing_touchdowns, @passing_interceptions, @passing_rating, @rushing_attempts, 
+                        @rushing_yards, @rushing_touchdowns, @receiving_targets, @receptions, @receiving_yards, 
+                        @receiving_touchdowns, @return_touchdowns, @two_point_conversions, @fumbles_lost, @field_goals_made, 
+                        @field_goals_attempted, @field_goals_made_0_to_19, @field_goals_made_20_to_29, @field_goals_made_30_to_39, @field_goals_made_40_to_49, 
+                        @field_goals_made_50_plus, @extra_points_made, @extra_points_attempted, @defensive_touchdowns, @special_teams_touchdowns, 
+                        @touchdowns_scored, @fumbles_forced, @fumbles_recovered, @interceptions, @tackles_for_loss, 
+                        @quarterback_hits, @sacks, @safeties, @blocked_kicks, @points_allowed)
+                    ON CONFLICT (player_id, team_id, week) DO UPDATE
+                    SET name = EXCLUDED.name,
+                        position = EXCLUDED.position,
+                        status = EXCLUDED.status,
+                        injury_status = EXCLUDED.injury_status,
+                        fantasy_points = EXCLUDED.fantasy_points,
+                        passing_completions = EXCLUDED.passing_completions,
+                        passing_attempts = EXCLUDED.passing_attempts,
+                        passing_yards = EXCLUDED.passing_yards,
+                        passing_touchdowns = EXCLUDED.passing_touchdowns,
+                        passing_interceptions = EXCLUDED.passing_interceptions,
+                        passing_rating = EXCLUDED.passing_rating,
+                        rushing_attempts = EXCLUDED.rushing_attempts,
+                        rushing_yards = EXCLUDED.rushing_yards,
+                        rushing_touchdowns = EXCLUDED.rushing_touchdowns,
+                        receiving_targets = EXCLUDED.receiving_targets,
+                        receptions = EXCLUDED.receptions,
+                        receiving_yards = EXCLUDED.receiving_yards,
+                        receiving_touchdowns = EXCLUDED.receiving_touchdowns,
+                        return_touchdowns = EXCLUDED.return_touchdowns,
+                        two_point_conversions = EXCLUDED.two_point_conversions,
+                        fumbles_lost = EXCLUDED.fumbles_lost,
+                        field_goals_made = EXCLUDED.field_goals_made,
+                        field_goals_attempted = EXCLUDED.field_goals_attempted,
+                        field_goals_made_0_to_19 = EXCLUDED.field_goals_made_0_to_19,
+                        field_goals_made_20_to_29 = EXCLUDED.field_goals_made_20_to_29,
+                        field_goals_made_30_to_39 = EXCLUDED.field_goals_made_30_to_39,
+                        field_goals_made_40_to_49 = EXCLUDED.field_goals_made_40_to_49,
+                        field_goals_made_50_plus = EXCLUDED.field_goals_made_50_plus,
+                        extra_points_made = EXCLUDED.extra_points_made,
+                        extra_points_attempted = EXCLUDED.extra_points_attempted,
+                        defensive_touchdowns = EXCLUDED.defensive_touchdowns,
+                        special_teams_touchdowns = EXCLUDED.special_teams_touchdowns,
+                        touchdowns_scored = EXCLUDED.touchdowns_scored,
+                        fumbles_forced = EXCLUDED.fumbles_forced,
+                        fumbles_recovered = EXCLUDED.fumbles_recovered,
+                        interceptions = EXCLUDED.interceptions,
+                        tackles_for_loss = EXCLUDED.tackles_for_loss,
+                        quarterback_hits = EXCLUDED.quarterback_hits,
+                        sacks = EXCLUDED.sacks,
+                        safeties = EXCLUDED.safeties,
+                        blocked_kicks = EXCLUDED.blocked_kicks,
+                        points_allowed = EXCLUDED.points_allowed;";
                 using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsExt.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsExt.TeamId);
-                    command.Parameters.AddWithValue("@week", week);
+                    command.Parameters.AddWithValue("@week", playerStatsExt.Week);
                     command.Parameters.AddWithValue("@position", playerStatsExt.Position);
                     command.Parameters.AddWithValue("@status", playerStatsExt.Status);
                     command.Parameters.AddWithValue("@injury_status", playerStatsExt.InjuryStatus ?? (object)DBNull.Value);
@@ -762,70 +777,86 @@ namespace Capstone.DAO.Reference
                     command.Parameters.AddWithValue("@safeties", playerStatsExt.Safeties);
                     command.Parameters.AddWithValue("@blocked_kicks", playerStatsExt.BlockedKicks);
                     command.Parameters.AddWithValue("@points_allowed", playerStatsExt.PointsAllowed);
+
                     await command.ExecuteNonQueryAsync();
                 }
             }
         }
 
-        public async Task UpdatePlayerProjectionsExtAsync(PlayerStatsExt playerStatsExt)
+        public async Task UpsertPlayerProjectionsExtAsync(PlayerStatsExt playerStatsExt)
         {
-            int week = await _configurationDao.GetConfigurationValue("current_week");
-
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 string sql = @"
-                    UPDATE player_projections_ext
-                    SET team_id = @team_id,
-                        name = @name,
-                        position = @position,
-                        status = @status,
-                        injury_status = @injury_status,
-                        fantasy_points = @fantasy_points,
-                        passing_completions = @passing_completions,
-                        passing_attempts = @passing_attempts,
-                        passing_yards = @passing_yards,
-                        passing_touchdowns = @passing_touchdowns,
-                        passing_interceptions = @passing_interceptions,
-                        passing_rating = @passing_rating,
-                        rushing_attempts = @rushing_attempts,
-                        rushing_yards = @rushing_yards,
-                        rushing_touchdowns = @rushing_touchdowns,
-                        receiving_targets = @receiving_targets,
-                        receptions = @receptions,
-                        receiving_yards = @receiving_yards,
-                        receiving_touchdowns = @receiving_touchdowns,
-                        return_touchdowns = @return_touchdowns,
-                        two_point_conversions = @two_point_conversions,
-                        fumbles_lost = @fumbles_lost,
-                        field_goals_made = @field_goals_made,
-                        field_goals_attempted = @field_goals_attempted,
-                        field_goals_made_0_to_19 = @field_goals_made_0_to_19,
-                        field_goals_made_20_to_29 = @field_goals_made_20_to_29,
-                        field_goals_made_30_to_39 = @field_goals_made_30_to_39,
-                        field_goals_made_40_to_49 = @field_goals_made_40_to_49,
-                        field_goals_made_50_plus = @field_goals_made_50_plus,
-                        extra_points_made = @extra_points_made,
-                        extra_points_attempted = @extra_points_attempted,
-                        defensive_touchdowns = @defensive_touchdowns,
-                        special_teams_touchdowns = @special_teams_touchdowns,
-                        touchdowns_scored = @touchdowns_scored,
-                        fumbles_forced = @fumbles_forced,
-                        fumbles_recovered = @fumbles_recovered,
-                        interceptions = @interceptions,
-                        tackles_for_loss = @tackles_for_loss,
-                        quarterback_hits = @quarterback_hits,
-                        sacks = @sacks,
-                        safeties = @safeties,
-                        blocked_kicks = @blocked_kicks,
-                        points_allowed = @points_allowed
-                    WHERE player_id = @player_id
-                        AND week = @week;";
+                    INSERT INTO player_projections_ext (
+                        player_id, team_id, week, name, position, 
+                        status, injury_status, fantasy_points, passing_completions, passing_attempts, 
+                        passing_yards, passing_touchdowns, passing_interceptions, passing_rating, rushing_attempts, 
+                        rushing_yards, rushing_touchdowns, receiving_targets, receptions, receiving_yards, 
+                        receiving_touchdowns, return_touchdowns, two_point_conversions, fumbles_lost, field_goals_made, 
+                        field_goals_attempted, field_goals_made_0_to_19, field_goals_made_20_to_29, field_goals_made_30_to_39, field_goals_made_40_to_49, 
+                        field_goals_made_50_plus, extra_points_made, extra_points_attempted, defensive_touchdowns, special_teams_touchdowns, 
+                        touchdowns_scored, fumbles_forced, fumbles_recovered, interceptions, tackles_for_loss, 
+                        quarterback_hits, sacks, safeties, blocked_kicks, points_allowed) 
+                    VALUES (
+                        @player_id, @team_id, @week, @name, @position, 
+                        @status, @injury_status, @fantasy_points, @passing_completions, @passing_attempts, 
+                        @passing_yards, @passing_touchdowns, @passing_interceptions, @passing_rating, @rushing_attempts, 
+                        @rushing_yards, @rushing_touchdowns, @receiving_targets, @receptions, @receiving_yards, 
+                        @receiving_touchdowns, @return_touchdowns, @two_point_conversions, @fumbles_lost, @field_goals_made, 
+                        @field_goals_attempted, @field_goals_made_0_to_19, @field_goals_made_20_to_29, @field_goals_made_30_to_39, @field_goals_made_40_to_49, 
+                        @field_goals_made_50_plus, @extra_points_made, @extra_points_attempted, @defensive_touchdowns, @special_teams_touchdowns, 
+                        @touchdowns_scored, @fumbles_forced, @fumbles_recovered, @interceptions, @tackles_for_loss, 
+                        @quarterback_hits, @sacks, @safeties, @blocked_kicks, @points_allowed)
+                    ON CONFLICT (player_id, team_id, week) DO UPDATE
+                    SET name = EXCLUDED.name,
+                        position = EXCLUDED.position,
+                        status = EXCLUDED.status,
+                        injury_status = EXCLUDED.injury_status,
+                        fantasy_points = EXCLUDED.fantasy_points,
+                        passing_completions = EXCLUDED.passing_completions,
+                        passing_attempts = EXCLUDED.passing_attempts,
+                        passing_yards = EXCLUDED.passing_yards,
+                        passing_touchdowns = EXCLUDED.passing_touchdowns,
+                        passing_interceptions = EXCLUDED.passing_interceptions,
+                        passing_rating = EXCLUDED.passing_rating,
+                        rushing_attempts = EXCLUDED.rushing_attempts,
+                        rushing_yards = EXCLUDED.rushing_yards,
+                        rushing_touchdowns = EXCLUDED.rushing_touchdowns,
+                        receiving_targets = EXCLUDED.receiving_targets,
+                        receptions = EXCLUDED.receptions,
+                        receiving_yards = EXCLUDED.receiving_yards,
+                        receiving_touchdowns = EXCLUDED.receiving_touchdowns,
+                        return_touchdowns = EXCLUDED.return_touchdowns,
+                        two_point_conversions = EXCLUDED.two_point_conversions,
+                        fumbles_lost = EXCLUDED.fumbles_lost,
+                        field_goals_made = EXCLUDED.field_goals_made,
+                        field_goals_attempted = EXCLUDED.field_goals_attempted,
+                        field_goals_made_0_to_19 = EXCLUDED.field_goals_made_0_to_19,
+                        field_goals_made_20_to_29 = EXCLUDED.field_goals_made_20_to_29,
+                        field_goals_made_30_to_39 = EXCLUDED.field_goals_made_30_to_39,
+                        field_goals_made_40_to_49 = EXCLUDED.field_goals_made_40_to_49,
+                        field_goals_made_50_plus = EXCLUDED.field_goals_made_50_plus,
+                        extra_points_made = EXCLUDED.extra_points_made,
+                        extra_points_attempted = EXCLUDED.extra_points_attempted,
+                        defensive_touchdowns = EXCLUDED.defensive_touchdowns,
+                        special_teams_touchdowns = EXCLUDED.special_teams_touchdowns,
+                        touchdowns_scored = EXCLUDED.touchdowns_scored,
+                        fumbles_forced = EXCLUDED.fumbles_forced,
+                        fumbles_recovered = EXCLUDED.fumbles_recovered,
+                        interceptions = EXCLUDED.interceptions,
+                        tackles_for_loss = EXCLUDED.tackles_for_loss,
+                        quarterback_hits = EXCLUDED.quarterback_hits,
+                        sacks = EXCLUDED.sacks,
+                        safeties = EXCLUDED.safeties,
+                        blocked_kicks = EXCLUDED.blocked_kicks,
+                        points_allowed = EXCLUDED.points_allowed;";
                 using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsExt.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsExt.TeamId);
-                    command.Parameters.AddWithValue("@week", week);
+                    command.Parameters.AddWithValue("@week", playerStatsExt.Week);
                     command.Parameters.AddWithValue("@name", playerStatsExt.Name);
                     command.Parameters.AddWithValue("@position", playerStatsExt.Position);
                     command.Parameters.AddWithValue("@status", playerStatsExt.Status);
@@ -868,70 +899,86 @@ namespace Capstone.DAO.Reference
                     command.Parameters.AddWithValue("@safeties", playerStatsExt.Safeties);
                     command.Parameters.AddWithValue("@blocked_kicks", playerStatsExt.BlockedKicks);
                     command.Parameters.AddWithValue("@points_allowed", playerStatsExt.PointsAllowed);
+
                     await command.ExecuteNonQueryAsync();
                 }
             }
         }
 
-        public async Task UpdateDefenseProjectionsExtAsync(PlayerStatsExt playerStatsExt)
+        public async Task UpsertDefenseProjectionsExtAsync(PlayerStatsExt playerStatsExt)
         {
-            int week = await _configurationDao.GetConfigurationValue("current_week");
-
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 string sql = @"
-                    UPDATE player_projections_ext
-                    SET team_id = @team_id,
-                        name = (SELECT name FROM players WHERE player_id = @player_id),
-                        position = @position,
-                        status = @status,
-                        injury_status = @injury_status,
-                        fantasy_points = @fantasy_points,
-                        passing_completions = @passing_completions,
-                        passing_attempts = @passing_attempts,
-                        passing_yards = @passing_yards,
-                        passing_touchdowns = @passing_touchdowns,
-                        passing_interceptions = @passing_interceptions,
-                        passing_rating = @passing_rating,
-                        rushing_attempts = @rushing_attempts,
-                        rushing_yards = @rushing_yards,
-                        rushing_touchdowns = @rushing_touchdowns,
-                        receiving_targets = @receiving_targets,
-                        receptions = @receptions,
-                        receiving_yards = @receiving_yards,
-                        receiving_touchdowns = @receiving_touchdowns,
-                        return_touchdowns = @return_touchdowns,
-                        two_point_conversions = @two_point_conversions,
-                        fumbles_lost = @fumbles_lost,
-                        field_goals_made = @field_goals_made,
-                        field_goals_attempted = @field_goals_attempted,
-                        field_goals_made_0_to_19 = @field_goals_made_0_to_19,
-                        field_goals_made_20_to_29 = @field_goals_made_20_to_29,
-                        field_goals_made_30_to_39 = @field_goals_made_30_to_39,
-                        field_goals_made_40_to_49 = @field_goals_made_40_to_49,
-                        field_goals_made_50_plus = @field_goals_made_50_plus,
-                        extra_points_made = @extra_points_made,
-                        extra_points_attempted = @extra_points_attempted,
-                        defensive_touchdowns = @defensive_touchdowns,
-                        special_teams_touchdowns = @special_teams_touchdowns,
-                        touchdowns_scored = @touchdowns_scored,
-                        fumbles_forced = @fumbles_forced,
-                        fumbles_recovered = @fumbles_recovered,
-                        interceptions = @interceptions,
-                        tackles_for_loss = @tackles_for_loss,
-                        quarterback_hits = @quarterback_hits,
-                        sacks = @sacks,
-                        safeties = @safeties,
-                        blocked_kicks = @blocked_kicks,
-                        points_allowed = @points_allowed
-                    WHERE player_id = @player_id
-                        AND week = @week;";
+                    INSERT INTO player_projections_ext (
+                        player_id, team_id, week, name, position, 
+                        status, injury_status, fantasy_points, passing_completions, passing_attempts, 
+                        passing_yards, passing_touchdowns, passing_interceptions, passing_rating, rushing_attempts, 
+                        rushing_yards, rushing_touchdowns, receiving_targets, receptions, receiving_yards, 
+                        receiving_touchdowns, return_touchdowns, two_point_conversions, fumbles_lost, field_goals_made, 
+                        field_goals_attempted, field_goals_made_0_to_19, field_goals_made_20_to_29, field_goals_made_30_to_39, field_goals_made_40_to_49, 
+                        field_goals_made_50_plus, extra_points_made, extra_points_attempted, defensive_touchdowns, special_teams_touchdowns, 
+                        touchdowns_scored, fumbles_forced, fumbles_recovered, interceptions, tackles_for_loss, 
+                        quarterback_hits, sacks, safeties, blocked_kicks, points_allowed) 
+                    VALUES (
+                        @player_id, @team_id, @week, (SELECT name FROM players WHERE player_id = @player_id), @position, 
+                        @status, @injury_status, @fantasy_points, @passing_completions, @passing_attempts, 
+                        @passing_yards, @passing_touchdowns, @passing_interceptions, @passing_rating, @rushing_attempts, 
+                        @rushing_yards, @rushing_touchdowns, @receiving_targets, @receptions, @receiving_yards, 
+                        @receiving_touchdowns, @return_touchdowns, @two_point_conversions, @fumbles_lost, @field_goals_made, 
+                        @field_goals_attempted, @field_goals_made_0_to_19, @field_goals_made_20_to_29, @field_goals_made_30_to_39, @field_goals_made_40_to_49, 
+                        @field_goals_made_50_plus, @extra_points_made, @extra_points_attempted, @defensive_touchdowns, @special_teams_touchdowns, 
+                        @touchdowns_scored, @fumbles_forced, @fumbles_recovered, @interceptions, @tackles_for_loss,
+                        @quarterback_hits, @sacks, @safeties, @blocked_kicks, @points_allowed)
+                    ON CONFLICT (player_id, team_id, week) DO UPDATE
+                    SET name = EXCLUDED.name,
+                        position = EXCLUDED.position,
+                        status = EXCLUDED.status,
+                        injury_status = EXCLUDED.injury_status,
+                        fantasy_points = EXCLUDED.fantasy_points,
+                        passing_completions = EXCLUDED.passing_completions,
+                        passing_attempts = EXCLUDED.passing_attempts,
+                        passing_yards = EXCLUDED.passing_yards,
+                        passing_touchdowns = EXCLUDED.passing_touchdowns,
+                        passing_interceptions = EXCLUDED.passing_interceptions,
+                        passing_rating = EXCLUDED.passing_rating,
+                        rushing_attempts = EXCLUDED.rushing_attempts,
+                        rushing_yards = EXCLUDED.rushing_yards,
+                        rushing_touchdowns = EXCLUDED.rushing_touchdowns,
+                        receiving_targets = EXCLUDED.receiving_targets,
+                        receptions = EXCLUDED.receptions,
+                        receiving_yards = EXCLUDED.receiving_yards,
+                        receiving_touchdowns = EXCLUDED.receiving_touchdowns,
+                        return_touchdowns = EXCLUDED.return_touchdowns,
+                        two_point_conversions = EXCLUDED.two_point_conversions,
+                        fumbles_lost = EXCLUDED.fumbles_lost,
+                        field_goals_made = EXCLUDED.field_goals_made,
+                        field_goals_attempted = EXCLUDED.field_goals_attempted,
+                        field_goals_made_0_to_19 = EXCLUDED.field_goals_made_0_to_19,
+                        field_goals_made_20_to_29 = EXCLUDED.field_goals_made_20_to_29,
+                        field_goals_made_30_to_39 = EXCLUDED.field_goals_made_30_to_39,
+                        field_goals_made_40_to_49 = EXCLUDED.field_goals_made_40_to_49,
+                        field_goals_made_50_plus = EXCLUDED.field_goals_made_50_plus,
+                        extra_points_made = EXCLUDED.extra_points_made,
+                        extra_points_attempted = EXCLUDED.extra_points_attempted,
+                        defensive_touchdowns = EXCLUDED.defensive_touchdowns,
+                        special_teams_touchdowns = EXCLUDED.special_teams_touchdowns,
+                        touchdowns_scored = EXCLUDED.touchdowns_scored,
+                        fumbles_forced = EXCLUDED.fumbles_forced,
+                        fumbles_recovered = EXCLUDED.fumbles_recovered,
+                        interceptions = EXCLUDED.interceptions,
+                        tackles_for_loss = EXCLUDED.tackles_for_loss,
+                        quarterback_hits = EXCLUDED.quarterback_hits,
+                        sacks = EXCLUDED.sacks,
+                        safeties = EXCLUDED.safeties,
+                        blocked_kicks = EXCLUDED.blocked_kicks,
+                        points_allowed = EXCLUDED.points_allowed;";
                 using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsExt.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsExt.TeamId);
-                    command.Parameters.AddWithValue("@week", week);
+                    command.Parameters.AddWithValue("@week", playerStatsExt.Week);
                     command.Parameters.AddWithValue("@position", playerStatsExt.Position);
                     command.Parameters.AddWithValue("@status", playerStatsExt.Status);
                     command.Parameters.AddWithValue("@injury_status", playerStatsExt.InjuryStatus ?? (object)DBNull.Value);
@@ -973,6 +1020,7 @@ namespace Capstone.DAO.Reference
                     command.Parameters.AddWithValue("@safeties", playerStatsExt.Safeties);
                     command.Parameters.AddWithValue("@blocked_kicks", playerStatsExt.BlockedKicks);
                     command.Parameters.AddWithValue("@points_allowed", playerStatsExt.PointsAllowed);
+
                     await command.ExecuteNonQueryAsync();
                 }
             }
