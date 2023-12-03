@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Capstone.DAO;
 using Capstone.DAO.Reference;
 using Capstone.Models;
+using Capstone.Models.Data;
 using Capstone.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -123,6 +124,58 @@ namespace Capstone.Controllers
             catch (Exception e)
             {
                 Console.WriteLine($"Error updating player projections: {e.Message}");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+
+        [HttpPost("stats/ext")]
+        public async Task<ActionResult> AddPlayerStatsExt()
+        {
+            try
+            {
+                List<PlayerStats> playerStats = await _fantasyDataService.GetAllPlayerStatsAsync();
+                List<DefenseStats> defenseStats = await _fantasyDataService.GetAllDefenseStatsAsync();
+                foreach (PlayerStats playerStat in playerStats)
+                {
+                    PlayerStatsExt playerStatsExt = PlayerStatsExt.FromPlayerStatsExt(playerStat);
+                    await _playerStatsDao.AddPlayerStatsExtAsync(playerStatsExt);
+                };
+                foreach (DefenseStats defenseStat in defenseStats)
+                {
+                    PlayerStatsExt playerStatsExt = PlayerStatsExt.FromDefenseStatsExt(defenseStat);
+                    await _playerStatsDao.AddDefenseStatsExtAsync(playerStatsExt);
+                };
+                return Ok("Player stats extended added successfully.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error adding player stats extended: {e.Message}");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+
+        [HttpPost("projections/ext")]
+        public async Task<ActionResult> AddPlayerProjectionsExt()
+        {
+            try
+            {
+                List<PlayerStats> playerProjections = await _fantasyDataService.GetAllPlayerProjectionsAsync();
+                List<DefenseStats> defenseProjections = await _fantasyDataService.GetAllDefenseProjectionsAsync();
+                foreach (PlayerStats playerProjection in playerProjections)
+                {
+                    PlayerStatsExt playerProjectionsExt = PlayerStatsExt.FromPlayerStatsExt(playerProjection);
+                    await _playerStatsDao.AddPlayerProjectionsExtAsync(playerProjectionsExt);
+                };
+                foreach (DefenseStats defenseProjection in defenseProjections)
+                {
+                    PlayerStatsExt playerProjectionsExt = PlayerStatsExt.FromDefenseStatsExt(defenseProjection);
+                    await _playerStatsDao.AddDefenseProjectionsExtAsync(playerProjectionsExt);
+                };
+                return Ok("Player projections extended added successfully.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error adding player projections extended: {e.Message}");
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }
