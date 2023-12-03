@@ -23,5 +23,10 @@ namespace Capstone.DAO.Reference
         Task AddDefenseStatsExtAsync(PlayerStatsExt playerStatsExt);
         Task AddPlayerProjectionsExtAsync(PlayerStatsExt playerStatsExt);
         Task AddDefenseProjectionsExtAsync(PlayerStatsExt playerStatsExt);
+
+        Task UpdatePlayerStatsExtAsync(PlayerStatsExt playerStatsExt);
+        Task UpdateDefenseStatsExtAsync(PlayerStatsExt playerStatsExt);
+        Task UpdatePlayerProjectionsExtAsync(PlayerStatsExt playerStatsExt);
+        Task UpdateDefenseProjectionsExtAsync(PlayerStatsExt playerStatsExt);
     }
 }
