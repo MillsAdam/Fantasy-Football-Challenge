@@ -101,6 +101,46 @@ const DatabaseService = {
         }
     },
 
+    async createPlayerStatsExt() {
+        try {
+            const response = await axios.post(`http://localhost:5000/api/players/stats/ext`, {});
+            return response.data;
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            throw error;
+        }
+    },
+
+    async updatePlayerStatsExt() {
+        try {
+            const response = await axios.put(`http://localhost:5000/api/players/stats/ext`, {});
+            return response.data;
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            throw error;
+        }
+    },
+
+    async createPlayerProjectionsExt() {
+        try {
+            const response = await axios.post(`http://localhost:5000/api/players/projections/ext`, {});
+            return response.data;
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            throw error;
+        }
+    },
+
+    async updatePlayerProjectionsExt() {
+        try {
+            const response = await axios.put(`http://localhost:5000/api/players/projections/ext`, {});
+            return response.data;
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            throw error;
+        }
+    },
+
     async updateLineupScores() {
         try {
             const response = await axios.put(`http://localhost:5000/api/scores/lineups`, {});

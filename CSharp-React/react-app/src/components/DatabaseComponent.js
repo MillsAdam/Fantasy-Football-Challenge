@@ -175,7 +175,8 @@ function DatabaseComponent() {
         try {
             if (authToken && currentUser.role === 'admin') {
                 const newPlayerStats = await DatabaseService.createPlayerStats();
-                if (newPlayerStats) {
+                const newPlayerStatsExt = await DatabaseService.createPlayerStatsExt();
+                if (newPlayerStats && newPlayerStatsExt) {
                     displaySuccessMessage("Player stats created successfully")
                 }
             }
@@ -195,7 +196,8 @@ function DatabaseComponent() {
         try {
             if (authToken && currentUser.role === 'admin') {
                 const updatedPlayerStats = await DatabaseService.updatePlayerStats();
-                if (updatedPlayerStats) {
+                const updatedPlayerStatsExt = await DatabaseService.updatePlayerStatsExt();
+                if (updatedPlayerStats && updatedPlayerStatsExt) {
                     displaySuccessMessage("Player stats updated successfully")
                 }
             }
@@ -215,7 +217,8 @@ function DatabaseComponent() {
         try {
             if (authToken && currentUser.role === 'admin') {
                 const newPlayerProjections = await DatabaseService.createPlayerProjections();
-                if (newPlayerProjections) {
+                const newPlayerProjectionsExt = await DatabaseService.createPlayerProjectionsExt();
+                if (newPlayerProjections && newPlayerProjectionsExt) {
                     displaySuccessMessage("Player projections created successfully")
                 }
             }
@@ -235,7 +238,8 @@ function DatabaseComponent() {
         try {
             if (authToken && currentUser.role === 'admin') {
                 const updatedPlayerProjections = await DatabaseService.updatePlayerProjections();
-                if (updatedPlayerProjections) {
+                const updatedPlayerProjectionsExt = await DatabaseService.updatePlayerProjectionsExt();
+                if (updatedPlayerProjections && updatedPlayerProjectionsExt) {
                     displaySuccessMessage("Player projections updated successfully")
                 }
             }
@@ -325,13 +329,6 @@ function DatabaseComponent() {
                         return a.configKey.localeCompare(b.configKey);
                     });
                     const sortedConfigKeys = fetchedConfiguration.map(config => config.configKey).sort();
-                    // const translateConfigurations = fetchedConfiguration.map(config => {
-                    //     if (config.configKey === 'lock_rosters') {
-                    //         return {...config, configValue: translateLockRostersValue(config.configValue)}
-                    //     }
-                    //     return config;
-                    // });
-                    // setConfigurations(translatedConfigurations);
                     setConfigurations(sortedConfigurations);
                     setDynamicConfigKeyOptions(sortedConfigKeys);
                 }
