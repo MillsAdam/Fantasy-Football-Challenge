@@ -72,15 +72,15 @@ namespace Capstone.Services
 
             for (int week = 1; week <= 18; week++)
             {
-                var weeklyStats = await GetPlayerStatsAsync("2023REG", week);
+                var weeklyStats = await GetPlayerStatsAsync("2022REG", week);
                 allPlayerStats.AddRange(weeklyStats);
             }
 
-            for (int week = 1; week <= 4; week++)
-            {
-                var weeklyStats = await GetPlayerStatsAsync("2023POST", week);
-                allPlayerStats.AddRange(weeklyStats);
-            }
+            // for (int week = 1; week <= 4; week++)
+            // {
+            //     var weeklyStats = await GetPlayerStatsAsync("2022POST", week);
+            //     allPlayerStats.AddRange(weeklyStats);
+            // }
 
             return allPlayerStats;
         }
@@ -112,15 +112,15 @@ namespace Capstone.Services
 
             for (int week = 1; week <= 18; week++)
             {
-                var weeklyStats = await GetDefenseStatsAsync("2023REG", week);
+                var weeklyStats = await GetDefenseStatsAsync("2022REG", week);
                 allDefenseStats.AddRange(weeklyStats);
             }
 
-            for (int week = 1; week <= 4; week++)
-            {
-                var weeklyStats = await GetDefenseStatsAsync("2023POST", week);
-                allDefenseStats.AddRange(weeklyStats);
-            }
+            // for (int week = 1; week <= 4; week++)
+            // {
+            //     var weeklyStats = await GetDefenseStatsAsync("2022POST", week);
+            //     allDefenseStats.AddRange(weeklyStats);
+            // }
 
             return allDefenseStats;
         }
@@ -152,15 +152,15 @@ namespace Capstone.Services
 
             for (int week = 1; week <= 18; week++)
             {
-                var weeklyProjections = await GetPlayerProjectionsAsync("2023REG", week);
+                var weeklyProjections = await GetPlayerProjectionsAsync("2022REG", week);
                 allPlayerProjections.AddRange(weeklyProjections);
             }
 
-            for (int week = 1; week <= 4; week++)
-            {
-                var weeklyProjections = await GetPlayerProjectionsAsync("2023POST", week);
-                allPlayerProjections.AddRange(weeklyProjections);
-            }
+            // for (int week = 1; week <= 4; week++)
+            // {
+            //     var weeklyProjections = await GetPlayerProjectionsAsync("2022POST", week);
+            //     allPlayerProjections.AddRange(weeklyProjections);
+            // }
 
             return allPlayerProjections;
         }
@@ -192,15 +192,15 @@ namespace Capstone.Services
 
             for (int week = 1; week <= 18; week++)
             {
-                var weeklyProjections = await GetDefenseProjectionsAsync("2023REG", week);
+                var weeklyProjections = await GetDefenseProjectionsAsync("2022REG", week);
                 allDefenseProjections.AddRange(weeklyProjections);
             }
 
-            for (int week = 1; week <= 4; week++)
-            {
-                var weeklyProjections = await GetDefenseProjectionsAsync("2023POST", week);
-                allDefenseProjections.AddRange(weeklyProjections);
-            }
+            // for (int week = 1; week <= 4; week++)
+            // {
+            //     var weeklyProjections = await GetDefenseProjectionsAsync("2022POST", week);
+            //     allDefenseProjections.AddRange(weeklyProjections);
+            // }
 
             return allDefenseProjections;
         }
@@ -230,19 +230,28 @@ namespace Capstone.Services
         // Get Stats/Projections for Update
         public async Task<List<PlayerStats>> GetPlayerStatsForUpdateAsync()
         {
-            int week = await _configurationDao.GetConfigurationValue("current_week");
-            int seasonType = await _configurationDao.GetConfigurationValue("current_season_type");
+            int currentWeek = await _configurationDao.GetConfigurationValue("current_week");
+            string season;
+            int adjustedWeek;
 
-            string season = seasonType switch
+            if (currentWeek <= 18)
             {
-                1 => "2023REG",
-                3 => "2023POST",
-                _ => throw new InvalidOperationException("Invalid season type")
-            };
+                season = "2022REG";
+                adjustedWeek = currentWeek;
+            }
+            else if (currentWeek > 18)
+            {
+                season = "2022POST";
+                adjustedWeek = currentWeek - 18;
+            }
+            else
+            {
+                throw new InvalidOperationException("Invalid current week");
+            }
 
             try
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/PlayerGameStatsByWeek/{season}/{week}");
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/PlayerGameStatsByWeek/{season}/{adjustedWeek}");
                 request.Headers.Add("Ocp-Apim-Subscription-Key", ApiKey);
 
                 var response = await _client.SendAsync(request);
@@ -254,26 +263,35 @@ namespace Capstone.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error fetching data for {season} and {week}: {e.Message}");
+                Console.WriteLine($"Error fetching data for {season} and {adjustedWeek}: {e.Message}");
                 return null;
             }
         }
 
         public async Task<List<DefenseStats>> GetDefenseStatsForUpdateAsync()
         {
-            int week = await _configurationDao.GetConfigurationValue("current_week");
-            int seasonType = await _configurationDao.GetConfigurationValue("current_season_type");
+            int currentWeek = await _configurationDao.GetConfigurationValue("current_week");
+            string season;
+            int adjustedWeek;
 
-            string season = seasonType switch
+            if (currentWeek <= 18)
             {
-                1 => "2023REG",
-                3 => "2023POST",
-                _ => throw new InvalidOperationException("Invalid season type")
-            };
+                season = "2022REG";
+                adjustedWeek = currentWeek;
+            }
+            else if (currentWeek > 18)
+            {
+                season = "2022POST";
+                adjustedWeek = currentWeek - 18;
+            }
+            else
+            {
+                throw new InvalidOperationException("Invalid current week");
+            }
 
             try
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/FantasyDefenseByGame/{season}/{week}");
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/FantasyDefenseByGame/{season}/{adjustedWeek}");
                 request.Headers.Add("Ocp-Apim-Subscription-Key", ApiKey);
 
                 var response = await _client.SendAsync(request);
@@ -285,26 +303,35 @@ namespace Capstone.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error fetching data for {season} and {week}: {e.Message}");
+                Console.WriteLine($"Error fetching data for {season} and {adjustedWeek}: {e.Message}");
                 return null;
             }
         }
 
         public async Task<List<PlayerStats>> GetPlayerProjectionsForUpdateAsync()
         {
-            int week = await _configurationDao.GetConfigurationValue("current_week");
-            int seasonType = await _configurationDao.GetConfigurationValue("current_season_type");
+            int currentWeek = await _configurationDao.GetConfigurationValue("current_week");
+            string season;
+            int adjustedWeek;
 
-            string season = seasonType switch
+            if (currentWeek <= 18)
             {
-                1 => "2023REG",
-                3 => "2023POST",
-                _ => throw new InvalidOperationException("Invalid season type")
-            };
+                season = "2022REG";
+                adjustedWeek = currentWeek;
+            }
+            else if (currentWeek > 18)
+            {
+                season = "2022POST";
+                adjustedWeek = currentWeek - 18;
+            }
+            else
+            {
+                throw new InvalidOperationException("Invalid current week");
+            }
 
             try
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/PlayerGameProjectionStatsByWeek/{season}/{week}");
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/PlayerGameProjectionStatsByWeek/{season}/{adjustedWeek}");
                 request.Headers.Add("Ocp-Apim-Subscription-Key", ApiKey);
 
                 var response = await _client.SendAsync(request);
@@ -316,26 +343,35 @@ namespace Capstone.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error fetching data for {season} and {week}: {e.Message}");
+                Console.WriteLine($"Error fetching data for {season} and {adjustedWeek}: {e.Message}");
                 return null;
             }
         }
 
         public async Task<List<DefenseStats>> GetDefenseProjectionsForUpdateAsync()
         {
-            int week = await _configurationDao.GetConfigurationValue("current_week");
-            int seasonType = await _configurationDao.GetConfigurationValue("current_season_type");
+            int currentWeek = await _configurationDao.GetConfigurationValue("current_week");
+            string season;
+            int adjustedWeek;
 
-            string season = seasonType switch
+            if (currentWeek <= 18)
             {
-                1 => "2023REG",
-                3 => "2023POST",
-                _ => throw new InvalidOperationException("Invalid season type")
-            };
+                season = "2022REG";
+                adjustedWeek = currentWeek;
+            }
+            else if (currentWeek > 18)
+            {
+                season = "2022POST";
+                adjustedWeek = currentWeek - 18;
+            }
+            else
+            {
+                throw new InvalidOperationException("Invalid current week");
+            }
 
             try
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/FantasyDefenseProjectionsByGame/{season}/{week}");
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/FantasyDefenseProjectionsByGame/{season}/{adjustedWeek}");
                 request.Headers.Add("Ocp-Apim-Subscription-Key", ApiKey);
 
                 var response = await _client.SendAsync(request);
@@ -347,7 +383,7 @@ namespace Capstone.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error fetching data for {season} and {week}: {e.Message}");
+                Console.WriteLine($"Error fetching data for {season} and {adjustedWeek}: {e.Message}");
                 return null;
             }
         }

@@ -60,6 +60,11 @@ namespace Capstone
             services.AddTransient<IPlayerStatsDao, PlayerStatsSqlDao>();
             services.AddTransient<IConfigurationDao, ConfigurationSqlDao>();
             services.AddTransient<IQBSeasonTotalDao, QBSeasonTotalSqlDao>();
+            services.AddTransient<IQBSeasonAverageDao, QBSeasonAverageSqlDao>();
+            services.AddTransient<IQBLast4TotalDao, QBLast4TotalSqlDao>();
+            services.AddTransient<IQBLast4AverageDao, QBLast4AverageSqlDao>();
+            services.AddTransient<IQBWeeklyTotalDao, QBWeeklyTotalSqlDao>();
+            services.AddTransient<IQBWeeklyProjectedDao, QBWeeklyProjectedSqlDao>();
 
             // configure jwt authentication
             var key = Encoding.ASCII.GetBytes(Configuration["JwtSecret"]);

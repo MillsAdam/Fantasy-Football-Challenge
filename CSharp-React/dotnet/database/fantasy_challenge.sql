@@ -40,14 +40,13 @@ CREATE TABLE players (
 CREATE TABLE player_stats (
 	player_id int NOT NULL,
 	team_id int NOT NULL,
-	season_type int NOT NULL,
 	week int NOT NULL,
 	name varchar(50) NOT NULL,
 	position varchar(50) NOT NULL,
 	status varchar(50),
 	injury_status varchar(50),
 	fantasy_points numeric(5,2),
-	CONSTRAINT PK_player_stats PRIMARY KEY (player_id, team_id, season_type, week),
+	CONSTRAINT PK_player_stats PRIMARY KEY (player_id, team_id, week),
 	CONSTRAINT FK_player_stats_player_id FOREIGN KEY (player_id) REFERENCES players(player_id),
 	CONSTRAINT FK_player_stats_team_id FOREIGN KEY (team_id) REFERENCES teams(team_id)
 );
@@ -55,14 +54,13 @@ CREATE TABLE player_stats (
 CREATE TABLE player_projections (
 	player_id int NOT NULL,
 	team_id int NOT NULL,
-	season_type int NOT NULL,
 	week int NOT NULL,
 	name varchar(50) NOT NULL,
 	position varchar(50) NOT NULL,
 	status varchar(50),
 	injury_status varchar(50),
 	fantasy_points numeric(5,2),
-	CONSTRAINT PK_player_projections PRIMARY KEY (player_id, team_id, season_type, week),
+	CONSTRAINT PK_player_projections PRIMARY KEY (player_id, team_id, week),
 	CONSTRAINT FK_player_projections_player_id FOREIGN KEY (player_id) REFERENCES players(player_id),
 	CONSTRAINT FK_player_projections_team_id FOREIGN KEY (team_id) REFERENCES teams(team_id)
 );
@@ -106,7 +104,6 @@ CREATE TABLE lineup_players (
 CREATE TABLE player_stats_ext (
 	player_id int NOT NULL,
 	team_id int NOT NULL,
-	season_type int NOT NULL,
 	week int NOT NULL,
 	name varchar(50) NOT NULL,
 	position varchar(50) NOT NULL,
@@ -150,7 +147,7 @@ CREATE TABLE player_stats_ext (
 	safeties numeric(5,2),
 	blocked_kicks numeric(5,2),
 	points_allowed numeric(5,2),
-	CONSTRAINT PK_player_stats_ext PRIMARY KEY (player_id, team_id, season_type, week),
+	CONSTRAINT PK_player_stats_ext PRIMARY KEY (player_id, team_id, week),
 	CONSTRAINT FK_player_stats_ext_player_id FOREIGN KEY (player_id) REFERENCES players(player_id),
 	CONSTRAINT FK_player_stats_ext_team_id FOREIGN KEY (team_id) REFERENCES teams(team_id)
 );
@@ -158,7 +155,6 @@ CREATE TABLE player_stats_ext (
 CREATE TABLE player_projections_ext (
 	player_id int NOT NULL,
 	team_id int NOT NULL,
-	season_type int NOT NULL,
 	week int NOT NULL,
 	name varchar(50) NOT NULL,
 	position varchar(50) NOT NULL,
@@ -202,7 +198,7 @@ CREATE TABLE player_projections_ext (
 	safeties numeric(5,2),
 	blocked_kicks numeric(5,2),
 	points_allowed numeric(5,2),
-	CONSTRAINT PK_player_projections_ext PRIMARY KEY (player_id, team_id, season_type, week),
+	CONSTRAINT PK_player_projections_ext PRIMARY KEY (player_id, team_id, week),
 	CONSTRAINT FK_player_projections_ext_player_id FOREIGN KEY (player_id) REFERENCES players(player_id),
 	CONSTRAINT FK_player_projections_ext_team_id FOREIGN KEY (team_id) REFERENCES teams(team_id)
 );

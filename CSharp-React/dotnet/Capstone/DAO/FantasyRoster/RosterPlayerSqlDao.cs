@@ -118,9 +118,8 @@ namespace Capstone.DAO
                     JOIN teams t ON p.team_id = t.team_id 
                     LEFT JOIN player_stats ps ON p.player_id = ps.player_id 
                     LEFT JOIN configuration c_week ON c_week.config_key = 'current_week' 
-                    LEFT JOIN configuration c_season_type ON c_season_type.config_key = 'current_season_type' 
-                    LEFT JOIN player_projections ppi ON p.player_id = ppi.player_id AND ppi.week = c_week.config_value AND ppi.season_type = c_season_type.config_value 
-                    LEFT JOIN player_stats psi ON p.player_id = psi.player_id AND psi.week = c_week.config_value AND psi.season_type = c_season_type.config_value 
+                    LEFT JOIN player_projections ppi ON p.player_id = ppi.player_id AND ppi.week = c_week.config_value  
+                    LEFT JOIN player_stats psi ON p.player_id = psi.player_id AND psi.week = c_week.config_value  
                     WHERE roster_id = @roster_id 
                     GROUP BY 
                         rp.roster_id, 

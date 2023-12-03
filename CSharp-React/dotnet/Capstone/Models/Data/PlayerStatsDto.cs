@@ -9,7 +9,6 @@ namespace Capstone.Models
     {
         public int PlayerId { get; set; } // Player ID
         public int TeamId { get; set; } // Team ID
-        public int SeasonType { get; set; } // Season Type
         public int Week { get; set; } // Week
         public string Name { get; set; } // Player Name
         public string Position { get; set; } // Player Position
@@ -17,12 +16,15 @@ namespace Capstone.Models
         public string? InjuryStatus { get; set; } // Player Injury Status // Nullable
         public double FantasyPoints { get; set; } // Fantasy Points
 
+
+        private const int PostSeasonType = 3;
+        private const int RegularSeasonWeeks = 18;
+
         public static PlayerStatsDto FromPlayerStats(PlayerStats playerStats) => new PlayerStatsDto
         {
             PlayerId = playerStats.PlayerID,
             TeamId = playerStats.TeamID,
-            SeasonType = playerStats.SeasonType,
-            Week = playerStats.Week,
+            Week = playerStats.SeasonType == PostSeasonType ? playerStats.Week + RegularSeasonWeeks : playerStats.Week,
             Name = playerStats.Name,
             Position = playerStats.Position,
             Status = playerStats.Played == 1 ? "Active" : "Inactive",
@@ -34,8 +36,7 @@ namespace Capstone.Models
         {
             PlayerId = defenseStats.PlayerID,
             TeamId = defenseStats.TeamID,
-            SeasonType = defenseStats.SeasonType,
-            Week = defenseStats.Week,
+            Week = defenseStats.SeasonType == PostSeasonType ? defenseStats.Week + RegularSeasonWeeks : defenseStats.Week,
             Name = defenseStats.Team,
             Position = "DEF",
             Status = "Active",

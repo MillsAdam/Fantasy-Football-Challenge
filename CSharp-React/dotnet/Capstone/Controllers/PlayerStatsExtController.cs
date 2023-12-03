@@ -21,12 +21,11 @@ namespace Capstone.Controllers
         public async Task<ActionResult> searchPlayerStatsAsync(
             [FromQuery] string position, 
             [FromQuery] string interval, 
-            [FromQuery] string points, 
             [FromQuery] string category, 
             [FromQuery] string filter = "", 
             [FromQuery] int? week = null)
         {
-            return Ok(await _playerStatsExtService.searchPlayerStatsAsync(position, interval, points, category, filter, week));
+            return Ok(await _playerStatsExtService.searchPlayerStatsAsync(position, interval, category, filter, week));
         }
     }
 }

@@ -26,12 +26,11 @@ namespace Capstone.DAO.Reference
             {
                 await connection.OpenAsync();
                 using NpgsqlCommand command = new NpgsqlCommand(
-                    "INSERT INTO player_stats (player_id, team_id, season_type, week, name, position, status, injury_status, fantasy_points) " +
-                    "VALUES (@player_id, @team_id, @season_type, @week, @name, @position, @status, @injury_status, @fantasy_points);", connection);
+                    "INSERT INTO player_stats (player_id, team_id, week, name, position, status, injury_status, fantasy_points) " +
+                    "VALUES (@player_id, @team_id, @week, @name, @position, @status, @injury_status, @fantasy_points);", connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsDto.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsDto.TeamId);
-                    command.Parameters.AddWithValue("@season_type", playerStatsDto.SeasonType);
                     command.Parameters.AddWithValue("@week", playerStatsDto.Week);
                     command.Parameters.AddWithValue("@name", playerStatsDto.Name);
                     command.Parameters.AddWithValue("@position", playerStatsDto.Position);
@@ -49,14 +48,13 @@ namespace Capstone.DAO.Reference
             {
                 await connection.OpenAsync();
                 using NpgsqlCommand command = new NpgsqlCommand(
-                    "INSERT INTO player_stats (player_id, team_id, season_type, week, name, position, status, injury_status, fantasy_points) " +
-                    "VALUES (@player_id, @team_id, @season_type, @week, " +
+                    "INSERT INTO player_stats (player_id, team_id, week, name, position, status, injury_status, fantasy_points) " +
+                    "VALUES (@player_id, @team_id, @week, " +
                         "(SELECT name FROM players WHERE player_id = @player_id), " +
                         "@position, @status, @injury_status, @fantasy_points);", connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsDto.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsDto.TeamId);
-                    command.Parameters.AddWithValue("@season_type", playerStatsDto.SeasonType);
                     command.Parameters.AddWithValue("@week", playerStatsDto.Week);
                     command.Parameters.AddWithValue("@position", playerStatsDto.Position);
                     command.Parameters.AddWithValue("@status", playerStatsDto.Status);
@@ -73,12 +71,11 @@ namespace Capstone.DAO.Reference
             {
                 await connection.OpenAsync();
                 using NpgsqlCommand command = new NpgsqlCommand(
-                    "INSERT INTO player_projections (player_id, team_id, season_type, week, name, position, status, injury_status, fantasy_points) " +
-                    "VALUES (@player_id, @team_id, @season_type, @week, @name, @position, @status, @injury_status, @fantasy_points);", connection);
+                    "INSERT INTO player_projections (player_id, team_id, week, name, position, status, injury_status, fantasy_points) " +
+                    "VALUES (@player_id, @team_id, @week, @name, @position, @status, @injury_status, @fantasy_points);", connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsDto.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsDto.TeamId);
-                    command.Parameters.AddWithValue("@season_type", playerStatsDto.SeasonType);
                     command.Parameters.AddWithValue("@week", playerStatsDto.Week);
                     command.Parameters.AddWithValue("@name", playerStatsDto.Name);
                     command.Parameters.AddWithValue("@position", playerStatsDto.Position);
@@ -96,13 +93,12 @@ namespace Capstone.DAO.Reference
             {
                 await connection.OpenAsync();
                 using NpgsqlCommand command = new NpgsqlCommand(
-                    @"INSERT INTO player_projections (player_id, team_id, season_type, week, name, position, status, injury_status, fantasy_points) 
-                    VALUES (@player_id, @team_id, @season_type, @week, 
+                    @"INSERT INTO player_projections (player_id, team_id, week, name, position, status, injury_status, fantasy_points) 
+                    VALUES (@player_id, @team_id, @week, 
                         (SELECT name FROM players WHERE player_id = @player_id), @position, @status, @injury_status, @fantasy_points);", connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsDto.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsDto.TeamId);
-                    command.Parameters.AddWithValue("@season_type", playerStatsDto.SeasonType);
                     command.Parameters.AddWithValue("@week", playerStatsDto.Week);
                     command.Parameters.AddWithValue("@position", playerStatsDto.Position);
                     command.Parameters.AddWithValue("@status", playerStatsDto.Status);
@@ -116,7 +112,6 @@ namespace Capstone.DAO.Reference
         public async Task UpdatePlayerStatsDtoAsync(PlayerStatsDto playerStatsDto)
         {
             int week = await _configurationDao.GetConfigurationValue("current_week");
-            int seasonType = await _configurationDao.GetConfigurationValue("current_season_type");
 
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
@@ -130,14 +125,12 @@ namespace Capstone.DAO.Reference
                         injury_status = @injury_status,
                         fantasy_points = @fantasy_points
                     WHERE player_id = @player_id 
-                        AND season_type = @season_type 
                         AND week = @week;";
 
                 using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsDto.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsDto.TeamId);
-                    command.Parameters.AddWithValue("@season_type", seasonType);
                     command.Parameters.AddWithValue("@week", week);
                     command.Parameters.AddWithValue("@name", playerStatsDto.Name);
                     command.Parameters.AddWithValue("@position", playerStatsDto.Position);
@@ -153,7 +146,6 @@ namespace Capstone.DAO.Reference
         public async Task UpdateDefenseStatsDtoAsync(PlayerStatsDto playerStatsDto)
         {
             int week = await _configurationDao.GetConfigurationValue("current_week");
-            int seasonType = await _configurationDao.GetConfigurationValue("current_season_type");
 
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
@@ -161,7 +153,6 @@ namespace Capstone.DAO.Reference
                 string sql = @"
                     UPDATE player_stats
                     SET team_id = @team_id,
-                        season_type = @season_type,
                         week = @week,
                         name = (SELECT name FROM players WHERE player_id = @player_id),
                         position = @position,
@@ -169,14 +160,12 @@ namespace Capstone.DAO.Reference
                         injury_status = @injury_status,
                         fantasy_points = @fantasy_points
                     WHERE player_id = @player_id 
-                        AND season_type = @season_type 
                         AND week = @week;";
 
                 using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsDto.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsDto.TeamId);
-                    command.Parameters.AddWithValue("@season_type", seasonType);
                     command.Parameters.AddWithValue("@week", week);
                     command.Parameters.AddWithValue("@position", playerStatsDto.Position);
                     command.Parameters.AddWithValue("@status", playerStatsDto.Status);
@@ -191,7 +180,6 @@ namespace Capstone.DAO.Reference
         public async Task UpdatePlayerProjectionsDtoAsync(PlayerStatsDto playerStatsDto)
         {
             int week = await _configurationDao.GetConfigurationValue("current_week");
-            int seasonType = await _configurationDao.GetConfigurationValue("current_season_type");
 
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
@@ -205,14 +193,12 @@ namespace Capstone.DAO.Reference
                         injury_status = @injury_status,
                         fantasy_points = @fantasy_points
                     WHERE player_id = @player_id 
-                        AND season_type = @season_type 
                         AND week = @week;";
 
                 using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsDto.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsDto.TeamId);
-                    command.Parameters.AddWithValue("@season_type", seasonType);
                     command.Parameters.AddWithValue("@week", week);
                     command.Parameters.AddWithValue("@name", playerStatsDto.Name);
                     command.Parameters.AddWithValue("@position", playerStatsDto.Position);
@@ -228,7 +214,6 @@ namespace Capstone.DAO.Reference
         public async Task UpdateDefenseProjectionsDtoAsync(PlayerStatsDto playerStatsDto)
         {
             int week = await _configurationDao.GetConfigurationValue("current_week");
-            int seasonType = await _configurationDao.GetConfigurationValue("current_season_type");
 
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
@@ -241,13 +226,13 @@ namespace Capstone.DAO.Reference
                         status = @status,
                         injury_status = @injury_status,
                         fantasy_points = @fantasy_points
-                    WHERE player_id = @player_id;";
+                    WHERE player_id = @player_id 
+                        AND week = @week;";
 
                 using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsDto.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsDto.TeamId);
-                    command.Parameters.AddWithValue("@season_type", seasonType);
                     command.Parameters.AddWithValue("@week", week);
                     command.Parameters.AddWithValue("@position", playerStatsDto.Position);
                     command.Parameters.AddWithValue("@status", playerStatsDto.Status);
@@ -268,29 +253,28 @@ namespace Capstone.DAO.Reference
                 await connection.OpenAsync();
                 using NpgsqlCommand command = new NpgsqlCommand(
                     @"INSERT INTO player_stats_ext (
-                        player_id, team_id, season_type, week, name, 
-                        position, status, injury_status, fantasy_points, passing_completions, 
-                        passing_attempts, passing_yards, passing_touchdowns, passing_interceptions, passing_rating, 
-                        rushing_attempts, rushing_yards, rushing_touchdowns, receiving_targets, receptions, 
-                        receiving_yards, receiving_touchdowns, return_touchdowns, two_point_conversions, fumbles_lost, 
-                        field_goals_made, field_goals_attempted, field_goals_made_0_to_19, field_goals_made_20_to_29, field_goals_made_30_to_39, 
-                        field_goals_made_40_to_49, field_goals_made_50_plus, extra_points_made, extra_points_attempted, defensive_touchdowns, 
-                        special_teams_touchdowns, touchdowns_scored, fumbles_forced, fumbles_recovered, interceptions, 
-                        tackles_for_loss, quarterback_hits, sacks, safeties, blocked_kicks, points_allowed) 
+                        player_id, team_id, week, name, position, 
+                        status, injury_status, fantasy_points, passing_completions, passing_attempts, 
+                        passing_yards, passing_touchdowns, passing_interceptions, passing_rating, rushing_attempts, 
+                        rushing_yards, rushing_touchdowns, receiving_targets, receptions, receiving_yards, 
+                        receiving_touchdowns, return_touchdowns, two_point_conversions, fumbles_lost, field_goals_made, 
+                        field_goals_attempted, field_goals_made_0_to_19, field_goals_made_20_to_29, field_goals_made_30_to_39, field_goals_made_40_to_49, 
+                        field_goals_made_50_plus, extra_points_made, extra_points_attempted, defensive_touchdowns, special_teams_touchdowns, 
+                        touchdowns_scored, fumbles_forced, fumbles_recovered, interceptions, tackles_for_loss, 
+                        quarterback_hits, sacks, safeties, blocked_kicks, points_allowed) 
                     VALUES (
-                        @player_id, @team_id, @season_type, @week, @name, 
-                        @position, @status, @injury_status, @fantasy_points, @passing_completions, 
-                        @passing_attempts, @passing_yards, @passing_touchdowns, @passing_interceptions, @passing_rating, 
-                        @rushing_attempts, @rushing_yards, @rushing_touchdowns, @receiving_targets, @receptions, 
-                        @receiving_yards, @receiving_touchdowns, @return_touchdowns, @two_point_conversions, @fumbles_lost, 
-                        @field_goals_made, @field_goals_attempted, @field_goals_made_0_to_19, @field_goals_made_20_to_29, @field_goals_made_30_to_39, 
-                        @field_goals_made_40_to_49, @field_goals_made_50_plus, @extra_points_made, @extra_points_attempted, @defensive_touchdowns, 
-                        @special_teams_touchdowns, @touchdowns_scored, @fumbles_forced, @fumbles_recovered, @interceptions, 
-                        @tackles_for_loss, @quarterback_hits, @sacks, @safeties, @blocked_kicks, @points_allowed);", connection);
+                        @player_id, @team_id, @week, @name, @position, 
+                        @status, @injury_status, @fantasy_points, @passing_completions, @passing_attempts, 
+                        @passing_yards, @passing_touchdowns, @passing_interceptions, @passing_rating, @rushing_attempts, 
+                        @rushing_yards, @rushing_touchdowns, @receiving_targets, @receptions, @receiving_yards, 
+                        @receiving_touchdowns, @return_touchdowns, @two_point_conversions, @fumbles_lost, @field_goals_made, 
+                        @field_goals_attempted, @field_goals_made_0_to_19, @field_goals_made_20_to_29, @field_goals_made_30_to_39, @field_goals_made_40_to_49, 
+                        @field_goals_made_50_plus, @extra_points_made, @extra_points_attempted, @defensive_touchdowns, @special_teams_touchdowns, 
+                        @touchdowns_scored, @fumbles_forced, @fumbles_recovered, @interceptions, @tackles_for_loss, 
+                        @quarterback_hits, @sacks, @safeties, @blocked_kicks, @points_allowed);", connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsExt.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsExt.TeamId);
-                    command.Parameters.AddWithValue("@season_type", playerStatsExt.SeasonType);
                     command.Parameters.AddWithValue("@week", playerStatsExt.Week);
                     command.Parameters.AddWithValue("@name", playerStatsExt.Name);
                     command.Parameters.AddWithValue("@position", playerStatsExt.Position);
@@ -347,29 +331,28 @@ namespace Capstone.DAO.Reference
                 await connection.OpenAsync();
                 using NpgsqlCommand command = new NpgsqlCommand(
                     @"INSERT INTO player_stats_ext (
-                        player_id, team_id, season_type, week, name, 
-                        position, status, injury_status, fantasy_points, passing_completions, 
-                        passing_attempts, passing_yards, passing_touchdowns, passing_interceptions, passing_rating, 
-                        rushing_attempts, rushing_yards, rushing_touchdowns, receiving_targets, receptions, 
-                        receiving_yards, receiving_touchdowns, return_touchdowns, two_point_conversions, fumbles_lost, 
-                        field_goals_made, field_goals_attempted, field_goals_made_0_to_19, field_goals_made_20_to_29, field_goals_made_30_to_39, 
-                        field_goals_made_40_to_49, field_goals_made_50_plus, extra_points_made, extra_points_attempted, defensive_touchdowns, 
-                        special_teams_touchdowns, touchdowns_scored, fumbles_forced, fumbles_recovered, interceptions, 
-                        tackles_for_loss, quarterback_hits, sacks, safeties, blocked_kicks, points_allowed) 
+                        player_id, team_id, week, name, position, 
+                        status, injury_status, fantasy_points, passing_completions, passing_attempts, 
+                        passing_yards, passing_touchdowns, passing_interceptions, passing_rating, rushing_attempts, 
+                        rushing_yards, rushing_touchdowns, receiving_targets, receptions, receiving_yards, 
+                        receiving_touchdowns, return_touchdowns, two_point_conversions, fumbles_lost, field_goals_made, 
+                        field_goals_attempted, field_goals_made_0_to_19, field_goals_made_20_to_29, field_goals_made_30_to_39, field_goals_made_40_to_49, 
+                        field_goals_made_50_plus, extra_points_made, extra_points_attempted, defensive_touchdowns, special_teams_touchdowns, 
+                        touchdowns_scored, fumbles_forced, fumbles_recovered, interceptions, tackles_for_loss, 
+                        quarterback_hits, sacks, safeties, blocked_kicks, points_allowed) 
                     VALUES (
-                        @player_id, @team_id, @season_type, @week, (SELECT name FROM players WHERE player_id = @player_id), 
-                        @position, @status, @injury_status, @fantasy_points, @passing_completions, 
-                        @passing_attempts, @passing_yards, @passing_touchdowns, @passing_interceptions, @passing_rating, 
-                        @rushing_attempts, @rushing_yards, @rushing_touchdowns, @receiving_targets, @receptions, 
-                        @receiving_yards, @receiving_touchdowns, @return_touchdowns, @two_point_conversions, @fumbles_lost, 
-                        @field_goals_made, @field_goals_attempted, @field_goals_made_0_to_19, @field_goals_made_20_to_29, @field_goals_made_30_to_39, 
-                        @field_goals_made_40_to_49, @field_goals_made_50_plus, @extra_points_made, @extra_points_attempted, @defensive_touchdowns, 
-                        @special_teams_touchdowns, @touchdowns_scored, @fumbles_forced, @fumbles_recovered, @interceptions, 
-                        @tackles_for_loss, @quarterback_hits, @sacks, @safeties, @blocked_kicks, @points_allowed);", connection);
+                        @player_id, @team_id, @week, (SELECT name FROM players WHERE player_id = @player_id), @position, 
+                        @status, @injury_status, @fantasy_points, @passing_completions, @passing_attempts, 
+                        @passing_yards, @passing_touchdowns, @passing_interceptions, @passing_rating, @rushing_attempts, 
+                        @rushing_yards, @rushing_touchdowns, @receiving_targets, @receptions, @receiving_yards, 
+                        @receiving_touchdowns, @return_touchdowns, @two_point_conversions, @fumbles_lost, @field_goals_made, 
+                        @field_goals_attempted, @field_goals_made_0_to_19, @field_goals_made_20_to_29, @field_goals_made_30_to_39, @field_goals_made_40_to_49, 
+                        @field_goals_made_50_plus, @extra_points_made, @extra_points_attempted, @defensive_touchdowns, @special_teams_touchdowns, 
+                        @touchdowns_scored, @fumbles_forced, @fumbles_recovered, @interceptions, @tackles_for_loss, 
+                        @quarterback_hits, @sacks, @safeties, @blocked_kicks, @points_allowed);", connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsExt.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsExt.TeamId);
-                    command.Parameters.AddWithValue("@season_type", playerStatsExt.SeasonType);
                     command.Parameters.AddWithValue("@week", playerStatsExt.Week);
                     command.Parameters.AddWithValue("@position", playerStatsExt.Position);
                     command.Parameters.AddWithValue("@status", playerStatsExt.Status);
@@ -425,29 +408,28 @@ namespace Capstone.DAO.Reference
                 await connection.OpenAsync();
                 using NpgsqlCommand command = new NpgsqlCommand(
                     @"INSERT INTO player_projections_ext (
-                        player_id, team_id, season_type, week, name, 
-                        position, status, injury_status, fantasy_points, passing_completions, 
-                        passing_attempts, passing_yards, passing_touchdowns, passing_interceptions, passing_rating, 
-                        rushing_attempts, rushing_yards, rushing_touchdowns, receiving_targets, receptions, 
-                        receiving_yards, receiving_touchdowns, return_touchdowns, two_point_conversions, fumbles_lost, 
-                        field_goals_made, field_goals_attempted, field_goals_made_0_to_19, field_goals_made_20_to_29, field_goals_made_30_to_39, 
-                        field_goals_made_40_to_49, field_goals_made_50_plus, extra_points_made, extra_points_attempted, defensive_touchdowns, 
-                        special_teams_touchdowns, touchdowns_scored, fumbles_forced, fumbles_recovered, interceptions, 
-                        tackles_for_loss, quarterback_hits, sacks, safeties, blocked_kicks, points_allowed) 
+                        player_id, team_id, week, name, position, 
+                        status, injury_status, fantasy_points, passing_completions, passing_attempts, 
+                        passing_yards, passing_touchdowns, passing_interceptions, passing_rating, rushing_attempts, 
+                        rushing_yards, rushing_touchdowns, receiving_targets, receptions, receiving_yards, 
+                        receiving_touchdowns, return_touchdowns, two_point_conversions, fumbles_lost, field_goals_made, 
+                        field_goals_attempted, field_goals_made_0_to_19, field_goals_made_20_to_29, field_goals_made_30_to_39, field_goals_made_40_to_49, 
+                        field_goals_made_50_plus, extra_points_made, extra_points_attempted, defensive_touchdowns, special_teams_touchdowns, 
+                        touchdowns_scored, fumbles_forced, fumbles_recovered, interceptions, tackles_for_loss, 
+                        quarterback_hits, sacks, safeties, blocked_kicks, points_allowed) 
                     VALUES (
-                        @player_id, @team_id, @season_type, @week, @name, 
-                        @position, @status, @injury_status, @fantasy_points, @passing_completions, 
-                        @passing_attempts, @passing_yards, @passing_touchdowns, @passing_interceptions, @passing_rating, 
-                        @rushing_attempts, @rushing_yards, @rushing_touchdowns, @receiving_targets, @receptions, 
-                        @receiving_yards, @receiving_touchdowns, @return_touchdowns, @two_point_conversions, @fumbles_lost, 
-                        @field_goals_made, @field_goals_attempted, @field_goals_made_0_to_19, @field_goals_made_20_to_29, @field_goals_made_30_to_39, 
-                        @field_goals_made_40_to_49, @field_goals_made_50_plus, @extra_points_made, @extra_points_attempted, @defensive_touchdowns, 
-                        @special_teams_touchdowns, @touchdowns_scored, @fumbles_forced, @fumbles_recovered, @interceptions, 
-                        @tackles_for_loss, @quarterback_hits, @sacks, @safeties, @blocked_kicks, @points_allowed);", connection);
+                        @player_id, @team_id, @week, @name, @position, 
+                        @status, @injury_status, @fantasy_points, @passing_completions, @passing_attempts, 
+                        @passing_yards, @passing_touchdowns, @passing_interceptions, @passing_rating, @rushing_attempts, 
+                        @rushing_yards, @rushing_touchdowns, @receiving_targets, @receptions, @receiving_yards, 
+                        @receiving_touchdowns, @return_touchdowns, @two_point_conversions, @fumbles_lost, @field_goals_made, 
+                        @field_goals_attempted, @field_goals_made_0_to_19, @field_goals_made_20_to_29, @field_goals_made_30_to_39, @field_goals_made_40_to_49, 
+                        @field_goals_made_50_plus, @extra_points_made, @extra_points_attempted, @defensive_touchdowns, @special_teams_touchdowns, 
+                        @touchdowns_scored, @fumbles_forced, @fumbles_recovered, @interceptions, @tackles_for_loss, 
+                        @quarterback_hits, @sacks, @safeties, @blocked_kicks, @points_allowed);", connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsExt.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsExt.TeamId);
-                    command.Parameters.AddWithValue("@season_type", playerStatsExt.SeasonType);
                     command.Parameters.AddWithValue("@week", playerStatsExt.Week);
                     command.Parameters.AddWithValue("@name", playerStatsExt.Name);
                     command.Parameters.AddWithValue("@position", playerStatsExt.Position);
@@ -504,29 +486,28 @@ namespace Capstone.DAO.Reference
                 await connection.OpenAsync();
                 using NpgsqlCommand command = new NpgsqlCommand(
                     @"INSERT INTO player_projections_ext (
-                        player_id, team_id, season_type, week, name, 
-                        position, status, injury_status, fantasy_points, passing_completions, 
-                        passing_attempts, passing_yards, passing_touchdowns, passing_interceptions, passing_rating, 
-                        rushing_attempts, rushing_yards, rushing_touchdowns, receiving_targets, receptions, 
-                        receiving_yards, receiving_touchdowns, return_touchdowns, two_point_conversions, fumbles_lost, 
-                        field_goals_made, field_goals_attempted, field_goals_made_0_to_19, field_goals_made_20_to_29, field_goals_made_30_to_39, 
-                        field_goals_made_40_to_49, field_goals_made_50_plus, extra_points_made, extra_points_attempted, defensive_touchdowns, 
-                        special_teams_touchdowns, touchdowns_scored, fumbles_forced, fumbles_recovered, interceptions, 
-                        tackles_for_loss, quarterback_hits, sacks, safeties, blocked_kicks, points_allowed) 
+                        player_id, team_id, week, name, position, 
+                        status, injury_status, fantasy_points, passing_completions, passing_attempts, 
+                        passing_yards, passing_touchdowns, passing_interceptions, passing_rating, rushing_attempts, 
+                        rushing_yards, rushing_touchdowns, receiving_targets, receptions, receiving_yards, 
+                        receiving_touchdowns, return_touchdowns, two_point_conversions, fumbles_lost, field_goals_made, 
+                        field_goals_attempted, field_goals_made_0_to_19, field_goals_made_20_to_29, field_goals_made_30_to_39, field_goals_made_40_to_49, 
+                        field_goals_made_50_plus, extra_points_made, extra_points_attempted, defensive_touchdowns, special_teams_touchdowns, 
+                        touchdowns_scored, fumbles_forced, fumbles_recovered, interceptions, tackles_for_loss, 
+                        quarterback_hits, sacks, safeties, blocked_kicks, points_allowed) 
                     VALUES (
-                        @player_id, @team_id, @season_type, @week, (SELECT name FROM players WHERE player_id = @player_id), 
-                        @position, @status, @injury_status, @fantasy_points, @passing_completions, 
-                        @passing_attempts, @passing_yards, @passing_touchdowns, @passing_interceptions, @passing_rating, 
-                        @rushing_attempts, @rushing_yards, @rushing_touchdowns, @receiving_targets, @receptions, 
-                        @receiving_yards, @receiving_touchdowns, @return_touchdowns, @two_point_conversions, @fumbles_lost, 
-                        @field_goals_made, @field_goals_attempted, @field_goals_made_0_to_19, @field_goals_made_20_to_29, @field_goals_made_30_to_39, 
-                        @field_goals_made_40_to_49, @field_goals_made_50_plus, @extra_points_made, @extra_points_attempted, @defensive_touchdowns, 
-                        @special_teams_touchdowns, @touchdowns_scored, @fumbles_forced, @fumbles_recovered, @interceptions, 
-                        @tackles_for_loss, @quarterback_hits, @sacks, @safeties, @blocked_kicks, @points_allowed);", connection);
+                        @player_id, @team_id, @week, (SELECT name FROM players WHERE player_id = @player_id), @position, 
+                        @status, @injury_status, @fantasy_points, @passing_completions, @passing_attempts, 
+                        @passing_yards, @passing_touchdowns, @passing_interceptions, @passing_rating, @rushing_attempts, 
+                        @rushing_yards, @rushing_touchdowns, @receiving_targets, @receptions, @receiving_yards, 
+                        @receiving_touchdowns, @return_touchdowns, @two_point_conversions, @fumbles_lost, @field_goals_made, 
+                        @field_goals_attempted, @field_goals_made_0_to_19, @field_goals_made_20_to_29, @field_goals_made_30_to_39, @field_goals_made_40_to_49, 
+                        @field_goals_made_50_plus, @extra_points_made, @extra_points_attempted, @defensive_touchdowns, @special_teams_touchdowns, 
+                        @touchdowns_scored, @fumbles_forced, @fumbles_recovered, @interceptions, @tackles_for_loss, 
+                        @quarterback_hits, @sacks, @safeties, @blocked_kicks, @points_allowed);", connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsExt.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsExt.TeamId);
-                    command.Parameters.AddWithValue("@season_type", playerStatsExt.SeasonType);
                     command.Parameters.AddWithValue("@week", playerStatsExt.Week);
                     command.Parameters.AddWithValue("@position", playerStatsExt.Position);
                     command.Parameters.AddWithValue("@status", playerStatsExt.Status);
@@ -578,7 +559,6 @@ namespace Capstone.DAO.Reference
         public async Task UpdatePlayerStatsExtAsync(PlayerStatsExt playerStatsExt)
         {
             int week = await _configurationDao.GetConfigurationValue("current_week");
-            int seasonType = await _configurationDao.GetConfigurationValue("current_season_type");
 
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
@@ -629,13 +609,11 @@ namespace Capstone.DAO.Reference
                         blocked_kicks = @blocked_kicks,
                         points_allowed = @points_allowed
                     WHERE player_id = @player_id
-                        AND season_type = @season_type
                         AND week = @week;";
                 using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsExt.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsExt.TeamId);
-                    command.Parameters.AddWithValue("@season_type", seasonType);
                     command.Parameters.AddWithValue("@week", week);
                     command.Parameters.AddWithValue("@name", playerStatsExt.Name);
                     command.Parameters.AddWithValue("@position", playerStatsExt.Position);
@@ -687,7 +665,6 @@ namespace Capstone.DAO.Reference
         public async Task UpdateDefenseStatsExtAsync(PlayerStatsExt playerStatsExt)
         {
             int week = await _configurationDao.GetConfigurationValue("current_week");
-            int seasonType = await _configurationDao.GetConfigurationValue("current_season_type");
 
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
@@ -738,13 +715,11 @@ namespace Capstone.DAO.Reference
                         blocked_kicks = @blocked_kicks,
                         points_allowed = @points_allowed
                     WHERE player_id = @player_id
-                        AND season_type = @season_type
                         AND week = @week;";
                 using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsExt.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsExt.TeamId);
-                    command.Parameters.AddWithValue("@season_type", seasonType);
                     command.Parameters.AddWithValue("@week", week);
                     command.Parameters.AddWithValue("@position", playerStatsExt.Position);
                     command.Parameters.AddWithValue("@status", playerStatsExt.Status);
@@ -795,7 +770,6 @@ namespace Capstone.DAO.Reference
         public async Task UpdatePlayerProjectionsExtAsync(PlayerStatsExt playerStatsExt)
         {
             int week = await _configurationDao.GetConfigurationValue("current_week");
-            int seasonType = await _configurationDao.GetConfigurationValue("current_season_type");
 
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
@@ -846,13 +820,11 @@ namespace Capstone.DAO.Reference
                         blocked_kicks = @blocked_kicks,
                         points_allowed = @points_allowed
                     WHERE player_id = @player_id
-                        AND season_type = @season_type
                         AND week = @week;";
                 using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsExt.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsExt.TeamId);
-                    command.Parameters.AddWithValue("@season_type", seasonType);
                     command.Parameters.AddWithValue("@week", week);
                     command.Parameters.AddWithValue("@name", playerStatsExt.Name);
                     command.Parameters.AddWithValue("@position", playerStatsExt.Position);
@@ -904,7 +876,6 @@ namespace Capstone.DAO.Reference
         public async Task UpdateDefenseProjectionsExtAsync(PlayerStatsExt playerStatsExt)
         {
             int week = await _configurationDao.GetConfigurationValue("current_week");
-            int seasonType = await _configurationDao.GetConfigurationValue("current_season_type");
 
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
@@ -955,13 +926,11 @@ namespace Capstone.DAO.Reference
                         blocked_kicks = @blocked_kicks,
                         points_allowed = @points_allowed
                     WHERE player_id = @player_id
-                        AND season_type = @season_type
                         AND week = @week;";
                 using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
                 {
                     command.Parameters.AddWithValue("@player_id", playerStatsExt.PlayerId);
                     command.Parameters.AddWithValue("@team_id", playerStatsExt.TeamId);
-                    command.Parameters.AddWithValue("@season_type", seasonType);
                     command.Parameters.AddWithValue("@week", week);
                     command.Parameters.AddWithValue("@position", playerStatsExt.Position);
                     command.Parameters.AddWithValue("@status", playerStatsExt.Status);

@@ -106,9 +106,8 @@ namespace Capstone.DAO
                     JOIN teams t ON p.team_id = t.team_id 
                     LEFT JOIN player_stats ps ON p.player_id = ps.player_id 
                     LEFT JOIN configuration c_week ON c_week.config_key = 'current_week' 
-                    LEFT JOIN configuration c_season_type ON c_season_type.config_key = 'current_season_type' 
-                    LEFT JOIN player_projections ppi ON p.player_id = ppi.player_id AND ppi.week = c_week.config_value AND ppi.season_type = c_season_type.config_value 
-                    LEFT JOIN player_stats psi ON p.player_id = psi.player_id AND psi.week = c_week.config_value AND psi.season_type = c_season_type.config_value 
+                    LEFT JOIN player_projections ppi ON p.player_id = ppi.player_id AND ppi.week = c_week.config_value  
+                    LEFT JOIN player_stats psi ON p.player_id = psi.player_id AND psi.week = c_week.config_value  
                     WHERE lineup_id = @lineup_id 
                     GROUP BY 
                         lp.lineup_id, 
@@ -191,7 +190,6 @@ namespace Capstone.DAO
             }
         }
 
-        // CHANGE STATUS AND INJURY STATUS TO REFLECT CORRECT WEEK
         public async Task<List<LineupPlayerDto>> GetLineupPlayerDtosByUserAndWeek(User user, int gameWeek)
         {
             List<LineupPlayerDto> lineupPlayerDtos = new List<LineupPlayerDto>();
@@ -226,15 +224,8 @@ namespace Capstone.DAO
                             WHEN @game_week = 3 THEN 'lineup_week_three' 
                             WHEN @game_week = 4 THEN 'lineup_week_four' 
                         END 
-                    LEFT JOIN configuration c_season_type ON c_season_type.config_key = 
-                        CASE 
-                            WHEN @game_week = 1 THEN 'lineup_season_type_week_one' 
-                            WHEN @game_week = 2 THEN 'lineup_season_type_week_two' 
-                            WHEN @game_week = 3 THEN 'lineup_season_type_week_three' 
-                            WHEN @game_week = 4 THEN 'lineup_season_type_week_four' 
-                        END 
-                    LEFT JOIN player_projections ppi ON p.player_id = ppi.player_id AND ppi.week = c_week.config_value AND ppi.season_type = c_season_type.config_value 
-                    LEFT JOIN player_stats psi ON p.player_id = psi.player_id AND psi.week = c_week.config_value AND psi.season_type = c_season_type.config_value 
+                    LEFT JOIN player_projections ppi ON p.player_id = ppi.player_id AND ppi.week = c_week.config_value  
+                    LEFT JOIN player_stats psi ON p.player_id = psi.player_id AND psi.week = c_week.config_value  
                     WHERE fr.user_id = @user_id  
                         AND fl.game_week = @game_week
                     GROUP BY 

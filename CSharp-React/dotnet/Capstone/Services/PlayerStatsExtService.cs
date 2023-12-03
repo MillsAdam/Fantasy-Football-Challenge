@@ -20,13 +20,13 @@ namespace Capstone.Services
             _qbService = qbService;
         }
 
-        public async Task<List<PlayerStatsExtDto>> searchPlayerStatsAsync(string position, string interval, string points, string category, string filter, int? week)
+        public async Task<List<PlayerStatsExtDto>> searchPlayerStatsAsync(string position, string interval, string category, string filter, int? week)
         {
             List<PlayerStatsExtDto> playerStatsExtDtos = new List<PlayerStatsExtDto>();
             switch(position)
             {
                 case QB:
-                    playerStatsExtDtos = await _qbService.searchQBStatsAsync(interval, points, category, filter, week);
+                    playerStatsExtDtos = await _qbService.searchQBStatsAsync(interval, category, filter, week);
                     break;
             }
 

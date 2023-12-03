@@ -8,16 +8,25 @@ using Npgsql;
 
 namespace Capstone.DAO.Position.Quarterback
 {
-    public class QBSeasonTotalSqlDao : IQBSeasonTotalDao
+    public class QBLast4TotalSqlDao : IQBLast4TotalDao
     {
         private readonly string _connectionString;
-        public QBSeasonTotalSqlDao(IConfiguration configuration)
+        private readonly IConfigurationDao _configurationDao;
+        public QBLast4TotalSqlDao(IConfiguration configuration, IConfigurationDao configurationDao)
         {
             _connectionString = configuration.GetConnectionString("Project");
+            _configurationDao = configurationDao;
         }
 
-        private const string SELECT_SQL = 
-            @"SELECT 
+        private const string SELECT_SQL =
+            @"WITH StartingWeek AS (
+                SELECT week 
+                FROM player_stats_ext 
+                WHERE week = @week 
+                ORDER BY week 
+                LIMIT 1
+            ) 
+            SELECT 
                 p.player_id, 
                 COUNT(DISTINCT pse.week) AS week, 
                 p.position, 
@@ -26,11 +35,11 @@ namespace Capstone.DAO.Position.Quarterback
                 p.status, 
                 p.injury_status, 
                 SUM(pse.passing_completions) AS passing_completions, 
-                SUM(pse.passing_attempts) AS passing_attempts, 
+                SUM(pse.passing_attempts) AS passing_attempts,
                 CASE 
                     WHEN SUM(pse.passing_attempts) = 0 THEN 0 
-                    ELSE ROUND(SUM(pse.passing_completions) / SUM(pse.passing_attempts) * 100, 2) 
-                END AS passing_completion_percentage, 
+                    ELSE ROUND((SUM(pse.passing_completions) / SUM(pse.passing_attempts)) * 100, 2) 
+                END AS completion_percentage, 
                 SUM(pse.passing_yards) AS passing_yards, 
                 SUM(pse.passing_touchdowns) AS passing_touchdowns, 
                 SUM(pse.passing_interceptions) AS passing_interceptions, 
@@ -43,18 +52,20 @@ namespace Capstone.DAO.Position.Quarterback
                 SUM(pse.fantasy_points) AS fantasy_points_total, 
                 ROUND(AVG(pse.fantasy_points), 2) AS fantasy_points_average, 
                 t.conference, 
-                t.status AS team_status, 
+                t.status AS team_status
             FROM player_stats_ext pse 
             JOIN players p ON p.player_id = pse.player_id 
             JOIN teams t ON t.team_id = pse.team_id 
-            WHERE p.position = 'QB' ";
+            CROSS JOIN StartingWeek AS sw
+            WHERE p.position = 'QB' 
+                AND pse.week <= sw.week 
+                AND pse.week >= sw.week - 3 ";
 
         private const string GROUP_BY_SQL =
             @"GROUP BY 
                 p.player_id, 
                 p.position, 
                 t.team, 
-                pse.position, 
                 p.name, 
                 p.status, 
                 p.injury_status, 
@@ -62,7 +73,7 @@ namespace Capstone.DAO.Position.Quarterback
                 t.status 
             ORDER BY fantasy_points_total DESC;";
 
-        private const string CONF_SQL = 
+        private const string CONF_SQL =
             @"AND lower(t.conference) ILIKE @conf ";
 
         private const string TEAM_SQL =
@@ -71,85 +82,99 @@ namespace Capstone.DAO.Position.Quarterback
         private const string NAME_SQL =
             @"AND lower(p.name) ILIKE @name ";
 
-        
-        public async Task<List<PlayerStatsExtDto>> getQBSeasonTotalStatsAsync()
+
+
+        public async Task<List<PlayerStatsExtDto>> getQBLast4TotalStatsAsync()
         {
-            List<PlayerStatsExtDto> qbSeasonTotalStats = new List<PlayerStatsExtDto>();
+            int week = await _configurationDao.GetConfigurationValue("current_week");
+            List<PlayerStatsExtDto> qbLast4TotalStats = new List<PlayerStatsExtDto>();
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using NpgsqlCommand command = new NpgsqlCommand(SELECT_SQL + GROUP_BY_SQL, connection);
+                using (NpgsqlCommand command = new NpgsqlCommand(SELECT_SQL + GROUP_BY_SQL, connection))
                 {
-                    NpgsqlDataReader reader = command.ExecuteReader();
-                    while (await reader.ReadAsync())
+                    command.Parameters.AddWithValue("@week", week);
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        PlayerStatsExtDto qbSeasonTotalStat = MapRowToQBStat(reader);
-                        qbSeasonTotalStats.Add(qbSeasonTotalStat);
+                        while (reader.Read())
+                        {
+                            qbLast4TotalStats.Add(MapRowToQBStat(reader));
+                        }
                     }
                 }
             }
-            return qbSeasonTotalStats;
+            return qbLast4TotalStats;
         }
 
-        public async Task<List<PlayerStatsExtDto>> getQBSeasonTotalStatsByConfAsync(string conf)
+        public async Task<List<PlayerStatsExtDto>> getQBLast4TotalStatsByConfAsync(string conf)
         {
-            List<PlayerStatsExtDto> qbSeasonTotalStatsByConf = new List<PlayerStatsExtDto>();
+            int week = await _configurationDao.GetConfigurationValue("current_week");
+            List<PlayerStatsExtDto> qbLast4TotalStatsByConf = new List<PlayerStatsExtDto>();
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using NpgsqlCommand command = new NpgsqlCommand(SELECT_SQL + CONF_SQL + GROUP_BY_SQL, connection);
+                using (NpgsqlCommand command = new NpgsqlCommand(SELECT_SQL + CONF_SQL + GROUP_BY_SQL, connection))
                 {
-                    command.Parameters.AddWithValue("conf", $"%{conf}%");
-                    NpgsqlDataReader reader = command.ExecuteReader();
-                    while (await reader.ReadAsync())
+                    command.Parameters.AddWithValue("@week", week);
+                    command.Parameters.AddWithValue("@conf", $"%{conf}%");
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        PlayerStatsExtDto qbSeasonTotalStatByConf = MapRowToQBStat(reader);
-                        qbSeasonTotalStatsByConf.Add(qbSeasonTotalStatByConf);
+                        while (reader.Read())
+                        {
+                            qbLast4TotalStatsByConf.Add(MapRowToQBStat(reader));
+                        }
                     }
                 }
             }
-            return qbSeasonTotalStatsByConf;
+            return qbLast4TotalStatsByConf;
         }
 
-        public async Task<List<PlayerStatsExtDto>> getQBSeasonTotalStatsByTeamAsync(string team)
+        public async Task<List<PlayerStatsExtDto>> getQBLast4TotalStatsByTeamAsync(string team)
         {
-            List<PlayerStatsExtDto> qbSeasonTotalStatsByTeam = new List<PlayerStatsExtDto>();
+            int week = await _configurationDao.GetConfigurationValue("current_week");
+            List<PlayerStatsExtDto> qbLast4TotalStatsByTeam = new List<PlayerStatsExtDto>();
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using NpgsqlCommand command = new NpgsqlCommand(SELECT_SQL + TEAM_SQL + GROUP_BY_SQL, connection);
+                using (NpgsqlCommand command = new NpgsqlCommand(SELECT_SQL + TEAM_SQL + GROUP_BY_SQL, connection))
                 {
-                    command.Parameters.AddWithValue("team", $"%{team}%");
-                    NpgsqlDataReader reader = command.ExecuteReader();
-                    while (await reader.ReadAsync())
+                    command.Parameters.AddWithValue("@week", week);
+                    command.Parameters.AddWithValue("@team", $"%{team}%");
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        PlayerStatsExtDto qbSeasonTotalStatByTeam = MapRowToQBStat(reader);
-                        qbSeasonTotalStatsByTeam.Add(qbSeasonTotalStatByTeam);
+                        while (reader.Read())
+                        {
+                            qbLast4TotalStatsByTeam.Add(MapRowToQBStat(reader));
+                        }
                     }
                 }
             }
-            return qbSeasonTotalStatsByTeam;
+            return qbLast4TotalStatsByTeam;
         }
 
-        public async Task<List<PlayerStatsExtDto>> getQBSeasonTotalStatsByNameAsync(string name)
+        public async Task<List<PlayerStatsExtDto>> getQBLast4TotalStatsByNameAsync(string name)
         {
-            List<PlayerStatsExtDto> qbSeasonTotalStatsByName = new List<PlayerStatsExtDto>();
+            int week = await _configurationDao.GetConfigurationValue("current_week");
+            List<PlayerStatsExtDto> qbLast4TotalStatsByName = new List<PlayerStatsExtDto>();
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using NpgsqlCommand command = new NpgsqlCommand(SELECT_SQL + NAME_SQL + GROUP_BY_SQL, connection);
+                using (NpgsqlCommand command = new NpgsqlCommand(SELECT_SQL + NAME_SQL + GROUP_BY_SQL, connection))
                 {
-                    command.Parameters.AddWithValue("name", $"%{name}%");
-                    NpgsqlDataReader reader = command.ExecuteReader();
-                    while (await reader.ReadAsync())
+                    command.Parameters.AddWithValue("@week", week);
+                    command.Parameters.AddWithValue("@name", $"%{name}%");
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        PlayerStatsExtDto qbSeasonTotalStatByName = MapRowToQBStat(reader);
-                        qbSeasonTotalStatsByName.Add(qbSeasonTotalStatByName);
+                        while (reader.Read())
+                        {
+                            qbLast4TotalStatsByName.Add(MapRowToQBStat(reader));
+                        }
                     }
                 }
             }
-            return qbSeasonTotalStatsByName;
+            return qbLast4TotalStatsByName;
         }
+
 
         private PlayerStatsExtDto MapRowToQBStat(NpgsqlDataReader reader)
         {

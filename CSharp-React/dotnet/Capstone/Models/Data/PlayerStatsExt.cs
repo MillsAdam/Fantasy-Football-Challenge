@@ -9,7 +9,6 @@ namespace Capstone.Models.Data
     {
         public int PlayerId { get; set; }
         public int? TeamId { get; set; }
-        public int SeasonType { get; set; }
         public int Week { get; set; }
         public string Name { get; set; }
         public string Position { get; set; }
@@ -54,12 +53,15 @@ namespace Capstone.Models.Data
         public double BlockedKicks { get; set; }
         public double PointsAllowed { get; set; } 
 
+
+        private const int PostSeasonType = 3;
+        private const int RegularSeasonWeeks = 18;
+
         public static PlayerStatsExt FromPlayerStatsExt(PlayerStats playerStats) => new PlayerStatsExt 
         {
             PlayerId = playerStats.PlayerID,
             TeamId = playerStats.TeamID,
-            SeasonType = playerStats.SeasonType,
-            Week = playerStats.Week,
+            Week = playerStats.SeasonType == PostSeasonType ? playerStats.Week + RegularSeasonWeeks : playerStats.Week,
             Name = playerStats.Name,
             Position = playerStats.Position,
             Status = playerStats.Played == 1 ? "Active" : "Inactive",
@@ -108,8 +110,7 @@ namespace Capstone.Models.Data
         {
             PlayerId = defenseStats.PlayerID,
             TeamId = defenseStats.TeamID,
-            SeasonType = defenseStats.SeasonType,
-            Week = defenseStats.Week,
+            Week = defenseStats.SeasonType == PostSeasonType ? defenseStats.Week + RegularSeasonWeeks : defenseStats.Week,
             Name = defenseStats.Team,
             Position = "DEF",
             Status = "Active",

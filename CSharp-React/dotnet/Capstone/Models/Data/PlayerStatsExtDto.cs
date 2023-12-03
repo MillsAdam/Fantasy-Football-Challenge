@@ -9,7 +9,6 @@ namespace Capstone.Models.Data
     {
         public int PlayerId { get; set; }
         public int TeamId { get; set; }
-        public int SeasonType { get; set; }
         public int Week { get; set; }
         public string Position { get; set; }
         public string Team { get; set; }
@@ -61,5 +60,7 @@ namespace Capstone.Models.Data
         public double Safeties { get; set; }
         public double BlockedKicks { get; set; }
         public double PointsAllowed { get; set; }
+        public string Conference { get; set; }
+        public string TeamStatus { get; set; }
     }
 }

@@ -19,7 +19,6 @@ const GAME_WEEK_OPTIONS = [1, 2, 3, 4];
 
 function LineupComponent() {
     const { authToken, currentUser } = useContext(AuthContext);
-    // const [rosterPlayers, setRosterPlayers] = useState([]);
     const [activeRosterPlayers, setActiveRosterPlayers] = useState([]);
     const [lineupPlayers, setLineupPlayers] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -73,26 +72,6 @@ function LineupComponent() {
             setError('User not found');
         }
     }, [authToken, currentUser]);
-
-    // useEffect(() => {
-    //     async function getLineupPlayersByWeek() {
-    //         setIsLoading(true);
-    //         try {
-    //             const lineupPlayersData = await LineupService.getLineupPlayersByWeek(authToken, selectedGameWeek);
-    //             setWeeklyLineupPlayers(lineupPlayersData);
-    //         } catch (error) {
-    //             console.error('An error occurred: ', error);
-    //             setError('Failed to get lineup players');
-    //         }
-    //         setIsLoading(false);
-    //     }
-
-    //     if (currentUser && currentUser.userId) {
-    //         getLineupPlayersByWeek();
-    //     } else {
-    //         setError('User not found');
-    //     }
-    // }, [authToken, currentUser, selectedGameWeek]);
 
     useEffect(() => {
         async function fetchConfigurations() {

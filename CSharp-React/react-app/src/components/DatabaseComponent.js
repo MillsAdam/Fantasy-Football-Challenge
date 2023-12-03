@@ -4,23 +4,17 @@ import DatabaseService from "../services/DatabaseService";
 import "../styles/DatabaseComponent.css";
 
 const configValueOptions = {
-    'current_week': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
-    'current_season_type': [1, 3],
+    'current_week': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
     'current_lineup_week': [1, 2, 3, 4],
     'lock_rosters': [1, 2],
     'lock_lineups': [1, 2],
-    'lineup_week_one': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
-    'lineup_week_two': [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10, 11, 12, 13, 14, 15, 16, 17, 18],
-    'lineup_week_three': [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10, 11, 12, 13, 14, 15, 16, 17, 18],
-    'lineup_week_four': [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10, 11, 12, 13, 14, 15, 16, 17, 18],
-    'lineup_season_type_week_one': [1, 3],
-    'lineup_season_type_week_two': [1, 3],
-    'lineup_season_type_week_three': [1, 3],
-    'lineup_season_type_week_four': [1, 3],
+    'lineup_week_one': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+    'lineup_week_two': [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+    'lineup_week_three': [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+    'lineup_week_four': [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
 };
 const configKeyDisplayNames = {
     'current_week': 'Current Week',
-    'current_season_type': 'Current Season Type',
     'current_lineup_week': 'Current Lineup Week',
     'lock_rosters': 'Lock Rosters',
     'lock_lineups': 'Lock Lineups',
@@ -28,10 +22,6 @@ const configKeyDisplayNames = {
     'lineup_week_two': 'Lineup Week Two',
     'lineup_week_three': 'Lineup Week Three',
     'lineup_week_four': 'Lineup Week Four',
-    'lineup_season_type_week_one': 'Lineup Season Type Week One',
-    'lineup_season_type_week_two': 'Lineup Season Type Week Two',
-    'lineup_season_type_week_three': 'Lineup Season Type Week Three',
-    'lineup_season_type_week_four': 'Lineup Season Type Week Four',
 };
 const teamNameDisplayNames = {
     'ARI': 'Arizona Cardinals',
@@ -98,14 +88,6 @@ function DatabaseComponent() {
     const toggleConfigTableVisibility = () => {
         setIsConfigTableVisible(!isConfigTableVisible);
     }
-
-    // function translateLockRostersValue(value) {
-    //     return value === 1;
-    // }
-
-    // function translateLockRostersValueBack(value) {
-    //     return value ? 1 : 2;
-    // }
 
     async function createTeams(e) {
         e.preventDefault();
@@ -188,6 +170,27 @@ function DatabaseComponent() {
         setLoadingMessage("");
     }
 
+    async function createPlayerStatsByWeek(e) {
+        e.preventDefault();
+        setLoadingMessage("Creating Player Stats By Week...");
+        setIsLoading(true);
+        setError(null);
+        try {
+            if (authToken && currentUser.role === 'admin') {
+                const newPlayerStatsByWeek = await DatabaseService.createPlayerStatsByWeek();
+                const newPlayerStatsByWeekExt = await DatabaseService.createPlayerStatsExtByWeek();
+                if (newPlayerStatsByWeek && newPlayerStatsByWeekExt) {
+                    displaySuccessMessage("Player stats by week created successfully")
+                }
+            }
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            setError('Failed to create player stats by week');
+        }
+        setIsLoading(false);
+        setLoadingMessage("");
+    }
+
     async function updatePlayerStats(e) {
         e.preventDefault();
         setLoadingMessage("Updating Player Stats...");
@@ -225,6 +228,27 @@ function DatabaseComponent() {
         } catch (error) {
             console.error('An error occurred: ', error);
             setError('Failed to create player projections');
+        }
+        setIsLoading(false);
+        setLoadingMessage("");
+    }
+
+    async function createPlayerProjectionsByWeek(e) {
+        e.preventDefault();
+        setLoadingMessage("Updating Player Projections...");
+        setIsLoading(true);
+        setError(null);
+        try {
+            if (authToken && currentUser.role === 'admin') {
+                const updatedPlayerProjections = await DatabaseService.createPlayerProjectionsByWeek();
+                const updatedPlayerProjectionsExt = await DatabaseService.createPlayerProjectionsExtByWeek();
+                if (updatedPlayerProjections && updatedPlayerProjectionsExt) {
+                    displaySuccessMessage("Player projections updated successfully")
+                }
+            }
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            setError('Failed to update player projections');
         }
         setIsLoading(false);
         setLoadingMessage("");
@@ -429,6 +453,11 @@ function DatabaseComponent() {
                             {isLoading && loadingMessage === "Creating Player Stats..." ? "Loading..." : "Create Player Stats"}
                         </button>
                     </form>
+                    <form onSubmit={createPlayerStatsByWeek}>
+                        <button className="database-button" type="submit" disabled={isLoading}>
+                            {isLoading && loadingMessage === "Creating Player Stats By Week..." ? "Loading..." : "Create Player Stats By Week"}
+                        </button>
+                    </form>
                     <form onSubmit={updatePlayerStats}>
                         <button className="database-button" type="submit" disabled={isLoading}>
                             {isLoading && loadingMessage === "Updating Player Stats..." ? "Loading..." : "Update Player Stats"}
@@ -440,6 +469,11 @@ function DatabaseComponent() {
                     <form onSubmit={createPlayerProjections}>
                         <button className="database-button" type="submit" disabled={isLoading}>
                             {isLoading && loadingMessage === "Creating Player Projections..." ? "Loading..." : "Create Player Projections"}
+                        </button>
+                    </form>
+                    <form onSubmit={createPlayerProjectionsByWeek}>
+                        <button className="database-button" type="submit" disabled={isLoading}>
+                            {isLoading && loadingMessage === "Creating Player Projections By Week..." ? "Loading..." : "Create Player Projections By Week"}
                         </button>
                     </form>
                     <form onSubmit={updatePlayerProjections}>
