@@ -129,14 +129,14 @@ function DatabaseComponent() {
         setLoadingMessage("");
     }
 
-    async function updatePlayers(e) {
+    async function upsertPlayers(e) {
         e.preventDefault();
-        setLoadingMessage("Updating Players...");
+        setLoadingMessage("Upserting Players...");
         setIsLoading(true);
         setError(null);
         try {
             if (authToken && currentUser.role === 'admin') {
-                const updatedPlayers = await DatabaseService.updatePlayers();
+                const updatedPlayers = await DatabaseService.upsertPlayers();
                 if (updatedPlayers) {
                     displaySuccessMessage("Players updated successfully")
                 }
@@ -398,9 +398,9 @@ function DatabaseComponent() {
                             {isLoading && loadingMessage === "Creating Players..." ? "Loading..." : "Create Players"}
                         </button>
                     </form>
-                    <form onSubmit={updatePlayers}>
+                    <form onSubmit={upsertPlayers}>
                         <button className="database-button" type="submit" disabled={isLoading}>
-                            {isLoading && loadingMessage === "Updating Players..." ? "Loading..." : "Update Players"}
+                            {isLoading && loadingMessage === "Upserting Players..." ? "Loading..." : "Upsert Players"}
                         </button>
                     </form>
                 </div>

@@ -72,15 +72,15 @@ namespace Capstone.Services
 
             for (int week = 1; week <= 18; week++)
             {
-                var weeklyStats = await GetPlayerStatsAsync("2022REG", week);
+                var weeklyStats = await GetPlayerStatsAsync("2023REG", week);
                 allPlayerStats.AddRange(weeklyStats);
             }
 
-            // for (int week = 1; week <= 4; week++)
-            // {
-            //     var weeklyStats = await GetPlayerStatsAsync("2022POST", week);
-            //     allPlayerStats.AddRange(weeklyStats);
-            // }
+            for (int week = 1; week <= 4; week++)
+            {
+                var weeklyStats = await GetPlayerStatsAsync("2023POST", week);
+                allPlayerStats.AddRange(weeklyStats);
+            }
 
             return allPlayerStats;
         }
@@ -112,15 +112,15 @@ namespace Capstone.Services
 
             for (int week = 1; week <= 18; week++)
             {
-                var weeklyStats = await GetDefenseStatsAsync("2022REG", week);
+                var weeklyStats = await GetDefenseStatsAsync("2023REG", week);
                 allDefenseStats.AddRange(weeklyStats);
             }
 
-            // for (int week = 1; week <= 4; week++)
-            // {
-            //     var weeklyStats = await GetDefenseStatsAsync("2022POST", week);
-            //     allDefenseStats.AddRange(weeklyStats);
-            // }
+            for (int week = 1; week <= 4; week++)
+            {
+                var weeklyStats = await GetDefenseStatsAsync("2023POST", week);
+                allDefenseStats.AddRange(weeklyStats);
+            }
 
             return allDefenseStats;
         }
@@ -152,15 +152,15 @@ namespace Capstone.Services
 
             for (int week = 1; week <= 18; week++)
             {
-                var weeklyProjections = await GetPlayerProjectionsAsync("2022REG", week);
+                var weeklyProjections = await GetPlayerProjectionsAsync("2023REG", week);
                 allPlayerProjections.AddRange(weeklyProjections);
             }
 
-            // for (int week = 1; week <= 4; week++)
-            // {
-            //     var weeklyProjections = await GetPlayerProjectionsAsync("2022POST", week);
-            //     allPlayerProjections.AddRange(weeklyProjections);
-            // }
+            for (int week = 1; week <= 4; week++)
+            {
+                var weeklyProjections = await GetPlayerProjectionsAsync("2023POST", week);
+                allPlayerProjections.AddRange(weeklyProjections);
+            }
 
             return allPlayerProjections;
         }
@@ -192,15 +192,15 @@ namespace Capstone.Services
 
             for (int week = 1; week <= 18; week++)
             {
-                var weeklyProjections = await GetDefenseProjectionsAsync("2022REG", week);
+                var weeklyProjections = await GetDefenseProjectionsAsync("2023REG", week);
                 allDefenseProjections.AddRange(weeklyProjections);
             }
 
-            // for (int week = 1; week <= 4; week++)
-            // {
-            //     var weeklyProjections = await GetDefenseProjectionsAsync("2022POST", week);
-            //     allDefenseProjections.AddRange(weeklyProjections);
-            // }
+            for (int week = 1; week <= 4; week++)
+            {
+                var weeklyProjections = await GetDefenseProjectionsAsync("2023POST", week);
+                allDefenseProjections.AddRange(weeklyProjections);
+            }
 
             return allDefenseProjections;
         }
@@ -236,12 +236,12 @@ namespace Capstone.Services
 
             if (currentWeek <= 18)
             {
-                season = "2022REG";
+                season = "2023REG";
                 adjustedWeek = currentWeek;
             }
             else if (currentWeek > 18)
             {
-                season = "2022POST";
+                season = "2023POST";
                 adjustedWeek = currentWeek - 18;
             }
             else
@@ -276,12 +276,12 @@ namespace Capstone.Services
 
             if (currentWeek <= 18)
             {
-                season = "2022REG";
+                season = "2023REG";
                 adjustedWeek = currentWeek;
             }
             else if (currentWeek > 18)
             {
-                season = "2022POST";
+                season = "2023POST";
                 adjustedWeek = currentWeek - 18;
             }
             else
@@ -316,12 +316,12 @@ namespace Capstone.Services
 
             if (currentWeek <= 18)
             {
-                season = "2022REG";
+                season = "2023REG";
                 adjustedWeek = currentWeek;
             }
             else if (currentWeek > 18)
             {
-                season = "2022POST";
+                season = "2023POST";
                 adjustedWeek = currentWeek - 18;
             }
             else
@@ -356,12 +356,12 @@ namespace Capstone.Services
 
             if (currentWeek <= 18)
             {
-                season = "2022REG";
+                season = "2023REG";
                 adjustedWeek = currentWeek;
             }
             else if (currentWeek > 18)
             {
-                season = "2022POST";
+                season = "2023POST";
                 adjustedWeek = currentWeek - 18;
             }
             else

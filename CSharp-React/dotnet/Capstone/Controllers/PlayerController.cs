@@ -48,8 +48,8 @@ namespace Capstone.Controllers
             }
         }
 
-        [HttpPut]
-        public async Task<ActionResult> UpdatePlayer()
+        [HttpPut("upsert")]
+        public async Task<ActionResult> UpsertPlayer()
         {
             try
             {
@@ -58,18 +58,18 @@ namespace Capstone.Controllers
                 foreach (Team team in teams)
                 {
                     PlayerDto playerDto = PlayerDto.FromTeam(team);
-                    await _playerDao.UpdatePlayerAsync(playerDto);
+                    await _playerDao.UpsertPlayerAsync(playerDto);
                 };
                 foreach (Player player in players)
                 {
                     PlayerDto playerDto = PlayerDto.FromPlayer(player);
-                    await _playerDao.UpdatePlayerAsync(playerDto);
+                    await _playerDao.UpsertPlayerAsync(playerDto);
                 };
-                return Ok("Players updated successfully.");
+                return Ok("Players upserted successfully.");
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error updating players: {e.Message}");
+                Console.WriteLine($"Error upserting players: {e.Message}");
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }

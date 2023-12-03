@@ -40,19 +40,22 @@ namespace Capstone.DAO
             }
         }
 
-        public async Task UpdatePlayerAsync(PlayerDto playerDto)
+        public async Task UpsertPlayerAsync(PlayerDto playerDto)
         {
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 string sql = @"
-                    UPDATE players
+                    INSERT INTO players (
+                        player_id, team_id, name, position, status, injury_status) 
+                    VALUES (
+                        @player_id, @team_id, @name, @position, @status, @injury_status)
+                    ON CONFLICT (player_id) DO UPDATE
                     SET team_id = @team_id,
                         name = @name,
                         position = @position,
                         status = @status,
-                        injury_status = @injury_status
-                    WHERE player_id = @player_id;";
+                        injury_status = @injury_status;";
 
                 using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
                 {
@@ -60,7 +63,7 @@ namespace Capstone.DAO
                     command.Parameters.AddWithValue("@team_id", playerDto.TeamId ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("@name", playerDto.Name);
                     command.Parameters.AddWithValue("@position", playerDto.Position);
-                    command.Parameters.AddWithValue("@status", playerDto.Status ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@status", playerDto.Status);
                     command.Parameters.AddWithValue("@injury_status", playerDto.InjuryStatus ?? (object)DBNull.Value);
 
                     await command.ExecuteNonQueryAsync();

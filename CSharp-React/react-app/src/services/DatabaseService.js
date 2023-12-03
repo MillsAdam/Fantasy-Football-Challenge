@@ -51,9 +51,9 @@ const DatabaseService = {
         }
     },
 
-    async updatePlayers() {
+    async upsertPlayers() {
         try {
-            const response = await axios.put(`http://localhost:5000/api/players`, {});
+            const response = await axios.post(`http://localhost:5000/api/players/upsert`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
