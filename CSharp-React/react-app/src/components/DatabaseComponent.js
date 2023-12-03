@@ -395,6 +395,11 @@ function DatabaseComponent() {
 
     return (
         <div>
+            <div className="message-container">
+                {loadingMessage && <p>{loadingMessage}</p>}
+                {successMessage && <p>{successMessage}</p>}
+                {error && <p>{error}</p>}
+            </div>
             <div className="page-container">
                 <div className="component-container">
                     <h3>Teams</h3>
@@ -545,11 +550,6 @@ function DatabaseComponent() {
                         </div>
                     )}
                 </div>
-            </div>
-            <div className="message-container">
-                {loadingMessage && <p>{loadingMessage}</p>}
-                {successMessage && <p>{successMessage}</p>}
-                {error && <p>{error}</p>}
             </div>
         </div>
     )

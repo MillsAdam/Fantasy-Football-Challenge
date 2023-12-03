@@ -5,14 +5,15 @@ using System.Threading.Tasks;
 
 namespace Capstone.Models.Data
 {
-    public class PlayerDBStatsDto
+    public class PlayerStatsExtDto
     {
         public int PlayerId { get; set; }
         public int TeamId { get; set; }
         public int SeasonType { get; set; }
         public int Week { get; set; }
-        public string Name { get; set; }
         public string Position { get; set; }
+        public string Team { get; set; }
+        public string Name { get; set; }
         public string Status { get; set; }
         public string? InjuryStatus { get; set; }
         public double FantasyPointsTotal { get; set; }

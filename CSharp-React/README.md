@@ -1,5 +1,3 @@
-# Final Capstone
+# Fantasy Playoff Challenge
 
-This directory contains all of the starter projects for the final capstone. The Vue starter project works with both the Java and .NET backend projects with a single configuration update that you can read about in the README.
-
-Each project contains instructions that provides information about the starting code and explains how to get started with the final capstone project.
+Draft teams of 27 players and compete against others to achieve the highest cumulative score throughout the NFL playoffs.

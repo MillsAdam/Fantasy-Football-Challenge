@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Capstone.Models;
+using Capstone.Models.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Capstone.Data
@@ -25,6 +26,8 @@ namespace Capstone.Data
         public DbSet<DefenseStats> DefenseStats { get; set; }
         public DbSet<SearchPlayerDto> SearchPlayerDtos { get; set; }
         public DbSet<Configuration> Configuration { get; set; }
+        public DbSet<PlayerStatsExt> PlayerStatsExt { get; set; }
+        public DbSet<PlayerStatsExtDto> PlayerStatsExtDtos { get; set; }
         
         
 

@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Capstone.Models;
 using Capstone.Services;
 using Capstone.DAO.Reference;
+using Capstone.DAO.Position.Quarterback;
+using Capstone.Services.Position;
 
 
 namespace Capstone
@@ -47,6 +49,8 @@ namespace Capstone
                 options.UseNpgsql(connectionString));
             services.AddScoped<FantasyDataService>();
             services.AddScoped<ScoreService>();
+            services.AddScoped<PlayerStatsExtService>();
+            services.AddScoped<QBService>();
             services.AddTransient<ITeamDao, TeamSqlDao>();
             services.AddTransient<IPlayerDao, PlayerSqlDao>();
             services.AddTransient<IFantasyRosterDao, FantasyRosterSqlDao>();
@@ -55,6 +59,7 @@ namespace Capstone
             services.AddTransient<ILineupPlayerDao, LineupPlayerSqlDao>();   
             services.AddTransient<IPlayerStatsDao, PlayerStatsSqlDao>();
             services.AddTransient<IConfigurationDao, ConfigurationSqlDao>();
+            services.AddTransient<IQBSeasonTotalDao, QBSeasonTotalSqlDao>();
 
             // configure jwt authentication
             var key = Encoding.ASCII.GetBytes(Configuration["JwtSecret"]);
