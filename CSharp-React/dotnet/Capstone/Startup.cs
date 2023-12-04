@@ -16,6 +16,9 @@ using Capstone.Services;
 using Capstone.DAO.Reference;
 using Capstone.DAO.Position.Quarterback;
 using Capstone.Services.Position;
+using Capstone.DAO.Position.Flex;
+using Capstone.DAO.Position.Kicker;
+using Capstone.DAO.Position.Defense;
 
 
 namespace Capstone
@@ -51,6 +54,8 @@ namespace Capstone
             services.AddScoped<ScoreService>();
             services.AddScoped<PlayerStatsExtService>();
             services.AddScoped<QBService>();
+            services.AddScoped<FlexService>();
+            services.AddScoped<FlexPosService>();
             services.AddTransient<ITeamDao, TeamSqlDao>();
             services.AddTransient<IPlayerDao, PlayerSqlDao>();
             services.AddTransient<IFantasyRosterDao, FantasyRosterSqlDao>();
@@ -65,6 +70,25 @@ namespace Capstone
             services.AddTransient<IQBLast4AverageDao, QBLast4AverageSqlDao>();
             services.AddTransient<IQBWeeklyTotalDao, QBWeeklyTotalSqlDao>();
             services.AddTransient<IQBWeeklyProjectedDao, QBWeeklyProjectedSqlDao>();
+            services.AddTransient<IFlexSeasonTotalDao, FlexSeasonTotalSqlDao>();
+            services.AddTransient<IFlexSeasonAverageDao, FlexSeasonAverageSqlDao>();
+            services.AddTransient<IFlexLast4TotalDao, FlexLast4TotalSqlDao>();
+            services.AddTransient<IFlexLast4AverageDao, FlexLast4AverageSqlDao>();
+            services.AddTransient<IFlexWeeklyTotalDao, FlexWeeklyTotalSqlDao>();
+            services.AddTransient<IFlexWeeklyProjectedDao, FlexWeeklyProjectedSqlDao>();
+            services.AddTransient<IKSeasonTotalDao, KSeasonTotalSqlDao>();
+            services.AddTransient<IKSeasonAverageDao, KSeasonAverageSqlDao>();
+            services.AddTransient<IKLast4TotalDao, KLast4TotalSqlDao>();
+            services.AddTransient<IKLast4AverageDao, KLast4AverageSqlDao>();
+            services.AddTransient<IKWeeklyTotalDao, KWeeklyTotalSqlDao>();
+            services.AddTransient<IKWeeklyProjectedDao, KWeeklyProjectedSqlDao>();
+            services.AddTransient<IDefSeasonTotalDao, DefSeasonTotalSqlDao>();
+            services.AddTransient<IDefSeasonAverageDao, DefSeasonAverageSqlDao>();
+            services.AddTransient<IDefLast4TotalDao, DefLast4TotalSqlDao>();
+            services.AddTransient<IDefLast4AverageDao, DefLast4AverageSqlDao>();
+            services.AddTransient<IDefWeeklyTotalDao, DefWeeklyTotalSqlDao>();
+            services.AddTransient<IDefWeeklyProjectedDao, DefWeeklyProjectedSqlDao>();
+
 
             // configure jwt authentication
             var key = Encoding.ASCII.GetBytes(Configuration["JwtSecret"]);

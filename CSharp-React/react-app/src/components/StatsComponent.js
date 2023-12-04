@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect, useCallback } from "react";
-import { AuthContext } from "../context/AuthContext";
+import React, { useState, useEffect } from "react";
+// import { AuthContext } from "../context/AuthContext";
 import StatsService from "../services/StatsService";
 import DatabaseService from "../services/DatabaseService";
 import "../styles/StatsComponent.css";
@@ -98,7 +98,7 @@ const teamNameDisplayOptions = {
 
 
 function StatsComponent() {
-    const { authToken, currentUser } = useContext(AuthContext);
+    // const { authToken, currentUser } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [searchResults, setSearchResults] = useState([]);

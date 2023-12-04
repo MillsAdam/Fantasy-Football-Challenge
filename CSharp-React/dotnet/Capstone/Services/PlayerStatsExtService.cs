@@ -12,6 +12,8 @@ namespace Capstone.Services
     {
         private readonly string _connectionString;
         private QBService _qbService;
+        private FlexService _flexService;
+        private FlexPosService _flexPosService;
         private const string QB = "qb";
         private const string RB = "rb";
         private const string WR = "wr";
@@ -20,10 +22,15 @@ namespace Capstone.Services
         private const string K = "k";
         private const string DEF = "def";
 
-        public PlayerStatsExtService(IConfiguration configuration, QBService qbService)
+        public PlayerStatsExtService(IConfiguration configuration, 
+            QBService qbService, 
+            FlexService flexService, 
+            FlexPosService flexPosService)
         {
             _connectionString = configuration.GetConnectionString("Project");
             _qbService = qbService;
+            _flexService = flexService;
+            _flexPosService = flexPosService;
         }
 
         public async Task<List<PlayerStatsExtDto>> searchPlayerStatsAsync(string position, string interval, string category, string filter, int? week)
@@ -33,11 +40,11 @@ namespace Capstone.Services
                 case QB:
                     return await _qbService.searchQBStatsAsync(interval, category, filter, week);
                 case FLEX:
-                    return new List<PlayerStatsExtDto>();
+                    return await _flexService.searchFlexStatsAsync(interval, category, filter, week);
                 case RB:
                 case WR:
                 case TE:
-                    return new List<PlayerStatsExtDto>();
+                    return await _flexPosService.searchFlexPosStatsAsync(position, interval, category, filter, week);
                 case K:
                     return new List<PlayerStatsExtDto>();
                 case DEF:
