@@ -43,7 +43,7 @@ namespace Capstone.DAO.Position.Quarterback
                 SUM(pse.fantasy_points) AS fantasy_points_total, 
                 ROUND(AVG(pse.fantasy_points), 2) AS fantasy_points_average, 
                 t.conference, 
-                t.status AS team_status, 
+                t.status AS team_status 
             FROM player_stats_ext pse 
             JOIN players p ON p.player_id = pse.player_id 
             JOIN teams t ON t.team_id = pse.team_id 
@@ -164,7 +164,7 @@ namespace Capstone.DAO.Position.Quarterback
                 InjuryStatus = Convert.ToString(reader["injury_status"]),
                 PassingCompletions = Convert.ToDouble(reader["passing_completions"]),
                 PassingAttempts = Convert.ToDouble(reader["passing_attempts"]),
-                PassingCompletionPercentage = Convert.ToDouble(reader["completion_percentage"]),
+                PassingCompletionPercentage = Convert.ToDouble(reader["passing_completion_percentage"]),
                 PassingYards = Convert.ToDouble(reader["passing_yards"]),
                 PassingTouchdowns = Convert.ToDouble(reader["passing_touchdowns"]),
                 PassingInterceptions = Convert.ToDouble(reader["passing_interceptions"]),

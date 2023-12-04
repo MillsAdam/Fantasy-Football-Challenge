@@ -39,7 +39,7 @@ namespace Capstone.DAO.Position.Quarterback
                 CASE 
                     WHEN SUM(pse.passing_attempts) = 0 THEN 0 
                     ELSE ROUND((SUM(pse.passing_completions) / SUM(pse.passing_attempts)) * 100, 2) 
-                END AS completion_percentage, 
+                END AS passing_completion_percentage, 
                 SUM(pse.passing_yards) AS passing_yards, 
                 SUM(pse.passing_touchdowns) AS passing_touchdowns, 
                 SUM(pse.passing_interceptions) AS passing_interceptions, 
@@ -58,8 +58,8 @@ namespace Capstone.DAO.Position.Quarterback
             JOIN teams t ON t.team_id = pse.team_id 
             CROSS JOIN StartingWeek AS sw
             WHERE p.position = 'QB' 
-                AND pse.week <= sw.week 
-                AND pse.week >= sw.week - 3 ";
+                AND pse.week >= sw.week - 3 
+                AND pse.week <= sw.week ";
 
         private const string GROUP_BY_SQL =
             @"GROUP BY 
@@ -189,7 +189,7 @@ namespace Capstone.DAO.Position.Quarterback
                 InjuryStatus = Convert.ToString(reader["injury_status"]),
                 PassingCompletions = Convert.ToDouble(reader["passing_completions"]),
                 PassingAttempts = Convert.ToDouble(reader["passing_attempts"]),
-                PassingCompletionPercentage = Convert.ToDouble(reader["completion_percentage"]),
+                PassingCompletionPercentage = Convert.ToDouble(reader["passing_completion_percentage"]),
                 PassingYards = Convert.ToDouble(reader["passing_yards"]),
                 PassingTouchdowns = Convert.ToDouble(reader["passing_touchdowns"]),
                 PassingInterceptions = Convert.ToDouble(reader["passing_interceptions"]),

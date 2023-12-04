@@ -30,7 +30,7 @@ namespace Capstone.DAO.Position.Quarterback
                 CASE 
                     WHEN ROUND(AVG(pse.passing_attempts), 2) = 0 THEN 0 
                     ELSE ROUND((ROUND(AVG(pse.passing_completions), 2) / ROUND(AVG(pse.passing_attempts), 2)) * 100, 2) 
-                END AS completion_percentage, 
+                END AS passing_completion_percentage, 
                 ROUND(AVG(pse.passing_yards), 2) AS passing_yards, 
                 ROUND(AVG(pse.passing_touchdowns), 2) AS passing_touchdowns, 
                 ROUND(AVG(pse.passing_interceptions), 2) AS passing_interceptions, 
@@ -41,7 +41,7 @@ namespace Capstone.DAO.Position.Quarterback
                 ROUND(AVG(pse.two_point_conversions), 2) AS two_point_conversions, 
                 ROUND(AVG(pse.fumbles_lost), 2) AS fumbles_lost, 
                 ROUND(AVG(pse.fantasy_points), 2) AS fantasy_points_total, 
-                ROUND(AVG(pse.fantasy_points) / COUNT(DISTINCT pse.week), 2) AS fantasy_points_average, 
+                ROUND(AVG(pse.fantasy_points), 2) AS fantasy_points_average, 
                 t.conference, 
                 t.status AS team_status
             FROM player_stats_ext pse 
@@ -162,7 +162,7 @@ namespace Capstone.DAO.Position.Quarterback
                 InjuryStatus = Convert.ToString(reader["injury_status"]),
                 PassingCompletions = Convert.ToDouble(reader["passing_completions"]),
                 PassingAttempts = Convert.ToDouble(reader["passing_attempts"]),
-                PassingCompletionPercentage = Convert.ToDouble(reader["completion_percentage"]),
+                PassingCompletionPercentage = Convert.ToDouble(reader["passing_completion_percentage"]),
                 PassingYards = Convert.ToDouble(reader["passing_yards"]),
                 PassingTouchdowns = Convert.ToDouble(reader["passing_touchdowns"]),
                 PassingInterceptions = Convert.ToDouble(reader["passing_interceptions"]),

@@ -57,6 +57,12 @@ namespace Capstone.Services.Position
                     return await handleSeasonAverage(category, filter);
                 case LAST_4_TOTAL:
                     return await handleLast4Total(category, filter);
+                case LAST_4_AVERAGE:
+                    return await handleLast4Average(category, filter);
+                case WEEKLY_TOTAL:
+                    return await handleWeeklyTotal(category, filter, week);
+                case WEEKLY_PROJECTED:
+                    return await handleWeeklyProjected(category, filter, week);
                 default:
                     return new List<PlayerStatsExtDto>();
             }
@@ -108,6 +114,57 @@ namespace Capstone.Services.Position
                     return await _qbLast4TotalDao.getQBLast4TotalStatsByTeamAsync(filter);
                 case NAME:
                     return await _qbLast4TotalDao.getQBLast4TotalStatsByNameAsync(filter);
+                default:
+                    return new List<PlayerStatsExtDto>();
+            }
+        }
+
+        private async Task<List<PlayerStatsExtDto>> handleLast4Average(string category, string filter)
+        {
+            switch(category)
+            {
+                case ALL:
+                    return await _qbLast4AverageDao.getQBLast4AverageStatsAsync();
+                case CONF:
+                    return await _qbLast4AverageDao.getQBLast4AverageStatsByConfAsync(filter);
+                case TEAM:
+                    return await _qbLast4AverageDao.getQBLast4AverageStatsByTeamAsync(filter);
+                case NAME:
+                    return await _qbLast4AverageDao.getQBLast4AverageStatsByNameAsync(filter);
+                default:
+                    return new List<PlayerStatsExtDto>();
+            }
+        }
+
+        private async Task<List<PlayerStatsExtDto>> handleWeeklyTotal(string category, string filter, int? week)
+        {
+            switch(category)
+            {
+                case ALL:
+                    return await _qbWeeklyTotalDao.getQBWeeklyTotalStatsAsync(week.Value);
+                case CONF:
+                    return await _qbWeeklyTotalDao.getQBWeeklyTotalStatsByConfAsync(filter, week.Value);
+                case TEAM:
+                    return await _qbWeeklyTotalDao.getQBWeeklyTotalStatsByTeamAsync(filter, week.Value);
+                case NAME:
+                    return await _qbWeeklyTotalDao.getQBWeeklyTotalStatsByNameAsync(filter, week.Value);
+                default:
+                    return new List<PlayerStatsExtDto>();
+            }
+        }
+
+        private async Task<List<PlayerStatsExtDto>> handleWeeklyProjected(string category, string filter, int? week)
+        {
+            switch(category)
+            {
+                case ALL:
+                    return await _qbWeeklyProjectedDao.getQBWeeklyProjectedStatsAsync(week.Value);
+                case CONF:
+                    return await _qbWeeklyProjectedDao.getQBWeeklyProjectedStatsByConfAsync(filter, week.Value);
+                case TEAM:
+                    return await _qbWeeklyProjectedDao.getQBWeeklyProjectedStatsByTeamAsync(filter, week.Value);
+                case NAME:
+                    return await _qbWeeklyProjectedDao.getQBWeeklyProjectedStatsByNameAsync(filter, week.Value);
                 default:
                     return new List<PlayerStatsExtDto>();
             }

@@ -278,7 +278,8 @@ function RosterComponent() {
                         <div>
                             <input 
                                 className="search-input" 
-                                type="text" value={searchName} 
+                                type="text" 
+                                value={searchName} 
                                 placeholder="Enter Name" 
                                 onChange={(e) => setSearchName(e.target.value)} 
                                 disabled={activeSearchMethod && activeSearchMethod !== "name"}

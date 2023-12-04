@@ -1,0 +1,31 @@
+.search-container {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+    /* flex-direction: column;
+    align-items: center; */
+}
+
+.stats-select, .stats-button, .stats-filter-select, .stats-filter-input {
+    /* min-width: 30%;
+    flex: 1; */
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.table-container {
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+}
