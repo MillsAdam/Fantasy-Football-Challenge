@@ -1,20 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
 import RosterService from "../services/RosterService";
 import LineupService from "../services/LineupService";
-import DatabaseService from "../services/DatabaseService";
+// import DatabaseService from "../services/DatabaseService";
 import { AuthContext } from "../context/AuthContext";
+import { useConfig } from "../context/ConfigContext";
 import "../styles/LineupComponent.css";
-
-const ALL_LINEUP_POSITIONS = ['QB1', 'QB2', 'RB1', 'RB2', 'WR1', 'WR2', 'WR3', 'TE', 'FLEX', 'K', 'DEF'];
-const POSITION_SPECIFIC_OPTIONS = {
-    QB: ['QB1', 'QB2'],
-    RB: ['RB1', 'RB2', 'FLEX'],
-    WR: ['WR1', 'WR2', 'WR3', 'FLEX'],
-    TE: ['TE', 'FLEX'],
-    K: ['K'],
-    DEF: ['DEF']
-};
-const GAME_WEEK_OPTIONS = [1, 2, 3, 4];
+import { allLineupPositions, positionSpecificOptions, gameWeekOptions } from "../constants/LineupConstants";
 
 
 function LineupComponent() {
@@ -24,7 +15,7 @@ function LineupComponent() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [lineupOptions, setLineupOptions] = useState([]);
-    const [configurations, setConfigurations] = useState([]);
+    const { configurations } = useConfig();
     const [isLineupLocked, setIsLineupLocked] = useState(false);
     const [selectedGameWeek, setSelectedGameWeek] = useState("");
     const [weeklyLineupPlayers, setWeeklyLineupPlayers] = useState([]);
@@ -74,19 +65,6 @@ function LineupComponent() {
     }, [authToken, currentUser]);
 
     useEffect(() => {
-        async function fetchConfigurations() {
-            try {
-                const fetchedConfigurations = await DatabaseService.getConfiguration();
-                setConfigurations(fetchedConfigurations);
-            } catch (error) {
-                console.error('An error occurred: ', error);
-                setError('Failed to get configurations');
-            }
-        }
-        fetchConfigurations();
-    }, []);
-
-    useEffect(() => {
         const lineupLockConfig = configurations.find(config => config.configKey === 'lock_lineups');
         if (lineupLockConfig) {
             setIsLineupLocked(lineupLockConfig.configValue === 1);
@@ -95,12 +73,12 @@ function LineupComponent() {
 
     useEffect(() => {
         const takenPositions = lineupPlayers.map((lineupPlayer) => lineupPlayer.lineupPosition);
-        const availablePositions = ALL_LINEUP_POSITIONS.filter((position) => !takenPositions.includes(position));
+        const availablePositions = allLineupPositions.filter((position) => !takenPositions.includes(position));
         setLineupOptions(availablePositions);
     }, [lineupPlayers]);
 
     function getFilteredLineupOptions(playerPosition) {
-        const specificOptions = POSITION_SPECIFIC_OPTIONS[playerPosition] || [];
+        const specificOptions = positionSpecificOptions[playerPosition] || [];
         return lineupOptions.filter(option => specificOptions.includes(option));
     }
 
@@ -113,7 +91,7 @@ function LineupComponent() {
     async function handleAddPlayerToLineup(e, playerId, lineupPosition) {
         e.preventDefault();
         if (isLineupLocked) {
-            setError('Lineups are locked');
+            alert('Lineups are locked');
             return;
         }
         setIsLoading(true);
@@ -134,7 +112,7 @@ function LineupComponent() {
     async function handleRemovePlayerFromLineup(e, playerId) {
         e.preventDefault();
         if (isLineupLocked) {
-            setError('Lineups are locked');
+            alert('Lineups are locked');
             return;
         }
         setIsLoading(true);
@@ -276,7 +254,7 @@ function LineupComponent() {
                                 onChange={(e) => setSelectedGameWeek(e.target.value)}
                             >
                                 <option value="" disabled hidden>Select Week</option>
-                                {GAME_WEEK_OPTIONS.map((option) => (
+                                {gameWeekOptions.map((option) => (
                                     <option key={option} value={option}>Week {option}</option>
                                 ))}
                             </select>

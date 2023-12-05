@@ -1,62 +1,10 @@
 import React, { useState, useContext, useEffect, useCallback } from "react";
 import { AuthContext } from "../context/AuthContext";
 import DatabaseService from "../services/DatabaseService";
+import { useConfig } from "../context/ConfigContext";
 import "../styles/DatabaseComponent.css";
+import { configKeyDisplayNames, configValueOptions, teamNameDisplayNames } from "../constants/DatabaseConstants";
 
-const configValueOptions = {
-    'current_week': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-    'current_lineup_week': [1, 2, 3, 4],
-    'lock_rosters': [1, 2],
-    'lock_lineups': [1, 2],
-    'lineup_week_one': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-    'lineup_week_two': [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-    'lineup_week_three': [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-    'lineup_week_four': [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-};
-const configKeyDisplayNames = {
-    'current_week': 'Current Week',
-    'current_lineup_week': 'Current Lineup Week',
-    'lock_rosters': 'Lock Rosters',
-    'lock_lineups': 'Lock Lineups',
-    'lineup_week_one': 'Lineup Week One',
-    'lineup_week_two': 'Lineup Week Two',
-    'lineup_week_three': 'Lineup Week Three',
-    'lineup_week_four': 'Lineup Week Four',
-};
-const teamNameDisplayNames = {
-    'ARI': 'Arizona Cardinals',
-    'ATL': 'Atlanta Falcons',
-    'BAL': 'Baltimore Ravens',
-    'BUF': 'Buffalo Bills',
-    'CAR': 'Carolina Panthers',
-    'CHI': 'Chicago Bears',
-    'CIN': 'Cincinnati Bengals',
-    'CLE': 'Cleveland Browns',
-    'DAL': 'Dallas Cowboys',
-    'DEN': 'Denver Broncos',
-    'DET': 'Detroit Lions',
-    'GB': 'Green Bay Packers',
-    'HOU': 'Houston Texans',
-    'IND': 'Indianapolis Colts',
-    'JAX': 'Jacksonville Jaguars',
-    'KC': 'Kansas City Chiefs',
-    'MIA': 'Miami Dolphins',
-    'MIN': 'Minnesota Vikings',
-    'NE': 'New England Patriots',
-    'NO': 'New Orleans Saints',
-    'NYG': 'New York Giants',
-    'NYJ': 'New York Jets',
-    'LV': 'Las Vegas Raiders',
-    'PHI': 'Philadelphia Eagles',
-    'PIT': 'Pittsburgh Steelers',
-    'LAC': 'Los Angeles Chargers',
-    'SEA': 'Seattle Seahawks',
-    'SF': 'San Francisco 49ers',
-    'LAR': 'Los Angeles Rams',
-    'TB': 'Tampa Bay Buccaneers',
-    'TEN': 'Tennessee Titans',
-    'WAS': 'Washington Football Team'
-};
 
 function DatabaseComponent() {
     const { authToken, currentUser } = useContext(AuthContext);
@@ -65,7 +13,8 @@ function DatabaseComponent() {
     const [dynamicConfigKeyOptions, setDynamicConfigKeyOptions] = useState([]);
     const [selectedConfigKey, setSelectedConfigKey] = useState("");
     const [selectedConfigValue, setSelectedConfigValue] = useState("");
-    const [configurations, setConfigurations] = useState([]);
+    // new configurations
+    const { configurations, updateConfigurations } = useConfig();
     const [dynamicTeamNameOptions, setDynamicTeamNameOptions] = useState([]);
     const [selectedTeamName, setSelectedTeamName] = useState("");
     const [teams, setTeams] = useState([]);
@@ -89,9 +38,9 @@ function DatabaseComponent() {
         setIsConfigTableVisible(!isConfigTableVisible);
     }
 
-    async function createTeams(e) {
+    async function createTeamsAndPlayers(e) {
         e.preventDefault();
-        setLoadingMessage("Creating Teams...");
+        setLoadingMessage("Creating Teams and Players...");
         setIsLoading(true);
         setError(null);
         try {
@@ -99,31 +48,16 @@ function DatabaseComponent() {
                 const newTeams = await DatabaseService.createTeams();
                 if (newTeams) {
                     displaySuccessMessage("Teams created successfully")
-                }
-            }
-        } catch (error) {
-            console.error('An error occurred: ', error);
-            setError('Failed to create teams');
-        }
-        setIsLoading(false);
-        setLoadingMessage("");
-    }
 
-    async function createPlayers(e) {
-        e.preventDefault();
-        setLoadingMessage("Creating Players...");
-        setIsLoading(true);
-        setError(null);
-        try {
-            if (authToken && currentUser.role === 'admin') {
-                const newPlayers = await DatabaseService.createPlayers();
-                if (newPlayers) {
-                    displaySuccessMessage("Players created successfully")
+                    const newPlayers = await DatabaseService.createPlayers();
+                    if (newPlayers) {
+                        displaySuccessMessage("Players created successfully")
+                    }
                 }
             }
         } catch (error) {
             console.error('An error occurred: ', error);
-            setError('Failed to create players');
+            setError('Failed to create teams and players');
         }
         setIsLoading(false);
         setLoadingMessage("");
@@ -149,17 +83,19 @@ function DatabaseComponent() {
         setLoadingMessage("");
     }
 
-    async function createPlayerStats(e) {
+    async function createPlayerStatsAndProjections(e) {
         e.preventDefault();
-        setLoadingMessage("Creating Player Stats...");
+        setLoadingMessage("Creating Player Stats and Projections...");
         setIsLoading(true);
         setError(null);
         try {
             if (authToken && currentUser.role === 'admin') {
                 const newPlayerStats = await DatabaseService.createPlayerStats();
                 const newPlayerStatsExt = await DatabaseService.createPlayerStatsExt();
-                if (newPlayerStats && newPlayerStatsExt) {
-                    displaySuccessMessage("Player stats created successfully")
+                const newPlayerProjections = await DatabaseService.createPlayerProjections();
+                const newPlayerProjectionsExt = await DatabaseService.createPlayerProjectionsExt();
+                if (newPlayerStats && newPlayerStatsExt && newPlayerProjections && newPlayerProjectionsExt) {
+                    displaySuccessMessage("Player stats and projections created successfully")
                 }
             }
         } catch (error) {
@@ -170,17 +106,19 @@ function DatabaseComponent() {
         setLoadingMessage("");
     }
 
-    async function upsertPlayerStatsByWeek(e) {
+    async function upsertPlayerStatsAndProjectionsByWeek(e) {
         e.preventDefault();
-        setLoadingMessage("Upserting Player Stats By Week...");
+        setLoadingMessage("Upserting Player Stats and Projections By Week...");
         setIsLoading(true);
         setError(null);
         try {
             if (authToken && currentUser.role === 'admin') {
                 const newPlayerStatsByWeek = await DatabaseService.upsertPlayerStatsByWeek();
                 const newPlayerStatsByWeekExt = await DatabaseService.upsertPlayerStatsExtByWeek();
-                if (newPlayerStatsByWeek && newPlayerStatsByWeekExt) {
-                    displaySuccessMessage("Player stats by week created successfully")
+                const newPlayerProjectionsByWeek = await DatabaseService.upsertPlayerProjectionsByWeek();
+                const newPlayerProjectionsByWeekExt = await DatabaseService.upsertPlayerProjectionsExtByWeek();
+                if (newPlayerStatsByWeek && newPlayerStatsByWeekExt && newPlayerProjectionsByWeek && newPlayerProjectionsByWeekExt) {
+                    displaySuccessMessage("Player stats and projections by week created successfully")
                 }
             }
         } catch (error) {
@@ -191,51 +129,9 @@ function DatabaseComponent() {
         setLoadingMessage("");
     }
 
-    async function createPlayerProjections(e) {
+    async function updateLineupAndRosterScores(e) {
         e.preventDefault();
-        setLoadingMessage("Creating Player Projections...");
-        setIsLoading(true);
-        setError(null);
-        try {
-            if (authToken && currentUser.role === 'admin') {
-                const newPlayerProjections = await DatabaseService.createPlayerProjections();
-                const newPlayerProjectionsExt = await DatabaseService.createPlayerProjectionsExt();
-                if (newPlayerProjections && newPlayerProjectionsExt) {
-                    displaySuccessMessage("Player projections created successfully")
-                }
-            }
-        } catch (error) {
-            console.error('An error occurred: ', error);
-            setError('Failed to create player projections');
-        }
-        setIsLoading(false);
-        setLoadingMessage("");
-    }
-
-    async function upsertPlayerProjectionsByWeek(e) {
-        e.preventDefault();
-        setLoadingMessage("Upserting Player Projections...");
-        setIsLoading(true);
-        setError(null);
-        try {
-            if (authToken && currentUser.role === 'admin') {
-                const updatedPlayerProjections = await DatabaseService.upsertPlayerProjectionsByWeek();
-                const updatedPlayerProjectionsExt = await DatabaseService.upsertPlayerProjectionsExtByWeek();
-                if (updatedPlayerProjections && updatedPlayerProjectionsExt) {
-                    displaySuccessMessage("Player projections updated successfully")
-                }
-            }
-        } catch (error) {
-            console.error('An error occurred: ', error);
-            setError('Failed to update player projections');
-        }
-        setIsLoading(false);
-        setLoadingMessage("");
-    }
-
-    async function updateLineupScores(e) {
-        e.preventDefault();
-        setLoadingMessage("Updating Lineup Scores...");
+        setLoadingMessage("Updating Lineup and Roster Scores...");
         setIsLoading(true);
         setError(null);
         try {
@@ -243,31 +139,16 @@ function DatabaseComponent() {
                 const updatedLineupScores = await DatabaseService.updateLineupScores();
                 if (updatedLineupScores) {
                     displaySuccessMessage("Lineup scores updated successfully")
+
+                    const updatedRosterScores = await DatabaseService.updateRosterScores();
+                    if (updatedRosterScores) {
+                        displaySuccessMessage("Roster scores updated successfully")
+                    }
                 }
             }
         } catch (error) {
             console.error('An error occurred: ', error);
             setError('Failed to update lineup scores');
-        }
-        setIsLoading(false);
-        setLoadingMessage("");
-    }
-
-    async function updateRosterScores(e) {
-        e.preventDefault();
-        setLoadingMessage("Updating Roster Scores...");
-        setIsLoading(true);
-        setError(null);
-        try {
-            if (authToken && currentUser.role === 'admin') {
-                const updatedRosterScores = await DatabaseService.updateRosterScores();
-                if (updatedRosterScores) {
-                    displaySuccessMessage("Roster scores updated successfully")
-                }
-            }
-        } catch (error) {
-            console.error('An error occurred: ', error);
-            setError('Failed to update roster scores');
         }
         setIsLoading(false);
         setLoadingMessage("");
@@ -286,7 +167,8 @@ function DatabaseComponent() {
                 };
                 const updatedConfiguration = await DatabaseService.updateConfiguration(configuration);
                 if (updatedConfiguration) {
-                    await getConfiguration();
+                    const fetchedConfigurations = await DatabaseService.getConfiguration();
+                    updateConfigurations(fetchedConfigurations);
                     displaySuccessMessage("Configuration updated successfully")
                     setSelectedConfigKey("");
                     setSelectedConfigValue("");
@@ -305,22 +187,17 @@ function DatabaseComponent() {
         setError(null);
         try {
             if (authToken && currentUser.role === 'admin') {
-                const fetchedConfiguration = await DatabaseService.getConfiguration();
-                if (fetchedConfiguration) {
-                    const sortedConfigurations = fetchedConfiguration.sort((a, b) => {
-                        return a.configKey.localeCompare(b.configKey);
-                    });
-                    const sortedConfigKeys = fetchedConfiguration.map(config => config.configKey).sort();
-                    setConfigurations(sortedConfigurations);
-                    setDynamicConfigKeyOptions(sortedConfigKeys);
-                }
+                const sortedConfigurations = configurations.sort((a, b) => a.configKey.localeCompare(b.configKey));
+                const sortedConfigKeys = configurations.map(config => config.configKey).sort();
+                updateConfigurations(sortedConfigurations);
+                setDynamicConfigKeyOptions(sortedConfigKeys);
             }
         } catch (error) {
             console.error('An error occurred: ', error);
             setError('Failed to retrieve configuration');
         }
         setIsLoading(false);
-    }, [authToken, currentUser.role]);
+    }, [authToken, currentUser.role, configurations, updateConfigurations]);
 
     
 
@@ -384,18 +261,10 @@ function DatabaseComponent() {
             </div>
             <div className="page-container">
                 <div className="component-container">
-                    <h3>Teams</h3>
-                    <form onSubmit={createTeams}>
+                    <h3>Teams / Players</h3>
+                    <form onSubmit={createTeamsAndPlayers}>
                         <button className="database-button" type="submit" disabled={isLoading}>
-                            {isLoading && loadingMessage === "Creating Teams..." ? "Loading..." : "Create Teams"}
-                        </button>
-                    </form>
-                </div>
-                <div className="component-container">
-                    <h3>Players</h3>
-                    <form onSubmit={createPlayers}>
-                        <button className="database-button" type="submit" disabled={isLoading}>
-                            {isLoading && loadingMessage === "Creating Players..." ? "Loading..." : "Create Players"}
+                            {isLoading && loadingMessage === "Creating Teams and Players..." ? "Loading..." : "Create Teams and Players"}
                         </button>
                     </form>
                     <form onSubmit={upsertPlayers}>
@@ -406,40 +275,22 @@ function DatabaseComponent() {
                 </div>
                 <div className="component-container">
                     <h3>Player Stats</h3>
-                    <form onSubmit={createPlayerStats}>
+                    <form onSubmit={createPlayerStatsAndProjections}>
                         <button className="database-button" type="submit" disabled={isLoading}>
-                            {isLoading && loadingMessage === "Creating Player Stats..." ? "Loading..." : "Create Player Stats"}
+                            {isLoading && loadingMessage === "Creating Player Stats and Projections..." ? "Loading..." : "Create Player Stats and Projections"}
                         </button>
                     </form>
-                    <form onSubmit={upsertPlayerStatsByWeek}>
+                    <form onSubmit={upsertPlayerStatsAndProjectionsByWeek}>
                         <button className="database-button" type="submit" disabled={isLoading}>
-                            {isLoading && loadingMessage === "Upserting Player Stats By Week..." ? "Loading..." : "Upsert Player Stats By Week"}
-                        </button>
-                    </form>
-                </div>
-                <div className="component-container">
-                    <h3>Player Projections</h3>
-                    <form onSubmit={createPlayerProjections}>
-                        <button className="database-button" type="submit" disabled={isLoading}>
-                            {isLoading && loadingMessage === "Creating Player Projections..." ? "Loading..." : "Create Player Projections"}
-                        </button>
-                    </form>
-                    <form onSubmit={upsertPlayerProjectionsByWeek}>
-                        <button className="database-button" type="submit" disabled={isLoading}>
-                            {isLoading && loadingMessage === "Upserting Player Projections By Week..." ? "Loading..." : "Upsert Player Projections By Week"}
+                            {isLoading && loadingMessage === "Upserting Player Stats and Projections By Week..." ? "Loading..." : "Upsert Player Stats and Projections By Week"}
                         </button>
                     </form>
                 </div>
                 <div className="component-container">
                     <h3>Scores</h3>
-                    <form onSubmit={updateLineupScores}>
+                    <form onSubmit={updateLineupAndRosterScores}>
                         <button className="database-button" type="submit" disabled={isLoading}>
-                            {isLoading && loadingMessage === "Updating Lineup Scores..." ? "Loading..." : "Update Lineup Scores"}
-                        </button>
-                    </form>
-                    <form onSubmit={updateRosterScores}>
-                        <button className="database-button" type="submit" disabled={isLoading}>
-                            {isLoading && loadingMessage === "Updating Roster Scores..." ? "Loading..." : "Update Roster Scores"}
+                            {isLoading && loadingMessage === "Updating Lineup and Roster Scores..." ? "Loading..." : "Update Lineup and Roster Scores"}
                         </button>
                     </form>
                 </div>

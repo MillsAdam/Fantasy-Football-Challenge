@@ -2,6 +2,7 @@ import './App.css';
 import React from 'react';
 import ErrorBoundary from './ErrorBoundary';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ConfigProvider } from './context/ConfigContext';
 import NavigationBar from './components/NavigationBar';
 import Home from './views/Home';
 import Login from './views/Login';
@@ -20,22 +21,24 @@ function App() {
   return (
     <Router>
       <ErrorBoundary>
-        <div className="App">
-          <header className="App-header">
-            <NavigationBar />
-          </header>
-          <Routes>
-            <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/logout" element={<ProtectedRoute><Logout /></ProtectedRoute>} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/league" element={<ProtectedRoute><League /></ProtectedRoute>} />
-            <Route path="/roster" element={<ProtectedRoute><Roster /></ProtectedRoute>} />
-            <Route path="/lineup" element={<ProtectedRoute><Lineup /></ProtectedRoute>} />
-            <Route path="/stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
-            <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
-          </Routes>
-        </div>
+        <ConfigProvider>
+          <div className="App">
+            <header className="App-header">
+              <NavigationBar />
+            </header>
+            <Routes>
+              <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/logout" element={<ProtectedRoute><Logout /></ProtectedRoute>} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/league" element={<ProtectedRoute><League /></ProtectedRoute>} />
+              <Route path="/roster" element={<ProtectedRoute><Roster /></ProtectedRoute>} />
+              <Route path="/lineup" element={<ProtectedRoute><Lineup /></ProtectedRoute>} />
+              <Route path="/stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
+              <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
+            </Routes>
+          </div>
+        </ConfigProvider>
       </ErrorBoundary>     
     </Router>
   );
