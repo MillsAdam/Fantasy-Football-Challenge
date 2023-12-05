@@ -133,6 +133,37 @@ const positionColumns = {
     wr: sharedColumns,
     te: sharedColumns,
     flex: sharedColumns,
+    k: [
+        { key: 'fieldGoalsMade', label: 'FGM' },
+        { key: 'fieldGoalsAttempted', label: 'FGA' },
+        { key: 'fieldGoalPercentage', label: 'Pct' },
+        { key: 'fieldGoalsMade0to19', label: '0-19' },
+        { key: 'fieldGoalsMade20to29', label: '20-29' },
+        { key: 'fieldGoalsMade30to39', label: '30-39' },
+        { key: 'fieldGoalsMade40to49', label: '40-49' },
+        { key: 'fieldGoalsMade50Plus', label: '50+' },
+        { key: 'extraPointsMade', label: 'XPM' },
+        { key: 'extraPointsAttempted', label: 'XPA' },
+        { key: 'extraPointPercentage', label: 'Pct'},
+        { key: 'fantasyPointsTotal', label: 'Tot' },
+        { key: 'fantasyPointsAverage', label: 'Avg' }
+    ],
+    def: [
+        { key: 'defensiveTouchdowns', label: 'Def' },
+        { key: 'specialTeamsTouchdowns', label: 'ST' },
+        { key: 'touchdownsScored', label: 'TD' },
+        { key: 'fumblesForced', label: 'FF' },
+        { key: 'fumblesRecovered', label: 'FR' },
+        { key: 'interceptions', label: 'Int' },
+        { key: 'tacklesForLoss', label: 'TFL' },
+        { key: 'quarterbackHits', label: 'QH' },
+        { key: 'sacks', label: 'Sck' },
+        { key: 'safeties', label: 'Sfty' },
+        { key: 'blockedKicks', label: 'Blk' },
+        { key: 'pointsAllowed', label: 'PtsA' },
+        { key: 'fantasyPointsTotal', label: 'Tot' },
+        { key: 'fantasyPointsAverage', label: 'Avg' }
+    ]
 };
 const sharedHeaders = [
     { label: 'Rushing', colSpan: 4 },
@@ -149,6 +180,14 @@ const headerColumns = {
     wr: sharedHeaders,
     te: sharedHeaders,
     flex: sharedHeaders,
+    k: [
+        { label: 'Field Goals', colSpan: 8 },
+        { label: 'Extra Points', colSpan: 3 },
+    ],
+    def: [
+        { label: 'Touchdown', colSpan: 3 },
+        { label: 'Defensive', colSpan: 9 },
+    ]
 };
 
 function StatsComponent() {
@@ -197,7 +236,13 @@ function StatsComponent() {
     }, []);
 
     useEffect(() => {
-        if (selectedPosition === 'qb' || selectedPosition === 'rb' || selectedPosition === 'wr' || selectedPosition === 'te' || selectedPosition === 'flex') {
+        if (selectedPosition === 'qb' || 
+            selectedPosition === 'rb' || 
+            selectedPosition === 'wr' || 
+            selectedPosition === 'te' || 
+            selectedPosition === 'flex' || 
+            selectedPosition === 'k' || 
+            selectedPosition === 'def') {
             setSelectedInterval('');
             setSelectedCategory('');
             setSelectedFilter('');

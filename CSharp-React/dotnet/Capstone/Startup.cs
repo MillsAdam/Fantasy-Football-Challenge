@@ -56,6 +56,8 @@ namespace Capstone
             services.AddScoped<QBService>();
             services.AddScoped<FlexService>();
             services.AddScoped<FlexPosService>();
+            services.AddScoped<KService>();
+            services.AddScoped<DefService>();
             services.AddTransient<ITeamDao, TeamSqlDao>();
             services.AddTransient<IPlayerDao, PlayerSqlDao>();
             services.AddTransient<IFantasyRosterDao, FantasyRosterSqlDao>();

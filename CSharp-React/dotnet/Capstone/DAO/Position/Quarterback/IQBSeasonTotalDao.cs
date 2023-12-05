@@ -12,6 +12,5 @@ namespace Capstone.DAO.Position.Quarterback
         Task<List<PlayerStatsExtDto>> getQBSeasonTotalStatsByConfAsync(string conf);
         Task<List<PlayerStatsExtDto>> getQBSeasonTotalStatsByTeamAsync(string team);
         Task<List<PlayerStatsExtDto>> getQBSeasonTotalStatsByNameAsync(string name);
-
     }
 }
