@@ -94,8 +94,62 @@ const teamNameDisplayOptions = {
     'TEN': 'Tennessee Titans',
     'WAS': 'Washington Football Team'
 };
-// weeks (from configuration)
 
+const sharedColumns = [
+    { key: 'rushingAttempts', label: 'Att' },
+    { key: 'rushingYards', label: 'Yds' },
+    { key: 'rushingYardsPerAttempt', label: 'Y/A' },
+    { key: 'rushingTouchdowns', label: 'TD' },
+    { key: 'receivingTargets', label: 'Tgt' },
+    { key: 'receptions', label: 'Rec' },
+    { key: 'receivingYards', label: 'Yds' },
+    { key: 'receivingYardsPerReception', label: 'Y/R' },
+    { key: 'receivingTouchdowns', label: 'TD' },
+    { key: 'returnTouchdowns', label: 'retTD' },
+    { key: 'twoPointConversions', label: '2PC' },
+    { key: 'usage', label: 'Usg' },
+    { key: 'fumblesLost', label: 'FL' },
+    { key: 'fantasyPointsTotal', label: 'Tot' },
+    { key: 'fantasyPointsAverage', label: 'Avg' }
+];
+const positionColumns = {
+    qb: [
+        { key: 'passingCompletions', label: 'Comp' },
+        { key: 'passingAttempts', label: 'Att' },
+        { key: 'passingCompletionPercentage', label: 'Pct' },
+        { key: 'passingYards', label: 'Yds' },
+        { key: 'passingTouchdowns', label: 'TD' },
+        { key: 'passingInterceptions', label: 'Int' },
+        { key: 'passingRating', label: 'Rtng' },
+        { key: 'rushingAttempts', label: 'Att' },
+        { key: 'rushingYards', label: 'Yds' },
+        { key: 'rushingTouchdowns', label: 'TD' },
+        { key: 'twoPointConversions', label: '2PC' },
+        { key: 'fumblesLost', label: 'FL' },
+        { key: 'fantasyPointsTotal', label: 'Tot' },
+        { key: 'fantasyPointsAverage', label: 'Avg' }
+    ], 
+    rb: sharedColumns,
+    wr: sharedColumns,
+    te: sharedColumns,
+    flex: sharedColumns,
+};
+const sharedHeaders = [
+    { label: 'Rushing', colSpan: 4 },
+    { label: 'Receiving', colSpan: 5 },
+    { label: 'Extra', colSpan: 4 },
+];
+const headerColumns = {
+    qb: [
+        { label: 'Passing', colSpan: 7 },
+        { label: 'Rushing', colSpan: 3 },
+        { label: 'Extra', colSpan: 2 },
+    ],
+    rb: sharedHeaders,
+    wr: sharedHeaders,
+    te: sharedHeaders,
+    flex: sharedHeaders,
+};
 
 function StatsComponent() {
     // const { authToken, currentUser } = useContext(AuthContext);
@@ -141,6 +195,15 @@ function StatsComponent() {
         }
         fetchConfigurations();
     }, []);
+
+    useEffect(() => {
+        if (selectedPosition === 'qb' || selectedPosition === 'rb' || selectedPosition === 'wr' || selectedPosition === 'te' || selectedPosition === 'flex') {
+            setSelectedInterval('');
+            setSelectedCategory('');
+            setSelectedFilter('');
+            setSelectedWeek('');
+        }
+    }, [selectedPosition]);
 
     useEffect(() => {
         if (selectedCategory === 'conf' || selectedCategory === 'team' || selectedCategory === 'name') {
@@ -298,10 +361,10 @@ function StatsComponent() {
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th colSpan="6">Description</th>
-                                            <th colSpan="7">Passing</th>
-                                            <th colSpan="3">Rushing</th>
-                                            <th colSpan="2">Extra</th>
+                                            <th colSpan="6">Player Info</th>
+                                            {headerColumns[selectedPosition].map((column) => (
+                                                <th key={column.label} colSpan={column.colSpan}>{column.label}</th>
+                                            ))}
                                             <th colSpan="2">Points</th>
                                         </tr>
                                         <tr>
@@ -311,20 +374,9 @@ function StatsComponent() {
                                             <th>Week</th>
                                             <th>Inj</th>
                                             <th>Name</th>
-                                            <th>Comp</th>
-                                            <th>Att</th>
-                                            <th>Pct</th>
-                                            <th>Yds</th>
-                                            <th>TD</th>
-                                            <th>Int</th>
-                                            <th>Rtng</th>
-                                            <th>Att</th>
-                                            <th>Yds</th>
-                                            <th>TD</th>
-                                            <th>2PC</th>
-                                            <th>FL</th>
-                                            <th>Tot</th>
-                                            <th>Avg</th>
+                                            {positionColumns[selectedPosition].map((column) => (
+                                                <th key={column.key}>{column.label}</th>
+                                            ))}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -342,20 +394,9 @@ function StatsComponent() {
                                                     {player.injuryStatus ? player.injuryStatus.charAt(0) : 'A'}
                                                 </td>
                                                 <td>{player.name}</td>
-                                                <td>{player.passingCompletions}</td>
-                                                <td>{player.passingAttempts}</td>
-                                                <td>{player.passingCompletionPercentage}</td>
-                                                <td>{player.passingYards}</td>
-                                                <td>{player.passingTouchdowns}</td>
-                                                <td>{player.passingInterceptions}</td>
-                                                <td>{player.passingRating}</td>
-                                                <td>{player.rushingAttempts}</td>
-                                                <td>{player.rushingYards}</td>
-                                                <td>{player.rushingTouchdowns}</td>
-                                                <td>{player.twoPointConversions}</td>
-                                                <td>{player.fumblesLost}</td>
-                                                <td>{player.fantasyPointsTotal}</td>
-                                                <td>{player.fantasyPointsAverage}</td>
+                                                {positionColumns[selectedPosition].map((column) => (
+                                                    <td key={column.key}>{player[column.key]}</td>
+                                                ))}
                                             </tr>
                                         ))}
                                     </tbody>
