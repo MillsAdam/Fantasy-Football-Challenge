@@ -3,7 +3,7 @@ import RosterService from "../services/RosterService";
 import { AuthContext } from "../context/AuthContext";
 import { useConfig } from "../context/ConfigContext";
 import DatabaseService from "../services/DatabaseService";
-import "../styles/RosterComponent.css";
+import styles from "../styles/RosterComponent.module.css";
 import { positionOptions, teamNameDisplayOptions } from "../constants/RosterConstants";
 
 function RosterComponent() {
@@ -225,12 +225,12 @@ function RosterComponent() {
     return (
         <div>
             {isLoading? (<p>Loading...</p>) : (
-                <div className="page-container">
-                    <div className="component-container">
+                <div className={styles.pageContainer}>
+                    <div className={styles.componentContainer}>
                         <h2>Search Players</h2>
                         <div>
                             <input 
-                                className="search-input" 
+                                className={styles.searchInput} 
                                 type="text" 
                                 value={searchName} 
                                 placeholder="Enter Name" 
@@ -238,7 +238,7 @@ function RosterComponent() {
                                 disabled={activeSearchMethod && activeSearchMethod !== "name"}
                             />
                             <button 
-                                className="search-button" 
+                                className={styles.searchButton} 
                                 onClick={startSearchByName} 
                                 disabled={isLoading || (activeSearchMethod && activeSearchMethod !=="name")}
                             >
@@ -247,7 +247,7 @@ function RosterComponent() {
                         </div>
                         <div>
                             <select 
-                                className="search-select" 
+                                className={styles.searchSelect} 
                                 value={selectedTeamName} 
                                 onChange={(e) => setSelectedTeamName(e.target.value)} 
                                 disabled={activeSearchMethod && activeSearchMethod !== "team"}
@@ -258,7 +258,7 @@ function RosterComponent() {
                                 ))}
                             </select>
                             <button 
-                                className="search-button" 
+                                className={styles.searchButton}
                                 onClick={startSearchByTeam} 
                                 disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "team")}
                             >
@@ -267,7 +267,7 @@ function RosterComponent() {
                         </div>
                         <div>
                             <select 
-                                className="search-select" 
+                                className={styles.searchSelect} 
                                 value={selectedPosition} 
                                 onChange={(e) => setSelectedPosition(e.target.value)} 
                                 disabled={activeSearchMethod && activeSearchMethod !== "position"}
@@ -278,14 +278,14 @@ function RosterComponent() {
                                 ))}
                             </select>
                             <button 
-                                className="search-button" 
+                                className={styles.searchButton} 
                                 onClick={startSearchByPosition} 
                                 disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "position")}
                             >
                                 Search by Position
                             </button>
                         </div>
-                        <button className="clear-button" onClick={clearSearch} disabled={isLoading}>Clear Search</button>
+                        <button className={styles.clearButton} onClick={clearSearch} disabled={isLoading}>Clear Search</button>
                         {isLoading ? (<p>Loading...</p>) : (
                             searchPlayer.length > 0 && (
                                 <div>
@@ -337,7 +337,7 @@ function RosterComponent() {
                         )}
                     </div>
                     
-                    <div className="component-container">
+                    <div className={styles.componentContainer}>
                         <h2>My Roster</h2>
                         {activeRosterPlayers.length > 0 && (
                             <div className="table-container">

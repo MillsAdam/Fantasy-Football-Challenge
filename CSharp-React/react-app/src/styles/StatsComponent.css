@@ -1,10 +1,9 @@
 .search-container {
-    margin-top: 2rem;
     padding: 1rem;
     background: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    width: 90%;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
     
@@ -14,7 +13,6 @@
 }
 
 .stats-select, .stats-button, .stats-filter-select, .stats-filter-input {
-
     width: 100%;
     margin-bottom: 10px;
 }
