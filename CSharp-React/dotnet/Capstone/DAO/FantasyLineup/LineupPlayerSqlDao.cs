@@ -105,7 +105,7 @@ namespace Capstone.DAO
                     JOIN players p ON lp.player_id = p.player_id 
                     JOIN teams t ON p.team_id = t.team_id 
                     LEFT JOIN player_stats ps ON p.player_id = ps.player_id 
-                    LEFT JOIN configuration c_week ON c_week.config_key = 'current_week' 
+                    LEFT JOIN configuration c_week ON c_week.config_key = 'currentWeek' 
                     LEFT JOIN player_projections ppi ON p.player_id = ppi.player_id AND ppi.week = c_week.config_value  
                     LEFT JOIN player_stats psi ON p.player_id = psi.player_id AND psi.week = c_week.config_value  
                     WHERE lineup_id = @lineup_id 
@@ -219,10 +219,10 @@ namespace Capstone.DAO
                     LEFT JOIN player_stats ps ON p.player_id = ps.player_id 
                     LEFT JOIN configuration c_week ON c_week.config_key = 
                         CASE 
-                            WHEN @game_week = 1 THEN 'lineup_week_one' 
-                            WHEN @game_week = 2 THEN 'lineup_week_two' 
-                            WHEN @game_week = 3 THEN 'lineup_week_three' 
-                            WHEN @game_week = 4 THEN 'lineup_week_four' 
+                            WHEN @game_week = 1 THEN 'lineupWeek1' 
+                            WHEN @game_week = 2 THEN 'lineupWeek2' 
+                            WHEN @game_week = 3 THEN 'lineupWeek3' 
+                            WHEN @game_week = 4 THEN 'lineupWeek4'
                         END 
                     LEFT JOIN player_projections ppi ON p.player_id = ppi.player_id AND ppi.week = c_week.config_value  
                     LEFT JOIN player_stats psi ON p.player_id = psi.player_id AND psi.week = c_week.config_value  

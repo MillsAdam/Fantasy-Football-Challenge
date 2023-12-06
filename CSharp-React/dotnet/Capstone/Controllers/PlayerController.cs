@@ -48,7 +48,7 @@ namespace Capstone.Controllers
             }
         }
 
-        [HttpPut("upsert")]
+        [HttpPost("upsert")]
         public async Task<ActionResult> UpsertPlayer()
         {
             try

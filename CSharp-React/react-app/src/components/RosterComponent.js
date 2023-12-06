@@ -64,7 +64,7 @@ function RosterComponent() {
     }, []);
 
     useEffect(() => {
-        const rosterLockConfig = configurations.find(config => config.configKey === 'lock_rosters');
+        const rosterLockConfig = configurations.find(config => config.configKey === 'lockRosters');
         if (rosterLockConfig) {
             setIsRosterLocked(rosterLockConfig.configValue === 1);
         }

@@ -58,8 +58,8 @@ namespace Capstone.DAO.Position.Quarterback
             JOIN teams t ON t.team_id = pse.team_id 
             CROSS JOIN StartingWeek AS sw
             WHERE p.position = 'QB' 
-                AND pse.week >= sw.week - 3 
-                AND pse.week <= sw.week ";
+                AND pse.week <= sw.week  
+                AND pse.week >= sw.week - 3";
 
         private const string GROUP_BY_SQL =
             @"GROUP BY 
@@ -86,14 +86,14 @@ namespace Capstone.DAO.Position.Quarterback
 
         public async Task<List<PlayerStatsExtDto>> getQBLast4TotalStatsAsync()
         {
-            int week = await _configurationDao.GetConfigurationValue("current_week");
+            int week = await _configurationDao.GetConfigurationValue("currentWeek");
             List<PlayerStatsExtDto> qbLast4TotalStats = new List<PlayerStatsExtDto>();
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 using (NpgsqlCommand command = new NpgsqlCommand(SELECT_SQL + GROUP_BY_SQL, connection))
                 {
-                    command.Parameters.AddWithValue("@week", week);
+                    command.Parameters.AddWithValue("@week", week - 1);
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                     {
                         while (reader.Read())
@@ -108,14 +108,14 @@ namespace Capstone.DAO.Position.Quarterback
 
         public async Task<List<PlayerStatsExtDto>> getQBLast4TotalStatsByConfAsync(string conf)
         {
-            int week = await _configurationDao.GetConfigurationValue("current_week");
+            int week = await _configurationDao.GetConfigurationValue("currentWeek");
             List<PlayerStatsExtDto> qbLast4TotalStatsByConf = new List<PlayerStatsExtDto>();
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 using (NpgsqlCommand command = new NpgsqlCommand(SELECT_SQL + CONF_SQL + GROUP_BY_SQL, connection))
                 {
-                    command.Parameters.AddWithValue("@week", week);
+                    command.Parameters.AddWithValue("@week", week - 1);
                     command.Parameters.AddWithValue("@conf", $"%{conf}%");
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                     {
@@ -131,14 +131,14 @@ namespace Capstone.DAO.Position.Quarterback
 
         public async Task<List<PlayerStatsExtDto>> getQBLast4TotalStatsByTeamAsync(string team)
         {
-            int week = await _configurationDao.GetConfigurationValue("current_week");
+            int week = await _configurationDao.GetConfigurationValue("currentWeek");
             List<PlayerStatsExtDto> qbLast4TotalStatsByTeam = new List<PlayerStatsExtDto>();
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 using (NpgsqlCommand command = new NpgsqlCommand(SELECT_SQL + TEAM_SQL + GROUP_BY_SQL, connection))
                 {
-                    command.Parameters.AddWithValue("@week", week);
+                    command.Parameters.AddWithValue("@week", week - 1);
                     command.Parameters.AddWithValue("@team", $"%{team}%");
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                     {
@@ -154,14 +154,14 @@ namespace Capstone.DAO.Position.Quarterback
 
         public async Task<List<PlayerStatsExtDto>> getQBLast4TotalStatsByNameAsync(string name)
         {
-            int week = await _configurationDao.GetConfigurationValue("current_week");
+            int week = await _configurationDao.GetConfigurationValue("currentWeek");
             List<PlayerStatsExtDto> qbLast4TotalStatsByName = new List<PlayerStatsExtDto>();
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 using (NpgsqlCommand command = new NpgsqlCommand(SELECT_SQL + NAME_SQL + GROUP_BY_SQL, connection))
                 {
-                    command.Parameters.AddWithValue("@week", week);
+                    command.Parameters.AddWithValue("@week", week - 1);
                     command.Parameters.AddWithValue("@name", $"%{name}%");
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                     {

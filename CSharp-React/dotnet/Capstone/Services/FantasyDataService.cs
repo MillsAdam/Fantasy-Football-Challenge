@@ -230,7 +230,7 @@ namespace Capstone.Services
         // Get Stats/Projections for Update
         public async Task<List<PlayerStats>> GetPlayerStatsForUpdateAsync()
         {
-            int currentWeek = await _configurationDao.GetConfigurationValue("current_week");
+            int currentWeek = await _configurationDao.GetConfigurationValue("currentWeek");
             string season;
             int adjustedWeek;
 
@@ -270,7 +270,7 @@ namespace Capstone.Services
 
         public async Task<List<DefenseStats>> GetDefenseStatsForUpdateAsync()
         {
-            int currentWeek = await _configurationDao.GetConfigurationValue("current_week");
+            int currentWeek = await _configurationDao.GetConfigurationValue("currentWeek");
             string season;
             int adjustedWeek;
 
@@ -310,7 +310,7 @@ namespace Capstone.Services
 
         public async Task<List<PlayerStats>> GetPlayerProjectionsForUpdateAsync()
         {
-            int currentWeek = await _configurationDao.GetConfigurationValue("current_week");
+            int currentWeek = await _configurationDao.GetConfigurationValue("currentWeek");
             string season;
             int adjustedWeek;
 
@@ -350,7 +350,7 @@ namespace Capstone.Services
 
         public async Task<List<DefenseStats>> GetDefenseProjectionsForUpdateAsync()
         {
-            int currentWeek = await _configurationDao.GetConfigurationValue("current_week");
+            int currentWeek = await _configurationDao.GetConfigurationValue("currentWeek");
             string season;
             int adjustedWeek;
 

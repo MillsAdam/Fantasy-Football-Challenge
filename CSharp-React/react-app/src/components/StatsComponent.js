@@ -54,7 +54,7 @@ function StatsComponent() {
 
 
     useEffect(() => {
-        const currentWeekConfig = configurations.find(config => config.configKey === 'current_week');
+        const currentWeekConfig = configurations.find(config => config.configKey === 'currentWeek');
         if (currentWeekConfig) {
             const currentWeek = currentWeekConfig.configValue;
             setCurrentWeek(currentWeek);

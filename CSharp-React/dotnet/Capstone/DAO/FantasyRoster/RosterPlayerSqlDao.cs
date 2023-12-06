@@ -117,7 +117,7 @@ namespace Capstone.DAO
                     JOIN players p ON rp.player_id = p.player_id 
                     JOIN teams t ON p.team_id = t.team_id 
                     LEFT JOIN player_stats ps ON p.player_id = ps.player_id 
-                    LEFT JOIN configuration c_week ON c_week.config_key = 'current_week' 
+                    LEFT JOIN configuration c_week ON c_week.config_key = 'currentWeek' 
                     LEFT JOIN player_projections ppi ON p.player_id = ppi.player_id AND ppi.week = c_week.config_value  
                     LEFT JOIN player_stats psi ON p.player_id = psi.player_id AND psi.week = c_week.config_value  
                     WHERE roster_id = @roster_id 

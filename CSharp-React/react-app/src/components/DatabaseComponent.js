@@ -199,8 +199,6 @@ function DatabaseComponent() {
         setIsLoading(false);
     }, [authToken, currentUser.role, configurations, updateConfigurations]);
 
-    
-
     async function ToggleTeamStatus(e) {
         e.preventDefault();
         setLoadingMessage(`Updating ${selectedTeamName} Status...`);
@@ -261,7 +259,7 @@ function DatabaseComponent() {
             </div>
             <div className="page-container">
                 <div className="component-container">
-                    <h3>Teams / Players</h3>
+                    <h3>Teams / Players / Scores</h3>
                     <form onSubmit={createTeamsAndPlayers}>
                         <button className="database-button" type="submit" disabled={isLoading}>
                             {isLoading && loadingMessage === "Creating Teams and Players..." ? "Loading..." : "Create Teams and Players"}
@@ -272,9 +270,7 @@ function DatabaseComponent() {
                             {isLoading && loadingMessage === "Upserting Players..." ? "Loading..." : "Upsert Players"}
                         </button>
                     </form>
-                </div>
-                <div className="component-container">
-                    <h3>Player Stats</h3>
+                    <h3>Player Stats / Projections</h3>
                     <form onSubmit={createPlayerStatsAndProjections}>
                         <button className="database-button" type="submit" disabled={isLoading}>
                             {isLoading && loadingMessage === "Creating Player Stats and Projections..." ? "Loading..." : "Create Player Stats and Projections"}
@@ -282,15 +278,19 @@ function DatabaseComponent() {
                     </form>
                     <form onSubmit={upsertPlayerStatsAndProjectionsByWeek}>
                         <button className="database-button" type="submit" disabled={isLoading}>
-                            {isLoading && loadingMessage === "Upserting Player Stats and Projections By Week..." ? "Loading..." : "Upsert Player Stats and Projections By Week"}
+                            {isLoading && 
+                                loadingMessage === "Upserting Player Stats and Projections By Week..." ? 
+                                "Loading..." : 
+                                `Upsert Player Stats and Projections for Current Week ${configurations.find(config => config.configKey === "currentWeek")?.configValue}`}
                         </button>
                     </form>
-                </div>
-                <div className="component-container">
-                    <h3>Scores</h3>
+                    <h3>Lineup / Roster Scores</h3>
                     <form onSubmit={updateLineupAndRosterScores}>
                         <button className="database-button" type="submit" disabled={isLoading}>
-                            {isLoading && loadingMessage === "Updating Lineup and Roster Scores..." ? "Loading..." : "Update Lineup and Roster Scores"}
+                            {isLoading && 
+                                loadingMessage === "Updating Lineup and Roster Scores..." ? 
+                                    "Loading..." : 
+                                    `Update Lineup and Roster Scores for Lineup Week ${configurations.find(config => config.configKey === "currentLineupWeek")?.configValue}`}
                         </button>
                     </form>
                 </div>
@@ -317,9 +317,18 @@ function DatabaseComponent() {
                             disabled={!selectedConfigKey}
                         >
                             <option value="" disabled hidden>Select Config Value</option>
-                            {(configValueOptions[selectedConfigKey] || []).map(value => (
-                                <option key={value} value={value}>{value}</option>
-                            ))}
+                            {
+                                configValueOptions[selectedConfigKey] && 
+                                (typeof configValueOptions[selectedConfigKey] === 'object' && !Array.isArray(configValueOptions[selectedConfigKey]) 
+                                    ? Object.entries(configValueOptions[selectedConfigKey]).map(([value, displayText]) => (
+                                        <option key={value} value={value}>{displayText}</option>
+                                    ))
+                                    : Array.isArray(configValueOptions[selectedConfigKey]) && 
+                                    configValueOptions[selectedConfigKey].map(value => (
+                                        <option key={value} value={value}>{value}</option>
+                                    ))
+                                )
+                            }
                         </select>
                         <button className="database-button" type="submit" disabled={isLoading || !selectedConfigKey || !selectedConfigValue}>
                             {isLoading && loadingMessage === "Updating Configuration..." ? "Loading..." : "Update Configuration"}
@@ -335,7 +344,11 @@ function DatabaseComponent() {
                                     {configurations.map((config, index) => (
                                         <tr key={index}>
                                             <td>{configKeyDisplayNames[config.configKey] || config.configKey}</td>
-                                            <td>{config.configValue}</td>
+                                            <td>
+                                                {config.configKey === 'lockRosters' || config.configKey === 'lockLineups' || config.configKey === 'currentWeek' || config.configKey === 'startingLineupWeek' 
+                                                    ? configValueOptions[config.configKey][config.configValue] 
+                                                    : config.configValue}
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>

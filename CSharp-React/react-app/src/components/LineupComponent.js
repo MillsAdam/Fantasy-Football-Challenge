@@ -65,7 +65,7 @@ function LineupComponent() {
     }, [authToken, currentUser]);
 
     useEffect(() => {
-        const lineupLockConfig = configurations.find(config => config.configKey === 'lock_lineups');
+        const lineupLockConfig = configurations.find(config => config.configKey === 'lockLineups');
         if (lineupLockConfig) {
             setIsLineupLocked(lineupLockConfig.configValue === 1);
         }

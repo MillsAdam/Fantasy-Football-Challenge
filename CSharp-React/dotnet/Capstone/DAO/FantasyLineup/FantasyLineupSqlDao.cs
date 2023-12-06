@@ -48,7 +48,7 @@ namespace Capstone.DAO
                 using NpgsqlCommand command = new NpgsqlCommand(
                     @"SELECT fl.lineup_id, fl.roster_id, fl.game_week, fl.total_score 
                     FROM fantasy_lineups fl 
-                    LEFT JOIN configuration c_lineup_week ON c_lineup_week.config_key = 'current_lineup_week' 
+                    LEFT JOIN configuration c_lineup_week ON c_lineup_week.config_key = 'currentLineupWeek' 
                     WHERE roster_id = @roster_id 
                         AND game_week = c_lineup_week.config_value;", connection);
                 {
