@@ -133,7 +133,7 @@ function StatsComponent() {
                                 value={selectedPosition} 
                                 onChange={(e) => setSelectedPosition(e.target.value)}
                             >
-                                <option value="" disabled hidden>Select a position</option>
+                                <option value="" disabled hidden>Select a Position</option>
                                 {positionOptions.map((position) => (
                                     <option key={position} value={position}>{positionDisplayOptions[position]}</option>
                                 ))}
@@ -147,7 +147,7 @@ function StatsComponent() {
                                 onChange={(e) => setSelectedInterval(e.target.value)} 
                                 disabled={selectedPosition === ''}
                             >
-                                <option value="" disabled hidden>Select an interval</option>
+                                <option value="" disabled hidden>Select an Interval</option>
                                 {intervalOptions.map((interval) => (
                                     <option key={interval} value={interval}>{intervalDisplayOptions[interval]}</option>
                                 ))}
@@ -160,7 +160,7 @@ function StatsComponent() {
                                     value={selectedWeek} 
                                     onChange={(e) => setSelectedWeek(e.target.value)}
                                 >
-                                    <option value="" disabled hidden>Select a week</option>
+                                    <option value="" disabled hidden>Select a Week</option>
                                     {weekOptions
                                         .filter(week => week <= currentWeek)
                                         .map((week) => (
@@ -176,7 +176,7 @@ function StatsComponent() {
                                 onChange={(e) => setSelectedCategory(e.target.value)} 
                                 disabled={selectedPosition === '' || selectedInterval === ''}
                             >
-                                <option value="" disabled hidden>Select a category</option>
+                                <option value="" disabled hidden>Select a Category</option>
                                 {categoryOptions.map((category) => (
                                     <option key={category} value={category}>{categoryDisplayOptions[category]}</option>
                                 ))}
@@ -190,7 +190,7 @@ function StatsComponent() {
                                         value={selectedFilter}
                                         onChange={(e) => setSelectedFilter(e.target.value)}
                                     >
-                                        <option value="" disabled hidden>Select a filter</option>
+                                        <option value="" disabled hidden>Select a Filter</option>
                                         {selectedCategory === 'conf' && conferenceOptions.map((conference) => (
                                             <option key={conference} value={conference}>{conferenceDisplayOptions[conference]}</option>
                                         ))}

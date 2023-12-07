@@ -2,18 +2,17 @@ import React, { useState, useContext, useEffect, useCallback } from "react";
 import { AuthContext } from "../context/AuthContext";
 import DatabaseService from "../services/DatabaseService";
 import { useConfig } from "../context/ConfigContext";
-import "../styles/DatabaseComponent.css";
-import { configKeyDisplayNames, configValueOptions, teamNameDisplayNames } from "../constants/DatabaseConstants";
+import "../styles/AdminComponent.css";
+import { configKeyDisplayNames, configValueOptions, teamNameDisplayNames } from "../constants/AdminConstants";
 
 
-function DatabaseComponent() {
+function AdminComponent() {
     const { authToken, currentUser } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [dynamicConfigKeyOptions, setDynamicConfigKeyOptions] = useState([]);
     const [selectedConfigKey, setSelectedConfigKey] = useState("");
     const [selectedConfigValue, setSelectedConfigValue] = useState("");
-    // new configurations
     const { configurations, updateConfigurations } = useConfig();
     const [dynamicTeamNameOptions, setDynamicTeamNameOptions] = useState([]);
     const [selectedTeamName, setSelectedTeamName] = useState("");
@@ -27,7 +26,7 @@ function DatabaseComponent() {
         setSuccessMessage(message);
         setTimeout(() => {
             setSuccessMessage("");
-        }, 3000); // Clear the message after 5 seconds
+        }, 3000); // Clear the message after 3 seconds
     }
 
     const toggleTeamsTableVisibility = () => {
@@ -402,4 +401,4 @@ function DatabaseComponent() {
 
 }
 
-export default DatabaseComponent;
+export default AdminComponent;

@@ -245,6 +245,7 @@ function LineupComponent() {
                             </div>
                         )}
                     </div> 
+                    
                     <div className="component-container">
                         <h2>Weekly Lineup</h2>
                         <form onSubmit={getLineupPlayersByWeek}>

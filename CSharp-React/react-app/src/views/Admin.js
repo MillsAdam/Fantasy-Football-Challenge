@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from 'react-router-dom';
-import DatabaseComponent from "../components/DatabaseComponent";
+import AdminComponent from "../components/AdminComponent";
 
 function Admin() {
     const { authToken, currentUser } = useContext(AuthContext);
@@ -18,7 +18,7 @@ function Admin() {
     return (
         <div>
             <h1>Admin Page</h1>
-            <DatabaseComponent />
+            <AdminComponent />
         </div>
     )
 }

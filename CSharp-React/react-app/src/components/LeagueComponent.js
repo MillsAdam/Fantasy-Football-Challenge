@@ -5,7 +5,6 @@ import "../styles/LeagueComponent.css";
 
 function LeagueComponent() {
     const { authToken, currentUser } = useContext(AuthContext);
-    const [teamName, setTeamName] = useState("");
     const [rosters, setRosters] = useState([]);
     const [userHasTeam, setUserHasTeam] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -35,25 +34,7 @@ function LeagueComponent() {
         } else {
             setError('User not found');
         }
-    }, [currentUser]);
-
-    async function createRoster(e) {
-        e.preventDefault();
-        setIsLoading(true);
-        setError(null);
-        try {
-            const newRoster = await LeagueService.createRoster(teamName, authToken);
-            if (newRoster) {
-                const updatedRosters = await LeagueService.getFantasyRosters();
-                setRosters(updatedRosters);
-                setUserHasTeam(true);
-            }
-        } catch (error) {
-            console.error('An error occurred: ', error);
-            setError('Failed to create League Roster');
-        }
-        setIsLoading(false);
-    }
+    }, [authToken, currentUser]);
 
     return (
         <div>
@@ -61,14 +42,8 @@ function LeagueComponent() {
                 <div className="component-container">
                     {!userHasTeam && (
                         <div>
-                            <h2>Create League Roster</h2>
-                            <form onSubmit={createRoster}>
-                                <label>Team Name</label>
-                                <input type="text" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
-                                <button className="league-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create League Roster"}</button>
-                            </form>
+                            <h2>Create a Roster to view Leaderboard</h2>
                         </div>
-                        
                     )}
                     {userHasTeam && (
                         <div className="table-container">
