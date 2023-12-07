@@ -3,14 +3,13 @@ import { AuthContext } from "../context/AuthContext";
 import DatabaseService from "../services/DatabaseService";
 import { useConfig } from "../context/ConfigContext";
 import "../styles/AdminComponent.css";
-import { configKeyDisplayNames, configValueOptions, teamNameDisplayNames } from "../constants/AdminConstants";
+import { orderedConfigKeys, configDisplayOrder, configKeyDisplayNames, configValueOptions, teamNameDisplayNames } from "../constants/AdminConstants";
 
 
 function AdminComponent() {
     const { authToken, currentUser } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [dynamicConfigKeyOptions, setDynamicConfigKeyOptions] = useState([]);
     const [selectedConfigKey, setSelectedConfigKey] = useState("");
     const [selectedConfigValue, setSelectedConfigValue] = useState("");
     const { configurations, updateConfigurations } = useConfig();
@@ -165,6 +164,30 @@ function AdminComponent() {
                     ConfigValue: parseInt(selectedConfigValue, 10)
                 };
                 const updatedConfiguration = await DatabaseService.updateConfiguration(configuration);
+
+                if (selectedConfigKey === 'startingLineupWeek') {
+                    const lineupWeek1Config = {
+                        ConfigKey: 'lineupWeek1',
+                        ConfigValue: parseInt(selectedConfigValue, 10)
+                    };
+                    const lineupWeek2Config = {
+                        ConfigKey: 'lineupWeek2',
+                        ConfigValue: parseInt(selectedConfigValue, 10) + 1
+                    };
+                    const lineupWeek3Config = {
+                        ConfigKey: 'lineupWeek3',
+                        ConfigValue: parseInt(selectedConfigValue, 10) + 2
+                    };
+                    const lineupWeek4Config = {
+                        ConfigKey: 'lineupWeek4',
+                        ConfigValue: parseInt(selectedConfigValue, 10) + 3
+                    };
+                    await DatabaseService.updateConfiguration(lineupWeek1Config);
+                    await DatabaseService.updateConfiguration(lineupWeek2Config);
+                    await DatabaseService.updateConfiguration(lineupWeek3Config);
+                    await DatabaseService.updateConfiguration(lineupWeek4Config);
+                }
+
                 if (updatedConfiguration) {
                     const fetchedConfigurations = await DatabaseService.getConfiguration();
                     updateConfigurations(fetchedConfigurations);
@@ -187,9 +210,7 @@ function AdminComponent() {
         try {
             if (authToken && currentUser.role === 'admin') {
                 const sortedConfigurations = configurations.sort((a, b) => a.configKey.localeCompare(b.configKey));
-                const sortedConfigKeys = configurations.map(config => config.configKey).sort();
                 updateConfigurations(sortedConfigurations);
-                setDynamicConfigKeyOptions(sortedConfigKeys);
             }
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -305,8 +326,8 @@ function AdminComponent() {
                             }}
                         >
                             <option value="" disabled hidden>Select Config Key</option>
-                            {dynamicConfigKeyOptions.map(key => (
-                                <option key={key} value={key}>{configKeyDisplayNames[key] || key}</option>
+                            {[...orderedConfigKeys.keys()].map(key => (
+                                <option key={key} value={key}>{orderedConfigKeys.get(key)}</option>
                             ))}
                         </select>
                         <select 
@@ -340,7 +361,9 @@ function AdminComponent() {
                         <div className="table-container">
                             <table>
                                 <tbody>
-                                    {configurations.map((config, index) => (
+                                    {configurations
+                                        .sort((a,b) => configDisplayOrder.indexOf(a.configKey) - configDisplayOrder.indexOf(b.configKey))
+                                        .map((config, index) => (
                                         <tr key={index}>
                                             <td>{configKeyDisplayNames[config.configKey] || config.configKey}</td>
                                             <td>

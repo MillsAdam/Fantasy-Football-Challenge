@@ -47,11 +47,25 @@ export const configValueOptions = {
         18: 'Week 18',
         19: 'Wild Card'
     },
-    'lineupWeek1': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
-    'lineupWeek2': [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
-    'lineupWeek3': [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
-    'lineupWeek4': [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
 };
+export const orderedConfigKeys = new Map([
+    ['currentWeek', 'Current Week'],
+    ['currentLineupWeek', 'Current Lineup Week'],
+    ['lockRosters', 'Lock Rosters'],
+    ['lockLineups', 'Lock Lineups'],
+    ['startingLineupWeek', 'Starting Lineup Week'],
+]);
+export const configDisplayOrder = [
+    'currentWeek',
+    'currentLineupWeek',
+    'lockRosters',
+    'lockLineups',
+    'startingLineupWeek',
+    'lineupWeek1',
+    'lineupWeek2',
+    'lineupWeek3',
+    'lineupWeek4',
+];
 export const configKeyDisplayNames = {
     'currentWeek': 'Current Week',
     'currentLineupWeek': 'Current Lineup Week',
