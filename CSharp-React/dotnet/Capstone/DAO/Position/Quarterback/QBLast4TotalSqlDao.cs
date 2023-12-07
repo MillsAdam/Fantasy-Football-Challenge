@@ -96,7 +96,7 @@ namespace Capstone.DAO.Position.Quarterback
                     command.Parameters.AddWithValue("@week", week - 1);
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        while (reader.Read())
+                        while (await reader.ReadAsync())
                         {
                             qbLast4TotalStats.Add(MapRowToQBStat(reader));
                         }
@@ -119,7 +119,7 @@ namespace Capstone.DAO.Position.Quarterback
                     command.Parameters.AddWithValue("@conf", $"%{conf}%");
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        while (reader.Read())
+                        while (await reader.ReadAsync())
                         {
                             qbLast4TotalStatsByConf.Add(MapRowToQBStat(reader));
                         }
@@ -142,7 +142,7 @@ namespace Capstone.DAO.Position.Quarterback
                     command.Parameters.AddWithValue("@team", $"%{team}%");
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        while (reader.Read())
+                        while (await reader.ReadAsync())
                         {
                             qbLast4TotalStatsByTeam.Add(MapRowToQBStat(reader));
                         }
@@ -165,7 +165,7 @@ namespace Capstone.DAO.Position.Quarterback
                     command.Parameters.AddWithValue("@name", $"%{name}%");
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        while (reader.Read())
+                        while (await reader.ReadAsync())
                         {
                             qbLast4TotalStatsByName.Add(MapRowToQBStat(reader));
                         }

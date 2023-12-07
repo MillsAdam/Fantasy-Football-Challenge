@@ -291,9 +291,5 @@ namespace Capstone.DAO.Position.Flex
                 TeamStatus = Convert.ToString(reader["team_status"])
             };
         }
-
-        
-
-        
     }
 }

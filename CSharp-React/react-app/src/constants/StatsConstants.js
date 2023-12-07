@@ -1,4 +1,4 @@
-export const positionOptions = ['qb', 'rb', 'wr', 'te', 'k', 'def'];
+export const positionOptions = ['qb', 'rb', 'wr', 'te', 'flex', 'k', 'def'];
 export const positionDisplayOptions = {
     'qb': 'QB',
     'rb': 'RB',
