@@ -92,7 +92,7 @@ function LeagueComponent() {
         <div>
             {isLoading ? (<p>Loading...</p>) : (
                 <div className="page-container">
-                    <div className="league-component-container">
+                    <div className="component-container">
                         {!userHasTeam && (
                             <div>
                                 <h2>Create a Roster to view Leaderboard</h2>

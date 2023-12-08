@@ -1,12 +1,4 @@
-.league-component-container {
-    padding: 1rem;
-    background: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-}
+
 
 .team-info {
     display: flex;
@@ -39,9 +31,7 @@
 }
 
 @media (max-width: 1200px) {
-    .league-component-container {
-        width: 90%;
-    }
+
 
     .league-button-container {
         overflow-x: auto;
