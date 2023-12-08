@@ -136,8 +136,8 @@ function LeagueComponent() {
                         {selectedUserId && (
                             <div>
                                 <div className="team-info">
-                                    <h3>{selectedTeamName}</h3>
-                                    <p>Total Score: {selectedTotalScore}</p>
+                                    <h4>{selectedTeamName}</h4>
+                                    <p>Total Score: <strong>{selectedTotalScore}</strong></p>
                                 </div>
                                 <div className="league-button-container">
                                     {[1, 2, 3, 4].map(week => (
@@ -150,7 +150,7 @@ function LeagueComponent() {
                                 {selectedWeek && (
                                     <div>
                                         <div>
-                                            <p>Week {selectedWeek} Score: {selectedWeeklyScore}</p>
+                                            <p>Week {selectedWeek} Score: <strong>{selectedWeeklyScore}</strong></p>
                                         </div>
                                         <div className="table-container">
                                             <table>

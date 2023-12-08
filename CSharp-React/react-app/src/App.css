@@ -221,13 +221,49 @@ select:focus {
   }
 
   table {
-    font-size: 12px;
+    font-size: 10px;
+  }
+  
+  table td {
+    font-size: 10px;
+    white-space: nowrap;
   }
 
   button {
     flex-shrink: 0;
+    font-size: 10px;
     /* width: 30px; */
   }
+
+  select, input, label {
+    font-size: 10px;
+  }
+
+  .App-link {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  h4 {
+    font-size: 10px;
+  }
+
+  p {
+    font-size: 10px;
+  }
+
+
 }
 
 

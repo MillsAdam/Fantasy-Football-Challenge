@@ -282,7 +282,7 @@ function AdminComponent() {
                     <h3>Teams / Players / Scores</h3>
                     <form onSubmit={createTeamsAndPlayers}>
                         <button className="database-button" type="submit" disabled={isLoading}>
-                            {isLoading && loadingMessage === "Creating Teams and Players..." ? "Loading..." : "Create Teams and Players"}
+                            {isLoading && loadingMessage === "Creating Teams and Players..." ? "Loading..." : "Create Teams / Players"}
                         </button>
                     </form>
                     <form onSubmit={upsertPlayers}>
@@ -293,7 +293,7 @@ function AdminComponent() {
                     <h3>Player Stats / Projections</h3>
                     <form onSubmit={createPlayerStatsAndProjections}>
                         <button className="database-button" type="submit" disabled={isLoading}>
-                            {isLoading && loadingMessage === "Creating Player Stats and Projections..." ? "Loading..." : "Create Player Stats and Projections"}
+                            {isLoading && loadingMessage === "Creating Player Stats and Projections..." ? "Loading..." : "Create Player Stats / Projections"}
                         </button>
                     </form>
                     <form onSubmit={upsertPlayerStatsAndProjectionsByWeek}>
@@ -301,7 +301,7 @@ function AdminComponent() {
                             {isLoading && 
                                 loadingMessage === "Upserting Player Stats and Projections By Week..." ? 
                                 "Loading..." : 
-                                `Upsert Player Stats and Projections for Current Week ${configurations.find(config => config.configKey === "currentWeek")?.configValue}`}
+                                `Upsert Player Stats / Projections for Current Week ${configurations.find(config => config.configKey === "currentWeek")?.configValue}`}
                         </button>
                     </form>
                     <h3>Lineup / Roster Scores</h3>
@@ -310,7 +310,7 @@ function AdminComponent() {
                             {isLoading && 
                                 loadingMessage === "Updating Lineup and Roster Scores..." ? 
                                     "Loading..." : 
-                                    `Update Lineup and Roster Scores for Lineup Week ${configurations.find(config => config.configKey === "currentLineupWeek")?.configValue}`}
+                                    `Update Lineup / Roster Scores for Lineup Week ${configurations.find(config => config.configKey === "currentLineupWeek")?.configValue}`}
                         </button>
                     </form>
                 </div>

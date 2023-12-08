@@ -15,7 +15,7 @@
     margin-bottom: 1rem;
 }
 
-.team-info h3, .team-info p {
+.team-info h4, .team-info p {
     margin: 0;
     padding: 0.5rem;
     flex-basis: 48%;
