@@ -1,4 +1,4 @@
-.search-container {
+.stats-component-container {
     padding: 1rem;
     background: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -6,7 +6,9 @@
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    
+}
+
+.search-container {
     display: flex;
     flex-direction: column;
     align-items: stretch; /* changed from 'center' */
@@ -21,4 +23,10 @@
     width: 100%;
     max-width: 100%;
     overflow: auto;
+}
+
+@media (max-width: 1200px) {
+    .stats-component-container {
+        width: 90%;
+    }
 }

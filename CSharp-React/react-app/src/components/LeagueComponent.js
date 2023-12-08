@@ -135,15 +135,18 @@ function LeagueComponent() {
                         )}
                         {selectedUserId && (
                             <div>
-                                <div>
+                                <div className="team-info">
                                     <h3>{selectedTeamName}</h3>
                                     <p>Total Score: {selectedTotalScore}</p>
                                 </div>
-                                {[1, 2, 3, 4].map(week => (
-                                    <button className="league-button" key={week} type="button" onClick={() => handleWeekSelection(week)}>
-                                        Week {week}
-                                    </button>
-                                ))}
+                                <div className="league-button-container">
+                                    {[1, 2, 3, 4].map(week => (
+                                        <button className="league-button" key={week} type="button" onClick={() => handleWeekSelection(week)}>
+                                            Week {week}
+                                        </button>
+                                    ))}
+                                </div>
+                                
                                 {selectedWeek && (
                                     <div>
                                         <div>

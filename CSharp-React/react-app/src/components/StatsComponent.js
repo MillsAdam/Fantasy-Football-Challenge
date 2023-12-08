@@ -125,107 +125,110 @@ function StatsComponent() {
     return (
         <div>
             <div className="page-container">
-                <div className="search-container">
-                    <form onSubmit={searchPlayerStats}>
-                        <div>
-                            <select 
-                                className="stats-select" 
-                                value={selectedPosition} 
-                                onChange={(e) => setSelectedPosition(e.target.value)}
-                            >
-                                <option value="" disabled hidden>Select a Position</option>
-                                {positionOptions.map((position) => (
-                                    <option key={position} value={position}>{positionDisplayOptions[position]}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <div>
-
-                            <select 
-                                className="stats-select" 
-                                value={selectedInterval} 
-                                onChange={(e) => setSelectedInterval(e.target.value)} 
-                                disabled={selectedPosition === ''}
-                            >
-                                <option value="" disabled hidden>Select an Interval</option>
-                                {intervalOptions.map((interval) => (
-                                    <option key={interval} value={interval}>{intervalDisplayOptions[interval]}</option>
-                                ))}
-                            </select>
-                        </div>
-                        {(selectedInterval === 'weekly total' || selectedInterval === 'weekly projected') && (
+                <div className="stats-component-container">
+                    <div className="search-container">
+                        <form onSubmit={searchPlayerStats}>
                             <div>
                                 <select 
-                                    className="stats-filter-select"
-                                    value={selectedWeek} 
-                                    onChange={(e) => setSelectedWeek(e.target.value)}
+                                    className="stats-select" 
+                                    value={selectedPosition} 
+                                    onChange={(e) => setSelectedPosition(e.target.value)}
                                 >
-                                    <option value="" disabled hidden>Select a Week</option>
-                                    {weekOptions
-                                        .filter(week => week <= currentWeek)
-                                        .map((week) => (
-                                        <option key={week} value={week}>{weekDisplayOptions[week]}</option>
+                                    <option value="" disabled hidden>Select a Position</option>
+                                    {positionOptions.map((position) => (
+                                        <option key={position} value={position}>{positionDisplayOptions[position]}</option>
                                     ))}
                                 </select>
                             </div>
-                        )}
-                        <div>
-                            <select 
-                                className="stats-select" 
-                                value={selectedCategory} 
-                                onChange={(e) => setSelectedCategory(e.target.value)} 
-                                disabled={selectedPosition === '' || selectedInterval === ''}
-                            >
-                                <option value="" disabled hidden>Select a Category</option>
-                                {categoryOptions.map((category) => (
-                                    <option key={category} value={category}>{categoryDisplayOptions[category]}</option>
-                                ))}
-                            </select>
-                        </div>
-                        {selectedCategory !== 'all' && selectedCategory !== '' && (
                             <div>
-                                {(selectedCategory === 'conf' || selectedCategory === 'team') ? (
+
+                                <select 
+                                    className="stats-select" 
+                                    value={selectedInterval} 
+                                    onChange={(e) => setSelectedInterval(e.target.value)} 
+                                    disabled={selectedPosition === ''}
+                                >
+                                    <option value="" disabled hidden>Select an Interval</option>
+                                    {intervalOptions.map((interval) => (
+                                        <option key={interval} value={interval}>{intervalDisplayOptions[interval]}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            {(selectedInterval === 'weekly total' || selectedInterval === 'weekly projected') && (
+                                <div>
                                     <select 
-                                        className="stats-filter-select" 
-                                        value={selectedFilter}
-                                        onChange={(e) => setSelectedFilter(e.target.value)}
+                                        className="stats-filter-select"
+                                        value={selectedWeek} 
+                                        onChange={(e) => setSelectedWeek(e.target.value)}
                                     >
-                                        <option value="" disabled hidden>Select a Filter</option>
-                                        {selectedCategory === 'conf' && conferenceOptions.map((conference) => (
-                                            <option key={conference} value={conference}>{conferenceDisplayOptions[conference]}</option>
-                                        ))}
-                                        {selectedCategory === 'team' && activeTeamNameOptions.map((team) => (
-                                            <option key={team} value={team}>{teamNameDisplayOptions[team] || team}</option>
+                                        <option value="" disabled hidden>Select a Week</option>
+                                        {weekOptions
+                                            .filter(week => week <= currentWeek)
+                                            .map((week) => (
+                                            <option key={week} value={week}>{weekDisplayOptions[week]}</option>
                                         ))}
                                     </select>
-                                ) : selectedCategory === 'name' ? (
-                                    <input 
-                                        className="stats-filter-input" 
-                                        type="text" 
-                                        value={selectedFilter} 
-                                        placeholder="Enter Name" 
-                                        onChange={(e) => setSelectedFilter(e.target.value)} 
-                                    />
-                                ) : null}
+                                </div>
+                            )}
+                            <div>
+                                <select 
+                                    className="stats-select" 
+                                    value={selectedCategory} 
+                                    onChange={(e) => setSelectedCategory(e.target.value)} 
+                                    disabled={selectedPosition === '' || selectedInterval === ''}
+                                >
+                                    <option value="" disabled hidden>Select a Category</option>
+                                    {categoryOptions.map((category) => (
+                                        <option key={category} value={category}>{categoryDisplayOptions[category]}</option>
+                                    ))}
+                                </select>
                             </div>
-                        )}
-                        <div>
-                            <button 
-                                className="stats-button" 
-                                type="submit" 
-                                disabled=
-                                    {isLoading || 
-                                    (selectedPosition === '' && selectedInterval === '' && selectedCategory === '') || 
-                                    (selectedInterval === 'weekly total' && selectedWeek === '') ||
-                                    (selectedInterval === 'weekly projected' && selectedWeek === '') ||
-                                    (selectedCategory !== 'all' && selectedCategory !== '' && selectedFilter === '')
-                                }
-                            >
-                                Search
-                            </button>
-                            <button className="stats-button" onClick={clearSearch} disabled={isLoading}>Clear</button>
-                        </div>
-                    </form>
+                            {selectedCategory !== 'all' && selectedCategory !== '' && (
+                                <div>
+                                    {(selectedCategory === 'conf' || selectedCategory === 'team') ? (
+                                        <select 
+                                            className="stats-filter-select" 
+                                            value={selectedFilter}
+                                            onChange={(e) => setSelectedFilter(e.target.value)}
+                                        >
+                                            <option value="" disabled hidden>Select a Filter</option>
+                                            {selectedCategory === 'conf' && conferenceOptions.map((conference) => (
+                                                <option key={conference} value={conference}>{conferenceDisplayOptions[conference]}</option>
+                                            ))}
+                                            {selectedCategory === 'team' && activeTeamNameOptions.map((team) => (
+                                                <option key={team} value={team}>{teamNameDisplayOptions[team] || team}</option>
+                                            ))}
+                                        </select>
+                                    ) : selectedCategory === 'name' ? (
+                                        <input 
+                                            className="stats-filter-input" 
+                                            type="text" 
+                                            value={selectedFilter} 
+                                            placeholder="Enter Name" 
+                                            onChange={(e) => setSelectedFilter(e.target.value)} 
+                                        />
+                                    ) : null}
+                                </div>
+                            )}
+                            <div>
+                                <button 
+                                    className="stats-button" 
+                                    type="submit" 
+                                    disabled=
+                                        {isLoading || 
+                                        (selectedPosition === '' && selectedInterval === '' && selectedCategory === '') || 
+                                        (selectedInterval === 'weekly total' && selectedWeek === '') ||
+                                        (selectedInterval === 'weekly projected' && selectedWeek === '') ||
+                                        (selectedCategory !== 'all' && selectedCategory !== '' && selectedFilter === '')
+                                    }
+                                >
+                                    Search
+                                </button>
+                                <button className="stats-button" onClick={clearSearch} disabled={isLoading}>Clear</button>
+                            </div>
+                        </form>
+                    </div>
+                    
                     {isLoading ? (<p>Loading...</p>) : (
                         searchResults.length > 0 && (
                             <div className="table-container">
