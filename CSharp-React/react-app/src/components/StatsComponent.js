@@ -125,7 +125,7 @@ function StatsComponent() {
     return (
         <div>
             <div className="page-container">
-                <div className="stats-component-container">
+                <div className="component-container">
                     <div className="search-container">
                         <form onSubmit={searchPlayerStats}>
                             <div>

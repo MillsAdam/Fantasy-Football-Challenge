@@ -53,11 +53,13 @@
 .page-container {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: start;
   flex-wrap: wrap;
   width: 90%;
   margin-left: auto;
   margin-right: auto;
+  gap: 2%;
 }
 
 .component-container {
@@ -65,9 +67,9 @@
   background: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
-  width: 30%;
-  margin-left: auto;
-  margin-right: auto;
+  flex: 1;
+  min-width: 29%;
+  margin: .5%;
 }
 
 
@@ -209,12 +211,13 @@ select:focus {
 /* MEDIA QUERIES */
 @media (max-width: 1200px) {
   .page-container { 
-      flex-direction: column;
-      gap: 20px;
+      justify-content: center;
   }
 
   .component-container {
     width: 90%;
+    min-width: 90%;
+    margin: 5% 0;
   }
 
   table {
