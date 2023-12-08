@@ -61,8 +61,16 @@ function LeagueComponent() {
     };
 
     const handleWeekSelection = async (week) => {
-        setSelectedWeek(week);
-        fetchUserLineup(selectedUserId, week);
+        if (selectedWeek === week) {
+            setSelectedWeek(null);
+            setSelectedWeeklyScore(null);
+            setLIneup([]);
+            return;
+        } else {
+            setSelectedWeek(week);
+            fetchUserLineup(selectedUserId, week);
+        }
+        
     };
 
     async function fetchUserLineup(userId, week) {
