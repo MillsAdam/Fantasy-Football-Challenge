@@ -29,6 +29,16 @@ const LineupService = {
         }
     },
 
+    async getLineupPlayersByUserIdAndWeek(userId, week) {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/lineupplayers/league?userId=${userId}&gameWeek=${week}`);
+            return response.data;
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            throw error;
+        }
+    },
+
     async getWeeklyScoreByWeek(authToken, week) {
         try {
             const response = await axios.get(`http://localhost:5000/api/fantasylineups/score?gameWeek=${week}`, {

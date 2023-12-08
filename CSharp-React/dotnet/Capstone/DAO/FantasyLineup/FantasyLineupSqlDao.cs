@@ -91,5 +91,33 @@ namespace Capstone.DAO
                 }
             }
         }
+
+        // public async Task<FantasyLineup> GetFantasyLineupByUserId(int userId)
+        // {
+        //     FantasyLineup fantasyLineup = new FantasyLineup();
+        //     using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+        //     {
+        //         await connection.OpenAsync();
+        //         using NpgsqlCommand command = new NpgsqlCommand(
+        //             @"SELECT fl.lineup_id, fl.roster_id, fl.game_week, fl.total_score 
+        //             FROM fantasy_lineups fl 
+        //             LEFT JOIN configuration c_lineup_week ON c_lineup_week.config_key = 'currentLineupWeek' 
+        //             JOIN fantasy_rosters fr ON fr.roster_id = fl.roster_id
+        //             WHERE fr.user_id = @user_id 
+        //                 AND game_week = c_lineup_week.config_value;", connection);
+        //         {
+        //             command.Parameters.AddWithValue("@user_id", userId);
+        //             NpgsqlDataReader reader = command.ExecuteReader();
+        //             while (await reader.ReadAsync())
+        //             {
+        //                 fantasyLineup.FantasyLineupId = Convert.ToInt32(reader["lineup_id"]);
+        //                 fantasyLineup.FantasyRosterId = Convert.ToInt32(reader["roster_id"]);
+        //                 fantasyLineup.GameWeek = Convert.ToInt32(reader["game_week"]);
+        //                 fantasyLineup.TotalScore = Convert.ToDouble(reader["total_score"]);
+        //             }
+        //             return fantasyLineup;
+        //         }
+        //     }
+        // }
     }
 }
