@@ -18,13 +18,13 @@
     display: flex;
     justify-content: center;
     flex-wrap: nowrap;
-    gap: 10px;
+    gap: 4rem;
+    margin-left: 4rem;
+    margin-right: 4rem;
 }
 
-.league-button {
-    padding: 10px;
+.league-button.btn {
     flex: 1;
-    max-width: calc(25% - 10px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -35,9 +35,12 @@
 
     .league-button-container {
         overflow-x: auto;
+        gap: 1rem;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    .league-button {
+    .league-button.btn {
         min-width: 15%;
     }
 }

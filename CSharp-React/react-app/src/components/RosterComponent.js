@@ -277,7 +277,7 @@ function RosterComponent() {
                                 <form onSubmit={createRoster}>
                                     <label>Team Name</label>
                                     <input type="text" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
-                                    <button className="league-button" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create League Roster"}</button>
+                                    <button className="btn btn-neutral sm: btn-sm" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create League Roster"}</button>
                                 </form>
                             </div>
                         </div>
@@ -286,7 +286,7 @@ function RosterComponent() {
                         <div className="page-container">
                             <div className="roster-component-container">
                                 <h2>Search Players</h2>
-                                <div>
+                                <div className="roster-search">
                                     <input 
                                         className="roster-search-input" 
                                         type="text" 
@@ -296,14 +296,14 @@ function RosterComponent() {
                                         disabled={activeSearchMethod && activeSearchMethod !== "name"}
                                     />
                                     <button 
-                                        className="roster-search-button" 
+                                        className="roster-search-button btn btn-neutral sm: btn-sm" 
                                         onClick={startSearchByName} 
                                         disabled={isLoading || (activeSearchMethod && activeSearchMethod !=="name")}
                                     >
                                         Search by Name
                                     </button>
                                 </div>
-                                <div>
+                                <div className="roster-search">
                                     <select 
                                         className="roster-search-select" 
                                         value={selectedTeamName} 
@@ -316,14 +316,14 @@ function RosterComponent() {
                                         ))}
                                     </select>
                                     <button 
-                                        className="roster-search-button"
+                                        className="roster-search-button btn btn-neutral sm: btn-sm"
                                         onClick={startSearchByTeam} 
                                         disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "team")}
                                     >
                                         Search by Team
                                     </button>
                                 </div>
-                                <div>
+                                <div className="roster-search">
                                     <select 
                                         className="roster-search-select" 
                                         value={selectedPosition} 
@@ -336,14 +336,14 @@ function RosterComponent() {
                                         ))}
                                     </select>
                                     <button 
-                                        className="roster-search-button" 
+                                        className="roster-search-button btn btn-neutral sm: btn-sm" 
                                         onClick={startSearchByPosition} 
                                         disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "position")}
                                     >
                                         Search by Position
                                     </button>
                                 </div>
-                                <button className="roster-clear-button" onClick={clearSearch} disabled={isLoading}>Clear Search</button>
+                                <button className="btn btn-neutral sm: btn-sm" onClick={clearSearch} disabled={isLoading}>Clear Search</button>
                                 {isLoading ? (<p>Loading...</p>) : (
                                     searchPlayer.length > 0 && (
                                         <div>
@@ -366,7 +366,7 @@ function RosterComponent() {
                                                             <tr key={index}>
                                                                 <td>
                                                                     <button 
-                                                                        className="add-remove-button" 
+                                                                        className="add-remove-button btn btn-neutral sm: btn-sm" 
                                                                         onClick={(e) => handleAddPlayerToRoster(e, player.playerId)} 
                                                                         // disabled={isRosterFull}
                                                                     >
@@ -403,7 +403,7 @@ function RosterComponent() {
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Remove</th>
+                                                    <th>Rem</th>
                                                     <th>Conf</th>
                                                     <th>Team</th>
                                                     <th>Pos</th>
@@ -419,7 +419,7 @@ function RosterComponent() {
                                                         <td>{index+1}</td>
                                                         <td>
                                                             <button 
-                                                                className="add-remove-button" 
+                                                                className="add-remove-button btn btn-neutral sm: btn-sm" 
                                                                 onClick={(e) => handleRemovePlayerFromRoster(e, rosterPlayer.playerId)}
                                                             >
                                                                 -

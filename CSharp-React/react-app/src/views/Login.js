@@ -33,24 +33,27 @@ function Login() {
     };
 
     return (
-        <div className="component-container">
-            <h1>Login</h1>
-            <form onSubmit={login}>
-                <div className="form-input-group">
-                    <label htmlFor="username">Username</label>
-                    <input type="text" id="username" name="username"  value={user.username} onChange={handleInputChange} autoComplete="username" />
+        <div className="login-register-page-container">
+            <div className="login-register-component-container">
+                <h1>Login</h1>
+                <form onSubmit={login}>
+                    <div className="form-input-group">
+                        <label htmlFor="username">Username</label>
+                        <input type="text" id="username" name="username"  value={user.username} onChange={handleInputChange} autoComplete="username" />
+                    </div>
+                    <div className="form-input-group">
+                        <label htmlFor="password">Password</label>
+                        <input type="password" id="password" name="password" value={user.password} onChange={handleInputChange} autoComplete="current-password" />
+                    </div>
+                    <button className="btn btn-neutral sm: btn-sm" type="submit" value="Login">Login</button>
+                </form>
+                {invalidCredentials && <p className="invalid-credentials">Invalid credentials.</p>}
+                <div className="account-query">
+                    Don't have an account? <Link className="register-link" to="/register">Register</Link>
                 </div>
-                <div className="form-input-group">
-                    <label htmlFor="password">Password</label>
-                    <input type="password" id="password" name="password" value={user.password} onChange={handleInputChange} autoComplete="current-password" />
-                </div>
-                <button className="login-button" type="submit" value="Login">Login</button>
-            </form>
-            {invalidCredentials && <p className="invalid-credentials">Invalid credentials.</p>}
-            <div className="account-query">
-                Don't have an account? <Link className="register-link" to="/register">Register</Link>
             </div>
         </div>
+        
     );
 }
 

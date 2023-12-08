@@ -44,33 +44,36 @@ function Register() {
     };
 
     return (
-        <div className="component-container">
-            <h1>Register</h1>
-            {registrationErrors && (
-                <div role="alert">
-                    {registrationErrorMsg}
+        <div className="login-register-page-container">
+            <div className="login-register-component-container">
+                <h1>Register</h1>
+                {registrationErrors && (
+                    <div role="alert">
+                        {registrationErrorMsg}
+                    </div>
+                )}
+                <form onSubmit={register}>
+                    <div className="form-input-group">
+                        <label htmlFor="username">Username: </label>
+                        <input type="text" id="username" name="username" value={user.username} onChange={e => setUser({ ...user, username: e.target.value })} onFocus={clearErrors} autoComplete="username" />
+                    </div>
+                    <div className="form-input-group">
+                        <label htmlFor="password">Password: </label>
+                        <input type="password" id="password" name="password" value={user.password} onChange={e => setUser({ ...user, password: e.target.value })} onFocus={clearErrors} autoComplete="new-password" />
+                    </div>
+                    <div className="form-input-group">
+                        <label htmlFor="confirmPassword">Confirm Password: </label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" value={user.confirmPassword} onChange={e => setUser({ ...user, confirmPassword: e.target.value })} onFocus={clearErrors} autoComplete="new-password" />
+                    </div>
+                    <button className="btn btn-neutral sm: btn-sm" type="submit" value="Register">Register</button>
+                </form>
+                {registrationErrors && <div className="registration-errors">{registrationErrorMsg}</div>}
+                <div className="account-query">
+                    Already have an account? <Link className="login-link" to="/login">Login</Link>
                 </div>
-            )}
-            <form onSubmit={register}>
-                <div className="form-input-group">
-                    <label htmlFor="username">Username: </label>
-                    <input type="text" id="username" name="username" value={user.username} onChange={e => setUser({ ...user, username: e.target.value })} onFocus={clearErrors} autoComplete="username" />
-                </div>
-                <div className="form-input-group">
-                    <label htmlFor="password">Password: </label>
-                    <input type="password" id="password" name="password" value={user.password} onChange={e => setUser({ ...user, password: e.target.value })} onFocus={clearErrors} autoComplete="new-password" />
-                </div>
-                <div className="form-input-group">
-                    <label htmlFor="confirmPassword">Confirm Password: </label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" value={user.confirmPassword} onChange={e => setUser({ ...user, confirmPassword: e.target.value })} onFocus={clearErrors} autoComplete="new-password" />
-                </div>
-                <button className="register-button" type="submit" value="Register">Register</button>
-            </form>
-            {registrationErrors && <div className="registration-errors">{registrationErrorMsg}</div>}
-            <div className="account-query">
-                Already have an account? <Link className="login-link" to="/login">Login</Link>
             </div>
         </div>
+        
     );
 
 

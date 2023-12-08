@@ -1,3 +1,27 @@
+.login-register-page-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  gap: 2%;
+}
+
+
+.login-register-component-container {
+  padding: 1rem;
+  background: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  flex: 1;
+  max-width: 29%;
+  margin: .5%;
+}
+
+
 .invalid-credentials, .registration-errors {
   color: #ff3860;
   margin-top: 1rem;
@@ -21,7 +45,3 @@
   text-decoration: none;
   color: #282c34;
 }  
-
-.login-button, .register-button {
-  padding: 10px;
-}

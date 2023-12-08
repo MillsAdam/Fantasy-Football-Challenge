@@ -212,10 +212,12 @@ function StatsComponent() {
                             )}
                             <div>
                                 <button 
-                                    className="stats-button" 
+                                    className="btn btn-neutral sm: btn-sm" 
                                     type="submit" 
                                     disabled=
                                         {isLoading || 
+                                        (selectedPosition !== '' && selectedInterval === '') || 
+                                        (selectedPosition !== '' && selectedInterval !== '' && selectedCategory === '') ||
                                         (selectedPosition === '' && selectedInterval === '' && selectedCategory === '') || 
                                         (selectedInterval === 'weekly total' && selectedWeek === '') ||
                                         (selectedInterval === 'weekly projected' && selectedWeek === '') ||
@@ -224,7 +226,7 @@ function StatsComponent() {
                                 >
                                     Search
                                 </button>
-                                <button className="stats-button" onClick={clearSearch} disabled={isLoading}>Clear</button>
+                                <button className="btn btn-neutral sm: btn-sm" onClick={clearSearch} disabled={isLoading}>Clear</button>
                             </div>
                         </form>
                     </div>

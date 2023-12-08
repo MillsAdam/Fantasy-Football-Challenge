@@ -141,7 +141,7 @@ function LeagueComponent() {
                                 </div>
                                 <div className="league-button-container">
                                     {[1, 2, 3, 4].map(week => (
-                                        <button className="league-button" key={week} type="button" onClick={() => handleWeekSelection(week)}>
+                                        <button className="league-button btn btn-neutral sm: btn-sm" key={week} type="button" onClick={() => handleWeekSelection(week)}>
                                             Week {week}
                                         </button>
                                     ))}

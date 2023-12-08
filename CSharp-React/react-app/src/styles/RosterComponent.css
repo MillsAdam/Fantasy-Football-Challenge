@@ -1,4 +1,9 @@
-
+.roster-search {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
 
 .roster-search-button {
     width: 49%;
@@ -8,10 +13,6 @@
 .roster-search-input, .roster-search-select {
     width: 49%;
     margin-right: 1%;
-}
-
-.roster-clear-button, .roster-search-button {
-    padding: 12px 15px;
 }
 
 .roster-component-container {
