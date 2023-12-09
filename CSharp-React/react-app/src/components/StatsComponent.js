@@ -128,7 +128,7 @@ function StatsComponent() {
                     <div className="search-container">
                         <form onSubmit={searchPlayerStats}>
                             <div>
-                                <select className="btn btn-neutral btn-outline" 
+                                <select className="btn btn-neutral btn-outline btn-sm md:btn-md" 
                                     style={{ width: '100%', marginBottom: '1rem' }} 
                                     value={selectedPosition} 
                                     onChange={(e) => setSelectedPosition(e.target.value)}
@@ -141,7 +141,7 @@ function StatsComponent() {
                             </div>
                             <div>
 
-                                <select className="btn btn-neutral btn-outline" 
+                                <select className="btn btn-neutral btn-outline btn-sm md:btn-md" 
                                     style={{ width: '100%', marginBottom: '1rem' }} 
                                     value={selectedInterval} 
                                     onChange={(e) => setSelectedInterval(e.target.value)} 
@@ -155,7 +155,7 @@ function StatsComponent() {
                             </div>
                             {(selectedInterval === 'weekly total' || selectedInterval === 'weekly projected') && (
                                 <div>
-                                    <select className="btn btn-neutral btn-outline" 
+                                    <select className="btn btn-neutral btn-outline btn-sm md:btn-md" 
                                         style={{ width: '100%', marginBottom: '1rem' }}
                                         value={selectedWeek} 
                                         onChange={(e) => setSelectedWeek(e.target.value)}
@@ -170,7 +170,7 @@ function StatsComponent() {
                                 </div>
                             )}
                             <div>
-                                <select className="btn btn-neutral btn-outline" 
+                                <select className="btn btn-neutral btn-outline btn-sm md:btn-md" 
                                     style={{ width: '100%', marginBottom: '1rem' }} 
                                     value={selectedCategory} 
                                     onChange={(e) => setSelectedCategory(e.target.value)} 
@@ -185,7 +185,7 @@ function StatsComponent() {
                             {selectedCategory !== 'all' && selectedCategory !== '' && (
                                 <div>
                                     {(selectedCategory === 'conf' || selectedCategory === 'team') ? (
-                                        <select className="btn btn-neutral btn-outline" 
+                                        <select className="btn btn-neutral btn-outline btn-sm md:btn-md" 
                                             style={{ width: '100%', marginBottom: '1rem' }} 
                                             value={selectedFilter}
                                             onChange={(e) => setSelectedFilter(e.target.value)}
@@ -199,7 +199,7 @@ function StatsComponent() {
                                             ))}
                                         </select>
                                     ) : selectedCategory === 'name' ? (
-                                        <input className="btn btn-neutral btn-outline" 
+                                        <input className="btn btn-neutral btn-outline btn-sm md:btn-md" 
                                             style={{ textAlign: 'left', width: '100%', marginBottom: '1rem' }} 
                                             type="text" 
                                             value={selectedFilter} 
@@ -211,7 +211,7 @@ function StatsComponent() {
                             )}
                             <div className="horizontal-container" style={{ marginBottom: '1rem' }}>
                                 <button 
-                                    className="btn btn-primary btn-outline" 
+                                    className="btn btn-success btn-outline btn-sm md:btn-md" 
                                     style={{ width: '45%' }}
                                     type="submit" 
                                     disabled=
@@ -227,7 +227,7 @@ function StatsComponent() {
                                     Search
                                 </button>
                                 <button 
-                                    className="btn btn-secondary btn-outline" 
+                                    className="btn btn-warning btn-outline btn-sm md:btn-md" 
                                     style={{ width: '45%' }}
                                     onClick={clearSearch} 
                                     disabled={isLoading}

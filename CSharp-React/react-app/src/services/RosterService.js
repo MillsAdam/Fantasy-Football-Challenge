@@ -15,6 +15,16 @@ const RosterService = {
         }
     },
 
+    async getRosterPlayersByUserId(userId) {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/rosterplayers/league?userId=${userId}`);
+            return response.data;
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            throw error;
+        }
+    },
+
     async createRosterPlayer(playerId, authToken) {
         try {
             const response = await axios.post(`http://localhost:5000/api/rosterplayers?playerId=${playerId}`, {}, {

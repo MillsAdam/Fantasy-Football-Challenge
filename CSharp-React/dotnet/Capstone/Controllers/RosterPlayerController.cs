@@ -104,5 +104,20 @@ namespace Capstone.Controllers
             }
         }
 
+        [HttpGet("league")]
+        public async Task<ActionResult> GetRosterPlayersByUserId([FromQuery] int userId)
+        {
+            try
+            {
+                List<RosterPlayerDto> rosterPlayerDtos = await _rosterPlayerDao.GetRosterPlayerDtosByUserId(userId);
+                return Ok(rosterPlayerDtos);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error getting roster players: {e.Message}");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+
     }
 }

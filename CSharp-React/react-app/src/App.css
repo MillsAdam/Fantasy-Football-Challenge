@@ -47,6 +47,16 @@
   margin: 2% auto 2% auto;
 }
 
+.home-login-register-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 30%;
+  margin: 2% auto 2% auto;
+}
+
 .component-container {
   padding: 1rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
@@ -71,6 +81,10 @@
   text-align: left;
 }
 
+.custom-input:placeholder-show {
+  text-align: center;
+}
+
 
 /* MEDIA QUERIES */
 @media (max-width: 1200px) {
@@ -80,10 +94,41 @@
     align-items: center;
   }
 
+  .home-login-register-container {
+    width: 90%;
+  }
+
   .component-container {
     width: 100%;
     margin: 2% auto;
   }
 }
 
+primary-color{
+  color: #00cffd;
+}
+secondary-color{
+  color: #008100;
+}
+accent-color{
+  color: #408500;
+}
+neutral-color{
+  color: #2b2c26;
+}
+base-100-color{
+  color: #142730;
+}
+info-color{
+  color: #00ffff;
+}
+success-color{
+  color: #008f51;
+}
+warning-color{
+  color: #af6b00;
+}
+error-color{
+  color: #ff696e;
+}
 

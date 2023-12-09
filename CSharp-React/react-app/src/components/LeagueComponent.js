@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import LeagueService from "../services/LeagueService";
 import LineupService from "../services/LineupService";
+import RosterService from "../services/RosterService";
 import { AuthContext } from "../context/AuthContext";
 
 function LeagueComponent() {
@@ -15,6 +16,7 @@ function LeagueComponent() {
     const [selectedTotalScore, setSelectedTotalScore] = useState(null);
     const [selectedWeek, setSelectedWeek] = useState(null);
     const [lineup, setLIneup] = useState([]);
+    const [roster, setRoster] = useState([]);
 
     useEffect(() => {
         async function checkUserTeam() {
@@ -48,6 +50,7 @@ function LeagueComponent() {
             setSelectedTeamName(null);
             setSelectedTotalScore(null);
             setSelectedWeek(null);
+            setRoster([]);
             setLIneup([]);
             return;
         } else {
@@ -55,6 +58,7 @@ function LeagueComponent() {
             setSelectedTeamName(teamName);
             setSelectedTotalScore(totalScore);
             setSelectedWeek(null);
+            setRoster([]);
             setLIneup([]);
         }
     };
@@ -69,7 +73,15 @@ function LeagueComponent() {
             setSelectedWeek(week);
             fetchUserLineup(selectedUserId, week);
         }
-        
+    };
+
+    const handleRosterSelection = async() => {
+        if (roster.length !== 0) {
+            setRoster([]);
+            return;
+        } else {
+            fetUserRoster(selectedUserId);
+        }
     };
 
     async function fetchUserLineup(userId, week) {
@@ -87,6 +99,18 @@ function LeagueComponent() {
         setIsLoading(false);
     }
 
+    async function fetUserRoster(userId) {
+        setIsLoading(true);
+        try {
+            const rosterData = await RosterService.getRosterPlayersByUserId(userId);
+            setRoster(rosterData);
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            setError('Failed to fetch user roster');
+        }
+        setIsLoading(false);
+    }
+
     return (
         <div>
             {isLoading ? (<p>Loading...</p>) : (
@@ -94,13 +118,13 @@ function LeagueComponent() {
                     <div className="component-container">
                         {!userHasTeam && (
                             <div>
-                                <h2>Create a Roster to view Leaderboard</h2>
+                                Create a Roster to view Leaderboard
                             </div>
                         )}
                         {userHasTeam && (
                             <div >
-                                <div>
-                                    <h2>Leaderboard</h2>
+                                <div style={{ marginBottom: '1rem' }}>
+                                    Leaderboard
                                 </div>
                                 <div className="overflow-x auto" style={{ overflow: 'auto' }}>
                                     <table className="table table-xs table-pin-rows">
@@ -138,14 +162,58 @@ function LeagueComponent() {
                         {selectedUserId && (
                             <div>
                                 <div className="horizontal-container" style={{ margin: '1rem 0', justifyContent: 'space-evenly'}}>
-                                    <h4>{selectedTeamName}</h4>
-                                    <p>Total Score: <strong>{selectedTotalScore}</strong></p>
+                                    <div>
+                                        <strong>{selectedTeamName}</strong>
+                                    </div>
+                                    <div>
+                                        <button 
+                                            className="btn btn-info btn-outline btn-xs sm:btn-sm" 
+                                            type="button" 
+                                            onClick={() => handleRosterSelection(selectedUserId)}
+                                        >
+                                            Roster
+                                        </button>
+                                    </div>
                                 </div>
+                                
+                                {roster.length !== 0 && (
+                                    <div style={{ marginBottom: '1rem' }}>
+                                        <div style={{ marginBottom: '1rem' }}>
+                                            Total Score: <strong>{selectedTotalScore}</strong>
+                                        </div>
+                                        <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                                            <table className="table table-xs table-pin-rows">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Conf</th>
+                                                        <th>Team</th>
+                                                        <th>Pos</th>
+                                                        <th>Player</th>
+                                                        <th>Points</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {roster.map((rosterPlayer, index) => (
+                                                        <tr key={index} className="hover">
+                                                            <td>{rosterPlayer.conference}</td>
+                                                            <td>{rosterPlayer.team}</td>
+                                                            <td>{rosterPlayer.position}</td>
+                                                            <td>{rosterPlayer.name}</td>
+                                                            <td>{rosterPlayer.fantasyPoints}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                )}
+                                
+                                
                                 <div className="horizontal-container">
                                     {[1, 2, 3, 4].map(week => (
                                         <button 
-                                            className="btn btn-info btn-outline btn-sm" 
-                                            style={{ width: '21%', marginBottom: '1rem' }}
+                                            className="btn btn-info btn-outline btn-xs sm:btn-sm" 
+                                            style={{ width: '21%', margin: '1rem 0 1rem 0' }}
                                             type="button" 
                                             key={week} 
                                             onClick={() => handleWeekSelection(week)}
@@ -157,8 +225,8 @@ function LeagueComponent() {
                                 
                                 {selectedWeek && (
                                     <div>
-                                        <div>
-                                            <p>Week {selectedWeek} Score: <strong>{selectedWeeklyScore}</strong></p>
+                                        <div style={{ marginBottom: '1rem' }}>
+                                            Week {selectedWeek} Score: <strong>{selectedWeeklyScore}</strong>
                                         </div>
                                         <div className="overflow-x auto" style={{ overflow: 'auto' }}>
                                             <table className="table table-xs table-pin-rows">

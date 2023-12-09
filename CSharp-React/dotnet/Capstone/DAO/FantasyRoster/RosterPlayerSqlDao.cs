@@ -175,6 +175,127 @@ namespace Capstone.DAO
             return rosterPlayerDtos;
         }
 
+        public async Task<List<RosterPlayerDto>> GetRosterPlayerDtosByUserId(int userId)
+        {
+            List<RosterPlayerDto> rosterPlayerDtos = new List<RosterPlayerDto>();
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using NpgsqlCommand command = new NpgsqlCommand(
+                    @"SELECT 
+                        fr.roster_id, 
+                        p.player_id, 
+                        p.position, 
+                        t.team, 
+                        p.name, 
+                        p.status, 
+                        p.injury_status, 
+                        SUM(
+                            CASE 
+                                WHEN fl.game_week = 1 
+                                THEN (
+                                    SELECT SUM(psi.fantasy_points) 
+                                    FROM player_stats psi 
+                                    WHERE psi.player_id = p.player_id 
+                                        AND psi.week = (
+                                            SELECT config_value 
+                                            FROM configuration 
+                                            WHERE config_key = 'lineupWeek1'
+                                        )
+                                ) 
+                                WHEN fl.game_week = 2 
+                                THEN (
+                                    SELECT SUM(psi.fantasy_points) 
+                                    FROM player_stats psi 
+                                    WHERE psi.player_id = p.player_id 
+                                        AND psi.week = (
+                                            SELECT config_value 
+                                            FROM configuration 
+                                            WHERE config_key = 'lineupWeek2'
+                                        )
+                                ) 
+                                WHEN fl.game_week = 3 
+                                THEN (
+                                    SELECT SUM(psi.fantasy_points) 
+                                    FROM player_stats psi 
+                                    WHERE psi.player_id = p.player_id 
+                                        AND psi.week = (
+                                            SELECT config_value 
+                                            FROM configuration 
+                                            WHERE config_key = 'lineupWeek3'
+                                        )
+                                ) 
+                                WHEN fl.game_week = 4 
+                                THEN (
+                                    SELECT SUM(psi.fantasy_points) 
+                                    FROM player_stats psi 
+                                    WHERE psi.player_id = p.player_id 
+                                        AND psi.week = (
+                                            SELECT config_value 
+                                            FROM configuration 
+                                            WHERE config_key = 'lineupWeek4'
+                                        )
+                                ) 
+                                ELSE 0 
+                            END
+                        ) AS stat_fantasy_points, 
+                        t.conference, 
+                        t.status as team_status 
+                    FROM players p 
+                    JOIN teams t ON p.team_id = t.team_id 
+                    JOIN lineup_players lp ON p.player_id = lp.player_id 
+                    JOIN fantasy_lineups fl ON lp.lineup_id = fl.lineup_id 
+                    JOIN fantasy_rosters fr ON fl.roster_id = fr.roster_id 
+                    WHERE fr.user_id = @user_id 
+                    GROUP BY 
+                        fr.roster_id, 
+                        p.player_id, 
+                        p.position, 
+                        t.team, 
+                        p.name, 
+                        p.status, 
+                        t.conference, 
+                        t.status 
+                    ORDER BY 
+                        CASE p.position 
+                            WHEN 'QB' THEN 1 
+                            WHEN 'RB' THEN 2 
+                            WHEN 'WR' THEN 3 
+                            WHEN 'TE' THEN 4 
+                            WHEN 'K' THEN 5 
+                            WHEN 'DEF' THEN 6 
+                        ELSE 7 END ASC, 
+                        stat_fantasy_points DESC;", connection);
+                {
+                    command.Parameters.AddWithValue("@user_id", userId);
+                    NpgsqlDataReader reader = command.ExecuteReader();
+                    while (await reader.ReadAsync())
+                    {
+                        RosterPlayerDto rosterPlayerDto = new RosterPlayerDto();
+                        {
+                            rosterPlayerDto.FantasyRosterId = Convert.ToInt32(reader["roster_id"]);
+                            rosterPlayerDto.PlayerId = Convert.ToInt32(reader["player_id"]);
+                            rosterPlayerDto.Team = Convert.ToString(reader["team"]);
+                            rosterPlayerDto.Position = Convert.ToString(reader["position"]);
+                            rosterPlayerDto.Name = Convert.ToString(reader["name"]);
+                            rosterPlayerDto.Status = Convert.ToString(reader["status"]);
+                            rosterPlayerDto.InjuryStatus = Convert.ToString(reader["injury_status"] ?? (object)DBNull.Value);
+                            rosterPlayerDto.FantasyPoints = reader["stat_fantasy_points"] is DBNull ? 0.0 : Convert.ToDouble(reader["stat_fantasy_points"]);
+                            rosterPlayerDto.Conference = Convert.ToString(reader["conference"]);
+                            rosterPlayerDto.TeamStatus = Convert.ToString(reader["team_status"]);
+
+                            rosterPlayerDto.FantasyLineupId = null;
+                            rosterPlayerDto.LineupPosition = null;
+                            rosterPlayerDto.FantasyPointsAvg = 0.0;
+                            rosterPlayerDto.FantasyPointsProj = 0.0;
+                        };
+                        rosterPlayerDtos.Add(rosterPlayerDto);
+                    }
+                }
+                return rosterPlayerDtos;
+            }
+        }
+
         public async Task<List<RosterPlayer>> GetRosterPlayersByUser(User user)
         {
             List<RosterPlayer> rosterPlayers = new List<RosterPlayer>();

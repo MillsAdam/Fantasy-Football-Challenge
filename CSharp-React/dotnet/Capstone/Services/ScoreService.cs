@@ -28,11 +28,19 @@ namespace Capstone.Services
                         // Fetch the data first
                         var updateData = new List<(int LineupId, decimal TotalLineupScore)>();
                         var calculateCommand = new NpgsqlCommand(
-                            "SELECT lp.lineup_id, SUM(ps.fantasy_points) AS total_lineup_score " + 
-                            "FROM lineup_players lp " +
-                            "JOIN player_stats ps ON lp.player_id = ps.player_id " +
-                            "WHERE ps.week = 1 " +
-                            "GROUP BY lp.lineup_id", connection);
+                            @"SELECT lp.lineup_id, SUM(ps.fantasy_points) AS total_lineup_score 
+                            FROM lineup_players lp 
+                            JOIN fantasy_lineups fl ON lp.lineup_id = fl.lineup_id
+                            LEFT JOIN configuration c_week on c_week.config_key = 
+                                CASE 
+                                    WHEN fl.game_week = 1 THEN 'lineupWeek1' 
+                                    WHEN fl.game_week = 2 THEN 'lineupWeek2' 
+                                    WHEN fl.game_week = 3 THEN 'lineupWeek3' 
+                                    WHEN fl.game_week = 4 THEN 'lineupWeek4' 
+                                END 
+                            LEFT JOIN player_stats ps ON lp.player_id = ps.player_id AND ps.week = c_week.config_value 
+                            WHERE fl.game_week = (SELECT config_value FROM configuration WHERE config_key = 'currentLineupWeek') 
+                            GROUP BY lp.lineup_id", connection);
                         
                         using (var lineupReader = await calculateCommand.ExecuteReaderAsync())
                         {

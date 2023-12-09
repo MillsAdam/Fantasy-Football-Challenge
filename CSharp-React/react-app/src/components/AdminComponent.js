@@ -279,34 +279,40 @@ function AdminComponent() {
             <div className="page-container">
                 <div className="component-container">
 
-                    <h3>Teams / Players / Scores</h3>
+                    <div style={{ marginBottom: '1rem' }}>
+                        Teams / Players / Scores
+                    </div>
                     <form onSubmit={createTeamsAndPlayers}>
-                        <button className="btn btn-primary btn-outline" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
+                        <button className="btn btn-info btn-outline btn-sm md:btn-md" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
                             {isLoading && loadingMessage === "Creating Teams and Players..." ? "Loading..." : "Create Teams / Players"}
                         </button>
                     </form>
                     <form onSubmit={upsertPlayers}>
-                        <button className="btn btn-secondary btn-outline" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
+                        <button className="btn btn-primary btn-outline btn-sm md:btn-md" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
                             {isLoading && loadingMessage === "Upserting Players..." ? "Loading..." : "Upsert Players"}
                         </button>
                     </form>
-                    <h3>Player Stats / Projections</h3>
+                    <div style={{ marginBottom: '1rem' }}>
+                        Player Stats / Projections
+                    </div>
                     <form onSubmit={createPlayerStatsAndProjections}>
-                        <button className="btn btn-primary btn-outline" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
+                        <button className="btn btn-info btn-outline btn-sm md:btn-md" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
                             {isLoading && loadingMessage === "Creating Player Stats and Projections..." ? "Loading..." : "Create Player Stats / Projections"}
                         </button>
                     </form>
                     <form onSubmit={upsertPlayerStatsAndProjectionsByWeek}>
-                        <button className="btn btn-secondary btn-outline" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
+                        <button className="btn btn-primary btn-outline btn-sm md:btn-md" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
                             {isLoading && 
                                 loadingMessage === "Upserting Player Stats and Projections By Week..." ? 
                                 "Loading..." : 
                                 `Upsert Player Stats / Projections for Current Week ${configurations.find(config => config.configKey === "currentWeek")?.configValue}`}
                         </button>
                     </form>
-                    <h3>Lineup / Roster Scores</h3>
+                    <div style={{ marginBottom: '1rem' }}>
+                        Lineup / Roster Scores
+                    </div>
                     <form onSubmit={updateLineupAndRosterScores}>
-                        <button className="btn btn-secondary btn-outline" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
+                        <button className="btn btn-primary btn-outline btn-sm md:btn-md" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
                             {isLoading && 
                                 loadingMessage === "Updating Lineup and Roster Scores..." ? 
                                     "Loading..." : 
@@ -315,9 +321,11 @@ function AdminComponent() {
                     </form>
                 </div>
                 <div className="component-container">
-                    <h3>Configuration</h3>
+                    <div style={{ marginBottom: '1rem' }}>
+                        Configuration
+                    </div>
                     <form onSubmit={updateConfiguration}>
-                        <select className="btn btn-neutral btn-outline" 
+                        <select className="btn btn-neutral btn-outline btn-sm md:btn-md" 
                             value={selectedConfigKey} 
                             style={{ width: '100%', marginBottom: '1rem' }}
                             onChange={(e) => {
@@ -330,7 +338,7 @@ function AdminComponent() {
                                 <option style={{ textAlign: 'left' }} key={key} value={key}>{orderedConfigKeys.get(key)}</option>
                             ))}
                         </select>
-                        <select className="btn btn-neutral btn-outline" 
+                        <select className="btn btn-neutral btn-outline btn-sm md:btn-md" 
                             value={selectedConfigValue} 
                             style={{ width: '100%', marginBottom: '1rem' }}
                             onChange={(e) => setSelectedConfigValue(e.target.value)} 
@@ -350,11 +358,11 @@ function AdminComponent() {
                                 )
                             }
                         </select>
-                        <button className="btn btn-secondary btn-outline"  style={{ width: '100%', marginBottom: '1rem' }}type="submit" disabled={isLoading || !selectedConfigKey || !selectedConfigValue}>
+                        <button className="btn btn-primary btn-outline btn-sm md:btn-md"  style={{ width: '100%', marginBottom: '1rem' }}type="submit" disabled={isLoading || !selectedConfigKey || !selectedConfigValue}>
                             {isLoading && loadingMessage === "Updating Configuration..." ? "Loading..." : "Update Configuration"}
                         </button>
                     </form>
-                    <button className="btn btn-info btn-outline"  style={{ width: '100%', marginBottom: '1rem' }}onClick={toggleConfigTableVisibility}>
+                    <button className="btn btn-info btn-outline btn-sm md:btn-md"  style={{ width: '100%', marginBottom: '1rem' }}onClick={toggleConfigTableVisibility}>
                         {isConfigTableVisible ? "Hide Configuration" : "Show Configuration"}
                     </button>
                     {isConfigTableVisible && (
@@ -379,9 +387,11 @@ function AdminComponent() {
                     )}
                 </div>
                 <div className="component-container">
-                    <h3>Team Status</h3>
+                    <div style={{ marginBottom: '1rem' }}>
+                        Team Status
+                    </div>
                     <form onSubmit={ToggleTeamStatus}>
-                        <select className="btn btn-neutral btn-outline" 
+                        <select className="btn btn-neutral btn-outline btn-sm md:btn-md" 
                             value={selectedTeamName} 
                             style={{ width: '100%', marginBottom: '1rem' }}
                             onChange={(e) => setSelectedTeamName(e.target.value)}
@@ -391,11 +401,11 @@ function AdminComponent() {
                                 <option style={{ textAlign: 'left' }} key={teamName} value={teamName}>{teamNameDisplayNames[teamName] || teamName}</option>
                             ))}
                         </select>
-                        <button className="btn btn-secondary btn-outline"  style={{ width: '100%', marginBottom: '1rem' }}type="submit" disabled={isLoading || selectedTeamName === ""}>
+                        <button className="btn btn-primary btn-outline btn-sm md:btn-md"  style={{ width: '100%', marginBottom: '1rem' }}type="submit" disabled={isLoading || selectedTeamName === ""}>
                             {isLoading && loadingMessage === `Updating ${selectedTeamName} Status...` ? "Loading..." : `Update ${selectedTeamName} Status`}
                         </button>
                     </form>
-                    <button className="btn btn-info btn-outline"  style={{ width: '100%', marginBottom: '1rem' }}onClick={toggleTeamsTableVisibility}>
+                    <button className="btn btn-info btn-outline btn-sm md:btn-md"  style={{ width: '100%', marginBottom: '1rem' }}onClick={toggleTeamsTableVisibility}>
                         {isTeamsTableVisible ? "Hide Teams" : "Show Teams"}
                     </button>
                     {isTeamsTableVisible && (

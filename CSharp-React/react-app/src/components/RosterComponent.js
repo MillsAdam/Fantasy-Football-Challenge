@@ -11,7 +11,6 @@ function RosterComponent() {
     const [teamName, setTeamName] = useState("");
     const [userHasTeam, setUserHasTeam] = useState(false);
     const [rosterPlayers, setRosterPlayers] = useState([]);
-    const [activeRosterPlayers, setActiveRosterPlayers] = useState([]);
     const isRosterFull = rosterPlayers.length >= 27;
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -73,8 +72,6 @@ function RosterComponent() {
             try {
                 const rosterPlayersData = await RosterService.getRosterPlayersByUser(authToken);
                 setRosterPlayers(rosterPlayersData);
-                const activeRosterPlayers = rosterPlayersData.filter(player => player.teamStatus === 'Active');
-                setActiveRosterPlayers(activeRosterPlayers);
             } catch (error) {
                 console.error('An error occurred: ', error);
                 setError('Failed to get roster players');
@@ -223,8 +220,6 @@ function RosterComponent() {
             if (newRosterPlayer) {
                 const updatedRosterPlayers = await RosterService.getRosterPlayersByUser(authToken);
                 setRosterPlayers(updatedRosterPlayers);
-                const activeRosterPlayers = updatedRosterPlayers.filter(player => player.teamStatus === 'Active');
-                setActiveRosterPlayers(activeRosterPlayers);
                 const updatedSearchPlayer = searchPlayer.filter(player => player.playerId !== playerId);
                 setSearchPlayer(updatedSearchPlayer);
             }
@@ -249,8 +244,6 @@ function RosterComponent() {
             if (removedRosterPlayer) {
                 const updatedRosterPlayers = await RosterService.getRosterPlayersByUser(authToken);
                 setRosterPlayers(updatedRosterPlayers);
-                const activeRosterPlayers = updatedRosterPlayers.filter(player => player.teamStatus === 'Active');
-                setActiveRosterPlayers(activeRosterPlayers);
                 
                 const playerIndex = playerIndexMap[playerId];
                 if (playerToRemove) {
@@ -275,16 +268,18 @@ function RosterComponent() {
                     {!userHasTeam && (
                         <div className="page-container">
                             <div className="component-container">
-                                <h2 style={{ marginBottom: '1rem' }}>Create League Roster</h2>
+                                <div style={{ marginBottom: '1rem' }}>
+                                    Create League Roster
+                                </div>
                                 <form onSubmit={createRoster}>
                                     <label>Team Name</label>
                                     <input 
-                                        className="btn btn-neutral btn-outline" 
+                                        className="btn btn-neutral btn-outline btn-sm md:btn-md" 
                                         type="text" 
                                         style={{ width: '100%', marginBottom: '1rem' }} 
                                         value={teamName} onChange={(e) => setTeamName(e.target.value)} />
                                     <button 
-                                        className="btn btn-primary btn-outline" 
+                                        className="btn btn-primary btn-outline btn-sm md:btn-md" 
                                         style={{ width: '100%', marginBottom: '1rem' }} 
                                         type="submit" 
                                         disabled={isLoading}>{isLoading ? "Loading..." : "Create League Roster"}</button>
@@ -295,11 +290,13 @@ function RosterComponent() {
                     {userHasTeam && (
                         <div className="page-container">
                             <div className="component-container">
-                                <h2>Search Players</h2>
+                                <div style={{ marginBottom: '1rem' }}>
+                                    Search Players
+                                </div>
                                 <div className="horizontal-container">
                                     <input 
-                                        className="btn btn-neutral btn-outline custom-input"
-                                        style={{ textAlign: 'left', width: '60%', marginBottom: '1rem'}} 
+                                        className="btn btn-neutral btn-outline  btn-sm md:btn-md custom-input"
+                                        style={{ textAlign: 'left', width: '45%', marginBottom: '1rem'}} 
                                         type="text" 
                                         value={searchName} 
                                         placeholder="Enter Name" 
@@ -307,8 +304,8 @@ function RosterComponent() {
                                         disabled={activeSearchMethod && activeSearchMethod !== "name"}
                                     />
                                     <button
-                                        className="btn btn-primary btn-outline" 
-                                        style={{ width: '30%', marginBottom: '1rem' }}
+                                        className="btn btn-success btn-outline btn-sm md:btn-md" 
+                                        style={{ width: '45%', marginBottom: '1rem' }}
                                         onClick={startSearchByName} 
                                         disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "name") || searchName === ""}
                                     >
@@ -317,8 +314,8 @@ function RosterComponent() {
                                 </div>
                                 <div className="horizontal-container">
                                     <select 
-                                        className="btn btn-neutral btn-outline"
-                                        style={{ width: '60%', marginBottom: '1rem'}} 
+                                        className="btn btn-neutral btn-outline btn-sm md:btn-md"
+                                        style={{ width: '45%', marginBottom: '1rem'}} 
                                         value={selectedTeamName} 
                                         onChange={(e) => setSelectedTeamName(e.target.value)} 
                                         disabled={activeSearchMethod && activeSearchMethod !== "team"}
@@ -329,8 +326,8 @@ function RosterComponent() {
                                         ))}
                                     </select>
                                     <button 
-                                        className="btn btn-primary btn-outline" 
-                                        style={{ width: '30%', marginBottom: '1rem' }}
+                                        className="btn btn-success btn-outline btn-sm md:btn-md" 
+                                        style={{ width: '45%', marginBottom: '1rem' }}
                                         onClick={startSearchByTeam} 
                                         disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "team") || selectedTeamName === ""}
                                     >
@@ -339,8 +336,8 @@ function RosterComponent() {
                                 </div>
                                 <div className="horizontal-container">
                                     <select 
-                                        className="btn btn-neutral btn-outline" 
-                                        style={{ width: '60%', marginBottom: '1rem'}} 
+                                        className="btn btn-neutral btn-outline btn-sm md:btn-md" 
+                                        style={{ width: '45%', marginBottom: '1rem'}} 
                                         value={selectedPosition} 
                                         onChange={(e) => setSelectedPosition(e.target.value)} 
                                         disabled={activeSearchMethod && activeSearchMethod !== "position"}
@@ -351,15 +348,15 @@ function RosterComponent() {
                                         ))}
                                     </select>
                                     <button 
-                                        className="btn btn-primary btn-outline" 
-                                        style={{ width: '30%', marginBottom: '1rem' }}
+                                        className="btn btn-success btn-outline btn-sm md:btn-md" 
+                                        style={{ width: '45%', marginBottom: '1rem' }}
                                         onClick={startSearchByPosition} 
                                         disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "position") || selectedPosition === ""}
                                     >
                                         Search by Position
                                     </button>
                                 </div>
-                                <button className="btn btn-secondary btn-outline" style={{ width: '100%', marginBottom: '1rem' }} onClick={clearSearch} disabled={isLoading}>Clear Search</button>
+                                <button className="btn btn-warning btn-outline btn-sm md:btn-md" style={{ width: '100%', marginBottom: '1rem' }} onClick={clearSearch} disabled={isLoading}>Clear Search</button>
                                 {isLoading ? (<p>Loading...</p>) : (
                                     searchPlayer.length > 0 && (
                                         <div>
@@ -382,7 +379,7 @@ function RosterComponent() {
                                                             <tr key={index} className="hover">
                                                                 <td>
                                                                     <button 
-                                                                        className="btn btn-accent btn-outline btn-xs" 
+                                                                        className="btn btn-success btn-outline btn-xs" 
                                                                         onClick={(e) => handleAddPlayerToRoster(e, player.playerId)} 
                                                                         // disabled={isRosterFull}
                                                                     >
@@ -412,8 +409,10 @@ function RosterComponent() {
                             </div>
                             
                             <div className="component-container">
-                                <h2>My Roster</h2>
-                                {activeRosterPlayers.length > 0 && (
+                                <div style={{ marginBottom: '1rem' }}>
+                                    My Roster
+                                </div>
+                                {rosterPlayers.length > 0 && (
                                     <div className="overflow-x auto" style={{ overflow: 'auto' }}>
                                         <table className="table table-xs table-pin-rows">
                                             <thead>
@@ -430,12 +429,12 @@ function RosterComponent() {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {activeRosterPlayers.map((rosterPlayer, index) => (
+                                                {rosterPlayers.map((rosterPlayer, index) => (
                                                     <tr key={index} className="hover">
                                                         <td>{index+1}</td>
                                                         <td>
                                                             <button 
-                                                                className="btn btn-error btn-outline btn-xs" 
+                                                                className="btn btn-warning btn-outline btn-xs" 
                                                                 onClick={(e) => handleRemovePlayerFromRoster(e, rosterPlayer.playerId)}
                                                             >
                                                                 -

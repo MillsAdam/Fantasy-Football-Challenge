@@ -14,9 +14,11 @@ const Home = () => {
     }, [authToken, currentUser, navigate]);
 
     return (
-        <div className="page-container" style={{ flexDirection: 'column', alignItems: 'center' }}>
-            <div className="component-container" style={{ alignItems: 'center', width: '30%' }}>
-                <h1>Home Page</h1>
+        <div className="home-login-register-container">
+            <div className="component-container" style={{ alignItems: 'center', width: '100%' }}>
+                <div style={{ marginBottom: '1rem' }}>
+                    Home Page
+                </div>
                 <p>You must be authenticated to see this.</p>
                 <img src={logo} className="App-logo" alt="logo" />
             </div>

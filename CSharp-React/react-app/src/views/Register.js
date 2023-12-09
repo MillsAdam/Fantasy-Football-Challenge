@@ -43,9 +43,11 @@ function Register() {
     };
 
     return (
-        <div className="page-container" style={{ alignItems: 'center', width: '30%' }}>
-            <div className="component-container">
-                <h1>Register</h1>
+        <div className="home-login-register-container">
+            <div className="component-container" style={{ width: '100%' }}>
+                <div style={{ marginBottom: '1rem' }}>
+                    Register
+                </div>
                 {registrationErrors && (
                     <div role="alert">
                         {registrationErrorMsg}
@@ -53,49 +55,55 @@ function Register() {
                 )}
                 <form onSubmit={register}>
                     <div style={{ marginBottom: '1rem' }}>
-                        <label htmlFor="username">Username: </label>
+                        <div>
+                            Username:
+                        </div>
                         <input 
-                            className="btn btn-neutral btn-outline" 
+                            className="btn btn-neutral btn-outline btn-sm md:btn-md" 
                             style={{ textAlign: 'left', width: '100%' }} 
                             type="text" 
-                            id="username" 
                             name="username" 
+                            id="username" 
                             value={user.username} 
                             onChange={e => setUser({ ...user, username: e.target.value })} 
                             onFocus={clearErrors} 
                             autoComplete="username" />
                     </div>
                     <div style={{ marginBottom: '1rem' }}>
-                        <label htmlFor="password">Password: </label>
+                        <div>
+                            Password:
+                        </div>
                         <input 
-                            className="btn btn-neutral btn-outline" 
+                            className="btn btn-neutral btn-outline btn-sm md:btn-md" 
                             style={{ textAlign: 'left', width: '100%' }} 
                             type="password" 
-                            id="password" 
                             name="password" 
+                            id="password" 
                             value={user.password} 
                             onChange={e => setUser({ ...user, password: e.target.value })} 
                             onFocus={clearErrors} 
                             autoComplete="new-password" />
                     </div>
                     <div style={{ marginBottom: '1rem' }}>
-                        <label htmlFor="confirmPassword">Confirm Password: </label>
+                        <div>
+                            Confirm Password:
+                        </div>
                         <input 
-                            className="btn btn-neutral btn-outline" 
+                            className="btn btn-neutral btn-outline btn-sm md:btn-md" 
                             style={{ textAlign: 'left', width: '100%' }} 
                             type="password" 
-                            id="confirmPassword" 
                             name="confirmPassword" 
+                            id="confirmPassword" 
                             value={user.confirmPassword} 
                             onChange={e => setUser({ ...user, confirmPassword: e.target.value })} 
                             onFocus={clearErrors} 
                             autoComplete="new-password" />
                     </div>
-                    <button className="btn btn-primary btn-outline" style={{ width: '100%' }} type="submit" value="Register">Register</button>
+                    <button className="btn btn-primary btn-outline btn-sm md:btn-md" style={{ width: '100%' }} type="submit" value="Register">Register</button>
                 </form>
                 {registrationErrors && <div className="text-error" style={{ marginTop: '1rem' }}>{registrationErrorMsg}</div>}
                 <div style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
-                    Already have an account? <Link className="btn btn-primary btn-outline btn-sm" style={{ marginLeft: '0.5rem' }} to="/login">Login</Link>
+                    Already have an account? <Link className="btn btn-secondary btn-outline btn-xs sm:btn-sm" style={{ marginLeft: '0.5rem' }} to="/login">Login</Link>
                 </div>
             </div>
         </div>
