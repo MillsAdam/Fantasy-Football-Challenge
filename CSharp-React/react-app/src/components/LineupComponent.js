@@ -215,8 +215,11 @@ function LineupComponent() {
                                         {activeRosterPlayers.map((rosterPlayer, index) => (
                                             <tr key={index} className="hover">
                                                 <td>
-                                                    <select className="btn btn-neutral btn-outline btn-xs" id={`lineup-position-${index}`}>
-                                                        <option value="" disabled hidden>Pos</option>
+                                                    <select 
+                                                        className="btn btn-neutral btn-outline btn-xs" 
+                                                        id={`lineup-position-${index}`} 
+                                                        disabled={getFilteredLineupOptions(rosterPlayer.position).length === 0}
+                                                    >
                                                         {getFilteredLineupOptions(rosterPlayer.position).map((option) => (
                                                             <option style={{ textAlign: 'left' }} key={option} value={option}>{option}</option>
                                                         ))}

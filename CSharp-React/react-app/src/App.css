@@ -63,17 +63,12 @@
 
 .custom-input::placeholder {
   text-align: center;
-  font-weight: bold;
-  color: #aaa;
-  margin-right: .8rem;
+  color: rgb(220, 231, 235, 0.9);
+  margin-right: 16px;
 }
 
 .custom-input {
   text-align: left;
-}
-
-.custom-input:placeholder-shown {
-  text-align: center;
 }
 
 
