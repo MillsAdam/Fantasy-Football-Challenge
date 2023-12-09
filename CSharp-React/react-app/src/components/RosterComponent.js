@@ -276,19 +276,19 @@ function RosterComponent() {
                                 <h2>Create League Roster</h2>
                                 <form onSubmit={createRoster}>
                                     <label>Team Name</label>
-                                    <input type="text" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
-                                    <button className="btn btn-neutral sm: btn-sm" type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create League Roster"}</button>
+                                    <input type="text" style={{ marginBottom: '1rem' }} value={teamName} onChange={(e) => setTeamName(e.target.value)} />
+                                    <button className="btn btn-neutral sm: btn-sm" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create League Roster"}</button>
                                 </form>
                             </div>
                         </div>
                     )}
                     {userHasTeam && (
                         <div className="page-container">
-                            <div className="roster-component-container">
+                            <div className="component-container">
                                 <h2>Search Players</h2>
-                                <div className="roster-search">
+                                <div className="search-duo">
                                     <input 
-                                        className="roster-search-input" 
+                                        style={{ width: '60%', marginBottom: '1rem'}} 
                                         type="text" 
                                         value={searchName} 
                                         placeholder="Enter Name" 
@@ -296,16 +296,17 @@ function RosterComponent() {
                                         disabled={activeSearchMethod && activeSearchMethod !== "name"}
                                     />
                                     <button 
-                                        className="roster-search-button btn btn-neutral sm: btn-sm" 
+                                        className="btn btn-neutral sm: btn-sm" 
+                                        style={{ width: '30%', marginBottom: '1rem' }}
                                         onClick={startSearchByName} 
                                         disabled={isLoading || (activeSearchMethod && activeSearchMethod !=="name")}
                                     >
                                         Search by Name
                                     </button>
                                 </div>
-                                <div className="roster-search">
+                                <div className="search-duo">
                                     <select 
-                                        className="roster-search-select" 
+                                        style={{ width: '60%', marginBottom: '1rem'}} 
                                         value={selectedTeamName} 
                                         onChange={(e) => setSelectedTeamName(e.target.value)} 
                                         disabled={activeSearchMethod && activeSearchMethod !== "team"}
@@ -316,16 +317,17 @@ function RosterComponent() {
                                         ))}
                                     </select>
                                     <button 
-                                        className="roster-search-button btn btn-neutral sm: btn-sm"
+                                        className="btn btn-neutral sm: btn-sm" 
+                                        style={{ width: '30%', marginBottom: '1rem' }}
                                         onClick={startSearchByTeam} 
                                         disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "team")}
                                     >
                                         Search by Team
                                     </button>
                                 </div>
-                                <div className="roster-search">
+                                <div className="search-duo">
                                     <select 
-                                        className="roster-search-select" 
+                                        style={{ width: '60%', marginBottom: '1rem'}} 
                                         value={selectedPosition} 
                                         onChange={(e) => setSelectedPosition(e.target.value)} 
                                         disabled={activeSearchMethod && activeSearchMethod !== "position"}
@@ -336,14 +338,15 @@ function RosterComponent() {
                                         ))}
                                     </select>
                                     <button 
-                                        className="roster-search-button btn btn-neutral sm: btn-sm" 
+                                        className="btn btn-neutral sm: btn-sm" 
+                                        style={{ width: '30%', marginBottom: '1rem' }}
                                         onClick={startSearchByPosition} 
                                         disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "position")}
                                     >
                                         Search by Position
                                     </button>
                                 </div>
-                                <button className="btn btn-neutral sm: btn-sm" onClick={clearSearch} disabled={isLoading}>Clear Search</button>
+                                <button className="btn btn-neutral sm: btn-sm" style={{ width: '100%', marginBottom: '1rem' }} onClick={clearSearch} disabled={isLoading}>Clear Search</button>
                                 {isLoading ? (<p>Loading...</p>) : (
                                     searchPlayer.length > 0 && (
                                         <div>
@@ -395,7 +398,7 @@ function RosterComponent() {
                                 )}
                             </div>
                             
-                            <div className="roster-component-container">
+                            <div className="component-container">
                                 <h2>My Roster</h2>
                                 {activeRosterPlayers.length > 0 && (
                                     <div className="table-container">

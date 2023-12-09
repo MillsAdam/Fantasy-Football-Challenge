@@ -1,14 +1,7 @@
-
-
-
 .search-container {
     display: flex;
     flex-direction: column;
     align-items: stretch; /* changed from 'center' */
-}
-
-.stats-select, .stats-filter-select, .stats-filter-input {
-    width: 100%;
 }
 
 .table-container {

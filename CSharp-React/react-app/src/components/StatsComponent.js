@@ -130,7 +130,7 @@ function StatsComponent() {
                         <form onSubmit={searchPlayerStats}>
                             <div>
                                 <select 
-                                    className="stats-select" 
+                                    style={{ width: '100%', marginBottom: '1rem' }} 
                                     value={selectedPosition} 
                                     onChange={(e) => setSelectedPosition(e.target.value)}
                                 >
@@ -143,7 +143,7 @@ function StatsComponent() {
                             <div>
 
                                 <select 
-                                    className="stats-select" 
+                                    style={{ width: '100%', marginBottom: '1rem' }} 
                                     value={selectedInterval} 
                                     onChange={(e) => setSelectedInterval(e.target.value)} 
                                     disabled={selectedPosition === ''}
@@ -157,7 +157,7 @@ function StatsComponent() {
                             {(selectedInterval === 'weekly total' || selectedInterval === 'weekly projected') && (
                                 <div>
                                     <select 
-                                        className="stats-filter-select"
+                                        style={{ width: '100%', marginBottom: '1rem' }}
                                         value={selectedWeek} 
                                         onChange={(e) => setSelectedWeek(e.target.value)}
                                     >
@@ -172,7 +172,7 @@ function StatsComponent() {
                             )}
                             <div>
                                 <select 
-                                    className="stats-select" 
+                                    style={{ width: '100%', marginBottom: '1rem' }} 
                                     value={selectedCategory} 
                                     onChange={(e) => setSelectedCategory(e.target.value)} 
                                     disabled={selectedPosition === '' || selectedInterval === ''}
@@ -187,7 +187,7 @@ function StatsComponent() {
                                 <div>
                                     {(selectedCategory === 'conf' || selectedCategory === 'team') ? (
                                         <select 
-                                            className="stats-filter-select" 
+                                            style={{ width: '100%', marginBottom: '1rem' }} 
                                             value={selectedFilter}
                                             onChange={(e) => setSelectedFilter(e.target.value)}
                                         >
@@ -201,7 +201,7 @@ function StatsComponent() {
                                         </select>
                                     ) : selectedCategory === 'name' ? (
                                         <input 
-                                            className="stats-filter-input" 
+                                            style={{ width: '100%', marginBottom: '1rem' }} 
                                             type="text" 
                                             value={selectedFilter} 
                                             placeholder="Enter Name" 
@@ -210,9 +210,10 @@ function StatsComponent() {
                                     ) : null}
                                 </div>
                             )}
-                            <div>
+                            <div className="search-duo" style={{ marginBottom: '1rem' }}>
                                 <button 
                                     className="btn btn-neutral sm: btn-sm" 
+                                    style={{ width: '45%' }}
                                     type="submit" 
                                     disabled=
                                         {isLoading || 
@@ -226,7 +227,14 @@ function StatsComponent() {
                                 >
                                     Search
                                 </button>
-                                <button className="btn btn-neutral sm: btn-sm" onClick={clearSearch} disabled={isLoading}>Clear</button>
+                                <button 
+                                    className="btn btn-neutral sm: btn-sm" 
+                                    style={{ width: '45%' }}
+                                    onClick={clearSearch} 
+                                    disabled={isLoading}
+                                >
+                                        Clear
+                                </button>
                             </div>
                         </form>
                     </div>

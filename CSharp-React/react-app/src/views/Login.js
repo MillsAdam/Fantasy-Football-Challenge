@@ -33,8 +33,8 @@ function Login() {
     };
 
     return (
-        <div className="login-register-page-container">
-            <div className="login-register-component-container">
+        <div className="page-container">
+            <div className="component-container">
                 <h1>Login</h1>
                 <form onSubmit={login}>
                     <div className="form-input-group">
@@ -45,7 +45,7 @@ function Login() {
                         <label htmlFor="password">Password</label>
                         <input type="password" id="password" name="password" value={user.password} onChange={handleInputChange} autoComplete="current-password" />
                     </div>
-                    <button className="btn btn-neutral sm: btn-sm" type="submit" value="Login">Login</button>
+                    <button className="btn btn-neutral sm: btn-sm" style={{ width: '100%' }} type="submit" value="Login">Login</button>
                 </form>
                 {invalidCredentials && <p className="invalid-credentials">Invalid credentials.</p>}
                 <div className="account-query">

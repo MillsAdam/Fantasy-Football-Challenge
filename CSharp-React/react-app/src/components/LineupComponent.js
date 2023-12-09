@@ -171,7 +171,7 @@ function LineupComponent() {
                                         {lineupPlayers.map((lineupPlayer, index) => (
                                             <tr key={index}>
                                                 <td>
-                                                    <button className="add-remove-button btn btn-neutral sm: btn-sm" onClick={(e) => handleRemovePlayerFromLineup(e, lineupPlayer.playerId)}>-</button>
+                                                    <button className="add-remove-button btn btn-neutral btn-sm" onClick={(e) => handleRemovePlayerFromLineup(e, lineupPlayer.playerId)}>-</button>
                                                 </td>
                                                 <td>{lineupPlayer.conference}</td>
                                                 <td>{lineupPlayer.team}</td>
@@ -224,7 +224,7 @@ function LineupComponent() {
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <button className="add-remove-button btn btn-neutral sm: btn-sm" onClick={(e) => handleAddPlayerToLineup(e, rosterPlayer.playerId, document.getElementById(`lineup-position-${index}`).value)}>+</button>
+                                                    <button className="add-remove-button btn btn-neutral btn-sm" onClick={(e) => handleAddPlayerToLineup(e, rosterPlayer.playerId, document.getElementById(`lineup-position-${index}`).value)}>+</button>
                                                 </td>
                                                 <td>{rosterPlayer.conference}</td>
                                                 <td>{rosterPlayer.team}</td>
@@ -251,7 +251,7 @@ function LineupComponent() {
                         <h2>Weekly Lineup</h2>
                         <form onSubmit={getLineupPlayersByWeek}>
                             <select 
-                                className="game-week-select"
+                                style={{ marginBottom: '1rem', width: '100%' }}
                                 value={selectedGameWeek} 
                                 onChange={(e) => setSelectedGameWeek(e.target.value)}
                             >
@@ -260,8 +260,26 @@ function LineupComponent() {
                                     <option key={option} value={option}>Week {option}</option>
                                 ))}
                             </select>
-                            <button className="btn btn-neutral sm: btn-sm" type="submit" disabled={isLoading || selectedGameWeek === ""}>Submit</button>
-                            <button className="btn btn-neutral sm: btn-sm" type="button" onClick={clearGameWeek} disabled={isLoading || selectedGameWeek === ""}>Clear</button>
+                            <div className="search-duo" style={{ marginBottom: '1rem' }}>
+                                <button 
+                                    className="btn btn-neutral sm: btn-sm" 
+                                    style={{ width: '45%' }}
+                                    type="submit" 
+                                    disabled={isLoading || selectedGameWeek === ""}
+                                >
+                                    Submit
+                                </button>
+                                <button 
+                                    className="btn btn-neutral sm: btn-sm" 
+                                    style={{ width: '45%'}}
+                                    type="button" 
+                                    onClick={clearGameWeek} 
+                                    disabled={isLoading || selectedGameWeek === ""}
+                                >
+                                    Clear
+                                </button>
+                            </div>
+                            
                         </form>
                         {weeklyLineupPlayers.length > 0 && (
                             <div>

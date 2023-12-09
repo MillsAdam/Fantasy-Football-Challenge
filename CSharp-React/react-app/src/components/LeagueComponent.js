@@ -135,13 +135,19 @@ function LeagueComponent() {
                         )}
                         {selectedUserId && (
                             <div>
-                                <div className="team-info">
+                                <div className="search-duo" style={{ margin: '1rem 0', justifyContent: 'space-evenly'}}>
                                     <h4>{selectedTeamName}</h4>
                                     <p>Total Score: <strong>{selectedTotalScore}</strong></p>
                                 </div>
-                                <div className="league-button-container">
+                                <div className="search-duo">
                                     {[1, 2, 3, 4].map(week => (
-                                        <button className="league-button btn btn-neutral sm: btn-sm" key={week} type="button" onClick={() => handleWeekSelection(week)}>
+                                        <button 
+                                            className="btn btn-neutral btn-sm" 
+                                            style={{ width: '21%', marginBottom: '1rem' }}
+                                            type="button" 
+                                            key={week} 
+                                            onClick={() => handleWeekSelection(week)}
+                                        >
                                             Week {week}
                                         </button>
                                     ))}
