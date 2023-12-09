@@ -99,50 +99,53 @@ function LeagueComponent() {
                             </div>
                         )}
                         {userHasTeam && (
-                            <div className="table-container">
+                            <div >
                                 <div>
                                     <h2>Leaderboard</h2>
                                 </div>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Rank</th>
-                                            <th>User</th>
-                                            <th>Team</th>
-                                            <th>W1</th>
-                                            <th>W2</th>
-                                            <th>W3</th>
-                                            <th>W4</th>
-                                            <th>Points</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {rosters.map((roster, index) => (
-                                            <tr key={index} onClick={() => handleUserClick(roster.userId, roster.teamName, roster.totalScore)}>
-                                                <td>{index + 1}</td>
-                                                <td>{roster.username}</td>
-                                                <td>{roster.teamName}</td>
-                                                <td>{roster.week1Score}</td>
-                                                <td>{roster.week2Score}</td>
-                                                <td>{roster.week3Score}</td>
-                                                <td>{roster.week4Score}</td>
-                                                <td>{roster.totalScore}</td>
+                                <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                                    <table className="table table-xs table-pin-rows">
+                                        <thead>
+                                            <tr>
+                                                <th>Rank</th>
+                                                <th>User</th>
+                                                <th>Team</th>
+                                                <th>W1</th>
+                                                <th>W2</th>
+                                                <th>W3</th>
+                                                <th>W4</th>
+                                                <th>Points</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            {rosters.map((roster, index) => (
+                                                <tr key={index} className="hover" onClick={() => handleUserClick(roster.userId, roster.teamName, roster.totalScore)}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{roster.username}</td>
+                                                    <td>{roster.teamName}</td>
+                                                    <td>{roster.week1Score}</td>
+                                                    <td>{roster.week2Score}</td>
+                                                    <td>{roster.week3Score}</td>
+                                                    <td>{roster.week4Score}</td>
+                                                    <td>{roster.totalScore}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
                             </div>
                         )}
                         {selectedUserId && (
                             <div>
-                                <div className="search-duo" style={{ margin: '1rem 0', justifyContent: 'space-evenly'}}>
+                                <div className="horizontal-container" style={{ margin: '1rem 0', justifyContent: 'space-evenly'}}>
                                     <h4>{selectedTeamName}</h4>
                                     <p>Total Score: <strong>{selectedTotalScore}</strong></p>
                                 </div>
-                                <div className="search-duo">
+                                <div className="horizontal-container">
                                     {[1, 2, 3, 4].map(week => (
                                         <button 
-                                            className="btn btn-neutral btn-sm" 
+                                            className="btn btn-info btn-sm" 
                                             style={{ width: '21%', marginBottom: '1rem' }}
                                             type="button" 
                                             key={week} 
@@ -158,8 +161,8 @@ function LeagueComponent() {
                                         <div>
                                             <p>Week {selectedWeek} Score: <strong>{selectedWeeklyScore}</strong></p>
                                         </div>
-                                        <div className="table-container">
-                                            <table>
+                                        <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                                            <table className="table table-xs table-pin-rows">
                                                 <thead>
                                                     <tr>
                                                         <th>Conf</th>
@@ -171,7 +174,7 @@ function LeagueComponent() {
                                                 </thead>
                                                 <tbody>
                                                     {lineup.map((lineupPlayer, index) => (
-                                                        <tr key={index}>
+                                                        <tr key={index} className="hover">
                                                             <td>{lineupPlayer.conference}</td>
                                                             <td>{lineupPlayer.team}</td>
                                                             <td>{lineupPlayer.lineupPosition}</td>

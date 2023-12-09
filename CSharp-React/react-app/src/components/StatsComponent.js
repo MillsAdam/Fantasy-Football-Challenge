@@ -210,9 +210,9 @@ function StatsComponent() {
                                     ) : null}
                                 </div>
                             )}
-                            <div className="search-duo" style={{ marginBottom: '1rem' }}>
+                            <div className="horizontal-container" style={{ marginBottom: '1rem' }}>
                                 <button 
-                                    className="btn btn-neutral sm: btn-sm" 
+                                    className="btn btn-primary sm: btn-sm" 
                                     style={{ width: '45%' }}
                                     type="submit" 
                                     disabled=
@@ -228,7 +228,7 @@ function StatsComponent() {
                                     Search
                                 </button>
                                 <button 
-                                    className="btn btn-neutral sm: btn-sm" 
+                                    className="btn btn-secondary sm: btn-sm" 
                                     style={{ width: '45%' }}
                                     onClick={clearSearch} 
                                     disabled={isLoading}
@@ -241,8 +241,8 @@ function StatsComponent() {
                     
                     {isLoading ? (<p>Loading...</p>) : (
                         searchResults.length > 0 && (
-                            <div className="table-container">
-                                <table>
+                            <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                                <table className="table table-xs table-pin-rows">
                                     <thead>
                                         <tr>
                                             <th colSpan="6">Player Info</th>
@@ -265,7 +265,7 @@ function StatsComponent() {
                                     </thead>
                                     <tbody>
                                         {searchResults.map((player,index) => (
-                                            <tr key={index}>
+                                            <tr key={index} className="hover">
                                                 <td>{player.conference}</td>
                                                 <td>{player.team}</td>
                                                 <td>{player.position}</td>

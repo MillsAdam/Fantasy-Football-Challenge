@@ -15,11 +15,6 @@
   }
 }
 
-.App-link {
-  color: #61dafb;
-  text-decoration: none;
-}
-
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -60,7 +55,13 @@
   flex: 1;
 }
 
-.search-duo {
+/* .table-container {
+  width: 100%;
+  max-width: 100%;
+  overflow: auto;
+} */
+
+.horizontal-container {
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
@@ -70,31 +71,27 @@
 
 
 /* TABLE STYLES */
-table {
+/* table {
   margin-left: auto;
   margin-right: auto;
   border-collapse: collapse;
   width: 100%;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-  background-color: white;
   border-radius: 4px;
   overflow: hidden;
 }
 
 table th, table td {
-  padding: 4px 5px;
   text-align: left;
 }
 
 table th {
-  /* text-align: center; */
   background-color: #f4f4f4;
   color: #333;
   font-weight: bold;
 }
 
 table td {
-  /* text-align: left; */
   font-size: 14px;
   color: #333;
 }
@@ -105,37 +102,14 @@ table tr:nth-child(even) {
 
 table tr:hover {
   background-color: #f1f1f1
-}
-
-
-
-/* BUTTON STYLES */
-.add-remove-button {
-  width: 2rem;
-  height: 2rem;
-  padding: 0;
-  margin: 0;
-}
-
-
+} */
 
 /* FORM STYLES */
 input {
-  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 100%;
   box-sizing: border-box;
-}
-
-input:disabled {
-  background-color: #e0e0e0;
-  color: #a0a0a0;
-}
-
-input:focus {
-  outline: none;
-  border-color: #61dafb;
 }
 
 .form-input-group {
@@ -143,18 +117,8 @@ input:focus {
 }
 
 
-
-/* LABEL STYLES */
-label {
-  display: block;
-  margin-bottom: .5rem;
-  color: #333;
-}
-
-
 /* SELECT STYLES */
 select {
-  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 100%;
@@ -162,14 +126,9 @@ select {
   box-sizing: border-box
 }
 
-select:disabled {
-  background-color: #e0e0e0;
-  color: #a0a0a0;
-}
-
-select:focus {
-  outline: none;
-  border-color: #61dafb;
+.lineup-select {
+  padding: 5px;
+  margin: 0rem;
 }
 
 

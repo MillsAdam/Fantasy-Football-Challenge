@@ -33,7 +33,7 @@ function Login() {
     };
 
     return (
-        <div className="page-container">
+        <div className="page-container" style={{ alignItems: 'center', width: '30%' }}>
             <div className="component-container">
                 <h1>Login</h1>
                 <form onSubmit={login}>
@@ -45,7 +45,7 @@ function Login() {
                         <label htmlFor="password">Password</label>
                         <input type="password" id="password" name="password" value={user.password} onChange={handleInputChange} autoComplete="current-password" />
                     </div>
-                    <button className="btn btn-neutral sm: btn-sm" style={{ width: '100%' }} type="submit" value="Login">Login</button>
+                    <button className="btn btn-primary btn-sm" style={{ width: '100%' }} type="submit" value="Login">Login</button>
                 </form>
                 {invalidCredentials && <p className="invalid-credentials">Invalid credentials.</p>}
                 <div className="account-query">

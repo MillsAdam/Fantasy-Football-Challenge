@@ -44,7 +44,7 @@ function Register() {
     };
 
     return (
-        <div className="page-container">
+        <div className="page-container" style={{ alignItems: 'center', width: '30%' }}>
             <div className="component-container">
                 <h1>Register</h1>
                 {registrationErrors && (
@@ -65,7 +65,7 @@ function Register() {
                         <label htmlFor="confirmPassword">Confirm Password: </label>
                         <input type="password" id="confirmPassword" name="confirmPassword" value={user.confirmPassword} onChange={e => setUser({ ...user, confirmPassword: e.target.value })} onFocus={clearErrors} autoComplete="new-password" />
                     </div>
-                    <button className="btn btn-neutral sm: btn-sm" style={{ width: '100%' }} type="submit" value="Register">Register</button>
+                    <button className="btn btn-primary btn-sm" style={{ width: '100%' }} type="submit" value="Register">Register</button>
                 </form>
                 {registrationErrors && <div className="registration-errors">{registrationErrorMsg}</div>}
                 <div className="account-query">

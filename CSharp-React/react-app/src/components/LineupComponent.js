@@ -153,8 +153,8 @@ function LineupComponent() {
                     <div className="component-container">
                         <h2>My Lineup</h2>
                         {lineupPlayers.length > 0 && (
-                            <div className="table-container">
-                                <table>
+                            <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                                <table className="table table-xs table-pin-rows">
                                     <thead>
                                         <tr>
                                             <th>Rem</th>
@@ -169,9 +169,9 @@ function LineupComponent() {
                                     </thead>
                                     <tbody>
                                         {lineupPlayers.map((lineupPlayer, index) => (
-                                            <tr key={index}>
+                                            <tr key={index} className="hover">
                                                 <td>
-                                                    <button className="add-remove-button btn btn-neutral btn-sm" onClick={(e) => handleRemovePlayerFromLineup(e, lineupPlayer.playerId)}>-</button>
+                                                    <button className="btn btn-error btn-sm" onClick={(e) => handleRemovePlayerFromLineup(e, lineupPlayer.playerId)}>-</button>
                                                 </td>
                                                 <td>{lineupPlayer.conference}</td>
                                                 <td>{lineupPlayer.team}</td>
@@ -197,8 +197,8 @@ function LineupComponent() {
                     <div className="component-container">
                         <h2>My Roster</h2>
                         {activeRosterPlayers.length > 0 && (
-                            <div className="table-container">
-                                <table>
+                            <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                                <table className="table table-xs table-pin-rows">
                                     <thead>
                                         <tr>
                                             <th>Lineup</th>
@@ -214,7 +214,7 @@ function LineupComponent() {
                                     </thead>
                                     <tbody>
                                         {activeRosterPlayers.map((rosterPlayer, index) => (
-                                            <tr key={index}>
+                                            <tr key={index} className="hover">
                                                 <td>
                                                     <select className="lineup-select" id={`lineup-position-${index}`}>
                                                         <option value="" disabled hidden>Pos</option>
@@ -224,7 +224,7 @@ function LineupComponent() {
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <button className="add-remove-button btn btn-neutral btn-sm" onClick={(e) => handleAddPlayerToLineup(e, rosterPlayer.playerId, document.getElementById(`lineup-position-${index}`).value)}>+</button>
+                                                    <button className="btn btn-accent btn-sm" onClick={(e) => handleAddPlayerToLineup(e, rosterPlayer.playerId, document.getElementById(`lineup-position-${index}`).value)}>+</button>
                                                 </td>
                                                 <td>{rosterPlayer.conference}</td>
                                                 <td>{rosterPlayer.team}</td>
@@ -260,9 +260,9 @@ function LineupComponent() {
                                     <option key={option} value={option}>Week {option}</option>
                                 ))}
                             </select>
-                            <div className="search-duo" style={{ marginBottom: '1rem' }}>
+                            <div className="horizontal-container" style={{ marginBottom: '1rem' }}>
                                 <button 
-                                    className="btn btn-neutral sm: btn-sm" 
+                                    className="btn btn-primary sm: btn-sm" 
                                     style={{ width: '45%' }}
                                     type="submit" 
                                     disabled={isLoading || selectedGameWeek === ""}
@@ -270,7 +270,7 @@ function LineupComponent() {
                                     Submit
                                 </button>
                                 <button 
-                                    className="btn btn-neutral sm: btn-sm" 
+                                    className="btn btn-secondary sm: btn-sm" 
                                     style={{ width: '45%'}}
                                     type="button" 
                                     onClick={clearGameWeek} 
@@ -286,8 +286,8 @@ function LineupComponent() {
                                 <div>
                                     <h3>Weekly Score: {weeklyScore}</h3>
                                 </div>
-                                <div className="table-container">
-                                    <table>
+                                <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                                    <table className="table table-xs table-pin-rows">
                                         <thead>
                                             <tr>
                                                 <th>Conf</th>
@@ -300,7 +300,7 @@ function LineupComponent() {
                                         </thead>
                                         <tbody>
                                             {weeklyLineupPlayers.map((lineupPlayer, index) => (
-                                                <tr key={index}>
+                                                <tr key={index} className="hover">
                                                     <td>{lineupPlayer.conference}</td>
                                                     <td>{lineupPlayer.team}</td>
                                                     <td>{lineupPlayer.lineupPosition}</td>

@@ -282,23 +282,23 @@ function AdminComponent() {
 
                     <h3>Teams / Players / Scores</h3>
                     <form onSubmit={createTeamsAndPlayers}>
-                        <button className="btn btn-neutral btn-sm" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
+                        <button className="btn btn-primary btn-sm" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
                             {isLoading && loadingMessage === "Creating Teams and Players..." ? "Loading..." : "Create Teams / Players"}
                         </button>
                     </form>
                     <form onSubmit={upsertPlayers}>
-                        <button className="btn btn-neutral sm: btn-sm" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
+                        <button className="btn btn-secondary btn-sm" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
                             {isLoading && loadingMessage === "Upserting Players..." ? "Loading..." : "Upsert Players"}
                         </button>
                     </form>
                     <h3>Player Stats / Projections</h3>
                     <form onSubmit={createPlayerStatsAndProjections}>
-                        <button className="btn btn-neutral sm: btn-sm" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
+                        <button className="btn btn-primary btn-sm" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
                             {isLoading && loadingMessage === "Creating Player Stats and Projections..." ? "Loading..." : "Create Player Stats / Projections"}
                         </button>
                     </form>
                     <form onSubmit={upsertPlayerStatsAndProjectionsByWeek}>
-                        <button className="btn btn-neutral sm: btn-sm" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
+                        <button className="btn btn-secondary btn-sm" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
                             {isLoading && 
                                 loadingMessage === "Upserting Player Stats and Projections By Week..." ? 
                                 "Loading..." : 
@@ -307,7 +307,7 @@ function AdminComponent() {
                     </form>
                     <h3>Lineup / Roster Scores</h3>
                     <form onSubmit={updateLineupAndRosterScores}>
-                        <button className="btn btn-neutral sm: btn-sm" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
+                        <button className="btn btn-secondary btn-sm" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
                             {isLoading && 
                                 loadingMessage === "Updating Lineup and Roster Scores..." ? 
                                     "Loading..." : 
@@ -351,21 +351,21 @@ function AdminComponent() {
                                 )
                             }
                         </select>
-                        <button className="btn btn-neutral sm: btn-sm"  style={{ width: '100%', marginBottom: '1rem' }}type="submit" disabled={isLoading || !selectedConfigKey || !selectedConfigValue}>
+                        <button className="btn btn-secondary btn-sm"  style={{ width: '100%', marginBottom: '1rem' }}type="submit" disabled={isLoading || !selectedConfigKey || !selectedConfigValue}>
                             {isLoading && loadingMessage === "Updating Configuration..." ? "Loading..." : "Update Configuration"}
                         </button>
                     </form>
-                    <button className="btn btn-neutral sm: btn-sm"  style={{ width: '100%', marginBottom: '1rem' }}onClick={toggleConfigTableVisibility}>
+                    <button className="btn btn-info btn-sm"  style={{ width: '100%', marginBottom: '1rem' }}onClick={toggleConfigTableVisibility}>
                         {isConfigTableVisible ? "Hide Configuration" : "Show Configuration"}
                     </button>
                     {isConfigTableVisible && (
-                        <div className="table-container">
-                            <table>
+                        <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                            <table className="table table-xs table-pin-rows">
                                 <tbody>
                                     {configurations
                                         .sort((a,b) => configDisplayOrder.indexOf(a.configKey) - configDisplayOrder.indexOf(b.configKey))
                                         .map((config, index) => (
-                                        <tr key={index}>
+                                        <tr key={index} className="hover">
                                             <td>{configKeyDisplayNames[config.configKey] || config.configKey}</td>
                                             <td>
                                                 {config.configKey === 'lockRosters' || config.configKey === 'lockLineups' || config.configKey === 'currentWeek' || config.configKey === 'startingLineupWeek' 
@@ -392,19 +392,19 @@ function AdminComponent() {
                                 <option key={teamName} value={teamName}>{teamNameDisplayNames[teamName] || teamName}</option>
                             ))}
                         </select>
-                        <button className="btn btn-neutral sm: btn-sm"  style={{ width: '100%', marginBottom: '1rem' }}type="submit" disabled={isLoading || selectedTeamName === ""}>
+                        <button className="btn btn-secondary btn-sm"  style={{ width: '100%', marginBottom: '1rem' }}type="submit" disabled={isLoading || selectedTeamName === ""}>
                             {isLoading && loadingMessage === `Updating ${selectedTeamName} Status...` ? "Loading..." : `Update ${selectedTeamName} Status`}
                         </button>
                     </form>
-                    <button className="btn btn-neutral sm: btn-sm"  style={{ width: '100%', marginBottom: '1rem' }}onClick={toggleTeamsTableVisibility}>
+                    <button className="btn btn-info btn-sm"  style={{ width: '100%', marginBottom: '1rem' }}onClick={toggleTeamsTableVisibility}>
                         {isTeamsTableVisible ? "Hide Teams" : "Show Teams"}
                     </button>
                     {isTeamsTableVisible && (
-                        <div className="table-container">
-                            <table>
+                        <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                            <table className="table table-xs table-pin-rows">
                                 <tbody>
                                     {teams.map((team, index) => (
-                                        <tr key={index}>
+                                        <tr key={index} className="hover">
                                             <td>{teamNameDisplayNames[team.team] || team.team}</td>
                                             <td className={
                                                 team.status === 'Active' ? 'green-highlight' :
