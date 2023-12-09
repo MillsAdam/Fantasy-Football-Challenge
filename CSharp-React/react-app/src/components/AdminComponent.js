@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect, useCallback } from "react";
 import { AuthContext } from "../context/AuthContext";
 import DatabaseService from "../services/DatabaseService";
 import { useConfig } from "../context/ConfigContext";
-import "../styles/AdminComponent.css";
 import { orderedConfigKeys, configDisplayOrder, configKeyDisplayNames, configValueOptions, teamNameDisplayNames } from "../constants/AdminConstants";
 
 
@@ -282,23 +281,23 @@ function AdminComponent() {
 
                     <h3>Teams / Players / Scores</h3>
                     <form onSubmit={createTeamsAndPlayers}>
-                        <button className="btn btn-primary btn-sm" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
+                        <button className="btn btn-primary btn-outline" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
                             {isLoading && loadingMessage === "Creating Teams and Players..." ? "Loading..." : "Create Teams / Players"}
                         </button>
                     </form>
                     <form onSubmit={upsertPlayers}>
-                        <button className="btn btn-secondary btn-sm" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
+                        <button className="btn btn-secondary btn-outline" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
                             {isLoading && loadingMessage === "Upserting Players..." ? "Loading..." : "Upsert Players"}
                         </button>
                     </form>
                     <h3>Player Stats / Projections</h3>
                     <form onSubmit={createPlayerStatsAndProjections}>
-                        <button className="btn btn-primary btn-sm" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
+                        <button className="btn btn-primary btn-outline" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
                             {isLoading && loadingMessage === "Creating Player Stats and Projections..." ? "Loading..." : "Create Player Stats / Projections"}
                         </button>
                     </form>
                     <form onSubmit={upsertPlayerStatsAndProjectionsByWeek}>
-                        <button className="btn btn-secondary btn-sm" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
+                        <button className="btn btn-secondary btn-outline" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
                             {isLoading && 
                                 loadingMessage === "Upserting Player Stats and Projections By Week..." ? 
                                 "Loading..." : 
@@ -307,7 +306,7 @@ function AdminComponent() {
                     </form>
                     <h3>Lineup / Roster Scores</h3>
                     <form onSubmit={updateLineupAndRosterScores}>
-                        <button className="btn btn-secondary btn-sm" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
+                        <button className="btn btn-secondary btn-outline" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>
                             {isLoading && 
                                 loadingMessage === "Updating Lineup and Roster Scores..." ? 
                                     "Loading..." : 
@@ -318,7 +317,7 @@ function AdminComponent() {
                 <div className="component-container">
                     <h3>Configuration</h3>
                     <form onSubmit={updateConfiguration}>
-                        <select 
+                        <select className="btn btn-neutral btn-outline" 
                             value={selectedConfigKey} 
                             style={{ width: '100%', marginBottom: '1rem' }}
                             onChange={(e) => {
@@ -328,10 +327,10 @@ function AdminComponent() {
                         >
                             <option value="" disabled hidden>Select Config Key</option>
                             {[...orderedConfigKeys.keys()].map(key => (
-                                <option key={key} value={key}>{orderedConfigKeys.get(key)}</option>
+                                <option style={{ textAlign: 'left' }} key={key} value={key}>{orderedConfigKeys.get(key)}</option>
                             ))}
                         </select>
-                        <select 
+                        <select className="btn btn-neutral btn-outline" 
                             value={selectedConfigValue} 
                             style={{ width: '100%', marginBottom: '1rem' }}
                             onChange={(e) => setSelectedConfigValue(e.target.value)} 
@@ -342,20 +341,20 @@ function AdminComponent() {
                                 configValueOptions[selectedConfigKey] && 
                                 (typeof configValueOptions[selectedConfigKey] === 'object' && !Array.isArray(configValueOptions[selectedConfigKey]) 
                                     ? Object.entries(configValueOptions[selectedConfigKey]).map(([value, displayText]) => (
-                                        <option key={value} value={value}>{displayText}</option>
+                                        <option style={{ textAlign: 'left' }} key={value} value={value}>{displayText}</option>
                                     ))
                                     : Array.isArray(configValueOptions[selectedConfigKey]) && 
                                     configValueOptions[selectedConfigKey].map(value => (
-                                        <option key={value} value={value}>{value}</option>
+                                        <option style={{ textAlign: 'left' }} key={value} value={value}>{value}</option>
                                     ))
                                 )
                             }
                         </select>
-                        <button className="btn btn-secondary btn-sm"  style={{ width: '100%', marginBottom: '1rem' }}type="submit" disabled={isLoading || !selectedConfigKey || !selectedConfigValue}>
+                        <button className="btn btn-secondary btn-outline"  style={{ width: '100%', marginBottom: '1rem' }}type="submit" disabled={isLoading || !selectedConfigKey || !selectedConfigValue}>
                             {isLoading && loadingMessage === "Updating Configuration..." ? "Loading..." : "Update Configuration"}
                         </button>
                     </form>
-                    <button className="btn btn-info btn-sm"  style={{ width: '100%', marginBottom: '1rem' }}onClick={toggleConfigTableVisibility}>
+                    <button className="btn btn-info btn-outline"  style={{ width: '100%', marginBottom: '1rem' }}onClick={toggleConfigTableVisibility}>
                         {isConfigTableVisible ? "Hide Configuration" : "Show Configuration"}
                     </button>
                     {isConfigTableVisible && (
@@ -382,21 +381,21 @@ function AdminComponent() {
                 <div className="component-container">
                     <h3>Team Status</h3>
                     <form onSubmit={ToggleTeamStatus}>
-                        <select 
+                        <select className="btn btn-neutral btn-outline" 
                             value={selectedTeamName} 
                             style={{ width: '100%', marginBottom: '1rem' }}
                             onChange={(e) => setSelectedTeamName(e.target.value)}
                         >
                             <option value="" disabled hidden>Select a Team</option>
                             {dynamicTeamNameOptions.map(teamName => (
-                                <option key={teamName} value={teamName}>{teamNameDisplayNames[teamName] || teamName}</option>
+                                <option style={{ textAlign: 'left' }} key={teamName} value={teamName}>{teamNameDisplayNames[teamName] || teamName}</option>
                             ))}
                         </select>
-                        <button className="btn btn-secondary btn-sm"  style={{ width: '100%', marginBottom: '1rem' }}type="submit" disabled={isLoading || selectedTeamName === ""}>
+                        <button className="btn btn-secondary btn-outline"  style={{ width: '100%', marginBottom: '1rem' }}type="submit" disabled={isLoading || selectedTeamName === ""}>
                             {isLoading && loadingMessage === `Updating ${selectedTeamName} Status...` ? "Loading..." : `Update ${selectedTeamName} Status`}
                         </button>
                     </form>
-                    <button className="btn btn-info btn-sm"  style={{ width: '100%', marginBottom: '1rem' }}onClick={toggleTeamsTableVisibility}>
+                    <button className="btn btn-info btn-outline"  style={{ width: '100%', marginBottom: '1rem' }}onClick={toggleTeamsTableVisibility}>
                         {isTeamsTableVisible ? "Hide Teams" : "Show Teams"}
                     </button>
                     {isTeamsTableVisible && (

@@ -4,7 +4,6 @@ import LeagueService from "../services/LeagueService";
 import DatabaseService from "../services/DatabaseService";
 import { AuthContext } from "../context/AuthContext";
 import { useConfig } from "../context/ConfigContext";
-import "../styles/RosterComponent.css";
 import { positionOptions, teamNameDisplayOptions } from "../constants/RosterConstants";
 
 function RosterComponent() {
@@ -276,11 +275,19 @@ function RosterComponent() {
                     {!userHasTeam && (
                         <div className="page-container">
                             <div className="component-container">
-                                <h2>Create League Roster</h2>
+                                <h2 style={{ marginBottom: '1rem' }}>Create League Roster</h2>
                                 <form onSubmit={createRoster}>
                                     <label>Team Name</label>
-                                    <input type="text" style={{ marginBottom: '1rem' }} value={teamName} onChange={(e) => setTeamName(e.target.value)} />
-                                    <button className="btn btn-primary sm: btn-sm" style={{ width: '100%', marginBottom: '1rem' }} type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create League Roster"}</button>
+                                    <input 
+                                        className="btn btn-neutral btn-outline" 
+                                        type="text" 
+                                        style={{ width: '100%', marginBottom: '1rem' }} 
+                                        value={teamName} onChange={(e) => setTeamName(e.target.value)} />
+                                    <button 
+                                        className="btn btn-primary btn-outline" 
+                                        style={{ width: '100%', marginBottom: '1rem' }} 
+                                        type="submit" 
+                                        disabled={isLoading}>{isLoading ? "Loading..." : "Create League Roster"}</button>
                                 </form>
                             </div>
                         </div>
@@ -291,15 +298,16 @@ function RosterComponent() {
                                 <h2>Search Players</h2>
                                 <div className="horizontal-container">
                                     <input 
-                                        style={{ width: '60%', marginBottom: '1rem'}} 
+                                        className="btn btn-neutral btn-outline custom-input"
+                                        style={{ textAlign: 'left', width: '60%', marginBottom: '1rem'}} 
                                         type="text" 
                                         value={searchName} 
                                         placeholder="Enter Name" 
                                         onChange={(e) => setSearchName(e.target.value)} 
                                         disabled={activeSearchMethod && activeSearchMethod !== "name"}
                                     />
-                                    <button 
-                                        className="btn btn-primary btn-sm" 
+                                    <button
+                                        className="btn btn-primary btn-outline" 
                                         style={{ width: '30%', marginBottom: '1rem' }}
                                         onClick={startSearchByName} 
                                         disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "name") || searchName === ""}
@@ -309,6 +317,7 @@ function RosterComponent() {
                                 </div>
                                 <div className="horizontal-container">
                                     <select 
+                                        className="btn btn-neutral btn-outline"
                                         style={{ width: '60%', marginBottom: '1rem'}} 
                                         value={selectedTeamName} 
                                         onChange={(e) => setSelectedTeamName(e.target.value)} 
@@ -316,11 +325,11 @@ function RosterComponent() {
                                     >
                                         <option value="" disabled hidden>Select Team</option>
                                         {activeTeamNameOptions.map(teamName => (
-                                            <option key={teamName} value={teamName}>{teamNameDisplayOptions[teamName] || teamName}</option>
+                                            <option style={{ textAlign: 'left' }} key={teamName} value={teamName}>{teamNameDisplayOptions[teamName] || teamName}</option>
                                         ))}
                                     </select>
                                     <button 
-                                        className="btn btn-primary btn-sm" 
+                                        className="btn btn-primary btn-outline" 
                                         style={{ width: '30%', marginBottom: '1rem' }}
                                         onClick={startSearchByTeam} 
                                         disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "team") || selectedTeamName === ""}
@@ -330,6 +339,7 @@ function RosterComponent() {
                                 </div>
                                 <div className="horizontal-container">
                                     <select 
+                                        className="btn btn-neutral btn-outline" 
                                         style={{ width: '60%', marginBottom: '1rem'}} 
                                         value={selectedPosition} 
                                         onChange={(e) => setSelectedPosition(e.target.value)} 
@@ -337,11 +347,11 @@ function RosterComponent() {
                                     >
                                         <option value="" disabled hidden>Select Position</option>
                                         {positionOptions.map((position, index) => (
-                                            <option key={index} value={position}>{position}</option>
+                                            <option style={{ textAlign: 'left' }} key={index} value={position}>{position}</option>
                                         ))}
                                     </select>
                                     <button 
-                                        className="btn btn-primary btn-sm" 
+                                        className="btn btn-primary btn-outline" 
                                         style={{ width: '30%', marginBottom: '1rem' }}
                                         onClick={startSearchByPosition} 
                                         disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "position") || selectedPosition === ""}
@@ -349,7 +359,7 @@ function RosterComponent() {
                                         Search by Position
                                     </button>
                                 </div>
-                                <button className="btn btn-secondary sm: btn-sm" style={{ width: '100%', marginBottom: '1rem' }} onClick={clearSearch} disabled={isLoading}>Clear Search</button>
+                                <button className="btn btn-secondary btn-outline" style={{ width: '100%', marginBottom: '1rem' }} onClick={clearSearch} disabled={isLoading}>Clear Search</button>
                                 {isLoading ? (<p>Loading...</p>) : (
                                     searchPlayer.length > 0 && (
                                         <div>
@@ -372,7 +382,7 @@ function RosterComponent() {
                                                             <tr key={index} className="hover">
                                                                 <td>
                                                                     <button 
-                                                                        className="btn btn-accent btn-sm" 
+                                                                        className="btn btn-accent btn-outline btn-xs" 
                                                                         onClick={(e) => handleAddPlayerToRoster(e, player.playerId)} 
                                                                         // disabled={isRosterFull}
                                                                     >
@@ -383,8 +393,8 @@ function RosterComponent() {
                                                                 <td>{player.team}</td>
                                                                 <td>{player.position}</td>
                                                                 <td className={
-                                                                    player.injuryStatus === 'P' || player.injuryStatus === null ? 'green-highlight' :
-                                                                    ["Q"].includes(player.injuryStatus?.charAt(0)) ? 'yellow-highlight' :
+                                                                    ["P"].includes(player.injuryStatus?.charAt(0)) ? 'green-highlight' : 
+                                                                    ["Q"].includes(player.injuryStatus?.charAt(0)) ? 'yellow-highlight' : 
                                                                     ["D", "O"].includes(player.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
                                                                 }>
                                                                     {player.injuryStatus ? player.injuryStatus.charAt(0) : 'A'}
@@ -425,7 +435,7 @@ function RosterComponent() {
                                                         <td>{index+1}</td>
                                                         <td>
                                                             <button 
-                                                                className="btn btn-error btn-sm" 
+                                                                className="btn btn-error btn-outline btn-xs" 
                                                                 onClick={(e) => handleRemovePlayerFromRoster(e, rosterPlayer.playerId)}
                                                             >
                                                                 -
@@ -435,8 +445,8 @@ function RosterComponent() {
                                                         <td>{rosterPlayer.team}</td>
                                                         <td>{rosterPlayer.position}</td>
                                                         <td className={
-                                                            rosterPlayer.injuryStatus === 'P' || rosterPlayer.injuryStatus === null ? 'green-highlight' :
-                                                            ["Q"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'yellow-highlight' :
+                                                            ["P"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'green-highlight' : 
+                                                            ["Q"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'yellow-highlight' : 
                                                             ["D", "O"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
                                                         }>
                                                             {rosterPlayer.injuryStatus ? rosterPlayer.injuryStatus.charAt(0) : 'A'}

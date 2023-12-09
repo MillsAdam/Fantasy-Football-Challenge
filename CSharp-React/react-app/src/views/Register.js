@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthService from '../services/AuthService';
-import '../styles/LoginRegister.css';
 
 function Register() {
     const [user, setUser] = useState({
@@ -53,23 +52,50 @@ function Register() {
                     </div>
                 )}
                 <form onSubmit={register}>
-                    <div className="form-input-group">
+                    <div style={{ marginBottom: '1rem' }}>
                         <label htmlFor="username">Username: </label>
-                        <input type="text" id="username" name="username" value={user.username} onChange={e => setUser({ ...user, username: e.target.value })} onFocus={clearErrors} autoComplete="username" />
+                        <input 
+                            className="btn btn-neutral btn-outline" 
+                            style={{ textAlign: 'left', width: '100%' }} 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            value={user.username} 
+                            onChange={e => setUser({ ...user, username: e.target.value })} 
+                            onFocus={clearErrors} 
+                            autoComplete="username" />
                     </div>
-                    <div className="form-input-group">
+                    <div style={{ marginBottom: '1rem' }}>
                         <label htmlFor="password">Password: </label>
-                        <input type="password" id="password" name="password" value={user.password} onChange={e => setUser({ ...user, password: e.target.value })} onFocus={clearErrors} autoComplete="new-password" />
+                        <input 
+                            className="btn btn-neutral btn-outline" 
+                            style={{ textAlign: 'left', width: '100%' }} 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            value={user.password} 
+                            onChange={e => setUser({ ...user, password: e.target.value })} 
+                            onFocus={clearErrors} 
+                            autoComplete="new-password" />
                     </div>
-                    <div className="form-input-group">
+                    <div style={{ marginBottom: '1rem' }}>
                         <label htmlFor="confirmPassword">Confirm Password: </label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" value={user.confirmPassword} onChange={e => setUser({ ...user, confirmPassword: e.target.value })} onFocus={clearErrors} autoComplete="new-password" />
+                        <input 
+                            className="btn btn-neutral btn-outline" 
+                            style={{ textAlign: 'left', width: '100%' }} 
+                            type="password" 
+                            id="confirmPassword" 
+                            name="confirmPassword" 
+                            value={user.confirmPassword} 
+                            onChange={e => setUser({ ...user, confirmPassword: e.target.value })} 
+                            onFocus={clearErrors} 
+                            autoComplete="new-password" />
                     </div>
-                    <button className="btn btn-primary btn-sm" style={{ width: '100%' }} type="submit" value="Register">Register</button>
+                    <button className="btn btn-primary btn-outline" style={{ width: '100%' }} type="submit" value="Register">Register</button>
                 </form>
-                {registrationErrors && <div className="registration-errors">{registrationErrorMsg}</div>}
-                <div className="account-query">
-                    Already have an account? <Link className="login-link" to="/login">Login</Link>
+                {registrationErrors && <div className="text-error" style={{ marginTop: '1rem' }}>{registrationErrorMsg}</div>}
+                <div style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
+                    Already have an account? <Link className="btn btn-primary btn-outline btn-sm" style={{ marginLeft: '0.5rem' }} to="/login">Login</Link>
                 </div>
             </div>
         </div>

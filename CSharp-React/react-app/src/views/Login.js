@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthService from '../services/AuthService';
 import { AuthContext } from '../context/AuthContext';
-import '../styles/LoginRegister.css';
 
 function Login() {
     const [user, setUser] = useState({ username: '', password: '' });
@@ -37,19 +36,35 @@ function Login() {
             <div className="component-container">
                 <h1>Login</h1>
                 <form onSubmit={login}>
-                    <div className="form-input-group">
+                    <div style={{ marginBottom: '1rem' }}>
                         <label htmlFor="username">Username</label>
-                        <input type="text" id="username" name="username"  value={user.username} onChange={handleInputChange} autoComplete="username" />
+                        <input 
+                            className="btn btn-neutral btn-outline" 
+                            style={{ textAlign: 'left', width: '100%' }} 
+                            type="text" 
+                            id="username" 
+                            name="username"  
+                            value={user.username} 
+                            onChange={handleInputChange} 
+                            autoComplete="username" />
                     </div>
-                    <div className="form-input-group">
+                    <div style={{ marginBottom: '1rem' }}>
                         <label htmlFor="password">Password</label>
-                        <input type="password" id="password" name="password" value={user.password} onChange={handleInputChange} autoComplete="current-password" />
+                        <input 
+                            className="btn btn-neutral btn-outline" 
+                            style={{ textAlign: 'left', width: '100%' }} 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            value={user.password} 
+                            onChange={handleInputChange} 
+                            autoComplete="current-password" />
                     </div>
-                    <button className="btn btn-primary btn-sm" style={{ width: '100%' }} type="submit" value="Login">Login</button>
+                    <button className="btn btn-primary btn-outline" style={{ width: '100%' }} type="submit" value="Login">Login</button>
                 </form>
-                {invalidCredentials && <p className="invalid-credentials">Invalid credentials.</p>}
-                <div className="account-query">
-                    Don't have an account? <Link className="register-link" to="/register">Register</Link>
+                {invalidCredentials && <p className="text-error" style={{ marginTop: '1rem' }}>Invalid credentials.</p>}
+                <div style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
+                    Don't have an account? <Link className="btn btn-primary btn-outline btn-sm" style={{ marginLeft: '0.5rem' }} to="/register">Register</Link>
                 </div>
             </div>
         </div>

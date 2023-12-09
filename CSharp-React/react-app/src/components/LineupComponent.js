@@ -4,7 +4,6 @@ import LineupService from "../services/LineupService";
 // import DatabaseService from "../services/DatabaseService";
 import { AuthContext } from "../context/AuthContext";
 import { useConfig } from "../context/ConfigContext";
-import "../styles/LineupComponent.css";
 import { allLineupPositions, positionSpecificOptions, gameWeekOptions } from "../constants/LineupConstants";
 
 
@@ -171,14 +170,14 @@ function LineupComponent() {
                                         {lineupPlayers.map((lineupPlayer, index) => (
                                             <tr key={index} className="hover">
                                                 <td>
-                                                    <button className="btn btn-error btn-sm" onClick={(e) => handleRemovePlayerFromLineup(e, lineupPlayer.playerId)}>-</button>
+                                                    <button className="btn btn-error btn-outline btn-xs" onClick={(e) => handleRemovePlayerFromLineup(e, lineupPlayer.playerId)}>-</button>
                                                 </td>
                                                 <td>{lineupPlayer.conference}</td>
                                                 <td>{lineupPlayer.team}</td>
                                                 <td>{lineupPlayer.lineupPosition}</td>
                                                 <td className={
-                                                    lineupPlayer.injuryStatus === 'P' || lineupPlayer.injuryStatus === null ? 'green-highlight' :
-                                                    ["Q"].includes(lineupPlayer.injuryStatus?.charAt(0)) ? 'yellow-highlight' :
+                                                    ["P"].includes(lineupPlayer.injuryStatus?.charAt(0)) ? 'green-highlight' : 
+                                                    ["Q"].includes(lineupPlayer.injuryStatus?.charAt(0)) ? 'yellow-highlight' : 
                                                     ["D", "O"].includes(lineupPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
                                                 }>
                                                     {lineupPlayer.injuryStatus ? lineupPlayer.injuryStatus.charAt(0) : 'A'}
@@ -216,22 +215,22 @@ function LineupComponent() {
                                         {activeRosterPlayers.map((rosterPlayer, index) => (
                                             <tr key={index} className="hover">
                                                 <td>
-                                                    <select className="lineup-select" id={`lineup-position-${index}`}>
+                                                    <select className="btn btn-neutral btn-outline btn-xs" id={`lineup-position-${index}`}>
                                                         <option value="" disabled hidden>Pos</option>
                                                         {getFilteredLineupOptions(rosterPlayer.position).map((option) => (
-                                                            <option key={option} value={option}>{option}</option>
+                                                            <option style={{ textAlign: 'left' }} key={option} value={option}>{option}</option>
                                                         ))}
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <button className="btn btn-accent btn-sm" onClick={(e) => handleAddPlayerToLineup(e, rosterPlayer.playerId, document.getElementById(`lineup-position-${index}`).value)}>+</button>
+                                                    <button className="btn btn-accent btn-outline btn-xs" onClick={(e) => handleAddPlayerToLineup(e, rosterPlayer.playerId, document.getElementById(`lineup-position-${index}`).value)}>+</button>
                                                 </td>
                                                 <td>{rosterPlayer.conference}</td>
                                                 <td>{rosterPlayer.team}</td>
                                                 <td>{rosterPlayer.position}</td>
                                                 <td className={
-                                                    rosterPlayer.injuryStatus === 'P' || rosterPlayer.injuryStatus === null ? 'green-highlight' :
-                                                    ["Q"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'yellow-highlight' :
+                                                    ["P"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'green-highlight' : 
+                                                    ["Q"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'yellow-highlight' : 
                                                     ["D", "O"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
                                                 }>
                                                     {rosterPlayer.injuryStatus ? rosterPlayer.injuryStatus.charAt(0) : 'A'}
@@ -250,19 +249,19 @@ function LineupComponent() {
                     <div className="component-container">
                         <h2>Weekly Lineup</h2>
                         <form onSubmit={getLineupPlayersByWeek}>
-                            <select 
+                            <select className="btn btn-neutral btn-outline" 
                                 style={{ marginBottom: '1rem', width: '100%' }}
                                 value={selectedGameWeek} 
                                 onChange={(e) => setSelectedGameWeek(e.target.value)}
                             >
                                 <option value="" disabled hidden>Select Week</option>
                                 {gameWeekOptions.map((option) => (
-                                    <option key={option} value={option}>Week {option}</option>
+                                    <option style={{ textAlign: 'left' }} key={option} value={option}>Week {option}</option>
                                 ))}
                             </select>
                             <div className="horizontal-container" style={{ marginBottom: '1rem' }}>
                                 <button 
-                                    className="btn btn-primary sm: btn-sm" 
+                                    className="btn btn-primary btn-outline" 
                                     style={{ width: '45%' }}
                                     type="submit" 
                                     disabled={isLoading || selectedGameWeek === ""}
@@ -270,7 +269,7 @@ function LineupComponent() {
                                     Submit
                                 </button>
                                 <button 
-                                    className="btn btn-secondary sm: btn-sm" 
+                                    className="btn btn-secondary btn-outline" 
                                     style={{ width: '45%'}}
                                     type="button" 
                                     onClick={clearGameWeek} 
@@ -293,7 +292,6 @@ function LineupComponent() {
                                                 <th>Conf</th>
                                                 <th>Team</th>
                                                 <th>Pos</th>
-                                                <th>Inj</th>
                                                 <th>Player</th>
                                                 <th>Points</th>
                                             </tr>
@@ -304,13 +302,6 @@ function LineupComponent() {
                                                     <td>{lineupPlayer.conference}</td>
                                                     <td>{lineupPlayer.team}</td>
                                                     <td>{lineupPlayer.lineupPosition}</td>
-                                                    <td className={
-                                                        lineupPlayer.injuryStatus === 'P' || lineupPlayer.injuryStatus === null ? 'green-highlight' :
-                                                        ["Q"].includes(lineupPlayer.injuryStatus?.charAt(0)) ? 'yellow-highlight' :
-                                                        ["D", "O"].includes(lineupPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
-                                                    }>
-                                                        {lineupPlayer.injuryStatus ? lineupPlayer.injuryStatus.charAt(0) : 'A'}
-                                                    </td>
                                                     <td>{lineupPlayer.name}</td>
                                                     <td>{lineupPlayer.fantasyPoints}</td>
                                                 </tr>

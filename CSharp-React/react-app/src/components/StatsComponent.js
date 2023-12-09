@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import StatsService from "../services/StatsService";
 import DatabaseService from "../services/DatabaseService";
 import { useConfig } from "../context/ConfigContext";
-import "../styles/StatsComponent.css";
 import { 
     positionOptions, 
     positionDisplayOptions, 
@@ -129,20 +128,20 @@ function StatsComponent() {
                     <div className="search-container">
                         <form onSubmit={searchPlayerStats}>
                             <div>
-                                <select 
+                                <select className="btn btn-neutral btn-outline" 
                                     style={{ width: '100%', marginBottom: '1rem' }} 
                                     value={selectedPosition} 
                                     onChange={(e) => setSelectedPosition(e.target.value)}
                                 >
                                     <option value="" disabled hidden>Select a Position</option>
                                     {positionOptions.map((position) => (
-                                        <option key={position} value={position}>{positionDisplayOptions[position]}</option>
+                                        <option style={{ textAlign: 'left' }} key={position} value={position}>{positionDisplayOptions[position]}</option>
                                     ))}
                                 </select>
                             </div>
                             <div>
 
-                                <select 
+                                <select className="btn btn-neutral btn-outline" 
                                     style={{ width: '100%', marginBottom: '1rem' }} 
                                     value={selectedInterval} 
                                     onChange={(e) => setSelectedInterval(e.target.value)} 
@@ -150,13 +149,13 @@ function StatsComponent() {
                                 >
                                     <option value="" disabled hidden>Select an Interval</option>
                                     {intervalOptions.map((interval) => (
-                                        <option key={interval} value={interval}>{intervalDisplayOptions[interval]}</option>
+                                        <option style={{ textAlign: 'left' }} key={interval} value={interval}>{intervalDisplayOptions[interval]}</option>
                                     ))}
                                 </select>
                             </div>
                             {(selectedInterval === 'weekly total' || selectedInterval === 'weekly projected') && (
                                 <div>
-                                    <select 
+                                    <select className="btn btn-neutral btn-outline" 
                                         style={{ width: '100%', marginBottom: '1rem' }}
                                         value={selectedWeek} 
                                         onChange={(e) => setSelectedWeek(e.target.value)}
@@ -165,13 +164,13 @@ function StatsComponent() {
                                         {weekOptions
                                             .filter(week => week <= currentWeek)
                                             .map((week) => (
-                                            <option key={week} value={week}>{weekDisplayOptions[week]}</option>
+                                            <option style={{ textAlign: 'left' }} key={week} value={week}>{weekDisplayOptions[week]}</option>
                                         ))}
                                     </select>
                                 </div>
                             )}
                             <div>
-                                <select 
+                                <select className="btn btn-neutral btn-outline" 
                                     style={{ width: '100%', marginBottom: '1rem' }} 
                                     value={selectedCategory} 
                                     onChange={(e) => setSelectedCategory(e.target.value)} 
@@ -179,29 +178,29 @@ function StatsComponent() {
                                 >
                                     <option value="" disabled hidden>Select a Category</option>
                                     {categoryOptions.map((category) => (
-                                        <option key={category} value={category}>{categoryDisplayOptions[category]}</option>
+                                        <option style={{ textAlign: 'left' }} key={category} value={category}>{categoryDisplayOptions[category]}</option>
                                     ))}
                                 </select>
                             </div>
                             {selectedCategory !== 'all' && selectedCategory !== '' && (
                                 <div>
                                     {(selectedCategory === 'conf' || selectedCategory === 'team') ? (
-                                        <select 
+                                        <select className="btn btn-neutral btn-outline" 
                                             style={{ width: '100%', marginBottom: '1rem' }} 
                                             value={selectedFilter}
                                             onChange={(e) => setSelectedFilter(e.target.value)}
                                         >
                                             <option value="" disabled hidden>Select a Filter</option>
                                             {selectedCategory === 'conf' && conferenceOptions.map((conference) => (
-                                                <option key={conference} value={conference}>{conferenceDisplayOptions[conference]}</option>
+                                                <option style={{ textAlign: 'left' }} key={conference} value={conference}>{conferenceDisplayOptions[conference]}</option>
                                             ))}
                                             {selectedCategory === 'team' && activeTeamNameOptions.map((team) => (
-                                                <option key={team} value={team}>{teamNameDisplayOptions[team] || team}</option>
+                                                <option style={{ textAlign: 'left' }} key={team} value={team}>{teamNameDisplayOptions[team] || team}</option>
                                             ))}
                                         </select>
                                     ) : selectedCategory === 'name' ? (
-                                        <input 
-                                            style={{ width: '100%', marginBottom: '1rem' }} 
+                                        <input className="btn btn-neutral btn-outline" 
+                                            style={{ textAlign: 'left', width: '100%', marginBottom: '1rem' }} 
                                             type="text" 
                                             value={selectedFilter} 
                                             placeholder="Enter Name" 
@@ -212,7 +211,7 @@ function StatsComponent() {
                             )}
                             <div className="horizontal-container" style={{ marginBottom: '1rem' }}>
                                 <button 
-                                    className="btn btn-primary sm: btn-sm" 
+                                    className="btn btn-primary btn-outline" 
                                     style={{ width: '45%' }}
                                     type="submit" 
                                     disabled=
@@ -228,7 +227,7 @@ function StatsComponent() {
                                     Search
                                 </button>
                                 <button 
-                                    className="btn btn-secondary sm: btn-sm" 
+                                    className="btn btn-secondary btn-outline" 
                                     style={{ width: '45%' }}
                                     onClick={clearSearch} 
                                     disabled={isLoading}
@@ -271,8 +270,8 @@ function StatsComponent() {
                                                 <td>{player.position}</td>
                                                 <td>{player.week}</td>
                                                 <td className={
-                                                    player.injuryStatus === 'P' || player.injuryStatus === null ? 'green-highlight' :
-                                                    ["Q"].includes(player.injuryStatus?.charAt(0)) ? 'yellow-highlight' :
+                                                    ["P"].includes(player.injuryStatus?.charAt(0)) ? 'green-highlight' : 
+                                                    ["Q"].includes(player.injuryStatus?.charAt(0)) ? 'yellow-highlight' : 
                                                     ["D", "O"].includes(player.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
                                                 }>
                                                     {player.injuryStatus ? player.injuryStatus.charAt(0) : 'A'}

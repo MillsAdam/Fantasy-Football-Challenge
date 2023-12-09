@@ -49,17 +49,10 @@
 
 .component-container {
   padding: 1rem;
-  background: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   border-radius: 5px;
   flex: 1;
 }
-
-/* .table-container {
-  width: 100%;
-  max-width: 100%;
-  overflow: auto;
-} */
 
 .horizontal-container {
   display: flex;
@@ -68,69 +61,20 @@
   align-items: center;
 }
 
-
-
-/* TABLE STYLES */
-/* table {
-  margin-left: auto;
-  margin-right: auto;
-  border-collapse: collapse;
-  width: 100%;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-  overflow: hidden;
+.custom-input::placeholder {
+  text-align: center;
+  font-weight: bold;
+  color: #aaa;
+  margin-right: .8rem;
 }
 
-table th, table td {
+.custom-input {
   text-align: left;
 }
 
-table th {
-  background-color: #f4f4f4;
-  color: #333;
-  font-weight: bold;
+.custom-input:placeholder-shown {
+  text-align: center;
 }
-
-table td {
-  font-size: 14px;
-  color: #333;
-}
-
-table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-table tr:hover {
-  background-color: #f1f1f1
-} */
-
-/* FORM STYLES */
-input {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.form-input-group {
-  margin-bottom: 1rem;
-}
-
-
-/* SELECT STYLES */
-select {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 100%;
-  width: auto;
-  box-sizing: border-box
-}
-
-.lineup-select {
-  padding: 5px;
-  margin: 0rem;
-}
-
 
 
 /* MEDIA QUERIES */
@@ -145,55 +89,6 @@ select {
     width: 100%;
     margin: 2% auto;
   }
-
-  table {
-    font-size: 10px;
-  }
-  
-  table td {
-    font-size: 10px;
-    white-space: nowrap;
-  }
-
-  button {
-    flex-shrink: 0;
-    font-size: .75rem;
-  }
-
-  .btn {
-    flex-shrink: 0;
-    font-size: .75rem;
-  }
-
-  select, input, label {
-    font-size: .75rem;
-  }
-
-  .App-link {
-    font-size: 14px;
-  }
-
-  h1 {
-    font-size: 20px;
-  }
-
-  h2 {
-    font-size: 18px;
-  }
-
-  h3 {
-    font-size: 16px;
-  }
-
-  h4 {
-    font-size: 10px;
-  }
-
-  p {
-    font-size: 10px;
-  }
-
-
 }
 
 

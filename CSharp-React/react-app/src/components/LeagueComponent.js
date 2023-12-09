@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react";
 import LeagueService from "../services/LeagueService";
 import LineupService from "../services/LineupService";
 import { AuthContext } from "../context/AuthContext";
-import "../styles/LeagueComponent.css";
 
 function LeagueComponent() {
     const { authToken, currentUser } = useContext(AuthContext);
@@ -145,7 +144,7 @@ function LeagueComponent() {
                                 <div className="horizontal-container">
                                     {[1, 2, 3, 4].map(week => (
                                         <button 
-                                            className="btn btn-info btn-sm" 
+                                            className="btn btn-info btn-outline btn-sm" 
                                             style={{ width: '21%', marginBottom: '1rem' }}
                                             type="button" 
                                             key={week} 
