@@ -43,9 +43,9 @@ function Register() {
     };
 
     return (
-        <div className="home-login-register-container">
-            <div className="component-container" style={{ width: '100%' }}>
-                <div style={{ marginBottom: '1rem' }}>
+        <div className="flex flex-col justify-between items-center flex-wrap w-90 md:w-30 my-4 mx-auto">
+            <div className="flex-1 p-4 w-full">
+                <div className="mb-4">
                     Register
                 </div>
                 {registrationErrors && (
@@ -54,13 +54,12 @@ function Register() {
                     </div>
                 )}
                 <form onSubmit={register}>
-                    <div style={{ marginBottom: '1rem' }}>
+                    <div className="mb-4">
                         <div>
                             Username:
                         </div>
                         <input 
                             className="input input-primary input-bordered w-full input-sm md:input-md" 
-                            style={{ width: '100%' }} 
                             type="text" 
                             name="username" 
                             id="username" 
@@ -69,13 +68,12 @@ function Register() {
                             onFocus={clearErrors} 
                             autoComplete="username" />
                     </div>
-                    <div style={{ marginBottom: '1rem' }}>
+                    <div className="mb-4">
                         <div>
                             Password:
                         </div>
                         <input 
                             className="input input-primary input-bordered w-full input-sm md:input-md" 
-                            style={{ width: '100%' }} 
                             type="password" 
                             name="password" 
                             id="password" 
@@ -84,13 +82,12 @@ function Register() {
                             onFocus={clearErrors} 
                             autoComplete="new-password" />
                     </div>
-                    <div style={{ marginBottom: '1rem' }}>
+                    <div className="mb-4">
                         <div>
                             Confirm Password:
                         </div>
                         <input 
                             className="input input-primary input-bordered w-full input-sm md:input-md" 
-                            style={{ width: '100%' }} 
                             type="password" 
                             name="confirmPassword" 
                             id="confirmPassword" 
@@ -99,11 +96,11 @@ function Register() {
                             onFocus={clearErrors} 
                             autoComplete="new-password" />
                     </div>
-                    <button className="btn btn-primary btn-outline btn-sm md:btn-md" style={{ width: '100%' }} type="submit" value="Register">Register</button>
+                    <button className="btn btn-primary btn-outline btn-sm md:btn-md w-full" type="submit" value="Register">Register</button>
                 </form>
-                {registrationErrors && <div className="text-error" style={{ marginTop: '1rem' }}>{registrationErrorMsg}</div>}
-                <div style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
-                    Already have an account? <Link className="btn btn-secondary btn-outline btn-xs sm:btn-sm" style={{ marginLeft: '0.5rem' }} to="/login">Login</Link>
+                {registrationErrors && <div className="text-error mt-4">{registrationErrorMsg}</div>}
+                <div className="mt-4" style={{ fontSize: '0.9rem' }}>
+                    Already have an account? <Link className="btn btn-secondary btn-outline btn-xs sm:btn-sm ml-2" to="/login">Login</Link>
                 </div>
             </div>
         </div>

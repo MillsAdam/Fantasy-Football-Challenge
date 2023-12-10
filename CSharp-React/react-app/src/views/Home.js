@@ -14,9 +14,9 @@ const Home = () => {
     }, [authToken, currentUser, navigate]);
 
     return (
-        <div className="home-login-register-container">
-            <div className="component-container" style={{ alignItems: 'center', width: '100%' }}>
-                <div style={{ marginBottom: '1rem' }}>
+        <div className="flex flex-col justify-between items-center flex-wrap w-90 md:w-30 my-4 mx-auto">
+            <div className="flex-1 p-4 w-full">
+                <div className="mb-4">
                     Home Page
                 </div>
                 <p>You must be authenticated to see this.</p>

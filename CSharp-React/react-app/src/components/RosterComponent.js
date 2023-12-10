@@ -266,21 +266,19 @@ function RosterComponent() {
             {isLoading? (<p>Loading...</p>) : (
                 <div>
                     {!userHasTeam && (
-                        <div className="page-container">
-                            <div className="component-container">
-                                <div style={{ marginBottom: '1rem' }}>
+                        <div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
+                            <div className="flex-1 w-full p-4">
+                                <div className="mb-4">
                                     Create League Roster
                                 </div>
                                 <form onSubmit={createRoster}>
                                     <label>Team Name</label>
                                     <input 
-                                        className="input input-primary input-bordered w-full input-sm md:input-md" 
+                                        className="input input-primary input-bordered w-full input-sm md:input-md mb-4" 
                                         type="text" 
-                                        style={{ marginBottom: '1rem' }} 
                                         value={teamName} onChange={(e) => setTeamName(e.target.value)} />
                                     <button 
-                                        className="btn btn-primary btn-outline btn-sm md:btn-md w-full" 
-                                        style={{  marginBottom: '1rem' }} 
+                                        className="btn btn-primary btn-outline btn-sm md:btn-md w-full mb-4" 
                                         type="submit" 
                                         disabled={isLoading}>{isLoading ? "Loading..." : "Create League Roster"}</button>
                                 </form>
@@ -288,15 +286,14 @@ function RosterComponent() {
                         </div>
                     )}
                     {userHasTeam && (
-                        <div className="page-container">
-                            <div className="component-container">
-                                <div style={{ marginBottom: '1rem' }}>
+                        <div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
+                            <div className="flex-1 w-full p-4">
+                                <div className="mb-4">
                                     Search Players
                                 </div>
-                                <div className="horizontal-container">
+                                <div className="flex flex-row justify-between align-center flex-nowrap mb-4">
                                     <input 
-                                        className="input input-primary input-bordered w-full input-sm md:input-md"
-                                        style={{ width: '45%', marginBottom: '1rem'}} 
+                                        className="input input-primary input-bordered input-sm md:input-md w-45"
                                         type="text" 
                                         value={searchName} 
                                         placeholder="Enter Name" 
@@ -304,18 +301,16 @@ function RosterComponent() {
                                         disabled={(activeSearchMethod && activeSearchMethod !== "name") || selectedTeamName || selectedPosition}
                                     />
                                     <button
-                                        className="btn btn-success btn-outline btn-sm md:btn-md" 
-                                        style={{ width: '45%', marginBottom: '1rem' }}
+                                        className="btn btn-success btn-outline btn-sm md:btn-md w-45" 
                                         onClick={startSearchByName} 
                                         disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "name") || searchName === ""}
                                     >
                                         Search by Name
                                     </button>
                                 </div>
-                                <div className="horizontal-container">
+                                <div className="flex flex-row justify-between align-center flex-nowrap mb-4">
                                     <select 
-                                        className="select select-primary w-full select-sm md:select-md"
-                                        style={{ width: '45%', marginBottom: '1rem'}} 
+                                        className="select select-primary select-sm md:select-md w-45"
                                         value={selectedTeamName} 
                                         onChange={(e) => setSelectedTeamName(e.target.value)} 
                                         disabled={(activeSearchMethod && activeSearchMethod !== "team") || searchName || selectedPosition}
@@ -326,18 +321,16 @@ function RosterComponent() {
                                         ))}
                                     </select>
                                     <button 
-                                        className="btn btn-success btn-outline btn-sm md:btn-md" 
-                                        style={{ width: '45%', marginBottom: '1rem' }}
+                                        className="btn btn-success btn-outline btn-sm md:btn-md w-45" 
                                         onClick={startSearchByTeam} 
                                         disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "team") || selectedTeamName === ""}
                                     >
                                         Search by Team
                                     </button>
                                 </div>
-                                <div className="horizontal-container">
+                                <div className="flex flex-row justify-between align-center flex-nowrap mb-4">
                                     <select 
-                                        className="select select-primary w-full select-sm md:select-md" 
-                                        style={{ width: '45%', marginBottom: '1rem'}} 
+                                        className="select select-primary select-sm md:select-md w-45" 
                                         value={selectedPosition} 
                                         onChange={(e) => setSelectedPosition(e.target.value)} 
                                         disabled={(activeSearchMethod && activeSearchMethod !== "position") || searchName || selectedTeamName}
@@ -348,20 +341,21 @@ function RosterComponent() {
                                         ))}
                                     </select>
                                     <button 
-                                        className="btn btn-success btn-outline btn-sm md:btn-md" 
-                                        style={{ width: '45%', marginBottom: '1rem' }}
+                                        className="btn btn-success btn-outline btn-sm md:btn-md w-45" 
                                         onClick={startSearchByPosition} 
                                         disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "position") || selectedPosition === ""}
                                     >
                                         Search by Position
                                     </button>
                                 </div>
-                                <button className="btn btn-warning btn-outline btn-sm md:btn-md w-full" style={{ marginBottom: '1rem' }} onClick={clearSearch} disabled={isLoading}>Clear Search</button>
+                                <button className="btn btn-warning btn-outline btn-sm md:btn-md w-full w-full mb-4" onClick={clearSearch} disabled={isLoading}>Clear Search</button>
                                 {isLoading ? (<p>Loading...</p>) : (
                                     searchPlayer.length > 0 && (
                                         <div>
-                                            <h2>Search Results</h2>
-                                            <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                                            <div className="mb-4">
+                                                Search Results
+                                            </div>
+                                            <div className="overflow-auto">
                                                 <table className="table table-xs table-pin-rows">
                                                     <thead>
                                                         <tr>
@@ -408,12 +402,12 @@ function RosterComponent() {
                                 )}
                             </div>
                             
-                            <div className="component-container">
-                                <div style={{ marginBottom: '1rem' }}>
+                            <div className="flex-1 w-full p-4">
+                                <div className="mb-4">
                                     My Roster
                                 </div>
                                 {rosterPlayers.length > 0 && (
-                                    <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                                    <div className="overflow-auto">
                                         <table className="table table-xs table-pin-rows">
                                             <thead>
                                                 <tr>
@@ -425,7 +419,6 @@ function RosterComponent() {
                                                     <th>Inj</th>
                                                     <th>Player</th>
                                                     <th>Avg</th>
-                                                    <th>Proj</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -453,7 +446,6 @@ function RosterComponent() {
                                                         </td>
                                                         <td>{rosterPlayer.name}</td>
                                                         <td>{rosterPlayer.fantasyPointsAvg}</td>
-                                                        <td>{rosterPlayer.fantasyPointsProj}</td>
                                                     </tr>
                                                 ))}
                                             </tbody>

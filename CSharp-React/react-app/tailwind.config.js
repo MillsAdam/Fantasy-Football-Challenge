@@ -19,5 +19,14 @@ module.exports = {
       },
     ],
   },
+  theme: {
+    extend: {
+      width: {
+        '45': '45%',
+        '30': '30%',
+        '90': '90%',
+      },
+    },
+  },
   plugins: [require('daisyui')],
 };

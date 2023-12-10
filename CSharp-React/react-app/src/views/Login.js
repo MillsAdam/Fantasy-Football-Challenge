@@ -32,19 +32,18 @@ function Login() {
     };
 
     return (
-        <div className="home-login-register-container">
-            <div className="component-container" style={{ width: '100%' }}>
-                <div style={{ marginBottom: '1rem' }}>
+        <div className="flex flex-col justify-between items-center flex-wrap w-90 md:w-30 my-4 mx-auto">
+            <div className="flex-1 p-4 w-full">
+                <div className="mb-4">
                     Login
                 </div>
                 <form onSubmit={login}>
-                    <div style={{ marginBottom: '1rem' }}>
+                    <div className="mb-4">
                         <div>
                             Username:
                         </div>
                         <input 
                             className="input input-primary input-bordered w-full input-sm md:input-md" 
-                            style={{ width: '100%' }} 
                             type="text" 
                             name="username" 
                             id="username" 
@@ -52,13 +51,12 @@ function Login() {
                             onChange={handleInputChange} 
                             autoComplete="username" />
                     </div>
-                    <div style={{ marginBottom: '1rem' }}>
+                    <div className="mb-4">
                         <div>
                             Password:
                         </div>
                         <input 
                             className="input input-primary input-bordered w-full input-sm md:input-md" 
-                            style={{ width: '100%' }} 
                             type="password" 
                             name="password" 
                             id="password" 
@@ -66,11 +64,11 @@ function Login() {
                             onChange={handleInputChange} 
                             autoComplete="current-password" />
                     </div>
-                    <button className="btn btn-primary btn-outline btn-sm md:btn-md" style={{ width: '100%' }} type="submit" value="Login">Login</button>
+                    <button className="btn btn-primary btn-outline btn-sm md:btn-md w-full" type="submit" value="Login">Login</button>
                 </form>
-                {invalidCredentials && <p className="text-error" style={{ marginTop: '1rem' }}>Invalid credentials.</p>}
-                <div style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
-                    Don't have an account? <Link className="btn btn-secondary btn-outline btn-xs sm:btn-sm" style={{ marginLeft: '0.5rem' }} to="/register">Register</Link>
+                {invalidCredentials && <p className="text-error mt-4">Invalid credentials.</p>}
+                <div className="mt-4" style={{ fontSize: '0.9rem' }}>
+                    Don't have an account? <Link className="btn btn-secondary btn-outline btn-xs sm:btn-sm ml-2" to="/register">Register</Link>
                 </div>
             </div>
         </div>

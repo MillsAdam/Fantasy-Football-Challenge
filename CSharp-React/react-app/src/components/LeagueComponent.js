@@ -17,6 +17,8 @@ function LeagueComponent() {
     const [selectedWeek, setSelectedWeek] = useState(null);
     const [lineup, setLIneup] = useState([]);
     const [roster, setRoster] = useState([]);
+    const [isRosterVisible, setIsRosterVisible] = useState(false);
+    const [isLineupVisible, setIsLineupVisible] = useState(false);
 
     useEffect(() => {
         async function checkUserTeam() {
@@ -78,9 +80,11 @@ function LeagueComponent() {
     const handleRosterSelection = async() => {
         if (roster.length !== 0) {
             setRoster([]);
+            setIsRosterVisible(false)
             return;
         } else {
             fetUserRoster(selectedUserId);
+            setIsRosterVisible(true);
         }
     };
 
@@ -114,8 +118,8 @@ function LeagueComponent() {
     return (
         <div>
             {isLoading ? (<p>Loading...</p>) : (
-                <div className="page-container">
-                    <div className="component-container">
+                <div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
+                    <div className="flex-1 w-full p-4">
                         {!userHasTeam && (
                             <div>
                                 Create a Roster to view Leaderboard
@@ -123,10 +127,10 @@ function LeagueComponent() {
                         )}
                         {userHasTeam && (
                             <div >
-                                <div style={{ marginBottom: '1rem' }}>
+                                <div className="mb-4">
                                     Leaderboard
                                 </div>
-                                <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                                <div className="overflow-auto">
                                     <table className="table table-xs table-pin-rows">
                                         <thead>
                                             <tr>
@@ -161,27 +165,31 @@ function LeagueComponent() {
                         )}
                         {selectedUserId && (
                             <div>
-                                <div className="horizontal-container" style={{ margin: '1rem 0', justifyContent: 'space-evenly'}}>
+                                <div className="flex my-4 items-center justify-center">
                                     <div>
                                         <strong>{selectedTeamName}</strong>
                                     </div>
-                                    <div>
-                                        <button 
-                                            className="btn btn-info btn-outline btn-xs sm:btn-sm" 
-                                            type="button" 
-                                            onClick={() => handleRosterSelection(selectedUserId)}
-                                        >
-                                            Roster
-                                        </button>
+                                    <div className="flex flex-col">
+                                        <div className="form-control w-52">
+                                            <label className="flex cursor-pointer label items-center justify-center">
+                                                <span className="label-text">Roster</span>
+                                                <input 
+                                                    type="checkbox" 
+                                                    className="toggle toggle-info" 
+                                                    checked={isRosterVisible} 
+                                                    onChange={() => handleRosterSelection(selectedUserId)}
+                                                />
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                                 
                                 {roster.length !== 0 && (
-                                    <div style={{ marginBottom: '1rem' }}>
-                                        <div style={{ marginBottom: '1rem' }}>
+                                    <div className="mb-4">
+                                        <div className="mb-4">
                                             Total Score: <strong>{selectedTotalScore}</strong>
                                         </div>
-                                        <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                                        <div className="overflow-auto">
                                             <table className="table table-xs table-pin-rows">
                                                 <thead>
                                                     <tr>
@@ -209,11 +217,11 @@ function LeagueComponent() {
                                 )}
                                 
                                 
-                                <div className="horizontal-container">
+                                <div className="flex flex-row justify-between align-center flex-nowrap">
                                     {[1, 2, 3, 4].map(week => (
                                         <button 
-                                            className="btn btn-info btn-outline btn-xs sm:btn-sm" 
-                                            style={{ width: '21%', margin: '1rem 0 1rem 0' }}
+                                            className="btn btn-info btn-outline btn-xs sm:btn-sm my-4" 
+                                            style={{ width: '21%' }}
                                             type="button" 
                                             key={week} 
                                             onClick={() => handleWeekSelection(week)}
@@ -225,10 +233,10 @@ function LeagueComponent() {
                                 
                                 {selectedWeek && (
                                     <div>
-                                        <div style={{ marginBottom: '1rem' }}>
+                                        <div className="mb-4">
                                             Week {selectedWeek} Score: <strong>{selectedWeeklyScore}</strong>
                                         </div>
-                                        <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                                        <div className="overflow-auto">
                                             <table className="table table-xs table-pin-rows">
                                                 <thead>
                                                     <tr>

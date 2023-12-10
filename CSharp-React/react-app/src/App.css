@@ -36,72 +36,9 @@
   color: yellow;
 }
 
-.page-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  width: 90%;
-  gap: 2%;
-  margin: 2% auto 2% auto;
-}
-
-.home-login-register-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  width: 30%;
-  margin: 2% auto 2% auto;
-}
-
 .component-container {
-  padding: 1rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   border-radius: 5px;
-  flex: 1;
-}
-
-.horizontal-container {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.custom-input::placeholder {
-  text-align: center;
-  color: rgb(220, 231, 235, 0.9);
-  margin-right: 16px;
-}
-
-.custom-input {
-  text-align: left;
-}
-
-.custom-input:placeholder-show {
-  text-align: center;
-}
-
-
-/* MEDIA QUERIES */
-@media (max-width: 1200px) {
-  .page-container { 
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .home-login-register-container {
-    width: 90%;
-  }
-
-  .component-container {
-    width: 100%;
-    margin: 2% auto;
-  }
 }
 
 primary-color{

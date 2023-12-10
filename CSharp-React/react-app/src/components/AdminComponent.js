@@ -328,8 +328,8 @@ function AdminComponent() {
 
   return (
     <div>
-      <div className="page-container">
-        <div className="component-container">
+      <div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
+        <div className="flex-1 w-full p-4">
           <div className="mb-4">Action</div>
           <select
             className="select select-primary w-full select-sm md:select-md mb-4"
@@ -370,15 +370,15 @@ function AdminComponent() {
           <button
             className="btn btn-primary btn-outline btn-sm md:btn-md w-full mb-4"
             type="submit"
-            disabled={isLoading || !selectedAction }
+            disabled={isLoading || !selectedAction}
             onClick={handleApply}
           >
             {isLoading ? "Loading..." : "Apply"}
           </button>
         </div>
 
-        <div className="component-container">
-          <div style={{ marginBottom: "1rem" }}>Configuration</div>
+        <div className="flex-1 w-full p-4">
+          <div className="mb-4">Configuration</div>
           <form onSubmit={updateConfiguration}>
             <select
               className="select select-primary w-full select-sm md:select-md mb-4"
@@ -447,7 +447,7 @@ function AdminComponent() {
             </div>
           </div>
           {isConfigTableVisible && (
-            <div className="overflow-x auto" style={{ overflow: "auto" }}>
+            <div className="overflow-auto">
               <table className="table table-xs table-pin-rows">
                 <tbody>
                   {configurations
@@ -480,8 +480,8 @@ function AdminComponent() {
           )}
         </div>
 
-        <div className="component-container">
-          <div style={{ marginBottom: "1rem" }}>Team Status</div>
+        <div className="flex-1 w-full p-4">
+          <div className="mb-4">Team Status</div>
           <form onSubmit={ToggleTeamStatus}>
             <select
               className="select select-primary w-full select-sm md:select-md mb-4"
@@ -522,7 +522,7 @@ function AdminComponent() {
             </div>
           </div>
           {isTeamsTableVisible && (
-            <div className="overflow-x auto" style={{ overflow: "auto" }}>
+            <div className="overflow-auto">
               <table className="table table-xs table-pin-rows">
                 <tbody>
                   {teams.map((team, index) => (

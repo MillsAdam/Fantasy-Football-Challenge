@@ -148,13 +148,13 @@ function LineupComponent() {
     return (
         <div>
             {isLoading ? (<p>Loading...</p>) : (
-                <div className="page-container">
-                    <div className="component-container">
-                        <div style={{ marginBottom: '1rem' }}>
+                <div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
+                    <div className="flex-1 w-full p-4">
+                        <div className="mb-4">
                             My Lineup
                         </div>
                         {lineupPlayers.length > 0 && (
-                            <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                            <div className="overflow-auto">
                                 <table className="table table-xs table-pin-rows">
                                     <thead>
                                         <tr>
@@ -198,12 +198,12 @@ function LineupComponent() {
                         )}
                     </div>
 
-                    <div className="component-container">
-                        <div style={{ marginBottom: '1rem' }}>
+                    <div className="flex-1 w-full p-4">
+                        <div className="mb-4">
                             My Roster
                         </div>
                         {activeRosterPlayers.length > 0 && (
-                            <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                            <div className="overflow-auto">
                                 <table className="table table-xs table-pin-rows">
                                     <thead>
                                         <tr>
@@ -259,13 +259,12 @@ function LineupComponent() {
                         )}
                     </div> 
                     
-                    <div className="component-container">
-                        <div style={{ marginBottom: '1rem' }}>
+                    <div className="flex-1 w-full p-4">
+                        <div className="mb-4">
                             Weekly Lineup
                         </div>
                         <form onSubmit={getLineupPlayersByWeek}>
-                            <select className="select select-primary w-full select-sm md:select-md" 
-                                style={{ marginBottom: '1rem' }}
+                            <select className="select select-primary w-full select-sm md:select-md mb-4" 
                                 value={selectedGameWeek} 
                                 onChange={(e) => setSelectedGameWeek(e.target.value)}
                             >
@@ -274,18 +273,16 @@ function LineupComponent() {
                                     <option key={option} value={option}>Week {option}</option>
                                 ))}
                             </select>
-                            <div className="horizontal-container" style={{ marginBottom: '1rem' }}>
+                            <div className="flex flex-row justify-between align-center flex-nowrap mb-4">
                                 <button 
-                                    className="btn btn-success btn-outline btn-sm md:btn-md" 
-                                    style={{ width: '45%' }}
+                                    className="btn btn-success btn-outline btn-sm md:btn-md w-45" 
                                     type="submit" 
                                     disabled={isLoading || selectedGameWeek === ""}
                                 >
                                     Submit
                                 </button>
                                 <button 
-                                    className="btn btn-warning btn-outline btn-sm md:btn-md" 
-                                    style={{ width: '45%'}}
+                                    className="btn btn-warning btn-outline btn-sm md:btn-md w-45" 
                                     type="button" 
                                     onClick={clearGameWeek} 
                                     disabled={isLoading || selectedGameWeek === ""}
@@ -300,7 +297,7 @@ function LineupComponent() {
                                 <div>
                                     <h3>Weekly Score: <strong>{weeklyScore}</strong></h3>
                                 </div>
-                                <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                                <div className="overflow-auto">
                                     <table className="table table-xs table-pin-rows">
                                         <thead>
                                             <tr>

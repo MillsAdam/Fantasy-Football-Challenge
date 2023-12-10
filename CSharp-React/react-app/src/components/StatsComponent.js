@@ -123,8 +123,8 @@ function StatsComponent() {
 
     return (
         <div>
-            <div className="page-container">
-                <div className="component-container">
+            <div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
+                <div className="flex-1 w-full p-4">
                     <div className="search-container">
                         <form onSubmit={searchPlayerStats}>
                             <div>
@@ -202,9 +202,9 @@ function StatsComponent() {
                                     ) : null}
                                 </div>
                             )}
-                            <div className="horizontal-container mb-4">
+                            <div className="flex flex-row justify-between align-center flex-nowrap mb-4">
                                 <button 
-                                    className="btn btn-success btn-outline btn-sm md:btn-md w-2/5" 
+                                    className="btn btn-success btn-outline btn-sm md:btn-md w-45" 
                                     type="submit" 
                                     disabled=
                                         {isLoading || 
@@ -219,7 +219,7 @@ function StatsComponent() {
                                     Search
                                 </button>
                                 <button 
-                                    className="btn btn-warning btn-outline btn-sm md:btn-md w-2/5" 
+                                    className="btn btn-warning btn-outline btn-sm md:btn-md w-45" 
                                     onClick={clearSearch} 
                                     disabled={isLoading}
                                 >
@@ -231,7 +231,7 @@ function StatsComponent() {
                     
                     {isLoading ? (<p>Loading...</p>) : (
                         searchResults.length > 0 && (
-                            <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                            <div className="overflow-auto">
                                 <table className="table table-xs table-pin-rows">
                                     <thead>
                                         <tr>
