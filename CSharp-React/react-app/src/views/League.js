@@ -15,7 +15,6 @@ const League = () => {
 
     return (
         <div className="league">
-            <h1>League Page</h1>
             <LeagueComponent />
         </div>
     );

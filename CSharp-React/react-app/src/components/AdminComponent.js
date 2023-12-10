@@ -437,10 +437,10 @@ function AdminComponent() {
           <div className="flex flex-col items-center justify-center">
             <div className="form-control">
               <label className="cursor-pointer label">
-                <span className="label-text">Toggle Configuration</span>
+                <span className="label-text mr-2 md:mr-4">Toggle Configuration</span>
                 <input
                   type="checkbox"
-                  className="toggle toggle-info"
+                  className="toggle toggle-info ml-2 md:ml-4"
                   onClick={toggleConfigTableVisibility}
                 />
               </label>
@@ -512,10 +512,10 @@ function AdminComponent() {
           <div className="flex flex-col items-center justify-center">
             <div className="form-control">
               <label className="cursor-pointer label">
-                <span className="label-text">Toggle Teams</span>
+                <span className="label-text mr-2 md:mr-4">Toggle Teams</span>
                 <input
                   type="checkbox"
-                  className="toggle toggle-info"
+                  className="toggle toggle-info ml-2 md:ml-4"
                   onClick={toggleTeamsTableVisibility}
                 />
               </label>

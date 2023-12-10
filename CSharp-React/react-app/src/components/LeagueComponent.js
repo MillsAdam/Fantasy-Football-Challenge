@@ -171,11 +171,11 @@ function LeagueComponent() {
                                     </div>
                                     <div className="flex flex-col">
                                         <div className="form-control">
-                                            <label className="flex cursor-pointer label items-center justify-center">
-                                                <span className="label-text">Roster</span>
+                                            <label className="flex cursor-pointer label">
+                                                <span className="label-text mr-2 md:mr-4">Roster</span>
                                                 <input 
                                                     type="checkbox" 
-                                                    className="toggle toggle-info" 
+                                                    className="toggle toggle-info ml-2 md:ml-4" 
                                                     checked={isRosterVisible} 
                                                     onChange={() => handleRosterSelection(selectedUserId)}
                                                 />
@@ -215,14 +215,12 @@ function LeagueComponent() {
                                         </div>
                                     </div>
                                 )}
-                                
-                                
-                                <div className="flex flex-row justify-between align-center flex-nowrap">
+
+                                <div role="tablist" className="tabs tabs-lifted mb-4">
                                     {[1, 2, 3, 4].map(week => (
                                         <button 
-                                            className="btn btn-info btn-outline btn-xs sm:btn-sm my-4" 
-                                            style={{ width: '21%' }}
-                                            type="button" 
+                                            role="tab" 
+                                            className={`tab ${selectedWeek === week ? 'tab-active text-white' : ''}`}
                                             key={week} 
                                             onClick={() => handleWeekSelection(week)}
                                         >
