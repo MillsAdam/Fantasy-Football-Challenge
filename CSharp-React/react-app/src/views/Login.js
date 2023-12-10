@@ -43,8 +43,8 @@ function Login() {
                             Username:
                         </div>
                         <input 
-                            className="btn btn-neutral btn-outline btn-sm md:btn-md" 
-                            style={{ textAlign: 'left', width: '100%' }} 
+                            className="input input-primary input-bordered w-full input-sm md:input-md" 
+                            style={{ width: '100%' }} 
                             type="text" 
                             name="username" 
                             id="username" 
@@ -57,8 +57,8 @@ function Login() {
                             Password:
                         </div>
                         <input 
-                            className="btn btn-neutral btn-outline btn-sm md:btn-md" 
-                            style={{ textAlign: 'left', width: '100%' }} 
+                            className="input input-primary input-bordered w-full input-sm md:input-md" 
+                            style={{ width: '100%' }} 
                             type="password" 
                             name="password" 
                             id="password" 

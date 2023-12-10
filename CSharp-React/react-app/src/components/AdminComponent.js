@@ -19,6 +19,8 @@ function AdminComponent() {
     const [loadingMessage, setLoadingMessage] = useState("");
     const [isTeamsTableVisible, setIsTeamsTableVisible] = useState(false);
     const [isConfigTableVisible, setIsConfigTableVisible] = useState(false);
+
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     
     const displaySuccessMessage = (message) => {
         setSuccessMessage(message);
@@ -271,11 +273,7 @@ function AdminComponent() {
 
     return (
         <div>
-            <div className="message-container">
-                {loadingMessage && <p>{loadingMessage}</p>}
-                {successMessage && <p>{successMessage}</p>}
-                {error && <p>{error}</p>}
-            </div>
+            
             <div className="page-container">
                 <div className="component-container">
 
@@ -325,9 +323,9 @@ function AdminComponent() {
                         Configuration
                     </div>
                     <form onSubmit={updateConfiguration}>
-                        <select className="btn btn-neutral btn-outline btn-sm md:btn-md" 
+                        <select className="select select-primary w-full select-sm md:select-md" 
                             value={selectedConfigKey} 
-                            style={{ width: '100%', marginBottom: '1rem' }}
+                            style={{ marginBottom: '1rem' }}
                             onChange={(e) => {
                                 setSelectedConfigKey(e.target.value);
                                 setSelectedConfigValue("");
@@ -338,9 +336,9 @@ function AdminComponent() {
                                 <option style={{ textAlign: 'left' }} key={key} value={key}>{orderedConfigKeys.get(key)}</option>
                             ))}
                         </select>
-                        <select className="btn btn-neutral btn-outline btn-sm md:btn-md" 
+                        <select className="select select-primary w-full select-sm md:select-md" 
                             value={selectedConfigValue} 
-                            style={{ width: '100%', marginBottom: '1rem' }}
+                            style={{ marginBottom: '1rem' }}
                             onChange={(e) => setSelectedConfigValue(e.target.value)} 
                             disabled={!selectedConfigKey}
                         >
@@ -349,11 +347,11 @@ function AdminComponent() {
                                 configValueOptions[selectedConfigKey] && 
                                 (typeof configValueOptions[selectedConfigKey] === 'object' && !Array.isArray(configValueOptions[selectedConfigKey]) 
                                     ? Object.entries(configValueOptions[selectedConfigKey]).map(([value, displayText]) => (
-                                        <option style={{ textAlign: 'left' }} key={value} value={value}>{displayText}</option>
+                                        <option key={value} value={value}>{displayText}</option>
                                     ))
                                     : Array.isArray(configValueOptions[selectedConfigKey]) && 
                                     configValueOptions[selectedConfigKey].map(value => (
-                                        <option style={{ textAlign: 'left' }} key={value} value={value}>{value}</option>
+                                        <option key={value} value={value}>{value}</option>
                                     ))
                                 )
                             }
@@ -391,21 +389,21 @@ function AdminComponent() {
                         Team Status
                     </div>
                     <form onSubmit={ToggleTeamStatus}>
-                        <select className="btn btn-neutral btn-outline btn-sm md:btn-md" 
+                        <select className="select select-primary w-full select-sm md:select-md" 
                             value={selectedTeamName} 
-                            style={{ width: '100%', marginBottom: '1rem' }}
+                            style={{ marginBottom: '1rem' }}
                             onChange={(e) => setSelectedTeamName(e.target.value)}
                         >
                             <option value="" disabled hidden>Select a Team</option>
                             {dynamicTeamNameOptions.map(teamName => (
-                                <option style={{ textAlign: 'left' }} key={teamName} value={teamName}>{teamNameDisplayNames[teamName] || teamName}</option>
+                                <option key={teamName} value={teamName}>{teamNameDisplayNames[teamName] || teamName}</option>
                             ))}
                         </select>
-                        <button className="btn btn-primary btn-outline btn-sm md:btn-md"  style={{ width: '100%', marginBottom: '1rem' }}type="submit" disabled={isLoading || selectedTeamName === ""}>
+                        <button className="btn btn-primary btn-outline btn-sm md:btn-md w-full"  style={{ marginBottom: '1rem' }}type="submit" disabled={isLoading || selectedTeamName === ""}>
                             {isLoading && loadingMessage === `Updating ${selectedTeamName} Status...` ? "Loading..." : `Update ${selectedTeamName} Status`}
                         </button>
                     </form>
-                    <button className="btn btn-info btn-outline btn-sm md:btn-md"  style={{ width: '100%', marginBottom: '1rem' }}onClick={toggleTeamsTableVisibility}>
+                    <button className="btn btn-info btn-outline btn-sm md:btn-md w-full"  style={{ marginBottom: '1rem' }}onClick={toggleTeamsTableVisibility}>
                         {isTeamsTableVisible ? "Hide Teams" : "Show Teams"}
                     </button>
                     {isTeamsTableVisible && (
@@ -428,7 +426,13 @@ function AdminComponent() {
                         </div>
                     )}
                 </div>
+
             </div>
+                <div className="message-container">
+                    {loadingMessage && <p>{loadingMessage}</p>}
+                    {successMessage && <p>{successMessage}</p>}
+                    {error && <p>{error}</p>}
+                </div>
         </div>
     )
 

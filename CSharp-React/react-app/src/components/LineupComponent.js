@@ -172,7 +172,10 @@ function LineupComponent() {
                                         {lineupPlayers.map((lineupPlayer, index) => (
                                             <tr key={index} className="hover">
                                                 <td>
-                                                    <button className="btn btn-warning btn-outline btn-xs" onClick={(e) => handleRemovePlayerFromLineup(e, lineupPlayer.playerId)}>-</button>
+                                                    <button 
+                                                        className="btn btn-warning btn-outline btn-xs" 
+                                                        disabled={isLineupLocked} 
+                                                        onClick={(e) => handleRemovePlayerFromLineup(e, lineupPlayer.playerId)}>-</button>
                                                 </td>
                                                 <td>{lineupPlayer.conference}</td>
                                                 <td>{lineupPlayer.team}</td>
@@ -220,17 +223,20 @@ function LineupComponent() {
                                             <tr key={index} className="hover">
                                                 <td>
                                                     <select 
-                                                        className="btn btn-neutral btn-outline btn-xs" 
+                                                        className="select select-primary w-full select-xs" 
                                                         id={`lineup-position-${index}`} 
-                                                        disabled={getFilteredLineupOptions(rosterPlayer.position).length === 0}
+                                                        disabled={getFilteredLineupOptions(rosterPlayer.position).length === 0 || isLineupLocked}
                                                     >
                                                         {getFilteredLineupOptions(rosterPlayer.position).map((option) => (
-                                                            <option style={{ textAlign: 'left' }} key={option} value={option}>{option}</option>
+                                                            <option key={option} value={option}>{option}</option>
                                                         ))}
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <button className="btn btn-success btn-outline btn-xs" onClick={(e) => handleAddPlayerToLineup(e, rosterPlayer.playerId, document.getElementById(`lineup-position-${index}`).value)}>+</button>
+                                                    <button 
+                                                        className="btn btn-success btn-outline btn-xs" 
+                                                        disabled={getFilteredLineupOptions(rosterPlayer.position).length === 0 || isLineupLocked} 
+                                                        onClick={(e) => handleAddPlayerToLineup(e, rosterPlayer.playerId, document.getElementById(`lineup-position-${index}`).value)}>+</button>
                                                 </td>
                                                 <td>{rosterPlayer.conference}</td>
                                                 <td>{rosterPlayer.team}</td>
@@ -258,14 +264,14 @@ function LineupComponent() {
                             Weekly Lineup
                         </div>
                         <form onSubmit={getLineupPlayersByWeek}>
-                            <select className="btn btn-neutral btn-outline btn-sm md:btn-md" 
-                                style={{ marginBottom: '1rem', width: '100%' }}
+                            <select className="select select-primary w-full select-sm md:select-md" 
+                                style={{ marginBottom: '1rem' }}
                                 value={selectedGameWeek} 
                                 onChange={(e) => setSelectedGameWeek(e.target.value)}
                             >
                                 <option value="" disabled hidden>Select Week</option>
                                 {gameWeekOptions.map((option) => (
-                                    <option style={{ textAlign: 'left' }} key={option} value={option}>Week {option}</option>
+                                    <option key={option} value={option}>Week {option}</option>
                                 ))}
                             </select>
                             <div className="horizontal-container" style={{ marginBottom: '1rem' }}>

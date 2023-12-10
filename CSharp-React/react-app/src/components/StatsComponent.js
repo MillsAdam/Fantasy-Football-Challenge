@@ -128,35 +128,34 @@ function StatsComponent() {
                     <div className="search-container">
                         <form onSubmit={searchPlayerStats}>
                             <div>
-                                <select className="btn btn-neutral btn-outline btn-sm md:btn-md" 
-                                    style={{ width: '100%', marginBottom: '1rem' }} 
+                                <select className="select select-primary w-full select-sm md:select-md" 
+                                    style={{ marginBottom: '1rem' }} 
                                     value={selectedPosition} 
                                     onChange={(e) => setSelectedPosition(e.target.value)}
                                 >
                                     <option value="" disabled hidden>Select a Position</option>
                                     {positionOptions.map((position) => (
-                                        <option style={{ textAlign: 'left' }} key={position} value={position}>{positionDisplayOptions[position]}</option>
+                                        <option key={position} value={position}>{positionDisplayOptions[position]}</option>
                                     ))}
                                 </select>
                             </div>
                             <div>
-
-                                <select className="btn btn-neutral btn-outline btn-sm md:btn-md" 
-                                    style={{ width: '100%', marginBottom: '1rem' }} 
+                                <select className="select select-primary w-full select-sm md:select-md" 
+                                    style={{ marginBottom: '1rem' }} 
                                     value={selectedInterval} 
                                     onChange={(e) => setSelectedInterval(e.target.value)} 
                                     disabled={selectedPosition === ''}
                                 >
                                     <option value="" disabled hidden>Select an Interval</option>
                                     {intervalOptions.map((interval) => (
-                                        <option style={{ textAlign: 'left' }} key={interval} value={interval}>{intervalDisplayOptions[interval]}</option>
+                                        <option key={interval} value={interval}>{intervalDisplayOptions[interval]}</option>
                                     ))}
                                 </select>
                             </div>
                             {(selectedInterval === 'weekly total' || selectedInterval === 'weekly projected') && (
                                 <div>
-                                    <select className="btn btn-neutral btn-outline btn-sm md:btn-md" 
-                                        style={{ width: '100%', marginBottom: '1rem' }}
+                                    <select className="select select-primary w-full select-sm md:select-md" 
+                                        style={{ marginBottom: '1rem' }}
                                         value={selectedWeek} 
                                         onChange={(e) => setSelectedWeek(e.target.value)}
                                     >
@@ -164,43 +163,43 @@ function StatsComponent() {
                                         {weekOptions
                                             .filter(week => week <= currentWeek)
                                             .map((week) => (
-                                            <option style={{ textAlign: 'left' }} key={week} value={week}>{weekDisplayOptions[week]}</option>
+                                            <option key={week} value={week}>{weekDisplayOptions[week]}</option>
                                         ))}
                                     </select>
                                 </div>
                             )}
                             <div>
-                                <select className="btn btn-neutral btn-outline btn-sm md:btn-md" 
-                                    style={{ width: '100%', marginBottom: '1rem' }} 
+                                <select className="select select-primary w-full select-sm md:select-md" 
+                                    style={{ marginBottom: '1rem' }} 
                                     value={selectedCategory} 
                                     onChange={(e) => setSelectedCategory(e.target.value)} 
                                     disabled={selectedPosition === '' || selectedInterval === ''}
                                 >
                                     <option value="" disabled hidden>Select a Category</option>
                                     {categoryOptions.map((category) => (
-                                        <option style={{ textAlign: 'left' }} key={category} value={category}>{categoryDisplayOptions[category]}</option>
+                                        <option key={category} value={category}>{categoryDisplayOptions[category]}</option>
                                     ))}
                                 </select>
                             </div>
                             {selectedCategory !== 'all' && selectedCategory !== '' && (
                                 <div>
                                     {(selectedCategory === 'conf' || selectedCategory === 'team') ? (
-                                        <select className="btn btn-neutral btn-outline btn-sm md:btn-md" 
+                                        <select className="select select-primary w-full select-sm md:select-md" 
                                             style={{ width: '100%', marginBottom: '1rem' }} 
                                             value={selectedFilter}
                                             onChange={(e) => setSelectedFilter(e.target.value)}
                                         >
                                             <option value="" disabled hidden>Select a Filter</option>
                                             {selectedCategory === 'conf' && conferenceOptions.map((conference) => (
-                                                <option style={{ textAlign: 'left' }} key={conference} value={conference}>{conferenceDisplayOptions[conference]}</option>
+                                                <option key={conference} value={conference}>{conferenceDisplayOptions[conference]}</option>
                                             ))}
                                             {selectedCategory === 'team' && activeTeamNameOptions.map((team) => (
-                                                <option style={{ textAlign: 'left' }} key={team} value={team}>{teamNameDisplayOptions[team] || team}</option>
+                                                <option key={team} value={team}>{teamNameDisplayOptions[team] || team}</option>
                                             ))}
                                         </select>
                                     ) : selectedCategory === 'name' ? (
-                                        <input className="btn btn-neutral btn-outline btn-sm md:btn-md" 
-                                            style={{ textAlign: 'left', width: '100%', marginBottom: '1rem' }} 
+                                        <input className="input input-primary input-bordered w-full input-sm md:input-md" 
+                                            style={{ marginBottom: '1rem' }} 
                                             type="text" 
                                             value={selectedFilter} 
                                             placeholder="Enter Name" 
