@@ -210,8 +210,7 @@ function StatsComponent() {
                             )}
                             <div className="horizontal-container" style={{ marginBottom: '1rem' }}>
                                 <button 
-                                    className="btn btn-success btn-outline btn-sm md:btn-md" 
-                                    style={{ width: '45%' }}
+                                    className="btn btn-success btn-outline btn-sm md:btn-md w-1/2" 
                                     type="submit" 
                                     disabled=
                                         {isLoading || 
@@ -226,8 +225,7 @@ function StatsComponent() {
                                     Search
                                 </button>
                                 <button 
-                                    className="btn btn-warning btn-outline btn-sm md:btn-md" 
-                                    style={{ width: '45%' }}
+                                    className="btn btn-warning btn-outline btn-sm md:btn-md w-1/2" 
                                     onClick={clearSearch} 
                                     disabled={isLoading}
                                 >

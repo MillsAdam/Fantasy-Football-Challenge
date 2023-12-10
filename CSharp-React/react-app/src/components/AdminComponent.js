@@ -20,8 +20,6 @@ function AdminComponent() {
     const [isTeamsTableVisible, setIsTeamsTableVisible] = useState(false);
     const [isConfigTableVisible, setIsConfigTableVisible] = useState(false);
 
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    
     const displaySuccessMessage = (message) => {
         setSuccessMessage(message);
         setTimeout(() => {
@@ -360,9 +358,15 @@ function AdminComponent() {
                             {isLoading && loadingMessage === "Updating Configuration..." ? "Loading..." : "Update Configuration"}
                         </button>
                     </form>
-                    <button className="btn btn-info btn-outline btn-sm md:btn-md"  style={{ width: '100%', marginBottom: '1rem' }}onClick={toggleConfigTableVisibility}>
-                        {isConfigTableVisible ? "Hide Configuration" : "Show Configuration"}
-                    </button>
+                    
+                    <div className="flex flex-col items-center justify-center">
+                        <div className="form-control w-52">
+                            <label className="cursor-pointer label">
+                                <span className="label-text">Toggle Configuration</span>
+                                <input type="checkbox" className="toggle toggle-info" onClick={toggleConfigTableVisibility} />
+                            </label>
+                        </div>
+                    </div>
                     {isConfigTableVisible && (
                         <div className="overflow-x auto" style={{ overflow: 'auto' }}>
                             <table className="table table-xs table-pin-rows">
@@ -384,6 +388,7 @@ function AdminComponent() {
                         </div>
                     )}
                 </div>
+
                 <div className="component-container">
                     <div style={{ marginBottom: '1rem' }}>
                         Team Status
@@ -403,28 +408,34 @@ function AdminComponent() {
                             {isLoading && loadingMessage === `Updating ${selectedTeamName} Status...` ? "Loading..." : `Update ${selectedTeamName} Status`}
                         </button>
                     </form>
-                    <button className="btn btn-info btn-outline btn-sm md:btn-md w-full"  style={{ marginBottom: '1rem' }}onClick={toggleTeamsTableVisibility}>
-                        {isTeamsTableVisible ? "Hide Teams" : "Show Teams"}
-                    </button>
-                    {isTeamsTableVisible && (
-                        <div className="overflow-x auto" style={{ overflow: 'auto' }}>
-                            <table className="table table-xs table-pin-rows">
-                                <tbody>
-                                    {teams.map((team, index) => (
-                                        <tr key={index} className="hover">
-                                            <td>{teamNameDisplayNames[team.team] || team.team}</td>
-                                            <td className={
-                                                team.status === 'Active' ? 'green-highlight' :
-                                                team.status === 'Inactive' ? 'red-highlight' : ''
-                                            }>
-                                                {team.status}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+
+                    <div className="flex flex-col items-center justify-center">
+                        <div className="form-control w-52">
+                            <label className="cursor-pointer label">
+                                <span className="label-text">Toggle Teams</span>
+                                <input type="checkbox" className="toggle toggle-info" onClick={toggleTeamsTableVisibility} />
+                            </label>
                         </div>
-                    )}
+                    </div>
+                        {isTeamsTableVisible && (
+                            <div className="overflow-x auto" style={{ overflow: 'auto' }}>
+                                <table className="table table-xs table-pin-rows">
+                                    <tbody>
+                                        {teams.map((team, index) => (
+                                            <tr key={index} className="hover">
+                                                <td>{teamNameDisplayNames[team.team] || team.team}</td>
+                                                <td className={
+                                                    team.status === 'Active' ? 'green-highlight' :
+                                                    team.status === 'Inactive' ? 'red-highlight' : ''
+                                                }>
+                                                    {team.status}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
                 </div>
 
             </div>
