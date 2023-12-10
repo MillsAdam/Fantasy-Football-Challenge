@@ -128,8 +128,7 @@ function StatsComponent() {
                     <div className="search-container">
                         <form onSubmit={searchPlayerStats}>
                             <div>
-                                <select className="select select-primary w-full select-sm md:select-md" 
-                                    style={{ marginBottom: '1rem' }} 
+                                <select className="select select-primary w-full select-sm md:select-md mb-4" 
                                     value={selectedPosition} 
                                     onChange={(e) => setSelectedPosition(e.target.value)}
                                 >
@@ -140,8 +139,7 @@ function StatsComponent() {
                                 </select>
                             </div>
                             <div>
-                                <select className="select select-primary w-full select-sm md:select-md" 
-                                    style={{ marginBottom: '1rem' }} 
+                                <select className="select select-primary w-full select-sm md:select-md mb-4" 
                                     value={selectedInterval} 
                                     onChange={(e) => setSelectedInterval(e.target.value)} 
                                     disabled={selectedPosition === ''}
@@ -154,8 +152,7 @@ function StatsComponent() {
                             </div>
                             {(selectedInterval === 'weekly total' || selectedInterval === 'weekly projected') && (
                                 <div>
-                                    <select className="select select-primary w-full select-sm md:select-md" 
-                                        style={{ marginBottom: '1rem' }}
+                                    <select className="select select-primary w-full select-sm md:select-md mb-4" 
                                         value={selectedWeek} 
                                         onChange={(e) => setSelectedWeek(e.target.value)}
                                     >
@@ -169,8 +166,7 @@ function StatsComponent() {
                                 </div>
                             )}
                             <div>
-                                <select className="select select-primary w-full select-sm md:select-md" 
-                                    style={{ marginBottom: '1rem' }} 
+                                <select className="select select-primary w-full select-sm md:select-md mb-4" 
                                     value={selectedCategory} 
                                     onChange={(e) => setSelectedCategory(e.target.value)} 
                                     disabled={selectedPosition === '' || selectedInterval === ''}
@@ -184,8 +180,7 @@ function StatsComponent() {
                             {selectedCategory !== 'all' && selectedCategory !== '' && (
                                 <div>
                                     {(selectedCategory === 'conf' || selectedCategory === 'team') ? (
-                                        <select className="select select-primary w-full select-sm md:select-md" 
-                                            style={{ width: '100%', marginBottom: '1rem' }} 
+                                        <select className="select select-primary w-full select-sm md:select-md mb-4" 
                                             value={selectedFilter}
                                             onChange={(e) => setSelectedFilter(e.target.value)}
                                         >
@@ -198,8 +193,7 @@ function StatsComponent() {
                                             ))}
                                         </select>
                                     ) : selectedCategory === 'name' ? (
-                                        <input className="input input-primary input-bordered w-full input-sm md:input-md" 
-                                            style={{ marginBottom: '1rem' }} 
+                                        <input className="input input-primary input-bordered w-full input-sm md:input-md mb-4" 
                                             type="text" 
                                             value={selectedFilter} 
                                             placeholder="Enter Name" 
@@ -208,9 +202,9 @@ function StatsComponent() {
                                     ) : null}
                                 </div>
                             )}
-                            <div className="horizontal-container" style={{ marginBottom: '1rem' }}>
+                            <div className="horizontal-container mb-4">
                                 <button 
-                                    className="btn btn-success btn-outline btn-sm md:btn-md w-1/2" 
+                                    className="btn btn-success btn-outline btn-sm md:btn-md w-2/5" 
                                     type="submit" 
                                     disabled=
                                         {isLoading || 
@@ -225,7 +219,7 @@ function StatsComponent() {
                                     Search
                                 </button>
                                 <button 
-                                    className="btn btn-warning btn-outline btn-sm md:btn-md w-1/2" 
+                                    className="btn btn-warning btn-outline btn-sm md:btn-md w-2/5" 
                                     onClick={clearSearch} 
                                     disabled={isLoading}
                                 >
