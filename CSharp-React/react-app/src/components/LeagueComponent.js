@@ -165,12 +165,12 @@ function LeagueComponent() {
                         )}
                         {selectedUserId && (
                             <div>
-                                <div className="flex my-4 items-center justify-center">
+                                <div className="flex my-4 items-center justify-evenly">
                                     <div>
                                         <strong>{selectedTeamName}</strong>
                                     </div>
                                     <div className="flex flex-col">
-                                        <div className="form-control w-52">
+                                        <div className="form-control">
                                             <label className="flex cursor-pointer label items-center justify-center">
                                                 <span className="label-text">Roster</span>
                                                 <input 

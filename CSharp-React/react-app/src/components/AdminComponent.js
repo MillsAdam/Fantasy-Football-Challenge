@@ -435,7 +435,7 @@ function AdminComponent() {
           </form>
 
           <div className="flex flex-col items-center justify-center">
-            <div className="form-control w-52">
+            <div className="form-control">
               <label className="cursor-pointer label">
                 <span className="label-text">Toggle Configuration</span>
                 <input
@@ -510,7 +510,7 @@ function AdminComponent() {
           </form>
 
           <div className="flex flex-col items-center justify-center">
-            <div className="form-control w-52">
+            <div className="form-control">
               <label className="cursor-pointer label">
                 <span className="label-text">Toggle Teams</span>
                 <input
