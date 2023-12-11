@@ -294,8 +294,8 @@ function AdminComponent() {
 	return (
 		<div className="flex flex-col min-h-screen">
 			<NavigationBar />
-			<div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
-				<div className="flex-1 w-full p-4">
+			<div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto ">
+				<div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
 					<div className="mb-4 text-primary text-xl">Action</div>
 					<select
 						className="select select-accent w-full select-sm md:select-md mb-4"
@@ -318,7 +318,7 @@ function AdminComponent() {
 					</button>
 				</div>
 
-				<div className="flex-1 w-full p-4">
+				<div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
 					<div className="mb-4 text-primary text-xl">Configuration</div>
 					<form onSubmit={updateConfiguration}>
 						<select
@@ -376,7 +376,7 @@ function AdminComponent() {
 									{configurations
 										.sort((a, b) => configDisplayOrder.indexOf(a.configKey) - configDisplayOrder.indexOf(b.configKey))
 										.map((config, index) => (
-											<tr key={index} className="hover">
+											<tr key={index} className="bg-neutral hover:bg-info-content">
 												<td>{configKeyDisplayNames[config.configKey] || config.configKey}</td>
 												<td>{config.configKey === "lockRosters" || config.configKey === "lockLineups" || config.configKey === "currentWeek" || config.configKey === "startingLineupWeek" ? configValueOptions[config.configKey][config.configValue] : config.configValue}</td>
 											</tr>
@@ -387,7 +387,7 @@ function AdminComponent() {
 					)}
 				</div>
 
-				<div className="flex-1 w-full p-4">
+				<div className="flex-1 w-full  mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
 					<div className="mb-4 text-primary text-xl">Team Status</div>
 					<form onSubmit={ToggleTeamStatus}>
 						<select className="select select-accent w-full select-sm md:select-md mb-4" value={selectedTeamName} onChange={(e) => setSelectedTeamName(e.target.value)}>
@@ -418,7 +418,7 @@ function AdminComponent() {
 							<table className="table table-xs table-pin-rows">
 								<tbody>
 									{teams.map((team, index) => (
-										<tr key={index} className="hover">
+										<tr key={index} className="bg-neutral hover:bg-info-content">
 											<td>{teamNameDisplayNames[team.team] || team.team}</td>
 											<td className={team.status === "Active" ? "green-highlight" : team.status === "Inactive" ? "red-highlight" : ""}>{team.status}</td>
 										</tr>

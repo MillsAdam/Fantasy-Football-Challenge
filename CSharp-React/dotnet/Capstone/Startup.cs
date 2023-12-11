@@ -49,7 +49,7 @@ namespace Capstone
             string connectionString = Configuration.GetConnectionString("Project");
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(connectionString));
+            options.UseNpgsql(connectionString));
             services.AddScoped<FantasyDataService>();
             services.AddScoped<ScoreService>();
             services.AddScoped<PlayerStatsExtService>();

@@ -150,7 +150,7 @@ function LineupComponent() {
         <div className="flex flex-col min-h-screen">
             <NavigationBar />
             <div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
-                <div className="flex-1 w-full p-4">
+                <div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
                     <div className="mb-4 text-xl text-primary">
                         My Lineup
                     </div>
@@ -171,7 +171,7 @@ function LineupComponent() {
                                 </thead>
                                 <tbody>
                                     {lineupPlayers.map((lineupPlayer, index) => (
-                                        <tr key={index} className="hover">
+                                        <tr key={index} className="bg-neutral hover:bg-info-content">
                                             <td>
                                                 <button 
                                                     className="btn btn-secondary btn-outline btn-xs" 
@@ -199,7 +199,7 @@ function LineupComponent() {
                     )}
                 </div>
 
-                <div className="flex-1 w-full p-4">
+                <div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
                     <div className="mb-4 text-xl text-primary">
                         My Roster
                     </div>
@@ -208,8 +208,9 @@ function LineupComponent() {
                             <table className="table table-xs table-pin-rows">
                                 <thead>
                                     <tr className="bg-base-300">
-                                        <th>Lineup</th>
+                                        
                                         <th>Add</th>
+                                        <th>Lineup</th>
                                         <th>Conf</th>
                                         <th>Team</th>
                                         <th>Pos</th>
@@ -221,7 +222,14 @@ function LineupComponent() {
                                 </thead>
                                 <tbody>
                                     {activeRosterPlayers.map((rosterPlayer, index) => (
-                                        <tr key={index} className="hover">
+                                        <tr key={index} className="bg-neutral hover:bg-info-content">
+                                            
+                                            <td>
+                                                <button 
+                                                    className="btn btn-primary btn-outline btn-xs" 
+                                                    disabled={getFilteredLineupOptions(rosterPlayer.position).length === 0 || isLineupLocked} 
+                                                    onClick={(e) => handleAddPlayerToLineup(e, rosterPlayer.playerId, document.getElementById(`lineup-position-${index}`).value)}>+</button>
+                                            </td>
                                             <td>
                                                 <select 
                                                     className="select select-accent w-full select-xs" 
@@ -232,12 +240,6 @@ function LineupComponent() {
                                                         <option key={option} value={option}>{option}</option>
                                                     ))}
                                                 </select>
-                                            </td>
-                                            <td>
-                                                <button 
-                                                    className="btn btn-primary btn-outline btn-xs" 
-                                                    disabled={getFilteredLineupOptions(rosterPlayer.position).length === 0 || isLineupLocked} 
-                                                    onClick={(e) => handleAddPlayerToLineup(e, rosterPlayer.playerId, document.getElementById(`lineup-position-${index}`).value)}>+</button>
                                             </td>
                                             <td>{rosterPlayer.conference}</td>
                                             <td>{rosterPlayer.team}</td>
@@ -260,7 +262,7 @@ function LineupComponent() {
                     )}
                 </div> 
                 
-                <div className="flex-1 w-full p-4">
+                <div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
                     <div className="mb-4 text-xl text-primary">
                         Weekly Lineup
                     </div>
@@ -306,7 +308,7 @@ function LineupComponent() {
                             <div className="overflow-auto">
                                 <table className="table table-xs table-pin-rows">
                                     <thead>
-                                        <tr>
+                                        <tr className="bg-base-300">
                                             <th>Conf</th>
                                             <th>Team</th>
                                             <th>Pos</th>
@@ -316,7 +318,7 @@ function LineupComponent() {
                                     </thead>
                                     <tbody>
                                         {weeklyLineupPlayers.map((lineupPlayer, index) => (
-                                            <tr key={index} className="hover">
+                                            <tr key={index} className="bg-neutral hover:bg-info-content">
                                                 <td>{lineupPlayer.conference}</td>
                                                 <td>{lineupPlayer.team}</td>
                                                 <td>{lineupPlayer.lineupPosition}</td>

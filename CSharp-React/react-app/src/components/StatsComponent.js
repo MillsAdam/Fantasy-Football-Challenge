@@ -127,7 +127,7 @@ function StatsComponent() {
         <div className="flex flex-col min-h-screen">
             <NavigationBar />
             <div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
-                <div className="flex-1 w-full p-4">
+                <div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
                     <div className="search-container">
                         <form onSubmit={searchPlayerStats}>
                             <div>
@@ -237,51 +237,57 @@ function StatsComponent() {
                     
                     {isLoading ? (<p>Loading...</p>) : (
                         searchResults.length > 0 && (
-                            <div className="overflow-auto">
-                                <table className="table table-xs table-pin-rows">
-                                    <thead>
-                                        <tr className="bg-base-300">
-                                            <th colSpan="6">Player Info</th>
-                                            {headerColumns[selectedPosition].map((column) => (
-                                                <th key={column.label} colSpan={column.colSpan}>{column.label}</th>
-                                            ))}
-                                            <th colSpan="2">Points</th>
-                                        </tr>
-                                        <tr className="bg-base-200">
-                                            <th>Conf</th>
-                                            <th>Team</th>
-                                            <th>Pos</th>
-                                            <th>Week</th>
-                                            <th>Inj</th>
-                                            <th>Name</th>
-                                            {positionColumns[selectedPosition].map((column) => (
-                                                <th key={column.key}>{column.label}</th>
-                                            ))}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {searchResults.map((player,index) => (
-                                            <tr key={index} className="hover">
-                                                <td>{player.conference}</td>
-                                                <td>{player.team}</td>
-                                                <td>{player.position}</td>
-                                                <td>{player.week}</td>
-                                                <td className={
-                                                    ["P"].includes(player.injuryStatus?.charAt(0)) ? 'green-highlight' : 
-                                                    ["Q"].includes(player.injuryStatus?.charAt(0)) ? 'yellow-highlight' : 
-                                                    ["D", "O"].includes(player.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
-                                                }>
-                                                    {player.injuryStatus ? player.injuryStatus.charAt(0) : 'A'}
-                                                </td>
-                                                <td>{player.name}</td>
+                            <div>
+                                <div className="mb-4 text-success">
+                                    Search Results
+                                </div>
+                                <div className="overflow-auto">
+                                    <table className="table table-xs table-pin-rows">
+                                        <thead>
+                                            <tr className="bg-base-300">
+                                                <th colSpan="6">Player Info</th>
+                                                {headerColumns[selectedPosition].map((column) => (
+                                                    <th key={column.label} colSpan={column.colSpan}>{column.label}</th>
+                                                ))}
+                                                <th colSpan="2">Points</th>
+                                            </tr>
+                                            <tr className="bg-base-100">
+                                                <th>Conf</th>
+                                                <th>Team</th>
+                                                <th>Pos</th>
+                                                <th>Week</th>
+                                                <th>Inj</th>
+                                                <th>Name</th>
                                                 {positionColumns[selectedPosition].map((column) => (
-                                                    <td key={column.key}>{player[column.key]}</td>
+                                                    <th key={column.key}>{column.label}</th>
                                                 ))}
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            {searchResults.map((player,index) => (
+                                                <tr key={index} className="bg-neutral hover:bg-info-content">
+                                                    <td>{player.conference}</td>
+                                                    <td>{player.team}</td>
+                                                    <td>{player.position}</td>
+                                                    <td>{player.week}</td>
+                                                    <td className={
+                                                        ["P"].includes(player.injuryStatus?.charAt(0)) ? 'green-highlight' : 
+                                                        ["Q"].includes(player.injuryStatus?.charAt(0)) ? 'yellow-highlight' : 
+                                                        ["D", "O"].includes(player.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
+                                                    }>
+                                                        {player.injuryStatus ? player.injuryStatus.charAt(0) : 'A'}
+                                                    </td>
+                                                    <td>{player.name}</td>
+                                                    {positionColumns[selectedPosition].map((column) => (
+                                                        <td key={column.key}>{player[column.key]}</td>
+                                                    ))}
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
+                            
                         )
                     )}
                     <div className="message-container">

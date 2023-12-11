@@ -119,7 +119,7 @@ function LeagueComponent() {
         <div className="flex flex-col min-h-screen">
             <NavigationBar />
                 <div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
-                    <div className="flex-1 w-full">
+                    <div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
                         {!userHasTeam && (
                             <div>
                                 Create a Roster to view Leaderboard
@@ -146,7 +146,7 @@ function LeagueComponent() {
                                         </thead>
                                         <tbody>
                                             {rosters.map((roster, index) => (
-                                                <tr key={index} className="hover" onClick={() => handleUserClick(roster.userId, roster.teamName, roster.totalScore)}>
+                                                <tr key={index} className="bg-neutral hover:bg-info-content" onClick={() => handleUserClick(roster.userId, roster.teamName, roster.totalScore)}>
                                                     <td>{index + 1}</td>
                                                     <td>{roster.username}</td>
                                                     <td>{roster.teamName}</td>
@@ -208,7 +208,7 @@ function LeagueComponent() {
                                                 </thead>
                                                 <tbody>
                                                     {roster.map((rosterPlayer, index) => (
-                                                        <tr key={index} className="hover">
+                                                        <tr key={index} className="bg-neutral hover:bg-info-content">
                                                             <td>{rosterPlayer.conference}</td>
                                                             <td>{rosterPlayer.team}</td>
                                                             <td>{rosterPlayer.position}</td>
@@ -259,7 +259,7 @@ function LeagueComponent() {
                                                 </thead>
                                                 <tbody>
                                                     {lineup.map((lineupPlayer, index) => (
-                                                        <tr key={index} className="hover">
+                                                        <tr key={index} className="bg-neutral hover:bg-info-content">
                                                             <td>{lineupPlayer.conference}</td>
                                                             <td>{lineupPlayer.team}</td>
                                                             <td>{lineupPlayer.lineupPosition}</td>

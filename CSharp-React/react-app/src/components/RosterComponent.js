@@ -267,7 +267,7 @@ function RosterComponent() {
             <NavigationBar />
             {userHasTeam && (
                 <div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
-                    <div className="flex-1 w-full">
+                    <div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
                         <div className="mb-4 text-xl text-primary">
                             Search Players
                         </div>
@@ -356,7 +356,7 @@ function RosterComponent() {
                                             </thead>
                                             <tbody>
                                                 {searchPlayer.map((player, index) => (
-                                                    <tr key={index} className="hover">
+                                                    <tr key={index} className="bg-neutral hover:bg-info-content">
                                                         <td>
                                                             <button 
                                                                 className="btn btn-primary btn-outline btn-xs" 
@@ -388,7 +388,7 @@ function RosterComponent() {
                         )}
                     </div>
                     
-                    <div className="flex-1 w-full">
+                    <div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
                         <div className="mb-4 text-xl text-primary">
                             My Roster
                         </div>
@@ -409,7 +409,7 @@ function RosterComponent() {
                                     </thead>
                                     <tbody>
                                         {rosterPlayers.map((rosterPlayer, index) => (
-                                            <tr key={index} className="hover">
+                                            <tr key={index} className="bg-neutral hover:bg-info-content">
                                                 <td>{index+1}</td>
                                                 <td>
                                                     <button 
@@ -443,7 +443,7 @@ function RosterComponent() {
             )}
             {!userHasTeam && !isLoading && (
                 <div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
-                    <div className="flex-1 w-full">
+                    <div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
                         <div className="mb-4">
                             Create League Roster
                         </div>
