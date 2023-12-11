@@ -33,7 +33,7 @@ namespace Capstone.DAO
                     command.Parameters.AddWithValue("@name", teamDto.Name);
                     command.Parameters.AddWithValue("@conference", teamDto.Conference);
                     command.Parameters.AddWithValue("@division", teamDto.Division);
-                    command.Parameters.AddWithValue("@status", "Active");
+                    command.Parameters.AddWithValue("@status", "Inactive");
                     await command.ExecuteNonQueryAsync();
                 }
             }

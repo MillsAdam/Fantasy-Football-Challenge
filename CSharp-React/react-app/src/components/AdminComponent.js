@@ -294,7 +294,7 @@ function AdminComponent() {
 	return (
 		<div className="flex flex-col min-h-screen">
 			<NavigationBar />
-			<div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto ">
+			<div className="flex lg:flex-row lg:justify-between lg:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto ">
 				<div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
 					<div className="mb-4 text-primary text-xl">Action</div>
 					<select
@@ -430,24 +430,24 @@ function AdminComponent() {
 				</div>
 			</div>
 
-      <div className="flex-1 w-full p-4">
-					<div className="mb-4">EXAMPLES</div>
-          <button className="btn btn-primary">Primary</button>
-          <button className="btn btn-secondary">Secondary</button>
-          <button className="btn btn-accent">Accent</button>
-          <button className="btn btn-neutral">Neutral</button>
-          <button className="btn btn-outline">Outline</button>
-          <button className="btn btn-ghost">Ghost</button>
-          <button className="btn btn-link">Link</button>
-          <button className="btn btn-disabled">Disabled</button>
-          <button className="btn bg-base-100">Base 100</button>
-          <button className="btn bg-base-200">Base 200</button>
-          <button className="btn bg-base-300">Base 300</button>
-          <button className="btn btn-info">Info</button>
-          <button className="btn btn-success">Success</button>
-          <button className="btn btn-warning">Warning</button>
-          <button className="btn btn-error">Error</button>
-      </div>
+			{/* <div className="flex-1 w-full p-4">
+							<div className="mb-4">EXAMPLES</div>
+				<button className="btn btn-primary">Primary</button>
+				<button className="btn btn-secondary">Secondary</button>
+				<button className="btn btn-accent">Accent</button>
+				<button className="btn btn-neutral">Neutral</button>
+				<button className="btn btn-outline">Outline</button>
+				<button className="btn btn-ghost">Ghost</button>
+				<button className="btn btn-link">Link</button>
+				<button className="btn btn-disabled">Disabled</button>
+				<button className="btn bg-base-100">Base 100</button>
+				<button className="btn bg-base-200">Base 200</button>
+				<button className="btn bg-base-300">Base 300</button>
+				<button className="btn btn-info">Info</button>
+				<button className="btn btn-success">Success</button>
+				<button className="btn btn-warning">Warning</button>
+				<button className="btn btn-error">Error</button>
+			</div> */}
 			<div className="message-container">
 				{loadingMessage && <p>{loadingMessage}</p>}
 				{successMessage && <p>{successMessage}</p>}

@@ -32,7 +32,7 @@ const Home = () => {
                     </div>
                 </div>
                 
-                <div className="mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
+                <div className="flex flex-col justify-center lg:w-60 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
                     <h2 className="text-3xl font-semibold mb-4 text-primary">How It Works:</h2>
                     <ul className="list-disc pl-8 mb-8 text-lg flex flex-col items-start custom-bullet">
                         <li className="mb-2 text-left">Build Your Roster: Select any 27 players from the teams in the NFL playoffs.</li>

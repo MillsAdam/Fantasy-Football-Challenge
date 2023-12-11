@@ -126,7 +126,7 @@ function StatsComponent() {
     return (
         <div className="flex flex-col min-h-screen">
             <NavigationBar />
-            <div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
+            <div className="flex lg:flex-row lg:justify-between lg:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
                 <div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
                     <div className="search-container">
                         <form onSubmit={searchPlayerStats}>

@@ -37,7 +37,7 @@ function Login() {
             <div className="w-full md:max-w-md max-w-xs">
                 <div className="flex-1 w-full">
                     <div className="flex flex-col justify-center items-center mb-20">
-                        <img src={LogoMain} alt="logo-main" className="w-48"/>
+                        <img src={LogoMain} alt="logo-main" className="md:w-72 w-48"/>
                     </div>
                     <div className="text-xl text-primary mb-4">
                         Login
@@ -45,7 +45,7 @@ function Login() {
                     <form onSubmit={login}>
                         <div className="mb-4">
                             <div>
-                                Username:
+                                Username
                             </div>
                             <input 
                                 className="input input-accent input-bordered w-full input-sm md:input-md" 
@@ -58,7 +58,7 @@ function Login() {
                         </div>
                         <div className="mb-4">
                             <div>
-                                Password:
+                                Password
                             </div>
                             <input 
                                 className="input input-accent input-bordered w-full input-sm md:input-md" 
