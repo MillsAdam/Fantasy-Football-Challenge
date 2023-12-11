@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthService from '../services/AuthService';
-import LogoMain from '../assets/Fantasy Playoff Main Logo.png';
+// import LogoInLight from '../assets/Fantasy Playoff Main Logo.png';
+import LogoInDark from '../assets/Fantasy Playoff Inverted Color.png';
 
 function Register() {
     const [user, setUser] = useState({
@@ -48,7 +49,7 @@ function Register() {
             <div className="w-full md:max-w-md max-w-xs">
                 <div className="flex-1 w-full">
                     <div className="flex flex-col justify-center items-center mb-20">
-                        <img src={LogoMain} alt="logo-main" className="md:w-72 w-48"/>
+                        <img src={LogoInDark} alt="logo-main" className="md:w-72 w-48"/>
                     </div>
                     <div className="mb-4 text-xl text-primary">
                         Register

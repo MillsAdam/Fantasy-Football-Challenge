@@ -370,9 +370,9 @@ function RosterComponent() {
                                                         <td>{player.team}</td>
                                                         <td>{player.position}</td>
                                                         <td className={
-                                                            ["P"].includes(player.injuryStatus?.charAt(0)) ? 'green-highlight' : 
-                                                            ["Q"].includes(player.injuryStatus?.charAt(0)) ? 'yellow-highlight' : 
-                                                            ["D", "O"].includes(player.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
+                                                            ["P"].includes(player.injuryStatus?.charAt(0)) ? 'text-green-500' : 
+                                                            ["Q"].includes(player.injuryStatus?.charAt(0)) ? 'text-yellow-500' : 
+                                                            ["D", "O"].includes(player.injuryStatus?.charAt(0)) ? 'text-red-500' : ''
                                                         }>
                                                             {player.injuryStatus ? player.injuryStatus.charAt(0) : 'A'}
                                                         </td>
@@ -424,9 +424,9 @@ function RosterComponent() {
                                                 <td>{rosterPlayer.team}</td>
                                                 <td>{rosterPlayer.position}</td>
                                                 <td className={
-                                                    ["P"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'green-highlight' : 
-                                                    ["Q"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'yellow-highlight' : 
-                                                    ["D", "O"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
+                                                    ["P"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'text-green-500' : 
+                                                    ["Q"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'text-yellow-500' : 
+                                                    ["D", "O"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'text-red-500' : ''
                                                 }>
                                                     {rosterPlayer.injuryStatus ? rosterPlayer.injuryStatus.charAt(0) : 'A'}
                                                 </td>

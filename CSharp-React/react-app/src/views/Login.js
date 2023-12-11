@@ -2,7 +2,8 @@ import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthService from '../services/AuthService';
 import { AuthContext } from '../context/AuthContext';
-import LogoMain from '../assets/Fantasy Playoff Main Logo.png'
+// import LogoInLight from '../assets/Fantasy Playoff Main Logo.png';
+import LogoInDark from '../assets/Fantasy Playoff Inverted Color.png';
 
 function Login() {
     const [user, setUser] = useState({ username: '', password: '' });
@@ -37,7 +38,7 @@ function Login() {
             <div className="w-full md:max-w-md max-w-xs">
                 <div className="flex-1 w-full">
                     <div className="flex flex-col justify-center items-center mb-20">
-                        <img src={LogoMain} alt="logo-main" className="md:w-72 w-48"/>
+                        <img src={LogoInDark} alt="logo-main" className="md:w-72 w-48"/>
                     </div>
                     <div className="text-xl text-primary mb-4">
                         Login

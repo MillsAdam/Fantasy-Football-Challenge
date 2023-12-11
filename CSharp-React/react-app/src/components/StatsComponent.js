@@ -271,9 +271,9 @@ function StatsComponent() {
                                                     <td>{player.position}</td>
                                                     <td>{player.week}</td>
                                                     <td className={
-                                                        ["P"].includes(player.injuryStatus?.charAt(0)) ? 'green-highlight' : 
-                                                        ["Q"].includes(player.injuryStatus?.charAt(0)) ? 'yellow-highlight' : 
-                                                        ["D", "O"].includes(player.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
+                                                        ["P"].includes(player.injuryStatus?.charAt(0)) ? 'text-green-500' : 
+                                                        ["Q"].includes(player.injuryStatus?.charAt(0)) ? 'text-yellow-500' : 
+                                                        ["D", "O"].includes(player.injuryStatus?.charAt(0)) ? 'text-red-500' : ''
                                                     }>
                                                         {player.injuryStatus ? player.injuryStatus.charAt(0) : 'A'}
                                                     </td>

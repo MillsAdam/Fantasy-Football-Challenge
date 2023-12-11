@@ -21,7 +21,7 @@ function App() {
     <Router>
       <ErrorBoundary>
         <ConfigProvider>
-          <div className="App">
+          <div className="text-center">
             <header className="App-header">
             </header>
             <Routes>

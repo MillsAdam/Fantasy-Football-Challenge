@@ -1,8 +1,8 @@
-.App {
+/* .App {
   text-align: center;
-}
+} */
 
-.App-logo {
+/* .App-logo {
   height: 40vmin;
   pointer-events: none;
   display: block;
@@ -22,27 +22,11 @@
   to {
     transform: rotate(360deg);
   }
-}
-
-.red-highlight {
-  color: red;
-}
-
-.green-highlight {
-  color: green;
-}
-
-.yellow-highlight {
-  color: yellow;
-}
+} */
 
 .custom-bullet li::marker {
   color: oklch(var(--a));
 }
 
-/* not used */
-.component-container {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-  border-radius: 5px;
-}
+/* marker:text-red-600 */
 
