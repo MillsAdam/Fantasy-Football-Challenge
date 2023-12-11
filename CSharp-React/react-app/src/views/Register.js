@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthService from '../services/AuthService';
+import LogoMain from '../assets/Fantasy Playoff Main Logo.png';
 
 function Register() {
     const [user, setUser] = useState({
@@ -43,68 +44,77 @@ function Register() {
     };
 
     return (
-        <div className="flex flex-col justify-between items-center flex-wrap w-90 md:w-30 my-4 mx-auto">
-            <div className="flex-1 p-4 w-full">
-                <div className="mb-4">
-                    Register
-                </div>
-                {registrationErrors && (
-                    <div role="alert">
-                        {registrationErrorMsg}
+        <div className="flex flex-col justify-center items-center min-h-screen">
+            <div className="w-full md:max-w-md max-w-xs">
+                <div className="flex-1 w-full">
+                    <div className="flex flex-col justify-center items-center mb-20">
+                        <img src={LogoMain} alt="logo-main" className="w-48"/>
                     </div>
-                )}
-                <form onSubmit={register}>
-                    <div className="mb-4">
-                        <div>
-                            Username:
+                    <div className="mb-4 text-xl text-primary">
+                        Register
+                    </div>
+                    {registrationErrors && (
+                        <div role="alert">
+                            {registrationErrorMsg}
                         </div>
-                        <input 
-                            className="input input-primary input-bordered w-full input-sm md:input-md" 
-                            type="text" 
-                            name="username" 
-                            id="username" 
-                            value={user.username} 
-                            onChange={e => setUser({ ...user, username: e.target.value })} 
-                            onFocus={clearErrors} 
-                            autoComplete="username" />
-                    </div>
-                    <div className="mb-4">
-                        <div>
-                            Password:
+                    )}
+                    <form onSubmit={register}>
+                        <div className="mb-4">
+                            <div>
+                                Username:
+                            </div>
+                            <input 
+                                className="input input-accent input-bordered w-full input-sm md:input-md" 
+                                type="text" 
+                                name="username" 
+                                id="username" 
+                                value={user.username} 
+                                onChange={e => setUser({ ...user, username: e.target.value })} 
+                                onFocus={clearErrors} 
+                                autoComplete="username" />
                         </div>
-                        <input 
-                            className="input input-primary input-bordered w-full input-sm md:input-md" 
-                            type="password" 
-                            name="password" 
-                            id="password" 
-                            value={user.password} 
-                            onChange={e => setUser({ ...user, password: e.target.value })} 
-                            onFocus={clearErrors} 
-                            autoComplete="new-password" />
-                    </div>
-                    <div className="mb-4">
-                        <div>
-                            Confirm Password:
+                        <div className="mb-4">
+                            <div>
+                                Password:
+                            </div>
+                            <input 
+                                className="input input-accent input-bordered w-full input-sm md:input-md" 
+                                type="password" 
+                                name="password" 
+                                id="password" 
+                                value={user.password} 
+                                onChange={e => setUser({ ...user, password: e.target.value })} 
+                                onFocus={clearErrors} 
+                                autoComplete="new-password" />
                         </div>
-                        <input 
-                            className="input input-primary input-bordered w-full input-sm md:input-md" 
-                            type="password" 
-                            name="confirmPassword" 
-                            id="confirmPassword" 
-                            value={user.confirmPassword} 
-                            onChange={e => setUser({ ...user, confirmPassword: e.target.value })} 
-                            onFocus={clearErrors} 
-                            autoComplete="new-password" />
+                        <div className="mb-4">
+                            <div>
+                                Confirm Password:
+                            </div>
+                            <input 
+                                className="input input-accent input-bordered w-full input-sm md:input-md mb-4" 
+                                type="password" 
+                                name="confirmPassword" 
+                                id="confirmPassword" 
+                                value={user.confirmPassword} 
+                                onChange={e => setUser({ ...user, confirmPassword: e.target.value })} 
+                                onFocus={clearErrors} 
+                                autoComplete="new-password" />
+                        </div>
+                        <button className="btn btn-primary btn-sm md:btn-md w-full mb-4" type="submit" value="Register">Register</button>
+                    </form>
+                    {registrationErrors && <div className="text-error my-4">{registrationErrorMsg}</div>}
+                    <div className="flex flex-row items-center justify-center mt-4">
+                        <div className="text-xs sm:text-sm mr-1">
+                            Already have an account?
+                        </div>
+                        <div className="btn btn-link btn-xs sm:btn-sm ml-1">
+                            <Link  to="/login">Login</Link>
+                        </div>
                     </div>
-                    <button className="btn btn-primary btn-outline btn-sm md:btn-md w-full" type="submit" value="Register">Register</button>
-                </form>
-                {registrationErrors && <div className="text-error mt-4">{registrationErrorMsg}</div>}
-                <div className="mt-4" style={{ fontSize: '0.9rem' }}>
-                    Already have an account? <Link className="btn btn-secondary btn-outline btn-xs sm:btn-sm ml-2" to="/login">Login</Link>
                 </div>
             </div>
-        </div>
-        
+        </div>  
     );
 
 

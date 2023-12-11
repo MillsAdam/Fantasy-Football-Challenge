@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthService from '../services/AuthService';
 import { AuthContext } from '../context/AuthContext';
+import LogoMain from '../assets/Fantasy Playoff Main Logo.png'
 
 function Login() {
     const [user, setUser] = useState({ username: '', password: '' });
@@ -32,47 +33,56 @@ function Login() {
     };
 
     return (
-        <div className="flex flex-col justify-between items-center flex-wrap w-90 md:w-30 my-4 mx-auto">
-            <div className="flex-1 p-4 w-full">
-                <div className="mb-4">
-                    Login
-                </div>
-                <form onSubmit={login}>
-                    <div className="mb-4">
-                        <div>
-                            Username:
-                        </div>
-                        <input 
-                            className="input input-primary input-bordered w-full input-sm md:input-md" 
-                            type="text" 
-                            name="username" 
-                            id="username" 
-                            value={user.username} 
-                            onChange={handleInputChange} 
-                            autoComplete="username" />
+        <div className="flex flex-col justify-center items-center min-h-screen">
+            <div className="w-full md:max-w-md max-w-xs">
+                <div className="flex-1 w-full">
+                    <div className="flex flex-col justify-center items-center mb-20">
+                        <img src={LogoMain} alt="logo-main" className="w-48"/>
                     </div>
-                    <div className="mb-4">
-                        <div>
-                            Password:
-                        </div>
-                        <input 
-                            className="input input-primary input-bordered w-full input-sm md:input-md" 
-                            type="password" 
-                            name="password" 
-                            id="password" 
-                            value={user.password} 
-                            onChange={handleInputChange} 
-                            autoComplete="current-password" />
+                    <div className="text-xl text-primary mb-4">
+                        Login
                     </div>
-                    <button className="btn btn-primary btn-outline btn-sm md:btn-md w-full" type="submit" value="Login">Login</button>
-                </form>
-                {invalidCredentials && <p className="text-error mt-4">Invalid credentials.</p>}
-                <div className="mt-4" style={{ fontSize: '0.9rem' }}>
-                    Don't have an account? <Link className="btn btn-secondary btn-outline btn-xs sm:btn-sm ml-2" to="/register">Register</Link>
+                    <form onSubmit={login}>
+                        <div className="mb-4">
+                            <div>
+                                Username:
+                            </div>
+                            <input 
+                                className="input input-accent input-bordered w-full input-sm md:input-md" 
+                                type="text" 
+                                name="username" 
+                                id="username" 
+                                value={user.username} 
+                                onChange={handleInputChange} 
+                                autoComplete="username" />
+                        </div>
+                        <div className="mb-4">
+                            <div>
+                                Password:
+                            </div>
+                            <input 
+                                className="input input-accent input-bordered w-full input-sm md:input-md" 
+                                type="password" 
+                                name="password" 
+                                id="password" 
+                                value={user.password} 
+                                onChange={handleInputChange} 
+                                autoComplete="current-password" />
+                        </div>
+                        <button className="btn btn-primary btn-sm md:btn-md w-full my-4" type="submit" value="Login">Login</button>
+                    </form>
+                    {invalidCredentials && <p className="text-error my-4">Invalid credentials.</p>}
+                    <div className="flex flex-row items-center justify-center mt-4">
+                        <div className="text-xs sm:text-sm mr-1">
+                            Don't have an account?
+                        </div>
+                        <div className="btn btn-link btn-xs sm:btn-sm ml-1">
+                            <Link to="/register">Register</Link>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        
     );
 }
 

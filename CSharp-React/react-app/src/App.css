@@ -36,36 +36,13 @@
   color: yellow;
 }
 
+.custom-bullet li::marker {
+  color: oklch(var(--a));
+}
+
+/* not used */
 .component-container {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   border-radius: 5px;
-}
-
-primary-color{
-  color: #00cffd;
-}
-secondary-color{
-  color: #008100;
-}
-accent-color{
-  color: #408500;
-}
-neutral-color{
-  color: #2b2c26;
-}
-base-100-color{
-  color: #142730;
-}
-info-color{
-  color: #00ffff;
-}
-success-color{
-  color: #008f51;
-}
-warning-color{
-  color: #af6b00;
-}
-error-color{
-  color: #ff696e;
 }
 

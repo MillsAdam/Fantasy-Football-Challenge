@@ -5,6 +5,7 @@ import LineupService from "../services/LineupService";
 import { AuthContext } from "../context/AuthContext";
 import { useConfig } from "../context/ConfigContext";
 import { allLineupPositions, positionSpecificOptions, gameWeekOptions } from "../constants/LineupConstants";
+import NavigationBar from "./NavigationBar";
 
 
 function LineupComponent() {
@@ -146,187 +147,191 @@ function LineupComponent() {
     }
 
     return (
-        <div>
-            {isLoading ? (<p>Loading...</p>) : (
-                <div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
-                    <div className="flex-1 w-full p-4">
-                        <div className="mb-4">
-                            My Lineup
+        <div className="flex flex-col min-h-screen">
+            <NavigationBar />
+            <div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
+                <div className="flex-1 w-full p-4">
+                    <div className="mb-4 text-xl text-primary">
+                        My Lineup
+                    </div>
+                    {lineupPlayers.length > 0 && (
+                        <div className="overflow-auto">
+                            <table className="table table-xs table-pin-rows">
+                                <thead>
+                                    <tr className="bg-base-300">
+                                        <th>Rem</th>
+                                        <th>Conf</th>
+                                        <th>Team</th>
+                                        <th>Pos</th>
+                                        <th>Inj</th>
+                                        <th>Player</th>
+                                        <th>Proj</th>
+                                        <th>Points</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {lineupPlayers.map((lineupPlayer, index) => (
+                                        <tr key={index} className="hover">
+                                            <td>
+                                                <button 
+                                                    className="btn btn-secondary btn-outline btn-xs" 
+                                                    disabled={isLineupLocked} 
+                                                    onClick={(e) => handleRemovePlayerFromLineup(e, lineupPlayer.playerId)}>-</button>
+                                            </td>
+                                            <td>{lineupPlayer.conference}</td>
+                                            <td>{lineupPlayer.team}</td>
+                                            <td>{lineupPlayer.lineupPosition}</td>
+                                            <td className={
+                                                ["P"].includes(lineupPlayer.injuryStatus?.charAt(0)) ? 'green-highlight' : 
+                                                ["Q"].includes(lineupPlayer.injuryStatus?.charAt(0)) ? 'yellow-highlight' : 
+                                                ["D", "O"].includes(lineupPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
+                                            }>
+                                                {lineupPlayer.injuryStatus ? lineupPlayer.injuryStatus.charAt(0) : 'A'}
+                                            </td>
+                                            <td>{lineupPlayer.name}</td>
+                                            <td>{lineupPlayer.fantasyPointsProj}</td>
+                                            <td>{lineupPlayer.fantasyPoints}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
-                        {lineupPlayers.length > 0 && (
+                    )}
+                </div>
+
+                <div className="flex-1 w-full p-4">
+                    <div className="mb-4 text-xl text-primary">
+                        My Roster
+                    </div>
+                    {activeRosterPlayers.length > 0 && (
+                        <div className="overflow-auto">
+                            <table className="table table-xs table-pin-rows">
+                                <thead>
+                                    <tr className="bg-base-300">
+                                        <th>Lineup</th>
+                                        <th>Add</th>
+                                        <th>Conf</th>
+                                        <th>Team</th>
+                                        <th>Pos</th>
+                                        <th>Inj</th>
+                                        <th>Player</th>
+                                        <th>Avg</th>
+                                        <th>Proj</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {activeRosterPlayers.map((rosterPlayer, index) => (
+                                        <tr key={index} className="hover">
+                                            <td>
+                                                <select 
+                                                    className="select select-accent w-full select-xs" 
+                                                    id={`lineup-position-${index}`} 
+                                                    disabled={getFilteredLineupOptions(rosterPlayer.position).length === 0 || isLineupLocked}
+                                                >
+                                                    {getFilteredLineupOptions(rosterPlayer.position).map((option) => (
+                                                        <option key={option} value={option}>{option}</option>
+                                                    ))}
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <button 
+                                                    className="btn btn-primary btn-outline btn-xs" 
+                                                    disabled={getFilteredLineupOptions(rosterPlayer.position).length === 0 || isLineupLocked} 
+                                                    onClick={(e) => handleAddPlayerToLineup(e, rosterPlayer.playerId, document.getElementById(`lineup-position-${index}`).value)}>+</button>
+                                            </td>
+                                            <td>{rosterPlayer.conference}</td>
+                                            <td>{rosterPlayer.team}</td>
+                                            <td>{rosterPlayer.position}</td>
+                                            <td className={
+                                                ["P"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'green-highlight' : 
+                                                ["Q"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'yellow-highlight' : 
+                                                ["D", "O"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
+                                            }>
+                                                {rosterPlayer.injuryStatus ? rosterPlayer.injuryStatus.charAt(0) : 'A'}
+                                            </td>
+                                            <td>{rosterPlayer.name}</td>
+                                            <td>{rosterPlayer.fantasyPointsAvg}</td>
+                                            <td>{rosterPlayer.fantasyPointsProj}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </div> 
+                
+                <div className="flex-1 w-full p-4">
+                    <div className="mb-4 text-xl text-primary">
+                        Weekly Lineup
+                    </div>
+                    <form onSubmit={getLineupPlayersByWeek}>
+                        <select className="select select-accent w-full select-sm md:select-md mb-4" 
+                            value={selectedGameWeek} 
+                            onChange={(e) => setSelectedGameWeek(e.target.value)}
+                        >
+                            <option value="" disabled hidden>Select Week</option>
+                            {gameWeekOptions.map((option) => (
+                                <option key={option} value={option}>Week {option}</option>
+                            ))}
+                        </select>
+                        <div className="flex flex-row justify-between align-center flex-nowrap mb-4">
+                            <button 
+                                className="btn btn-primary btn-sm md:btn-md w-45" 
+                                type="submit" 
+                                disabled={isLoading || selectedGameWeek === ""}
+                            >
+                                Submit
+                            </button>
+                            <button 
+                                className="btn btn-secondary btn-sm md:btn-md w-45" 
+                                type="button" 
+                                onClick={clearGameWeek} 
+                                disabled={isLoading || selectedGameWeek === ""}
+                            >
+                                Clear
+                            </button>
+                        </div>
+                        
+                    </form>
+                    {weeklyLineupPlayers.length > 0 && (
+                        <div>
+                            <div className="flex flex-row items-center justify-center">
+                                <div className="mr-2">
+                                    Weekly Score:
+                                </div>
+                                <div className="ml-2 text-success">
+                                    {weeklyScore}
+                                </div>
+                            </div>
                             <div className="overflow-auto">
                                 <table className="table table-xs table-pin-rows">
                                     <thead>
                                         <tr>
-                                            <th>Rem</th>
                                             <th>Conf</th>
                                             <th>Team</th>
                                             <th>Pos</th>
-                                            <th>Inj</th>
                                             <th>Player</th>
-                                            <th>Proj</th>
                                             <th>Points</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {lineupPlayers.map((lineupPlayer, index) => (
+                                        {weeklyLineupPlayers.map((lineupPlayer, index) => (
                                             <tr key={index} className="hover">
-                                                <td>
-                                                    <button 
-                                                        className="btn btn-warning btn-outline btn-xs" 
-                                                        disabled={isLineupLocked} 
-                                                        onClick={(e) => handleRemovePlayerFromLineup(e, lineupPlayer.playerId)}>-</button>
-                                                </td>
                                                 <td>{lineupPlayer.conference}</td>
                                                 <td>{lineupPlayer.team}</td>
                                                 <td>{lineupPlayer.lineupPosition}</td>
-                                                <td className={
-                                                    ["P"].includes(lineupPlayer.injuryStatus?.charAt(0)) ? 'green-highlight' : 
-                                                    ["Q"].includes(lineupPlayer.injuryStatus?.charAt(0)) ? 'yellow-highlight' : 
-                                                    ["D", "O"].includes(lineupPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
-                                                }>
-                                                    {lineupPlayer.injuryStatus ? lineupPlayer.injuryStatus.charAt(0) : 'A'}
-                                                </td>
                                                 <td>{lineupPlayer.name}</td>
-                                                <td>{lineupPlayer.fantasyPointsProj}</td>
                                                 <td>{lineupPlayer.fantasyPoints}</td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
                             </div>
-                        )}
-                    </div>
-
-                    <div className="flex-1 w-full p-4">
-                        <div className="mb-4">
-                            My Roster
                         </div>
-                        {activeRosterPlayers.length > 0 && (
-                            <div className="overflow-auto">
-                                <table className="table table-xs table-pin-rows">
-                                    <thead>
-                                        <tr>
-                                            <th>Lineup</th>
-                                            <th>Add</th>
-                                            <th>Conf</th>
-                                            <th>Team</th>
-                                            <th>Pos</th>
-                                            <th>Inj</th>
-                                            <th>Player</th>
-                                            <th>Avg</th>
-                                            <th>Proj</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {activeRosterPlayers.map((rosterPlayer, index) => (
-                                            <tr key={index} className="hover">
-                                                <td>
-                                                    <select 
-                                                        className="select select-primary w-full select-xs" 
-                                                        id={`lineup-position-${index}`} 
-                                                        disabled={getFilteredLineupOptions(rosterPlayer.position).length === 0 || isLineupLocked}
-                                                    >
-                                                        {getFilteredLineupOptions(rosterPlayer.position).map((option) => (
-                                                            <option key={option} value={option}>{option}</option>
-                                                        ))}
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <button 
-                                                        className="btn btn-success btn-outline btn-xs" 
-                                                        disabled={getFilteredLineupOptions(rosterPlayer.position).length === 0 || isLineupLocked} 
-                                                        onClick={(e) => handleAddPlayerToLineup(e, rosterPlayer.playerId, document.getElementById(`lineup-position-${index}`).value)}>+</button>
-                                                </td>
-                                                <td>{rosterPlayer.conference}</td>
-                                                <td>{rosterPlayer.team}</td>
-                                                <td>{rosterPlayer.position}</td>
-                                                <td className={
-                                                    ["P"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'green-highlight' : 
-                                                    ["Q"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'yellow-highlight' : 
-                                                    ["D", "O"].includes(rosterPlayer.injuryStatus?.charAt(0)) ? 'red-highlight' : ''
-                                                }>
-                                                    {rosterPlayer.injuryStatus ? rosterPlayer.injuryStatus.charAt(0) : 'A'}
-                                                </td>
-                                                <td>{rosterPlayer.name}</td>
-                                                <td>{rosterPlayer.fantasyPointsAvg}</td>
-                                                <td>{rosterPlayer.fantasyPointsProj}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        )}
-                    </div> 
-                    
-                    <div className="flex-1 w-full p-4">
-                        <div className="mb-4">
-                            Weekly Lineup
-                        </div>
-                        <form onSubmit={getLineupPlayersByWeek}>
-                            <select className="select select-primary w-full select-sm md:select-md mb-4" 
-                                value={selectedGameWeek} 
-                                onChange={(e) => setSelectedGameWeek(e.target.value)}
-                            >
-                                <option value="" disabled hidden>Select Week</option>
-                                {gameWeekOptions.map((option) => (
-                                    <option key={option} value={option}>Week {option}</option>
-                                ))}
-                            </select>
-                            <div className="flex flex-row justify-between align-center flex-nowrap mb-4">
-                                <button 
-                                    className="btn btn-success btn-outline btn-sm md:btn-md w-45" 
-                                    type="submit" 
-                                    disabled={isLoading || selectedGameWeek === ""}
-                                >
-                                    Submit
-                                </button>
-                                <button 
-                                    className="btn btn-warning btn-outline btn-sm md:btn-md w-45" 
-                                    type="button" 
-                                    onClick={clearGameWeek} 
-                                    disabled={isLoading || selectedGameWeek === ""}
-                                >
-                                    Clear
-                                </button>
-                            </div>
-                            
-                        </form>
-                        {weeklyLineupPlayers.length > 0 && (
-                            <div>
-                                <div>
-                                    <h3>Weekly Score: <strong>{weeklyScore}</strong></h3>
-                                </div>
-                                <div className="overflow-auto">
-                                    <table className="table table-xs table-pin-rows">
-                                        <thead>
-                                            <tr>
-                                                <th>Conf</th>
-                                                <th>Team</th>
-                                                <th>Pos</th>
-                                                <th>Player</th>
-                                                <th>Points</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {weeklyLineupPlayers.map((lineupPlayer, index) => (
-                                                <tr key={index} className="hover">
-                                                    <td>{lineupPlayer.conference}</td>
-                                                    <td>{lineupPlayer.team}</td>
-                                                    <td>{lineupPlayer.lineupPosition}</td>
-                                                    <td>{lineupPlayer.name}</td>
-                                                    <td>{lineupPlayer.fantasyPoints}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            
-                        )}
-                    </div>
+                        
+                    )}
                 </div>
-             )}
+            </div>
              <div className="message-container">
                 {error && <p>{error}</p>}
             </div> 

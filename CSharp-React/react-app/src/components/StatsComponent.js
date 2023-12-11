@@ -18,6 +18,7 @@ import {
     positionColumns, 
     headerColumns 
 } from "../constants/StatsConstants";
+import NavigationBar from "./NavigationBar";
 
 function StatsComponent() {
     // const { authToken, currentUser } = useContext(AuthContext);
@@ -67,7 +68,8 @@ function StatsComponent() {
             selectedPosition === 'te' || 
             selectedPosition === 'flex' || 
             selectedPosition === 'k' || 
-            selectedPosition === 'def') {
+            selectedPosition === 'def' || 
+            selectedPosition === '') {
             setSelectedInterval('');
             setSelectedCategory('');
             setSelectedFilter('');
@@ -122,13 +124,14 @@ function StatsComponent() {
     }
 
     return (
-        <div>
+        <div className="flex flex-col min-h-screen">
+            <NavigationBar />
             <div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
                 <div className="flex-1 w-full p-4">
                     <div className="search-container">
                         <form onSubmit={searchPlayerStats}>
                             <div>
-                                <select className="select select-primary w-full select-sm md:select-md mb-4" 
+                                <select className="select select-accent w-full select-sm md:select-md mb-4" 
                                     value={selectedPosition} 
                                     onChange={(e) => setSelectedPosition(e.target.value)}
                                 >
@@ -139,7 +142,7 @@ function StatsComponent() {
                                 </select>
                             </div>
                             <div>
-                                <select className="select select-primary w-full select-sm md:select-md mb-4" 
+                                <select className="select select-accent w-full select-sm md:select-md mb-4" 
                                     value={selectedInterval} 
                                     onChange={(e) => setSelectedInterval(e.target.value)} 
                                     disabled={selectedPosition === ''}
@@ -152,7 +155,7 @@ function StatsComponent() {
                             </div>
                             {(selectedInterval === 'weekly total' || selectedInterval === 'weekly projected') && (
                                 <div>
-                                    <select className="select select-primary w-full select-sm md:select-md mb-4" 
+                                    <select className="select select-accent w-full select-sm md:select-md mb-4" 
                                         value={selectedWeek} 
                                         onChange={(e) => setSelectedWeek(e.target.value)}
                                     >
@@ -166,7 +169,7 @@ function StatsComponent() {
                                 </div>
                             )}
                             <div>
-                                <select className="select select-primary w-full select-sm md:select-md mb-4" 
+                                <select className="select select-accent w-full select-sm md:select-md mb-4" 
                                     value={selectedCategory} 
                                     onChange={(e) => setSelectedCategory(e.target.value)} 
                                     disabled={selectedPosition === '' || selectedInterval === ''}
@@ -180,7 +183,7 @@ function StatsComponent() {
                             {selectedCategory !== 'all' && selectedCategory !== '' && (
                                 <div>
                                     {(selectedCategory === 'conf' || selectedCategory === 'team') ? (
-                                        <select className="select select-primary w-full select-sm md:select-md mb-4" 
+                                        <select className="select select-accent w-full select-sm md:select-md mb-4" 
                                             value={selectedFilter}
                                             onChange={(e) => setSelectedFilter(e.target.value)}
                                         >
@@ -193,7 +196,7 @@ function StatsComponent() {
                                             ))}
                                         </select>
                                     ) : selectedCategory === 'name' ? (
-                                        <input className="input input-primary input-bordered w-full input-sm md:input-md mb-4" 
+                                        <input className="input input-accent input-bordered w-full input-sm md:input-md mb-4" 
                                             type="text" 
                                             value={selectedFilter} 
                                             placeholder="Enter Name" 
@@ -204,7 +207,7 @@ function StatsComponent() {
                             )}
                             <div className="flex flex-row justify-between align-center flex-nowrap mb-4">
                                 <button 
-                                    className="btn btn-success btn-outline btn-sm md:btn-md w-45" 
+                                    className="btn btn-primary btn-sm md:btn-md w-45" 
                                     type="submit" 
                                     disabled=
                                         {isLoading || 
@@ -219,9 +222,12 @@ function StatsComponent() {
                                     Search
                                 </button>
                                 <button 
-                                    className="btn btn-warning btn-outline btn-sm md:btn-md w-45" 
+                                    className="btn btn-secondary btn-sm md:btn-md w-45" 
                                     onClick={clearSearch} 
-                                    disabled={isLoading}
+                                    disabled=
+                                        {isLoading || 
+                                        (selectedPosition === '' && selectedInterval === '' && selectedCategory === '' && selectedFilter === '' && selectedWeek === '')
+                                    }
                                 >
                                         Clear
                                 </button>
@@ -234,14 +240,14 @@ function StatsComponent() {
                             <div className="overflow-auto">
                                 <table className="table table-xs table-pin-rows">
                                     <thead>
-                                        <tr>
+                                        <tr className="bg-base-300">
                                             <th colSpan="6">Player Info</th>
                                             {headerColumns[selectedPosition].map((column) => (
                                                 <th key={column.label} colSpan={column.colSpan}>{column.label}</th>
                                             ))}
                                             <th colSpan="2">Points</th>
                                         </tr>
-                                        <tr>
+                                        <tr className="bg-base-200">
                                             <th>Conf</th>
                                             <th>Team</th>
                                             <th>Pos</th>

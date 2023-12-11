@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+import LogoSymbol from '../assets/Fantasy Playoff Logo Symbol.png';
 
 function NavigationBar() {
     const { authToken, currentUser } = useAuth();
@@ -24,7 +25,11 @@ function NavigationBar() {
     return (
         <div className="navbar bg-base-300">
             <div className="navbar-start">
-                <Link to="/" className="btn btn-ghost text-xl">FPC</Link>
+                <div className="btn btn-ghost text-xl">
+                    <Link to="/">
+                        <img src={LogoSymbol} alt="logo-symbol" className="w-6 inline-block"/>
+                    </Link>
+                </div>
             </div>
             <div className="navbar-center hidden lg:flex grow">
                 {authToken ? (
@@ -58,7 +63,7 @@ function NavigationBar() {
                         </button>
                         {authToken ? (
                             <div className={`${isMenuOpen ? 'block' : 'hidden'} absolute w-full z-50 lg:w-auto`}>
-                                <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52" >
+                                <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-200 rounded-box w-52" >
                                     <li><Link to="/" onClick={handleLinkClick}>Home</Link></li>
                                     <li><Link to="/league" onClick={handleLinkClick}>League</Link></li>
                                     <li><Link to="/roster" onClick={handleLinkClick}>Roster</Link></li>
@@ -72,7 +77,7 @@ function NavigationBar() {
                             </div>
                         ) : (
                             <div className={`${isMenuOpen ? 'block' : 'hidden'} absolute w-full z-50 lg:w-auto`}>
-                                <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+                                <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-200 rounded-box w-52">
                                     <li><Link to="/login" onClick={handleLinkClick}>Login</Link></li>
                                     <li><Link to="/register" onClick={handleLinkClick}>Register</Link></li>
                                 </ul>

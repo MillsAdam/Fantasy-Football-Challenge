@@ -3,6 +3,7 @@ import LeagueService from "../services/LeagueService";
 import LineupService from "../services/LineupService";
 import RosterService from "../services/RosterService";
 import { AuthContext } from "../context/AuthContext";
+import NavigationBar from "./NavigationBar";
 
 function LeagueComponent() {
     const { authToken, currentUser } = useContext(AuthContext);
@@ -18,7 +19,6 @@ function LeagueComponent() {
     const [lineup, setLIneup] = useState([]);
     const [roster, setRoster] = useState([]);
     const [isRosterVisible, setIsRosterVisible] = useState(false);
-    const [isLineupVisible, setIsLineupVisible] = useState(false);
 
     useEffect(() => {
         async function checkUserTeam() {
@@ -83,7 +83,7 @@ function LeagueComponent() {
             setIsRosterVisible(false)
             return;
         } else {
-            fetUserRoster(selectedUserId);
+            fetchUserRoster(selectedUserId);
             setIsRosterVisible(true);
         }
     };
@@ -103,7 +103,7 @@ function LeagueComponent() {
         setIsLoading(false);
     }
 
-    async function fetUserRoster(userId) {
+    async function fetchUserRoster(userId) {
         setIsLoading(true);
         try {
             const rosterData = await RosterService.getRosterPlayersByUserId(userId);
@@ -116,10 +116,10 @@ function LeagueComponent() {
     }
 
     return (
-        <div>
-            {isLoading ? (<p>Loading...</p>) : (
+        <div className="flex flex-col min-h-screen">
+            <NavigationBar />
                 <div className="flex md:flex-row md:justify-between md:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
-                    <div className="flex-1 w-full p-4">
+                    <div className="flex-1 w-full">
                         {!userHasTeam && (
                             <div>
                                 Create a Roster to view Leaderboard
@@ -128,12 +128,12 @@ function LeagueComponent() {
                         {userHasTeam && (
                             <div >
                                 <div className="mb-4">
-                                    Leaderboard
+                                    <p className="text-xl text-primary">Leaderboard</p>
                                 </div>
                                 <div className="overflow-auto">
                                     <table className="table table-xs table-pin-rows">
                                         <thead>
-                                            <tr>
+                                            <tr className="bg-base-300">
                                                 <th>Rank</th>
                                                 <th>User</th>
                                                 <th>Team</th>
@@ -167,7 +167,7 @@ function LeagueComponent() {
                             <div>
                                 <div className="flex my-4 items-center justify-evenly">
                                     <div>
-                                        <strong>{selectedTeamName}</strong>
+                                        <p className="text-info">{selectedTeamName}</p>
                                     </div>
                                     <div className="flex flex-col">
                                         <div className="form-control">
@@ -178,6 +178,7 @@ function LeagueComponent() {
                                                     className="toggle toggle-info ml-2 md:ml-4" 
                                                     checked={isRosterVisible} 
                                                     onChange={() => handleRosterSelection(selectedUserId)}
+                                                    disabled={isLoading}
                                                 />
                                             </label>
                                         </div>
@@ -186,13 +187,18 @@ function LeagueComponent() {
                                 
                                 {roster.length !== 0 && (
                                     <div className="mb-4">
-                                        <div className="mb-4">
-                                            Total Score: <strong>{selectedTotalScore}</strong>
+                                        <div className="mb-4 flex items-center justify-center flex-row">
+                                            <div className="mr-2">
+                                                Total Score:
+                                            </div>
+                                            <div className="ml-2 text-success">
+                                                {selectedTotalScore}
+                                            </div>
                                         </div>
                                         <div className="overflow-auto">
                                             <table className="table table-xs table-pin-rows">
                                                 <thead>
-                                                    <tr>
+                                                    <tr className="bg-base-300">
                                                         <th>Conf</th>
                                                         <th>Team</th>
                                                         <th>Pos</th>
@@ -220,9 +226,10 @@ function LeagueComponent() {
                                     {[1, 2, 3, 4].map(week => (
                                         <button 
                                             role="tab" 
-                                            className={`tab ${selectedWeek === week ? 'tab-active text-white' : ''}`}
+                                            className={`tab ${selectedWeek === week ? 'tab-active text-info font-bold' : ''}`}
                                             key={week} 
-                                            onClick={() => handleWeekSelection(week)}
+                                            onClick={() => handleWeekSelection(week)} 
+                                            disabled={isLoading}
                                         >
                                             Week {week}
                                         </button>
@@ -231,13 +238,18 @@ function LeagueComponent() {
                                 
                                 {selectedWeek && (
                                     <div>
-                                        <div className="mb-4">
-                                            Week {selectedWeek} Score: <strong>{selectedWeeklyScore}</strong>
+                                        <div className="mb-4 flex flex-row items-center justify-center">
+                                            <div className="mr-2">
+                                                Week {selectedWeek} Score:
+                                            </div>
+                                            <div className="ml-2 text-success">
+                                                {selectedWeeklyScore}
+                                            </div>
                                         </div>
                                         <div className="overflow-auto">
                                             <table className="table table-xs table-pin-rows">
                                                 <thead>
-                                                    <tr>
+                                                    <tr className="bg-base-300">
                                                         <th>Conf</th>
                                                         <th>Team</th>
                                                         <th>Pos</th>
@@ -266,8 +278,6 @@ function LeagueComponent() {
                         )}
                     </div>
                 </div>
-                
-            )}
             <div className="message-container">
                 {error && <p>{error}</p>}
             </div>

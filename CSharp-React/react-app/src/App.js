@@ -3,7 +3,6 @@ import React from 'react';
 import ErrorBoundary from './ErrorBoundary';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ConfigProvider } from './context/ConfigContext';
-import NavigationBar from './components/NavigationBar';
 import Home from './views/Home';
 import Login from './views/Login';
 import Logout from './views/Logout';
@@ -24,7 +23,6 @@ function App() {
         <ConfigProvider>
           <div className="App">
             <header className="App-header">
-              <NavigationBar />
             </header>
             <Routes>
               <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
