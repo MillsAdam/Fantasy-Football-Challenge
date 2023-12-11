@@ -318,6 +318,8 @@ function AdminComponent() {
 					</button>
 				</div>
 
+				<div className="divider lg:divider-horizontal divider-vertical"></div>
+
 				<div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
 					<div className="mb-4 text-primary text-xl">Configuration</div>
 					<form onSubmit={updateConfiguration}>
@@ -378,7 +380,12 @@ function AdminComponent() {
 										.map((config, index) => (
 											<tr key={index} className="bg-neutral hover:bg-info-content">
 												<td>{configKeyDisplayNames[config.configKey] || config.configKey}</td>
-												<td>{config.configKey === "lockRosters" || config.configKey === "lockLineups" || config.configKey === "currentWeek" || config.configKey === "startingLineupWeek" ? configValueOptions[config.configKey][config.configValue] : config.configValue}</td>
+												<td className={ 
+													(config.configKey === 'lockRosters' || config.configKey === 'lockLineups') && 
+													configValueOptions[config.configKey][config.configValue] === 'Unlocked' ? 'text-green-500' :
+													(config.configKey === 'lockRosters' || config.configKey === 'lockLineups') && 
+													configValueOptions[config.configKey][config.configValue] === 'Locked' ? 'text-red-500' : '' 
+												}>{config.configKey === "lockRosters" || config.configKey === "lockLineups" || config.configKey === "currentWeek" || config.configKey === "startingLineupWeek" ? configValueOptions[config.configKey][config.configValue] : config.configValue}</td>
 											</tr>
 										))}
 								</tbody>
@@ -386,6 +393,8 @@ function AdminComponent() {
 						</div>
 					)}
 				</div>
+
+				<div className="divider lg:divider-horizontal divider-vertical"></div>
 
 				<div className="flex-1 w-full  mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
 					<div className="mb-4 text-primary text-xl">Team Status</div>
@@ -420,7 +429,7 @@ function AdminComponent() {
 									{teams.map((team, index) => (
 										<tr key={index} className="bg-neutral hover:bg-info-content">
 											<td>{teamNameDisplayNames[team.team] || team.team}</td>
-											<td className={team.status === "Active" ? "green-highlight" : team.status === "Inactive" ? "red-highlight" : ""}>{team.status}</td>
+											<td className={team.status === "Active" ? 'text-green-500' : team.status === "Inactive" ? 'text-red-500' : ""}>{team.status}</td>
 										</tr>
 									))}
 								</tbody>

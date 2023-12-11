@@ -24,8 +24,8 @@ export const configValueOptions = {
         22: 'Super Bowl' 
     },
     'currentLineupWeek': [1, 2, 3, 4],
-    'lockRosters': { 1: 'True', 2: 'False' },
-    'lockLineups': { 1: 'True', 2: 'False' },
+    'lockRosters': { 1: 'Locked', 2: 'Unlocked' },
+    'lockLineups': { 1: 'Locked', 2: 'Unlocked' },
     'startingLineupWeek': { 
         1: 'Week 1', 
         2: 'Week 2', 

@@ -387,6 +387,8 @@ function RosterComponent() {
                             )
                         )}
                     </div>
+
+                    <div className="divider lg:divider-horizontal divider-vertical"></div>
                     
                     <div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
                         <div className="mb-4 text-xl text-primary">

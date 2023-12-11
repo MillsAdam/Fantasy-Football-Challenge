@@ -49,6 +49,7 @@ function LeagueComponent() {
     const handleUserClick = async (userId, teamName, totalScore) => {
         if (selectedUserId === userId) {
             setSelectedUserId(null);
+            setIsRosterVisible(false);
             setSelectedTeamName(null);
             setSelectedTotalScore(null);
             setSelectedWeek(null);
@@ -59,6 +60,7 @@ function LeagueComponent() {
             setSelectedUserId(userId);
             setSelectedTeamName(teamName);
             setSelectedTotalScore(totalScore);
+            setIsRosterVisible(false);
             setSelectedWeek(null);
             setRoster([]);
             setLIneup([]);
