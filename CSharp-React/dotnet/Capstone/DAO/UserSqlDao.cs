@@ -2,11 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using Capstone.Exceptions;
 using Capstone.Models;
 using Capstone.Security;
 using Capstone.Security.Models;
+using Microsoft.Extensions.Logging;
 using Npgsql;
+using NpgsqlTypes;
 
 namespace Capstone.DAO
 {
@@ -23,7 +26,7 @@ namespace Capstone.DAO
         {
             IList<User> users = new List<User>();
 
-            string sql = "SELECT user_id, username, password_hash, salt, user_role FROM users";
+            string sql = "SELECT user_id, username, password_hash, salt, user_role, current_league_id FROM users";
 
             try
             {
@@ -53,7 +56,7 @@ namespace Capstone.DAO
         {
             User user = null;
 
-            string sql = "SELECT user_id, username, password_hash, salt, user_role FROM users WHERE user_id = @user_id";
+            string sql = "SELECT user_id, username, password_hash, salt, user_role, current_league_id FROM users WHERE user_id = @user_id";
 
             try
             {
@@ -83,7 +86,7 @@ namespace Capstone.DAO
         {
             User user = null;
 
-            string sql = "SELECT user_id, username, password_hash, salt, user_role FROM users WHERE username = @username";
+            string sql = "SELECT user_id, username, password_hash, salt, user_role, current_league_id FROM users WHERE username = @username";
 
             try
             {
@@ -92,6 +95,7 @@ namespace Capstone.DAO
                     conn.Open();
 
                     NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
+                    // cmd.Parameters.Add(new NpgsqlParameter("@username", NpgsqlDbType.Text) { Value = username ?? (object)DBNull.Value });
                     cmd.Parameters.AddWithValue("@username", username);
                     NpgsqlDataReader reader = cmd.ExecuteReader();
 
@@ -147,6 +151,22 @@ namespace Capstone.DAO
             return GetUserByUsername(username);
         }
 
+        public async Task SetCurrentLeagueAsync(int userId, int fantasyLeagueId)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+            {
+                await connection.OpenAsync();
+
+                string sql = "UPDATE users SET current_league_id = @leagueId WHERE user_id = @userId;";
+
+                NpgsqlCommand command = new NpgsqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@leagueId", fantasyLeagueId);
+                command.Parameters.AddWithValue("@userId", userId);
+
+                await command.ExecuteNonQueryAsync();
+            }
+        }
+
         private User MapRowToUser(NpgsqlDataReader reader)
         {
             User user = new User();
@@ -155,6 +175,7 @@ namespace Capstone.DAO
             user.PasswordHash = Convert.ToString(reader["password_hash"]);
             user.Salt = Convert.ToString(reader["salt"]);
             user.Role = Convert.ToString(reader["user_role"]);
+            user.FantasyLeagueId = reader["current_league_id"] == DBNull.Value ? (int?)null : Convert.ToInt32(reader["current_league_id"]);
             return user;
         }
     }

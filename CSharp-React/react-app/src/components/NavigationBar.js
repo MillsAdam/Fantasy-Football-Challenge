@@ -36,6 +36,7 @@ function NavigationBar() {
                     <ul className="menu menu-horizontal px-1 justify-center flex-1">
                         <li><Link to="/" className="btn btn-ghost rounded-btn text-lg">Home</Link></li>
                         <li><Link to="/league" className="btn btn-ghost rounded-btn text-lg">League</Link></li>
+                        <li><Link to="/leaderboard" className="btn btn-ghost rounded-btn text-lg">Leaderboard</Link></li>
                         <li><Link to="/roster" className="btn btn-ghost rounded-btn text-lg">Roster</Link></li>
                         <li><Link to="/lineup" className="btn btn-ghost rounded-btn text-lg">Lineup</Link></li>
                         <li><Link to="/stats" className="btn btn-ghost rounded-btn text-lg">Stats</Link></li>
@@ -66,6 +67,7 @@ function NavigationBar() {
                                 <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-200 rounded-box w-52" >
                                     <li><Link to="/" onClick={handleLinkClick}>Home</Link></li>
                                     <li><Link to="/league" onClick={handleLinkClick}>League</Link></li>
+                                    <li><Link to="/leaderboard" onClick={handleLinkClick}>Leaderboard</Link></li>
                                     <li><Link to="/roster" onClick={handleLinkClick}>Roster</Link></li>
                                     <li><Link to="/lineup" onClick={handleLinkClick}>Lineup</Link></li>
                                     <li><Link to="/stats" onClick={handleLinkClick}>Stats</Link></li>

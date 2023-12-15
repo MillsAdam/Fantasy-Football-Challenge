@@ -65,14 +65,33 @@ CREATE TABLE player_projections (
 	CONSTRAINT FK_player_projections_team_id FOREIGN KEY (team_id) REFERENCES teams(team_id)
 );
 
+CREATE TABLE fantasy_leagues (
+	league_id SERIAL,
+	user_id int NOT NULL,
+	league_name varchar(50) UNIQUE NOT NULL,
+	league_password_hash varchar(200) NOT NULL,
+	league_salt varchar(200) NOT NULL,
+	CONSTRAINT PK_fantasy_leagues_league_id PRIMARY KEY (league_id),
+	CONSTRAINT FK_fantasy_leagues_user_id FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE fantasy_members (
+	user_id int NOT NULL,
+	league_id int NOT NULL,
+	PRIMARY KEY (user_id, league_id),
+	FOREIGN KEY (user_id) REFERENCES users(user_id),
+	FOREIGN KEY (league_id) REFERENCES fantasy_leagues(league_id)
+);
 
 CREATE TABLE fantasy_rosters (
-	roster_id SERIAL,
-	user_id int UNIQUE NOT NULL,
+	roster_id SERIAL PRIMARY KEY,
+	user_id int NOT NULL,
+	league_id int NOT NULL,
 	team_name varchar(50) UNIQUE NOT NULL,
 	total_score numeric(5,2),
-	CONSTRAINT PK_fantasy_rosters_team_id PRIMARY KEY (roster_id),
-	CONSTRAINT FK_fantasy_rosters_user_id FOREIGN KEY (user_id) REFERENCES users(user_id)
+	CONSTRAINT FK_fantasy_rosters_user_id FOREIGN KEY (user_id) REFERENCES users(user_id),
+	CONSTRAINT FK_fantasy_rosters_league_id FOREIGN KEY (league_id) REFERENCES fantasy_leagues(league_id),
+	CONSTRAINT unique_user_league UNIQUE (user_id, league_id)
 );
 
 CREATE TABLE roster_players (
@@ -202,6 +221,10 @@ CREATE TABLE player_projections_ext (
 	CONSTRAINT FK_player_projections_ext_player_id FOREIGN KEY (player_id) REFERENCES players(player_id),
 	CONSTRAINT FK_player_projections_ext_team_id FOREIGN KEY (team_id) REFERENCES teams(team_id)
 );
+
+ALTER TABLE users ADD COLUMN current_league_id int;
+ALTER TABLE users ALTER COLUMN current_league_id DROP NOT NULL;
+ALTER TABLE users ADD FOREIGN KEY (current_league_id) REFERENCES fantasy_leagues(league_id);
 
 
 COMMIT TRANSACTION;

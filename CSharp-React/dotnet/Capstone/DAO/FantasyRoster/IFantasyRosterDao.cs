@@ -10,7 +10,7 @@ namespace Capstone.DAO
     public interface IFantasyRosterDao
     {
         Task CreateFantasyRoster(User user, string teamName);
-        Task<List<FantasyRosterDto>> GetFantasyRosters();
+        Task<List<FantasyRosterDto>> GetFantasyRosters(User user);
         Task<FantasyRoster> GetFantasyRosterByUser(User user);
         
     }

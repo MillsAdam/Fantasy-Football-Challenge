@@ -5,12 +5,9 @@ using System.Threading.Tasks;
 
 namespace Capstone.Models
 {
-    public class FantasyRoster
+    public class FantasyMember
     {
-        public int FantasyRosterId { get; set; }
         public int UserId { get; set; }
         public int FantasyLeagueId { get; set; }
-        public string TeamName { get; set; }
-        public double TotalScore { get; set; }
     }
 }

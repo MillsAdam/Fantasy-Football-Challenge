@@ -19,6 +19,7 @@ using Capstone.Services.Position;
 using Capstone.DAO.Position.Flex;
 using Capstone.DAO.Position.Kicker;
 using Capstone.DAO.Position.Defense;
+using Capstone.DAO.FantasyLeague;
 
 
 namespace Capstone
@@ -90,6 +91,8 @@ namespace Capstone
             services.AddTransient<IDefLast4AverageDao, DefLast4AverageSqlDao>();
             services.AddTransient<IDefWeeklyTotalDao, DefWeeklyTotalSqlDao>();
             services.AddTransient<IDefWeeklyProjectedDao, DefWeeklyProjectedSqlDao>();
+            services.AddTransient<IFantasyLeagueDao, FantasyLeagueSqlDao>();
+            services.AddTransient<IFantasyMemberDao, FantasyMemberSqlDao>();
 
 
             // configure jwt authentication
@@ -128,15 +131,17 @@ namespace Capstone
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseRouting();
+            app.UseCors();
             app.UseAuthentication();
-
+            app.UseAuthorization();
             // app.UseHttpsRedirection();
 
-            app.UseRouting();
+            
 
-            app.UseCors();
+            
 
-            app.UseAuthorization();
+            
 
             app.UseEndpoints(endpoints =>
             {

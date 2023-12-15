@@ -82,6 +82,11 @@ namespace Capstone.DAO
 
         public async Task<List<LineupPlayerDto>> GetLineupPlayerDtosByUser(User user)
         {
+            if (user.FantasyLeagueId == null)
+            {
+                return new List<LineupPlayerDto>();
+            }
+
             List<LineupPlayerDto> lineupPlayerDtos = new List<LineupPlayerDto>();
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {

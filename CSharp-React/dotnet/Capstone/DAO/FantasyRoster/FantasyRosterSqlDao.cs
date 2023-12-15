@@ -25,9 +25,10 @@ namespace Capstone.DAO
             {
                 await connection.OpenAsync();
                 using NpgsqlCommand command = new NpgsqlCommand(
-                    @"INSERT INTO fantasy_rosters (user_id, team_name, total_score) VALUES (@user_id, @team_name, @total_score);", connection);
+                    @"INSERT INTO fantasy_rosters (user_id, league_id, team_name, total_score) VALUES (@user_id, @league_id, @team_name, @total_score);", connection);
                 {
                     command.Parameters.AddWithValue("@user_id", user.UserId);
+                    command.Parameters.AddWithValue("@league_id", user.FantasyLeagueId);
                     command.Parameters.AddWithValue("@team_name", teamName);
                     command.Parameters.AddWithValue("@total_score", 0);
                     await command.ExecuteNonQueryAsync();
@@ -35,8 +36,14 @@ namespace Capstone.DAO
             }
         }
 
-        public async Task<List<FantasyRosterDto>> GetFantasyRosters()
+        public async Task<List<FantasyRosterDto>> GetFantasyRosters(User user)
         {
+            if (user.FantasyLeagueId == null)
+            {
+                return new List<FantasyRosterDto>();
+            }
+
+            
             List<FantasyRosterDto> fantasyRosterDtos = new List<FantasyRosterDto>();
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
@@ -45,6 +52,7 @@ namespace Capstone.DAO
                     @"SELECT 
                         fr.roster_id, 
                         fr.user_id, 
+                        fr.league_id,
                         fr.team_name, 
                         u.username, 
                         fr.total_score, 
@@ -62,8 +70,10 @@ namespace Capstone.DAO
                         (SELECT roster_id, total_score FROM fantasy_lineups WHERE game_week = 3) w3 ON fr.roster_id = w3.roster_id 
                     LEFT JOIN 
                         (SELECT roster_id, total_score FROM fantasy_lineups WHERE game_week = 4) w4 ON fr.roster_id = w4.roster_id 
+                    WHERE fr.league_id = @league_id
                     ORDER BY fr.total_score DESC, u.username;", connection);
                 {
+                    command.Parameters.AddWithValue("@league_id", user.FantasyLeagueId);
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                     while (await reader.ReadAsync())
                     {
@@ -71,6 +81,7 @@ namespace Capstone.DAO
                         {
                             fantasyRosterDto.FantasyRosterId = Convert.ToInt32(reader["roster_id"]);
                             fantasyRosterDto.UserId = Convert.ToInt32(reader["user_id"]);
+                            fantasyRosterDto.FantasyLeagueId = Convert.ToInt32(reader["league_id"]);
                             fantasyRosterDto.TeamName = Convert.ToString(reader["team_name"]);
                             fantasyRosterDto.Username = Convert.ToString(reader["username"]);
                             fantasyRosterDto.TotalScore = Convert.ToDouble(reader["total_score"]);
@@ -94,14 +105,16 @@ namespace Capstone.DAO
             {
                 await connection.OpenAsync();
                 using NpgsqlCommand command = new NpgsqlCommand(
-                    @"SELECT roster_id, user_id, team_name, total_score FROM fantasy_rosters WHERE user_id = @user_id;", connection);
+                    @"SELECT roster_id, user_id, league_id, team_name, total_score FROM fantasy_rosters WHERE user_id = @user_id AND league_id = @league_id;", connection);
                 {
                     command.Parameters.AddWithValue("@user_id", user.UserId);
+                    command.Parameters.AddWithValue("@league_id", user.FantasyLeagueId);
                     NpgsqlDataReader reader = command.ExecuteReader();
                     while (await reader.ReadAsync())
                     {
                         fantasyRoster.FantasyRosterId = Convert.ToInt32(reader["roster_id"]);
                         fantasyRoster.UserId = Convert.ToInt32(reader["user_id"]);
+                        fantasyRoster.FantasyLeagueId = Convert.ToInt32(reader["league_id"]);
                         fantasyRoster.TeamName = Convert.ToString(reader["team_name"]);
                         fantasyRoster.TotalScore = Convert.ToDouble(reader["total_score"]);
                     }

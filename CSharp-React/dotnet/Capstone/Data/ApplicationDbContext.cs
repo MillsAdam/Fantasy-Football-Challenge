@@ -28,6 +28,10 @@ namespace Capstone.Data
         public DbSet<Configuration> Configuration { get; set; }
         public DbSet<PlayerStatsExt> PlayerStatsExt { get; set; }
         public DbSet<PlayerStatsExtDto> PlayerStatsExtDtos { get; set; }
+        public DbSet<FantasyLeagueModel> FantasyLeagueModels { get; set; }
+        public DbSet<FantasyMember> FantasyMembers { get; set; }
+        public DbSet<ReturnLeague> ReturnLeagues { get; set; }
+        public DbSet<FantasyLeagueRegistration> FantasyLeagueRegistrations { get; set; }
         
         
 

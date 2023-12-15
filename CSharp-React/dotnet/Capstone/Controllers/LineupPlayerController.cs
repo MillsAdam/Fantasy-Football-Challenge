@@ -96,6 +96,10 @@ namespace Capstone.Controllers
                 string username = User.Identity.Name;
                 User user = _userDao.GetUserByUsername(username);
                 List<LineupPlayerDto> lineupPlayerDtos = await _lineupPlayerDao.GetLineupPlayerDtosByUser(user);
+                if (lineupPlayerDtos == null || !lineupPlayerDtos.Any())
+                {
+                    return Ok(new List<FantasyRosterDto>());
+                }
                 return Ok(lineupPlayerDtos);
             }
             catch (Exception e)

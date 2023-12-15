@@ -95,6 +95,11 @@ namespace Capstone.DAO
 
         public async Task<List<RosterPlayerDto>> GetRosterPlayerDtosByUser(User user)
         {
+            if (user.FantasyLeagueId == null)
+            {
+                return new List<RosterPlayerDto>();
+            }
+
             List<RosterPlayerDto> rosterPlayerDtos = new List<RosterPlayerDto>();
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {

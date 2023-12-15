@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Capstone.DAO;
 using Capstone.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Capstone.Controllers
 {
@@ -15,12 +16,14 @@ namespace Capstone.Controllers
         private readonly IFantasyRosterDao _fantasyRosterDao;
         private readonly IUserDao _userDao;
         private readonly IFantasyLineupDao _fantasyLineupDao;
+        private readonly ILogger<FantasyTeamController> _logger;
 
-        public FantasyTeamController(IFantasyRosterDao fantasyRosterDao, IUserDao userDao, IFantasyLineupDao fantasyLineupDao)
+        public FantasyTeamController(IFantasyRosterDao fantasyRosterDao, IUserDao userDao, IFantasyLineupDao fantasyLineupDao, ILogger<FantasyTeamController> logger)
         {
             _fantasyRosterDao = fantasyRosterDao;
             _userDao = userDao;
             _fantasyLineupDao = fantasyLineupDao;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -28,8 +31,7 @@ namespace Capstone.Controllers
         {
             try
             {
-                string username = User.Identity.Name;
-                User user = _userDao.GetUserByUsername(username);
+                User user = _userDao.GetUserByUsername(User.Identity.Name);
                 await _fantasyRosterDao.CreateFantasyRoster(user, teamName);
                 FantasyRoster fantasyRoster = await _fantasyRosterDao.GetFantasyRosterByUser(user);
                 await _fantasyLineupDao.CreateFantasyLineup(fantasyRoster.FantasyRosterId);
@@ -37,7 +39,7 @@ namespace Capstone.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error creating fantasy team: {e.Message}");
+                _logger.LogError($"Error creating fantasy team: {e.Message}");
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }
@@ -47,12 +49,18 @@ namespace Capstone.Controllers
         {
             try
             {
-                List<FantasyRosterDto> fantasyRosterDtos = await _fantasyRosterDao.GetFantasyRosters();
+                User user = _userDao.GetUserByUsername(User.Identity.Name);
+                List<FantasyRosterDto> fantasyRosterDtos = await _fantasyRosterDao.GetFantasyRosters(user);
+                if (fantasyRosterDtos == null || !fantasyRosterDtos.Any())
+                {
+                    return Ok(new List<FantasyRosterDto>());
+                }
+                
                 return Ok(fantasyRosterDtos);
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error getting fantasy teams: {e.Message}");
+                _logger.LogError($"Error getting fantasy teams: {e.Message}");
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }

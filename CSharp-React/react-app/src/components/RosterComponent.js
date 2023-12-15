@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import RosterService from "../services/RosterService";
 import LeagueService from "../services/LeagueService";
 import DatabaseService from "../services/DatabaseService";
@@ -24,31 +24,53 @@ function RosterComponent() {
     const { configurations } = useConfig();
     const [isRosterLocked, setIsRosterLocked] = useState(false);
     const [playerIndexMap, setPlayerIndexMap] = useState({});
+    const [currentLeagueId, setCurrentLeagueId] = useState(null);
+
+    
+    const fetchCurrentLeagueId = useCallback(async () => {
+        setIsLoading(true);
+        try {
+            const leagueId = await LeagueService.getCurrentLeagueId(authToken);
+            setCurrentLeagueId(leagueId);
+        } catch (error) {
+            console.error("Error fetching current league: ", error);
+            setError(error);
+        }
+        setIsLoading(false);
+    }, [authToken]);
 
     useEffect(() => {
-        async function checkUserTeam() {
-            setIsLoading(true);
-            try {
-                const rostersData = await LeagueService.getFantasyRosters();
-                const userRoster = rostersData.find(roster => roster.userId === currentUser.userId);
-                if (userRoster) {
-                    setUserHasTeam(true);
-                } else {
-                    setUserHasTeam(false);
-                }
-            } catch (error) {
-                console.error('An error occurred: ', error);
-                setError('Failed to check user team status');
-            }
-            setIsLoading(false);
+        if (authToken && currentUser && currentUser.userId) {
+            fetchCurrentLeagueId();
+        } else {
+            setError('User not found');
         }
+    }, [authToken, currentUser, fetchCurrentLeagueId]);
 
-        if (currentUser && currentUser.userId) {
+    const checkUserTeam = useCallback(async () => {
+        setIsLoading(true);
+        try {
+            const rostersData = await LeagueService.getFantasyRosters(authToken);
+            const userRoster = rostersData.find(roster => roster.userId === currentUser.userId);
+            if (userRoster) {
+                setUserHasTeam(true);
+            } else {
+                setUserHasTeam(false);
+            }
+        } catch (error) {
+            console.error('Error occurred checking team status: ', error);
+            setError('Failed to check user team status');
+        }
+        setIsLoading(false);
+    }, [authToken, currentUser.userId]);
+
+    useEffect(() => {
+        if (authToken && currentUser && currentUser.userId) {
             checkUserTeam();
         } else {
             setError('User not found');
         }
-    }, [authToken, currentUser]);
+    }, [authToken, currentUser, checkUserTeam]);
 
     async function createRoster(e) {
         e.preventDefault();
@@ -57,7 +79,7 @@ function RosterComponent() {
         try {
             const newRoster = await LeagueService.createRoster(teamName, authToken);
             if (newRoster) {
-                await LeagueService.getFantasyRosters();
+                await LeagueService.getFantasyRosters(authToken);
                 setUserHasTeam(true);
             }
         } catch (error) {
@@ -67,25 +89,26 @@ function RosterComponent() {
         setIsLoading(false);
     }
 
-    useEffect(() => {
-        async function getRosterPlayers() {
-            setIsLoading(true);
-            try {
-                const rosterPlayersData = await RosterService.getRosterPlayersByUser(authToken);
-                setRosterPlayers(rosterPlayersData);
-            } catch (error) {
-                console.error('An error occurred: ', error);
-                setError('Failed to get roster players');
-            }
-            setIsLoading(false);
-        }
 
-        if (currentUser && currentUser.userId) {
+    const getRosterPlayers = useCallback(async () => {
+        setIsLoading(true);
+        try {
+            const rosterPlayersData = await RosterService.getRosterPlayersByUser(authToken);
+            setRosterPlayers(rosterPlayersData);
+        } catch (error) {
+            console.error('An error occurred: ', error);
+            setError('Failed to get roster players');
+        }
+        setIsLoading(false);
+    }, [authToken]);
+
+    useEffect(() => {
+        if (authToken && currentUser && currentUser.userId) {
             getRosterPlayers();
         } else {
             setError('User not found');
         }
-    }, [authToken, currentUser]);
+    }, [authToken, currentUser, getRosterPlayers]);
 
     useEffect(() => {
         async function getActiveTeamNameOptions() {
@@ -443,7 +466,16 @@ function RosterComponent() {
                     </div>
                 </div>
             )}
-            {!userHasTeam && !isLoading && (
+            {!currentLeagueId && !userHasTeam && !isLoading && (
+                <div className="flex lg:flex-row lg:justify-between lg:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
+                    <div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
+                        <div className="">
+                            Join a League to create a Roster
+                        </div>
+                    </div>
+                </div>
+            )}
+            {currentLeagueId > 0 && !userHasTeam && !isLoading && (
                 <div className="flex lg:flex-row lg:justify-between lg:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
                     <div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
                         <div className="mb-4 text-xl text-primary">
@@ -454,7 +486,8 @@ function RosterComponent() {
                             <input 
                                 className="input input-accent input-bordered w-full input-sm md:input-md mb-4" 
                                 type="text" 
-                                value={teamName} onChange={(e) => setTeamName(e.target.value)} />
+                                value={teamName} 
+                                onChange={(e) => setTeamName(e.target.value)} />
                             <button 
                                 className="btn btn-primary btn-sm md:btn-md w-full mb-4" 
                                 type="submit" 
