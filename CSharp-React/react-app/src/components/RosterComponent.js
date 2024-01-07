@@ -290,128 +290,133 @@ function RosterComponent() {
             <NavigationBar />
             {userHasTeam && (
                 <div className="flex lg:flex-row lg:justify-between lg:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
-                    <div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
-                        <div className="mb-4 text-xl text-primary">
-                            Search Players
-                        </div>
-                        <div className="flex flex-row justify-between align-center flex-nowrap mb-4">
-                            <input 
-                                className="input input-accent input-bordered input-sm md:input-md w-45"
-                                type="text" 
-                                value={searchName} 
-                                placeholder="Enter Name" 
-                                onChange={(e) => setSearchName(e.target.value)} 
-                                disabled={(activeSearchMethod && activeSearchMethod !== "name") || selectedTeamName || selectedPosition}
-                            />
-                            <button
-                                className="btn btn-primary btn-sm md:btn-md w-45" 
-                                onClick={startSearchByName} 
-                                disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "name") || searchName === ""}
-                            >
-                                Search by Name
-                            </button>
-                        </div>
-                        <div className="flex flex-row justify-between align-center flex-nowrap mb-4">
-                            <select 
-                                className="select select-accent select-sm md:select-md w-45"
-                                value={selectedTeamName} 
-                                onChange={(e) => setSelectedTeamName(e.target.value)} 
-                                disabled={(activeSearchMethod && activeSearchMethod !== "team") || searchName || selectedPosition}
-                            >
-                                <option value="" disabled hidden>Select Team</option>
-                                {activeTeamNameOptions.map(teamName => (
-                                    <option key={teamName} value={teamName}>{teamNameDisplayOptions[teamName] || teamName}</option>
-                                ))}
-                            </select>
+                    {!isRosterLocked && 
+                        <div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
+                            <div className="mb-4 text-xl text-primary">
+                                Search Players
+                            </div>
+                            <div className="flex flex-row justify-between align-center flex-nowrap mb-4">
+                                <input 
+                                    className="input input-accent input-bordered input-sm md:input-md w-45"
+                                    type="text" 
+                                    value={searchName} 
+                                    placeholder="Enter Name" 
+                                    onChange={(e) => setSearchName(e.target.value)} 
+                                    disabled={(activeSearchMethod && activeSearchMethod !== "name") || selectedTeamName || selectedPosition}
+                                />
+                                <button
+                                    className="btn btn-primary btn-sm md:btn-md w-45" 
+                                    onClick={startSearchByName} 
+                                    disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "name") || searchName === ""}
+                                >
+                                    Search by Name
+                                </button>
+                            </div>
+                            <div className="flex flex-row justify-between align-center flex-nowrap mb-4">
+                                <select 
+                                    className="select select-accent select-sm md:select-md w-45"
+                                    value={selectedTeamName} 
+                                    onChange={(e) => setSelectedTeamName(e.target.value)} 
+                                    disabled={(activeSearchMethod && activeSearchMethod !== "team") || searchName || selectedPosition}
+                                >
+                                    <option value="" disabled hidden>Select Team</option>
+                                    {activeTeamNameOptions.map(teamName => (
+                                        <option key={teamName} value={teamName}>{teamNameDisplayOptions[teamName] || teamName}</option>
+                                    ))}
+                                </select>
+                                <button 
+                                    className="btn btn-primary btn-sm md:btn-md w-45" 
+                                    onClick={startSearchByTeam} 
+                                    disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "team") || selectedTeamName === ""}
+                                >
+                                    Search by Team
+                                </button>
+                            </div>
+                            <div className="flex flex-row justify-between align-center flex-nowrap mb-4">
+                                <select 
+                                    className="select select-accent select-sm md:select-md w-45" 
+                                    value={selectedPosition} 
+                                    onChange={(e) => setSelectedPosition(e.target.value)} 
+                                    disabled={(activeSearchMethod && activeSearchMethod !== "position") || searchName || selectedTeamName}
+                                >
+                                    <option value="" disabled hidden>Select Position</option>
+                                    {positionOptions.map((position, index) => (
+                                        <option key={index} value={position}>{position}</option>
+                                    ))}
+                                </select>
+                                <button 
+                                    className="btn btn-primary btn-sm md:btn-md w-45" 
+                                    onClick={startSearchByPosition} 
+                                    disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "position") || selectedPosition === ""}
+                                >
+                                    Search by Position
+                                </button>
+                            </div>
                             <button 
-                                className="btn btn-primary btn-sm md:btn-md w-45" 
-                                onClick={startSearchByTeam} 
-                                disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "team") || selectedTeamName === ""}
+                                className="btn btn-secondary btn-sm md:btn-md w-full w-full mb-4" 
+                                onClick={clearSearch} 
+                                disabled={isLoading || (!searchName && !selectedTeamName && !selectedPosition)}
                             >
-                                Search by Team
+                                Clear Search
                             </button>
-                        </div>
-                        <div className="flex flex-row justify-between align-center flex-nowrap mb-4">
-                            <select 
-                                className="select select-accent select-sm md:select-md w-45" 
-                                value={selectedPosition} 
-                                onChange={(e) => setSelectedPosition(e.target.value)} 
-                                disabled={(activeSearchMethod && activeSearchMethod !== "position") || searchName || selectedTeamName}
-                            >
-                                <option value="" disabled hidden>Select Position</option>
-                                {positionOptions.map((position, index) => (
-                                    <option key={index} value={position}>{position}</option>
-                                ))}
-                            </select>
-                            <button 
-                                className="btn btn-primary btn-sm md:btn-md w-45" 
-                                onClick={startSearchByPosition} 
-                                disabled={isLoading || (activeSearchMethod && activeSearchMethod !== "position") || selectedPosition === ""}
-                            >
-                                Search by Position
-                            </button>
-                        </div>
-                        <button 
-                            className="btn btn-secondary btn-sm md:btn-md w-full w-full mb-4" 
-                            onClick={clearSearch} 
-                            disabled={isLoading || (!searchName && !selectedTeamName && !selectedPosition)}
-                        >
-                            Clear Search
-                        </button>
-                        {!isLoading && (
-                            searchPlayer.length > 0 && (
-                                <div>
-                                    <div className="mb-4 text-success">
-                                        Search Results
-                                    </div>
-                                    <div className="overflow-auto">
-                                        <table className="table table-xs table-pin-rows">
-                                            <thead>
-                                                <tr className="bg-base-300">
-                                                    <th>Add</th>
-                                                    <th>Conf</th>
-                                                    <th>Team</th>
-                                                    <th>Pos</th>
-                                                    <th>Inj</th>
-                                                    <th>Player</th>
-                                                    <th>Avg</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {searchPlayer.map((player, index) => (
-                                                    <tr key={index} className="bg-neutral hover:bg-info-content">
-                                                        <td>
-                                                            <button 
-                                                                className="btn btn-primary btn-outline btn-xs" 
-                                                                onClick={(e) => handleAddPlayerToRoster(e, player.playerId)} 
-                                                                disabled={isRosterFull || isRosterLocked}
-                                                            >
-                                                                +
-                                                            </button>
-                                                        </td>
-                                                        <td>{player.conference}</td>
-                                                        <td>{player.team}</td>
-                                                        <td>{player.position}</td>
-                                                        <td className={
-                                                            ["P"].includes(player.injuryStatus?.charAt(0)) ? 'text-green-500' : 
-                                                            ["Q"].includes(player.injuryStatus?.charAt(0)) ? 'text-yellow-500' : 
-                                                            ["D", "O"].includes(player.injuryStatus?.charAt(0)) ? 'text-red-500' : ''
-                                                        }>
-                                                            {player.injuryStatus ? player.injuryStatus.charAt(0) : 'A'}
-                                                        </td>
-                                                        <td>{player.name}</td>
-                                                        <td>{player.fantasyPointsAvg}</td>
+                            {!isLoading && (
+                                searchPlayer.length > 0 && (
+                                    <div>
+                                        <div className="mb-4 text-success">
+                                            Search Results
+                                        </div>
+                                        <div className="overflow-auto">
+                                            <table className="table table-xs table-pin-rows">
+                                                <thead>
+                                                    <tr className="bg-base-300">
+                                                        <th>Add</th>
+                                                        <th>Conf</th>
+                                                        <th>Team</th>
+                                                        <th>Pos</th>
+                                                        <th>Inj</th>
+                                                        <th>Player</th>
+                                                        <th>Avg</th>
                                                     </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    {searchPlayer.map((player, index) => (
+                                                        <tr key={index} className="bg-neutral hover:bg-info-content">
+                                                            <td>
+                                                                <button 
+                                                                    className="btn btn-primary btn-outline btn-xs" 
+                                                                    onClick={(e) => handleAddPlayerToRoster(e, player.playerId)} 
+                                                                    disabled={isRosterFull || isRosterLocked}
+                                                                >
+                                                                    +
+                                                                </button>
+                                                            </td>
+                                                            <td>{player.conference}</td>
+                                                            <td>{player.team}</td>
+                                                            <td>{player.position}</td>
+                                                            <td className={
+                                                                ["P"].includes(player.injuryStatus?.charAt(0)) ? 'text-green-500' : 
+                                                                ["Q"].includes(player.injuryStatus?.charAt(0)) ? 'text-yellow-500' : 
+                                                                ["D", "O"].includes(player.injuryStatus?.charAt(0)) ? 'text-red-500' : ''
+                                                            }>
+                                                                {player.injuryStatus ? player.injuryStatus.charAt(0) : 'A'}
+                                                            </td>
+                                                            <td>{player.name}</td>
+                                                            <td>{player.fantasyPointsAvg}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                </div>
-                            )
-                        )}
-                    </div>
-
-                    <div className="divider lg:divider-horizontal divider-vertical"></div>
+                                )
+                            )}
+                        </div>
+                    }
+                    
+                    {!isRosterLocked && 
+                        <div className="divider lg:divider-horizontal divider-vertical"></div>
+                    }
+                    
                     
                     <div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
                         <div className="mb-4 text-xl text-primary">

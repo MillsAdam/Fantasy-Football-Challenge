@@ -40,6 +40,7 @@ const Home = () => {
                         <li className="mb-2 text-left">Weekly Lineups: Set your lineup with up to 2 QBs, 2 RBs, 3 WRs, 1 TE, 1 Flex, 1 Kicker, and 1 Defense.</li>
                         <li className="mb-2 text-left">Point-Per-Reception (PPR) Scoring: Every catch counts, adding more excitement to your gameplay.</li>
                         <li className="mb-2 text-left">Cumulative Scoring: Scores accumulate through the Super Bowl.</li>
+                        <li className="mb-2 text-left">League creating and league joining locks at the start of playoffs.</li>
                         <li className="mb-2 text-left">Rosters Lock at Playoff Start.</li>
                         <li className="mb-2 text-left">Weekly Lineup Lock: Set your lineup before the first playoff game each week.</li>
                         <li className="mb-2 text-left">Reset and Refresh: Lineups and playoff weeks reset every Tuesday.</li>

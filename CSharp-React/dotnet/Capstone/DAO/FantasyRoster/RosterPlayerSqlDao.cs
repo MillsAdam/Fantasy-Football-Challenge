@@ -195,7 +195,7 @@ namespace Capstone.DAO
                         p.name, 
                         p.status, 
                         p.injury_status, 
-                        SUM(
+                        COALESCE(SUM(
                             CASE 
                                 WHEN fl.game_week = 1 
                                 THEN (
@@ -243,13 +243,13 @@ namespace Capstone.DAO
                                 ) 
                                 ELSE 0 
                             END
-                        ) AS stat_fantasy_points, 
+                        ), 0) AS stat_fantasy_points, 
                         t.conference, 
                         t.status as team_status 
                     FROM players p 
                     JOIN teams t ON p.team_id = t.team_id 
-                    JOIN lineup_players lp ON p.player_id = lp.player_id 
-                    JOIN fantasy_lineups fl ON lp.lineup_id = fl.lineup_id 
+                    LEFT JOIN lineup_players lp ON p.player_id = lp.player_id 
+                    LEFT JOIN fantasy_lineups fl ON lp.lineup_id = fl.lineup_id 
                     JOIN fantasy_rosters fr ON fl.roster_id = fr.roster_id 
                     WHERE fr.user_id = @user_id 
                     GROUP BY 

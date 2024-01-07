@@ -381,11 +381,11 @@ function AdminComponent() {
 											<tr key={index} className="bg-neutral hover:bg-info-content">
 												<td>{configKeyDisplayNames[config.configKey] || config.configKey}</td>
 												<td className={ 
-													(config.configKey === 'lockRosters' || config.configKey === 'lockLineups') && 
+													(config.configKey === 'lockLeagues' || config.configKey === 'lockRosters' || config.configKey === 'lockLineups') && 
 													configValueOptions[config.configKey][config.configValue] === 'Unlocked' ? 'text-green-500' :
-													(config.configKey === 'lockRosters' || config.configKey === 'lockLineups') && 
+													(config.configKey === 'lockLeagues' || config.configKey === 'lockRosters' || config.configKey === 'lockLineups') && 
 													configValueOptions[config.configKey][config.configValue] === 'Locked' ? 'text-red-500' : '' 
-												}>{config.configKey === "lockRosters" || config.configKey === "lockLineups" || config.configKey === "currentWeek" || config.configKey === "startingLineupWeek" ? configValueOptions[config.configKey][config.configValue] : config.configValue}</td>
+												}>{config.configKey === 'lockLeagues' || config.configKey === "lockRosters" || config.configKey === "lockLineups" || config.configKey === "currentWeek" || config.configKey === "startingLineupWeek" ? configValueOptions[config.configKey][config.configValue] : config.configValue}</td>
 											</tr>
 										))}
 								</tbody>

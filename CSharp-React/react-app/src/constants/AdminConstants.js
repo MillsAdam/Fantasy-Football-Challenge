@@ -24,6 +24,7 @@ export const configValueOptions = {
         22: 'Super Bowl' 
     },
     'currentLineupWeek': [1, 2, 3, 4],
+    'lockLeagues': { 1: 'Locked', 2: 'Unlocked' },
     'lockRosters': { 1: 'Locked', 2: 'Unlocked' },
     'lockLineups': { 1: 'Locked', 2: 'Unlocked' },
     'startingLineupWeek': { 
@@ -51,6 +52,7 @@ export const configValueOptions = {
 export const orderedConfigKeys = new Map([
     ['currentWeek', 'Current Week'],
     ['currentLineupWeek', 'Current Lineup Week'],
+    ['lockLeagues', 'Lock Leagues'],
     ['lockRosters', 'Lock Rosters'],
     ['lockLineups', 'Lock Lineups'],
     ['startingLineupWeek', 'Starting Lineup Week'],
@@ -58,6 +60,7 @@ export const orderedConfigKeys = new Map([
 export const configDisplayOrder = [
     'currentWeek',
     'currentLineupWeek',
+    'lockLeagues',
     'lockRosters',
     'lockLineups',
     'startingLineupWeek',
@@ -69,6 +72,7 @@ export const configDisplayOrder = [
 export const configKeyDisplayNames = {
     'currentWeek': 'Current Week',
     'currentLineupWeek': 'Current Lineup Week',
+    'lockLeagues': 'Lock Leagues',
     'lockRosters': 'Lock Rosters',
     'lockLineups': 'Lock Lineups',
     'startingLineupWeek': 'Starting Lineup Week',

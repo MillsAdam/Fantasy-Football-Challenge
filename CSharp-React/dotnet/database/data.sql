@@ -3,8 +3,9 @@ INSERT INTO users (username, password_hash, salt, user_role) VALUES ('admin','Yh
 
 INSERT INTO configuration (config_key, config_value) VALUES ('currentWeek', 1);
 INSERT INTO configuration (config_key, config_value) VALUES ('currentLineupWeek', 1);
-INSERT INTO configuration (config_key, config_value) VALUES ('lockRosters', 2);
-INSERT INTO configuration (config_key, config_value) VALUES ('lockLineups', 2);
+INSERT INTO configuration (config_key, config_value) VALUES ('lockLeagues', 1);
+INSERT INTO configuration (config_key, config_value) VALUES ('lockRosters', 1);
+INSERT INTO configuration (config_key, config_value) VALUES ('lockLineups', 1);
 INSERT INTO configuration (config_key, config_value) VALUES ('startingLineupWeek', 1);
 INSERT INTO configuration (config_key, config_value) VALUES ('lineupWeek1', 1);
 INSERT INTO configuration (config_key, config_value) VALUES ('lineupWeek2', 2);
