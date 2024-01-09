@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/bc154111-ee00-43d7-9070-84b8c8259d7e/resourceGroups/appsvc_windows_centralus/providers/Microsoft.Web/sites/fantasy-playoff-challenge",
+    "appService.deploySubpath": "."
+}
