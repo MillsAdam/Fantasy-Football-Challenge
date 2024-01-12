@@ -3,7 +3,7 @@ import axios from 'axios';
 const LeagueService = {
     async getFantasyRosters(authToken) {
         try {
-            const response = await axios.get('http://localhost:5000/api/fantasyrosters', {
+            const response = await axios.get('https://fantasyplayoffchallenge.azurewebsites.net/api/fantasyrosters', {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 },
@@ -17,7 +17,7 @@ const LeagueService = {
 
     async createRoster(teamName, authToken) {
         try {
-            const response = await axios.post(`http://localhost:5000/api/fantasyrosters?teamName=${teamName}`, {}, {
+            const response = await axios.post(`https://fantasyplayoffchallenge.azurewebsites.net/api/fantasyrosters?teamName=${teamName}`, {}, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 },
@@ -31,7 +31,7 @@ const LeagueService = {
 
     async registerFantasyLeague(leagueName, leaguePassword, authToken) {
         try {
-            const response = await axios.post('http://localhost:5000/api/fantasyleagues/register', {
+            const response = await axios.post('https://fantasyplayoffchallenge.azurewebsites.net/api/fantasyleagues/register', {
                 LeagueName: leagueName,
                 LeaguePassword: leaguePassword,
             }, {
@@ -47,7 +47,7 @@ const LeagueService = {
 
     async searchFantasyLeagues(leagueName, authToken) {
         try {
-            const response = await axios.get(`http://localhost:5000/api/fantasyleagues/search?leagueName=${leagueName}`, {
+            const response = await axios.get(`https://fantasyplayoffchallenge.azurewebsites.net/api/fantasyleagues/search?leagueName=${leagueName}`, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 },
@@ -61,7 +61,7 @@ const LeagueService = {
 
     async joinFantasyLeague(leagueId, leaguePassword, authToken) {
         try {
-            const response = await axios.post(`http://localhost:5000/api/fantasyleagues/join`, {
+            const response = await axios.post(`https://fantasyplayoffchallenge.azurewebsites.net/api/fantasyleagues/join`, {
                 FantasyLeagueId: leagueId,
                 LeaguePassword: leaguePassword,
             }, {
@@ -78,7 +78,7 @@ const LeagueService = {
 
     async getFantasyLeagues(authToken) {
         try {
-            const response = await axios.get('http://localhost:5000/api/fantasyleagues/myleagues', {
+            const response = await axios.get('https://fantasyplayoffchallenge.azurewebsites.net/api/fantasyleagues/myleagues', {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 },
@@ -92,7 +92,7 @@ const LeagueService = {
 
     async setCurrentLeague(leagueId, authToken) {
         try {
-            const response = await axios.put(`http://localhost:5000/api/fantasyleagues/setcurrentleague?fantasyLeagueId=${leagueId}`, {}, {
+            const response = await axios.put(`https://fantasyplayoffchallenge.azurewebsites.net/api/fantasyleagues/setcurrentleague?fantasyLeagueId=${leagueId}`, {}, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 },
@@ -106,7 +106,7 @@ const LeagueService = {
 
     async getCurrentLeagueId(authToken) {
         try {
-            const response = await axios.get('http://localhost:5000/api/fantasyleagues/currentleagueid', {
+            const response = await axios.get('https://fantasyplayoffchallenge.azurewebsites.net/api/fantasyleagues/currentleagueid', {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 },

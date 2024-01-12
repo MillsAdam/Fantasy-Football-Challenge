@@ -3,7 +3,7 @@ import axios from 'axios';
 const RosterService = {
     async getRosterPlayersByUser(authToken) {
         try {
-            const response = await axios.get('http://localhost:5000/api/rosterplayers', {
+            const response = await axios.get('https://fantasyplayoffchallenge.azurewebsites.net/api/rosterplayers', {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 },
@@ -17,7 +17,7 @@ const RosterService = {
 
     async getRosterPlayersByUserId(userId) {
         try {
-            const response = await axios.get(`http://localhost:5000/api/rosterplayers/league?userId=${userId}`);
+            const response = await axios.get(`https://fantasyplayoffchallenge.azurewebsites.net/api/rosterplayers/league?userId=${userId}`);
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -27,7 +27,7 @@ const RosterService = {
 
     async createRosterPlayer(playerId, authToken) {
         try {
-            const response = await axios.post(`http://localhost:5000/api/rosterplayers?playerId=${playerId}`, {}, {
+            const response = await axios.post(`https://fantasyplayoffchallenge.azurewebsites.net/api/rosterplayers?playerId=${playerId}`, {}, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 },
@@ -41,7 +41,7 @@ const RosterService = {
 
     async deleteRosterPlayer(playerId, authToken) {
         try {
-            const response = await axios.delete(`http://localhost:5000/api/rosterplayers?playerId=${playerId}`, {
+            const response = await axios.delete(`https://fantasyplayoffchallenge.azurewebsites.net/api/rosterplayers?playerId=${playerId}`, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 },
@@ -55,7 +55,7 @@ const RosterService = {
 
     async updateRosterPlayer(oldPlayerId, newPlayerId, authToken) {
         try {
-            const response = await axios.put(`http://localhost:5000/api/rosterplayers?oldPlayerId=${oldPlayerId}&newPlayerId=${newPlayerId}`, {}, {
+            const response = await axios.put(`https://fantasyplayoffchallenge.azurewebsites.net/api/rosterplayers?oldPlayerId=${oldPlayerId}&newPlayerId=${newPlayerId}`, {}, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 },

@@ -3,7 +3,7 @@ import axios from 'axios';
 const LineupService = {
     async getLineupPlayersByUser(authToken) {
         try {
-            const response = await axios.get('http://localhost:5000/api/lineupplayers', {
+            const response = await axios.get('https://fantasyplayoffchallenge.azurewebsites.net/api/lineupplayers', {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 },
@@ -17,7 +17,7 @@ const LineupService = {
 
     async getLineupPlayersByWeek(authToken, week) {
         try {
-            const response = await axios.get(`http://localhost:5000/api/lineupplayers/week?gameWeek=${week}`, {
+            const response = await axios.get(`https://fantasyplayoffchallenge.azurewebsites.net/api/lineupplayers/week?gameWeek=${week}`, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 },
@@ -31,7 +31,7 @@ const LineupService = {
 
     async getLineupPlayersByUserIdAndWeek(userId, week) {
         try {
-            const response = await axios.get(`http://localhost:5000/api/lineupplayers/league?userId=${userId}&gameWeek=${week}`);
+            const response = await axios.get(`https://fantasyplayoffchallenge.azurewebsites.net/api/lineupplayers/league?userId=${userId}&gameWeek=${week}`);
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -41,7 +41,7 @@ const LineupService = {
 
     async getWeeklyScoreByWeek(authToken, week) {
         try {
-            const response = await axios.get(`http://localhost:5000/api/fantasylineups/score?gameWeek=${week}`, {
+            const response = await axios.get(`https://fantasyplayoffchallenge.azurewebsites.net/api/fantasylineups/score?gameWeek=${week}`, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 },
@@ -55,7 +55,7 @@ const LineupService = {
 
     async createLineupPlayer(playerId, lineupPosition, authToken) {
         try {
-            const response = await axios.post(`http://localhost:5000/api/lineupplayers?playerId=${playerId}&lineupPosition=${lineupPosition}`, {}, {
+            const response = await axios.post(`https://fantasyplayoffchallenge.azurewebsites.net/api/lineupplayers?playerId=${playerId}&lineupPosition=${lineupPosition}`, {}, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 },
@@ -69,7 +69,7 @@ const LineupService = {
 
     async deleteLineupPlayer(playerId, authToken) {
         try {
-            const response = await axios.delete(`http://localhost:5000/api/lineupplayers?playerId=${playerId}`, {
+            const response = await axios.delete(`https://fantasyplayoffchallenge.azurewebsites.net/api/lineupplayers?playerId=${playerId}`, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 },

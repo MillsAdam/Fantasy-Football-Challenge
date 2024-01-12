@@ -2,11 +2,11 @@ import axios from 'axios';
 
 const AuthService = {
     login(user) {
-        return axios.post('http://localhost:5000/login', user);
+        return axios.post('https://fantasyplayoffchallenge.azurewebsites.net/login', user);
     },
 
     register(user) {
-        return axios.post('http://localhost:5000/register', user);
+        return axios.post('https://fantasyplayoffchallenge.azurewebsites.net/register', user);
     },
 }
 

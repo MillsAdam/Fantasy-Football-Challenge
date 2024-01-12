@@ -3,7 +3,7 @@ import axios from 'axios';
 const DatabaseService = {
     async searchPlayersName(playerName) {
         try {
-            const response = await axios.get(`http://localhost:5000/api/players/name?playerName=${playerName}`);
+            const response = await axios.get(`https://fantasyplayoffchallenge.azurewebsites.net/api/players/name?playerName=${playerName}`);
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -13,7 +13,7 @@ const DatabaseService = {
 
     async searchPlayersTeam(teamName) {
         try {
-            const response = await axios.get(`http://localhost:5000/api/players/team?teamName=${teamName}`);
+            const response = await axios.get(`https://fantasyplayoffchallenge.azurewebsites.net/api/players/team?teamName=${teamName}`);
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -23,7 +23,7 @@ const DatabaseService = {
 
     async searchPlayersPosition(position) {
         try {
-            const response = await axios.get(`http://localhost:5000/api/players/position?position=${position}`);
+            const response = await axios.get(`https://fantasyplayoffchallenge.azurewebsites.net/api/players/position?position=${position}`);
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -33,7 +33,7 @@ const DatabaseService = {
 
     async createTeams() {
         try {
-            const response = await axios.post(`http://localhost:5000/api/teams`, {});
+            const response = await axios.post(`https://fantasyplayoffchallenge.azurewebsites.net/api/teams`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -43,7 +43,7 @@ const DatabaseService = {
 
     async createPlayers() {
         try {
-            const response = await axios.post(`http://localhost:5000/api/players`, {});
+            const response = await axios.post(`https://fantasyplayoffchallenge.azurewebsites.net/api/players`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -53,7 +53,7 @@ const DatabaseService = {
 
     async upsertPlayers() {
         try {
-            const response = await axios.post(`http://localhost:5000/api/players/upsert`, {});
+            const response = await axios.post(`https://fantasyplayoffchallenge.azurewebsites.net/api/players/upsert`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -63,7 +63,7 @@ const DatabaseService = {
 
     async createPlayerStats() {
         try {
-            const response = await axios.post(`http://localhost:5000/api/players/stats`, {});
+            const response = await axios.post(`https://fantasyplayoffchallenge.azurewebsites.net/api/players/stats`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -73,7 +73,7 @@ const DatabaseService = {
 
     async upsertPlayerStatsByWeek() {
         try {
-            const response = await axios.post(`http://localhost:5000/api/players/stats/week`, {});
+            const response = await axios.post(`https://fantasyplayoffchallenge.azurewebsites.net/api/players/stats/week`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -83,7 +83,7 @@ const DatabaseService = {
 
     async createPlayerProjections() {
         try {
-            const response = await axios.post(`http://localhost:5000/api/players/projections`, {});
+            const response = await axios.post(`https://fantasyplayoffchallenge.azurewebsites.net/api/players/projections`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -93,7 +93,7 @@ const DatabaseService = {
 
     async upsertPlayerProjectionsByWeek() {
         try {
-            const response = await axios.post(`http://localhost:5000/api/players/projections/week`, {});
+            const response = await axios.post(`https://fantasyplayoffchallenge.azurewebsites.net/api/players/projections/week`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -103,7 +103,7 @@ const DatabaseService = {
 
     async createPlayerStatsExt() {
         try {
-            const response = await axios.post(`http://localhost:5000/api/players/stats/ext`, {});
+            const response = await axios.post(`https://fantasyplayoffchallenge.azurewebsites.net/api/players/stats/ext`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -113,7 +113,7 @@ const DatabaseService = {
 
     async upsertPlayerStatsExtByWeek() {
         try {
-            const response = await axios.post(`http://localhost:5000/api/players/stats/ext/week`, {});
+            const response = await axios.post(`https://fantasyplayoffchallenge.azurewebsites.net/api/players/stats/ext/week`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -123,7 +123,7 @@ const DatabaseService = {
 
     async createPlayerProjectionsExt() {
         try {
-            const response = await axios.post(`http://localhost:5000/api/players/projections/ext`, {});
+            const response = await axios.post(`https://fantasyplayoffchallenge.azurewebsites.net/api/players/projections/ext`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -133,7 +133,7 @@ const DatabaseService = {
 
     async upsertPlayerProjectionsExtByWeek() {
         try {
-            const response = await axios.post(`http://localhost:5000/api/players/projections/ext/week`, {});
+            const response = await axios.post(`https://fantasyplayoffchallenge.azurewebsites.net/api/players/projections/ext/week`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -143,7 +143,7 @@ const DatabaseService = {
 
     async updateLineupScores() {
         try {
-            const response = await axios.put(`http://localhost:5000/api/scores/lineups`, {});
+            const response = await axios.put(`https://fantasyplayoffchallenge.azurewebsites.net/api/scores/lineups`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -153,7 +153,7 @@ const DatabaseService = {
 
     async updateRosterScores() {
         try {
-            const response = await axios.put(`http://localhost:5000/api/scores/rosters`, {});
+            const response = await axios.put(`https://fantasyplayoffchallenge.azurewebsites.net/api/scores/rosters`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -163,7 +163,7 @@ const DatabaseService = {
 
     async updateConfiguration(configuration) {
         try {
-            const response = await axios.put(`http://localhost:5000/api/configuration`, configuration);
+            const response = await axios.put(`https://fantasyplayoffchallenge.azurewebsites.net/api/configuration`, configuration);
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -173,7 +173,7 @@ const DatabaseService = {
 
     async getConfiguration() {
         try {
-            const response = await axios.get(`http://localhost:5000/api/configuration`);
+            const response = await axios.get(`https://fantasyplayoffchallenge.azurewebsites.net/api/configuration`);
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -183,7 +183,7 @@ const DatabaseService = {
 
     async ToggleTeamStatus(teamName) {
         try {
-            const response = await axios.put(`http://localhost:5000/api/teams?teamName=${teamName}`, {});
+            const response = await axios.put(`https://fantasyplayoffchallenge.azurewebsites.net/api/teams?teamName=${teamName}`, {});
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -193,7 +193,7 @@ const DatabaseService = {
 
     async getTeams() {
         try {
-            const response = await axios.get(`http://localhost:5000/api/teams`);
+            const response = await axios.get(`https://fantasyplayoffchallenge.azurewebsites.net/api/teams`);
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
@@ -203,7 +203,7 @@ const DatabaseService = {
 
     async getActiveTeams() {
         try {
-            const response = await axios.get(`http://localhost:5000/api/teams/active`);
+            const response = await axios.get(`https://fantasyplayoffchallenge.azurewebsites.net/api/teams/active`);
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);

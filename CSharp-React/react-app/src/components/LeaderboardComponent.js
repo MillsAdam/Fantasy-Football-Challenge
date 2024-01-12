@@ -8,7 +8,7 @@ import NavigationBar from "./NavigationBar";
 function LeaderboardComponent() {
     const { authToken, currentUser } = useContext(AuthContext);
     const [rosters, setRosters] = useState([]);
-    const [userHasTeam, setUserHasTeam] = useState(false);
+    const [userHasTeam, setUserHasTeam] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [selectedUserId, setSelectedUserId] = useState(null);
@@ -147,12 +147,12 @@ function LeaderboardComponent() {
             <NavigationBar />
                 <div className="flex lg:flex-row lg:justify-between lg:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
                     <div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
-                        {!currentLeagueId && !userHasTeam && (
+                        {!currentLeagueId && userHasTeam === false && (
                             <div>
                                 Join a League and create a Roster to view Leaderboard
                             </div>
                         )}
-                        {currentLeagueId > 0 && !userHasTeam && (
+                        {currentLeagueId > 0 && userHasTeam === false && (
                             <div>
                                 Create a Roster to view Leaderboard
                             </div>

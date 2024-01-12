@@ -10,7 +10,7 @@ import NavigationBar from "./NavigationBar";
 function RosterComponent() {
     const { authToken, currentUser } = useContext(AuthContext);
     const [teamName, setTeamName] = useState("");
-    const [userHasTeam, setUserHasTeam] = useState(false);
+    const [userHasTeam, setUserHasTeam] = useState(null);
     const [rosterPlayers, setRosterPlayers] = useState([]);
     const isRosterFull = rosterPlayers.length >= 27;
     const [isLoading, setIsLoading] = useState(false);
@@ -471,7 +471,7 @@ function RosterComponent() {
                     </div>
                 </div>
             )}
-            {!currentLeagueId && !userHasTeam && !isLoading && (
+            {!currentLeagueId && userHasTeam === false && !isLoading && (
                 <div className="flex lg:flex-row lg:justify-between lg:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
                     <div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
                         <div className="">
@@ -480,7 +480,7 @@ function RosterComponent() {
                     </div>
                 </div>
             )}
-            {currentLeagueId > 0 && !userHasTeam && !isLoading && (
+            {currentLeagueId > 0 && userHasTeam === false && !isLoading && (
                 <div className="flex lg:flex-row lg:justify-between lg:items-start flex-wrap w-90 gap-4 flex-col justify-center align-center my-4 mx-auto">
                     <div className="flex-1 w-full mx-auto px-4 py-8 bg-base-200 shadow-md rounded-lg">
                         <div className="mb-4 text-xl text-primary">

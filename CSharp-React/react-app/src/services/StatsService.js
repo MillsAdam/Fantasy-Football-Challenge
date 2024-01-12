@@ -11,7 +11,7 @@ const StatsService = {
         };
 
         try {
-            const response = await axios.get(`http://localhost:5000/api/playerstats`, { params });
+            const response = await axios.get(`https://fantasyplayoffchallenge.azurewebsites.net/api/playerstats`, { params });
             return response.data;
         } catch (error) {
             console.error('An error occurred: ', error);
